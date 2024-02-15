@@ -4,7 +4,7 @@ import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, Activ
 import * as constant from '../../utilities/constants'
 import styles from './ProfileStyle';
 import { useDispatch, useSelector } from 'react-redux';
-import DrawerHeader from '../../components/DrawerHeader';
+import DrawerHeader from '../../components/HomeHeader';
 import FastImage from 'react-native-fast-image';
 import images from '../../utilities/images';
 import * as common_fn from '../../utilities/common_fn'

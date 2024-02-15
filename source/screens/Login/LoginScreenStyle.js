@@ -4,69 +4,90 @@ import * as constant from '../../utilities/constants'
 const styles = StyleSheet.create({
     safeView: {
         flex: 1,
-        paddingHorizontal: '5%',
         backgroundColor: constant.whiteColor,
     },
-    loginTopImage: {
-        height: constant.resW(18),
-        width: constant.resW(100),
-        alignSelf: 'center',
-        marginTop: '8%',
+    mainView:{
+        flex: 1,
+        backgroundColor: '#000000',
+        alignItems:'center',
+        // justifyContent:'center',
     },
-    loginText: {
-        color: constant.blackColor,
-        fontFamily: constant.typeSemibold,
-        fontSize: constant.font22,
-        marginTop: constant.resW(7)
+    logoStyle:{
+    height:constant.moderateScale(100),
+    width:constant.moderateScale(180),
+    alignSelf:'center',
+    // backgroundColor:'red',
+    
     },
-    loginTopView: {
+    text1:{
+        fontFamily:constant.typeLight,
+        fontSize:constant.moderateScale(20),
+        color:constant.whiteColor,
+    },
+    detailMainView:{
+    backgroundColor:'#FFFFFF29',
+    paddingHorizontal:'5%',
+    width:'80%',
+    borderRadius:10,
+    paddingTop:constant.moderateScale(18),
+    paddingBottom:constant.moderateScale(20)
+    },
+    text2:{
+        fontFamily:constant.typeLight,
+        fontSize:constant.moderateScale(12),
+        color:constant.whiteColor,
+        alignSelf:'center',
+        marginBottom:constant.moderateScale(20)
+    },
+    topButtonView:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    },
+    userButton:{
+     flexDirection:'row',
+     alignItems:'center',
+     justifyContent:'center',
+     width:'48%',
+     backgroundColor:'red',
+     paddingVertical:constant.moderateScale(14),
+     borderRadius:5
+    },
+    userButton2:{
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        width:'48%',
+        backgroundColor:'#ABABAB',
+        paddingVertical:constant.moderateScale(14),
+        borderRadius:5
+       },
+    userStyle:{
+        height:constant.moderateScale(13),
+        width:constant.moderateScale(13),
+    },
+    userText:{
+        fontFamily:constant.typeLight,
+        fontSize:constant.moderateScale(13),
+        color:constant.whiteColor,
+        marginLeft:constant.moderateScale(8)
+    },
+    inputMainView:{
+    //  flex:1,
+     backgroundColor:constant.whiteColor,
+     width:'100%'
+    },
+    scanStyle:{
+        height:constant.moderateScale(13),
+        width:constant.moderateScale(13),
+    },
+    inputStyle:{
+    flex:1,
+    },
+    eyeStyle:{
 
     },
-    loginText2: {
-        color: constant.blackColor,
-        fontFamily: constant.typeRegular,
-        fontSize: constant.font15,
-        marginTop: constant.resW(3),
-        marginBottom: '1%'
-    },
-    inputLogin: {
-        color: constant.blackColor,
-        fontFamily: constant.typeRegular,
-        fontSize: constant.font16,
-        borderWidth: 1,
-        borderColor: constant.silver,
-        height: constant.resW(12),
-        paddingHorizontal: '5%',
-        borderRadius: 10,
-        includeFontPadding: false,
-        textAlignVertical: 'center'
-    },
-    verifyButton: {
-        marginTop: "10%",
-        marginHorizontal: '0%',
-        marginTop: constant.resW(85)
-    },
-    text2: {
-        color: constant.blackColor,
-        fontFamily: constant.typeMedium,
-        fontSize: constant.font14,
-        alignSelf: 'center',
-        marginTop: '5%',
-        marginBottom: "10%"
-    },
-    text3: {
-        color: constant.blue,
-    },
-    forgetStyle: {
-        color: constant.blackColor,
-        fontFamily: constant.typeRegular,
-        fontSize: constant.font14,
-        borderBottomWidth: 1,
-        alignSelf: 'flex-start',
-        includeFontPadding: false,
-        paddingVertical: -1,
-        paddingTop: '2%'
-    },
+  
 })
 
 export default styles

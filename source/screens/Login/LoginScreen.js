@@ -18,6 +18,7 @@ export default function LoginScreen(props) {
     const dispatch = useDispatch()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [active,setActive] = useState(true)
 
     const fn_Veify = () => {
         if (email === '') common.showMsg("Please enter email")
@@ -45,28 +46,36 @@ export default function LoginScreen(props) {
         }
     }
 
+  const fn_buttonClick=(type)=>{
+    setActive(type)
+  }
+
     return (
         <SafeAreaView style={styles.safeView}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
-                <FastImage source={images.loginTopImage} resizeMode='contain' style={styles.loginTopImage} />
-                <Text style={styles.loginText}>Login</Text>
+         <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
+         <View style={styles.mainView}>
+            <FastImage source={images.logo} resizeMode='contain' style={styles.logoStyle} />
+            <Text style={styles.text1}>iConsultant</Text>
+            <View style={styles.detailMainView}>
+                <Text style={styles.text2}>Welcome! Please login to continue.</Text>
+            <View style={styles.topButtonView}>
+                <Pressable style={active ?styles.userButton : styles.userButton2 } onPress={()=>fn_buttonClick(true)}>
+                    <FastImage source={images.user} resizeMode='contain' style={styles.userStyle} />
+                    <Text style={styles.userText}>User</Text>
+                </Pressable>
+                <Pressable style={active ?styles.userButton2 : styles.userButton } onPress={()=>fn_buttonClick(false)}>
+                    <FastImage source={images.adminIcon} resizeMode='contain' style={styles.userStyle} />
+                    <Text style={styles.userText}>Admin</Text>
+                </Pressable>
+            </View>
+            <View style={styles.inputMainView}>
+                <FastImage source={images.scanIcon} resizeMode='contain' styles={styles.scanStyle} />
+             <TextInput style={styles.inputStyle} ></TextInput>
+             <FastImage source={images.eyeIcon} resizeMode='contain' styles={styles.eyeStyle} />
 
-                <View style={styles.loginTopView}>
-                    <Text style={styles.loginText2}>Email</Text>
-                    <TextInput style={styles.inputLogin} onChangeText={(t) => setEmail(t)}></TextInput>
-                </View>
-
-                <View style={styles.loginTopView}>
-                    <Text style={styles.loginText2}>Password</Text>
-                    <TextInput style={styles.inputLogin} secureTextEntry={true} placeholder='*******' placeholderTextColor={constant.silver} onChangeText={(t) => setPassword(t)}></TextInput>
-                </View>
-                <Text style={styles.forgetStyle}>Forget Password</Text>
-                <Button title='Verify' buttonExt={styles.verifyButton} click_Action={() => fn_Veify()} />
-                <Text onPress={() => props.navigation.push("Signup")} style={styles.text2}>Don't have a account ? <Text style={styles.text3}>Register</Text></Text>
-
-            </ScrollView>
-
+            </View>
+            </View>
+         </View>
         </SafeAreaView>
     );
 }

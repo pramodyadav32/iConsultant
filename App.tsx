@@ -1,23 +1,16 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import SplashScreen from './source/screens/SplashScreen/splashScreen';
-
-
-const Stack = createStackNavigator();
-
+import 'react-native-gesture-handler';
+import AuthNavigator from './source/navigation/AuthNavigator';
+import {Provider} from 'react-redux';
+import configureStore from './source/redux/configureStore';
+import EmptyLoader from './source/components/EmptyLoader';
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        >
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-      
+  // const store = configureStore()
 
-      </Stack.Navigator>
-    </NavigationContainer>
+  return (
+    <Provider store={configureStore}>
+      <EmptyLoader />
+      <AuthNavigator />
+    </Provider>
   );
 }

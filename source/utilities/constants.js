@@ -9,6 +9,15 @@ export const resH = (h) => {
     return (screenWidth * w) / 100;
   };
 
+  const guidelineBaseWidth = 375;
+const guidelineBaseHeight = 812;
+
+const horizontalScale = (size) => (screenWidth / guidelineBaseWidth) * size;
+const verticalScale = (size) => (screenHeight / guidelineBaseHeight) * size;
+const moderateScale = (size, factor = 0.5) => size + (horizontalScale(size) - size) * factor;
+
+export { horizontalScale, verticalScale, moderateScale };
+
   //fontSize
   export const font2 = (screenWidth * 0.9) / 100;
   export const font3 = (screenWidth * 1) / 100;
@@ -41,16 +50,13 @@ export const font36 = (screenWidth * 8.7) / 100;
 
 //fontFamily
 
-export const typeBold = 'Poppins-Bold'
-export const typeBlack = 'Poppins-Black'
-export const typeExtraBold = 'Poppins-ExtraBold'
-export const typeExtraLight = 'Poppins-ExtraBold'
-export const typeItalic = 'Poppins-Italic'
-export const typeLight = 'Poppins-Light'
-export const typeMedium = 'Poppins-Medium'
-export const typeSemibold = 'Poppins-SemiBold'
-export const typeThin= 'Poppins-Thin'
-export const typeRegular= 'Poppins-Regular'
+export const typeBold = 'Roboto-Bold'
+export const typeBlack = 'Roboto-Black'
+export const typeItalic = 'Roboto-Italic'
+export const typeLight = 'Roboto-Light'
+export const typeMedium = 'Roboto-Medium'
+export const typeThin= 'Roboto-Thin'
+export const typeRegular= 'Roboto-Regular'
 
 
 
@@ -65,14 +71,14 @@ export const grayishBlue = '#3D3D3F'
 export const gainsboro = '#DFDFDF'
 export const gray = '#F1F1F1'
 export const whiteSmoke = '#F2F2F2'
-export const whiteGhost = '#F1F3F9'
+export const whiteGhost = '#F9F9F9'
 export const aliceBlue ='#F7FAFC'
 export const dimGray = '#707070'
 export const green = '#609749'
 export const red = '#ED1C24'
 export const blue = '#4E74F9'
 export const silver = '#BBBBBB'
-export const textColor = '#676767'
+export const textColor = '#606060'
 
 
 

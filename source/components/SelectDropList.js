@@ -4,6 +4,7 @@ import * as constant from '../utilities/constants'
 // import AntDesign from 'react-native-vector-icons/AntDesign'
 import SelectDropdown from 'react-native-select-dropdown'
 import images from "../utilities/images"
+import FastImage from "react-native-fast-image"
 
 const SelectDropList = (props) => {
     const dropdownRef = useRef({}); 
@@ -31,7 +32,12 @@ const SelectDropList = (props) => {
         renderDropdownIcon={isOpened => {
             return (
                 <View style={{alignItems:'center',justifyContent:'center'}}>
-                {/* <AntDesign name={isOpened ? 'up' :'down'} style={styles.downIcon} /> */}
+                {isOpened ?
+                 <FastImage source={ images.upArrow } resizeMode="cover" style={styles.upIcon} />
+                :
+               <FastImage source={images.downArrow} resizeMode="cover" style={styles.downIcon} />
+
+            }
              </View>
             );
           }}
@@ -77,7 +83,7 @@ const SelectDropList = (props) => {
 
 SelectDropList.defaultProps = {
     on_Select: function () { },
-    title: 'Select',
+    title: 'Please Select',
     buttonExt:{},
     textExt:{},
     imageIcon:false,
@@ -106,10 +112,16 @@ const styles = StyleSheet.create({
     },
 
     downIcon:{
-        color:constant.silver,
-        fontSize:constant.font15,
-        paddingHorizontal:'2.5%',
-        paddingVertical:'0.3%'
+        // color:constant.silver,
+        // fontSize:constant.font15,
+        // paddingHorizontal:'2.5%',
+        // paddingVertical:'0.3%'
+        height:constant.resW(5),
+        width:constant.resW(5),
+    },
+    upIcon:{
+        height:constant.resW(3),
+        width:constant.resW(3),
     },
     downArrow:{
         height:constant.resW(1),

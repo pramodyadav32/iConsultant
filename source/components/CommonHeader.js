@@ -4,6 +4,7 @@ import * as constant from '../utilities/constants'
 import images from "../utilities/images"
 import {DrawerActions } from '@react-navigation/native';
 import { useDispatch } from "react-redux";
+import FastImage from "react-native-fast-image";
 
 const CommonHeader = (props) => {
     const{title,onBack,showInfo,mainExt,}= props
@@ -12,16 +13,16 @@ const CommonHeader = (props) => {
     return (
      <View style={[styles.MainView,mainExt]}>
         <Pressable style={styles.drawerButton} onPress={onBack}>
-            <Image source={images.backIcon} style={styles.drawerIconStyle} resizeMode="contain" />
+            <FastImage source={images.backIcon} resizeMode='contain' style={styles.drawerIconStyle}  />
         </Pressable>
      <View style={styles.midView}>
      <Text style={styles.title}>{title}</Text>
      </View>
      <View style={styles.rightView}>
-   {showInfo &&  <Pressable style={styles.infoButton}>
-   <Text style={styles.infoButtonText}>Select All</Text>
+   <Pressable style={styles.infoButton}>
+   <FastImage source={images.bellIcon} style={styles.bellIcon} resizeMode="contain" />
      </Pressable>
-}
+
 </View>
      </View> 
     )
@@ -38,38 +39,34 @@ export default CommonHeader;
 const styles = StyleSheet.create({
     MainView: {
       
-        backgroundColor: constant.whiteColor,
+        backgroundColor: constant.blackColor,
         alignItems: "center",
         flexDirection:'row',
-        height:constant.resW(17),
-        borderBottomWidth:1,
-        borderBottomColor:constant.gainsboro,
+        height:constant.moderateScale(50),
+        // borderBottomWidth:1,
+        // borderBottomColor:constant.gainsboro,
     },
     title:{
-    color:constant.blackColor,
-    fontFamily:constant.typeSemibold,
-    fontSize:constant.font21,
+    color:constant.whiteColor,
+    fontFamily:constant.typeRegular,
+    fontSize:constant.moderateScale(16),
     includeFontPadding:false,
     },
-    closeIcon:{
-        color:constant.whiteColor,
-        fontSize:constant.font10,
-        paddingHorizontal:'2.5%',
-        paddingVertical:'0.3%'
-    },
+ 
     infoButton:{
     alignItems:'center',
-    justifyContent:'center',
+    justifyContent:'flex-end',
+    // backgroundColor:'red',
+    // marginRight:constant.resW(3),
+    paddingHorizontal:'12%',
+    paddingVertical:"4%"
   
     },
 
-    infoButtonText:{
-        color:constant.baseColor,
-        fontFamily:constant.typeRegular,
-        fontSize:constant.font14,
-        includeFontPadding:false,
-        marginRight:constant.resW(4)
-    },
+   bellIcon:{
+    width:constant.moderateScale(18),
+    height:constant.moderateScale(18), 
+   },
     midView:{
      flex:1,
      justifyContent:'center',
@@ -80,12 +77,12 @@ const styles = StyleSheet.create({
         alignItems:'flex-end',
     },
     drawerButton:{
-    flex:0.25,   
+    flex:0.2,   
     },
     drawerIconStyle:{
-        width:constant.resW(7),
-        height:constant.resW(7), 
-        marginLeft:constant.resW(3)
+        width:constant.moderateScale(20),
+        height:constant.moderateScale(20), 
+        marginLeft:constant.moderateScale(15)
 
     }
    

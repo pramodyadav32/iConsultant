@@ -24,16 +24,16 @@ const styles = StyleSheet.create({
     title:{
     color:constant.whiteColor,
     fontFamily:constant.typeMedium,
-    fontSize:constant.font15,
+    fontSize:constant.moderateScale(15),
     marginTop:'1%'
     // includeFontPadding:false
     },
     infoButton:{
     alignItems:'center',
     justifyContent:'center',
-    backgroundColor:constant.baseColor,
+    backgroundColor:constant.red,
     marginHorizontal:'5%',
-    paddingVertical:'2.5%',
+    paddingVertical:constant.moderateScale(9),
     borderRadius:10,
     elevation:2
     },  
