@@ -18,7 +18,7 @@ export default function SplashScreen(props) {
                 index: 0,
                 // routes: [{ name: 'StackNavigator' }],
 
-                routes: [{ name: 'LoginScreen' }],
+                routes: [{ name: 'HomeScreen' }],
               }),
             );
         }, 1000);

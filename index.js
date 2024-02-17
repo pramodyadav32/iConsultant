@@ -2,7 +2,7 @@
  * @format
  */
 
-import {AppRegistry,Text,TextInput} from 'react-native';
+import {AppRegistry,Image,Text,TextInput} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import 'react-native-gesture-handler';
@@ -10,4 +10,7 @@ Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
 TextInput.defaultProps = TextInput.defaultProps || {};
 TextInput.defaultProps.allowFontScaling = false;
+// Image.defaultProps.allowFontScaling = false;
+Image.defaultProps = Image.defaultProps || {};
+
 AppRegistry.registerComponent(appName, () => App);

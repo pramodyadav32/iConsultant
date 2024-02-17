@@ -12,16 +12,18 @@ const HomeHeader = (props) => {
     return (
      <View style={[styles.MainView,mainExt]}>
         <Pressable style={styles.drawerButton} onPress={()=>showDrawer.dispatch(DrawerActions.toggleDrawer())}>
-            {/* <Image source={images.drawerIcon} style={styles.drawerIconStyle} resizeMode="contain" /> */}
+            <Image source={images.menu} style={styles.drawerIconStyle}  resizeMode="contain" />
         </Pressable>
      <View style={styles.midView}>
      <Text style={styles.title}>{title}</Text>
      </View>
      <View style={styles.rightView}>
-   {showInfo &&  <Pressable style={styles.infoButton}>
-        {/* <Image 12source={require('../assets/dummy/')} style={styles.infoImage} resizeMode="contain" /> */}
+     <Pressable style={styles.infoButton}>
+        <Image source={images.searchIcon} style={styles.infoImage}  resizeMode="contain" />
      </Pressable>
-}
+   <Pressable style={styles.infoButton}>
+        <Image source={images.bellIcon} style={styles.infoImage}  resizeMode="contain" />
+     </Pressable>
 </View>
      </View> 
     )
@@ -38,7 +40,7 @@ export default HomeHeader;
 const styles = StyleSheet.create({
     MainView: {
       
-        backgroundColor: constant.whiteColor,
+        backgroundColor: constant.blackColor,
         alignItems: "center",
         flexDirection:'row',
         height:constant.resW(17),
@@ -46,10 +48,11 @@ const styles = StyleSheet.create({
         borderBottomColor:constant.gainsboro,
     },
     title:{
-    color:constant.blackColor,
-    fontFamily:constant.typeSemibold,
-    fontSize:constant.font22,
+    color:constant.whiteColor,
+    fontFamily:constant.typeRegular,
+    fontSize:constant.moderateScale(17),
     includeFontPadding:false,
+
     },
     closeIcon:{
         color:constant.whiteColor,
@@ -60,9 +63,9 @@ const styles = StyleSheet.create({
     infoButton:{
     alignItems:'center',
     justifyContent:'center',
-    position:'absolute',
-    top:0,
-    right:'15%'
+    width:constant.resW(10),
+    height:constant.resW(10),
+   
     },
     infoImage:{
         width:constant.resW(5),
@@ -73,16 +76,21 @@ const styles = StyleSheet.create({
      justifyContent:'center'
     },
     rightView:{
-        flex:0.5,
+        flex:0.3,
         justifyContent:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        paddingRight:constant.moderateScale(15)
+     
     },
     drawerButton:{
-    flex:0.4
+    flex:0.3,
+    justifyContent:'center'
    
     },
     drawerIconStyle:{
-        width:constant.resW(8),
-        height:constant.resW(8), 
+        width:constant.resW(7),
+        height:constant.resW(7), 
         marginLeft:constant.resW(5)
 
     }

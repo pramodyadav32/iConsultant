@@ -3,7 +3,7 @@ import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux'
-import { userData_Action, selectedBranch_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
+import { userData_Action,emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import styles from './LoginScreenStyle'
@@ -18,7 +18,7 @@ export default function LoginScreen(props) {
     const dispatch = useDispatch()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [active,setActive] = useState(true)
+    const [active, setActive] = useState(true)
 
     const fn_Veify = () => {
         if (email === '') common.showMsg("Please enter email")
@@ -39,43 +39,64 @@ export default function LoginScreen(props) {
     const loginCallBack = (res) => {
         dispatch(emptyLoader_Action(false))
         if (res.status === 'success') {
-            set_UserData("true",res.data,res.token)
+            set_UserData("true", res.data, res.token)
             props.navigation.goBack()
         } else {
-          constant.showMsg(res.message)
+            constant.showMsg(res.message)
         }
     }
 
-  const fn_buttonClick=(type)=>{
-    setActive(type)
-  }
+    const fn_buttonClick = (type) => {
+        setActive(type)
+    }
+
+    const fn_LoginClick =()=>{
+        props.navigation.navigate("SelectBranchScreen")
+    }
 
     return (
         <SafeAreaView style={styles.safeView}>
-         <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
-         <View style={styles.mainView}>
-            <FastImage source={images.logo} resizeMode='contain' style={styles.logoStyle} />
-            <Text style={styles.text1}>iConsultant</Text>
-            <View style={styles.detailMainView}>
-                <Text style={styles.text2}>Welcome! Please login to continue.</Text>
-            <View style={styles.topButtonView}>
-                <Pressable style={active ?styles.userButton : styles.userButton2 } onPress={()=>fn_buttonClick(true)}>
-                    <FastImage source={images.user} resizeMode='contain' style={styles.userStyle} />
-                    <Text style={styles.userText}>User</Text>
-                </Pressable>
-                <Pressable style={active ?styles.userButton2 : styles.userButton } onPress={()=>fn_buttonClick(false)}>
-                    <FastImage source={images.adminIcon} resizeMode='contain' style={styles.userStyle} />
-                    <Text style={styles.userText}>Admin</Text>
-                </Pressable>
-            </View>
-            <View style={styles.inputMainView}>
-                <FastImage source={images.scanIcon} resizeMode='contain' styles={styles.scanStyle} />
-             <TextInput style={styles.inputStyle} ></TextInput>
-             <FastImage source={images.eyeIcon} resizeMode='contain' styles={styles.eyeStyle} />
+            <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
+            <ImageBackground source={images.SplashScreen} resizeMode='cover' style={styles.bgImage}>
+                <View style={styles.mainView}>
+                    <FastImage source={images.logo} resizeMode='contain' style={styles.logoStyle} />
+                    <Text style={styles.text1}>iConsultant</Text>
+                    <View style={styles.detailMainView}>
+                        <Text style={styles.text2}>Welcome! Please login to continue.</Text>
+                        <View style={styles.topButtonView}>
+                            <Pressable style={active ? styles.userButton : styles.userButton2} onPress={() => fn_buttonClick(true)}>
+                                <FastImage source={images.user} resizeMode='contain' style={styles.userStyle} />
+                                <Text style={styles.userText}>User</Text>
+                            </Pressable>
+                            <Pressable style={active ? styles.userButton2 : styles.userButton} onPress={() => fn_buttonClick(false)}>
+                                <FastImage source={images.adminIcon} resizeMode='contain' style={styles.userStyle} />
+                                <Text style={styles.userText}>Admin</Text>
+                            </Pressable>
+                        </View>
 
-            </View>
-            </View>
-         </View>
+                        <View style={styles.inputMainView}>
+                            <Image source={images.scanIcon} resizeMode='contain' style={styles.scanIconStyle} />
+                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='Company ID' ></TextInput>
+                            <Image source={images.eyeIcon} resizeMode='contain' style={styles.eyeStyle} />
+                        </View>
+                        <View style={styles.inputMainView}>
+                            <FastImage source={images.userIcon} resizeMode='contain' style={styles.userIconStyle} />
+                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='User ID' ></TextInput>
+                        </View>
+
+                        <View style={styles.inputMainView}>
+                            <Image source={images.lock} resizeMode='contain' style={styles.scanIconStyle} />
+                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='Password' ></TextInput>
+                            <Image source={images.eyeIcon} resizeMode='contain' style={styles.eyeStyle} />
+                        </View>
+                        <Button
+                            title='Log In'
+                            buttonExt={styles.loginButton}
+                           click_Action={()=>fn_LoginClick()}
+                        />
+                    </View>
+                </View>
+            </ImageBackground>
         </SafeAreaView>
     );
 }

@@ -6,6 +6,7 @@ import DrawerNavigator from './DrawerNavigator';
 import ProspectScreen from '../screens/ProspectScreen/ProspectScreen';
 import CalenderScreen from '../screens/CalenderScreen/CalenderScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
+import SelectBranchScreen from '../screens/SelectBranch/SelectBranchScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,8 @@ export default function AuthNavigator() {
        <Stack.Screen  name='HomeScreen' component={DrawerNavigator}/>
        <Stack.Screen  name='ProspectScreen' component={ProspectScreen}/>
        <Stack.Screen  name='CalenderScreen' component={CalenderScreen}/>
+       <Stack.Screen  name='SelectBranchScreen' component={SelectBranchScreen}/>
+
 
 
       </Stack.Navigator>

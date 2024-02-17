@@ -5,172 +5,160 @@ const styles = StyleSheet.create({
     drawerStyle:{
     borderBottomWidth:0
     },
-    text1:{
-        fontFamily:constant.typeSemibold,
-        fontSize:constant.font22,
-        color:constant.blackColor,
-        marginLeft:'4%'
-    },
-    text2:{
-        fontFamily:constant.typeMedium,
-        fontSize:constant.font15,
-        color:'#A5A7AC',
-        marginLeft:'4%'
-    },
-    searchMainView:{
-    backgroundColor:'#F4F4F5',
-    marginHorizontal:'4%',
-    borderWidth:1,
+    topButtonView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginHorizontal:constant.moderateScale(8)
+  },
+  userButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '48%',
+      backgroundColor: 'red',
+      paddingVertical: constant.moderateScale(14),
+      borderRadius: 5,
+      paddingHorizontal:constant.moderateScale(10),
+      borderWidth:1,
+      borderColor:constant.whiteColor,
+      elevation:1
+  },
+
+  userStyle: {
+      height: constant.moderateScale(18),
+      width: constant.moderateScale(18),
+  },
+  userText: {
+      fontFamily: constant.typeMedium,
+      fontSize: constant.moderateScale(15),
+      color: constant.whiteColor,
+  },
+
+  //ActionToday
+
+  driveListMainView:{
+    // backgroundColor:'#F9F9F9',
+    marginHorizontal:'2%',
+    // paddingHorizontal:'2%',
     borderRadius:10,
-    borderColor:'#BBBBBB',
-    flexDirection:'row',
-    marginTop:constant.resW(7),
-    marginBottom:constant.resW(5)
-    },
-    inputStyle:{
-    paddingHorizontal:'3%',
-    fontFamily:constant.typeMedium,
-    fontSize:constant.font15,
-    color:constant.blackColor,
-    flex:1
-    },
-    searchImage:{
-    height:constant.resW(5),
-    width:constant.resW(5),
-    },
-    searchImageView:{
-     backgroundColor:constant.baseColor,
-     borderRadius:5,
-     width:constant.resW(11),
-     alignItems:'center',
-     justifyContent:'center',
-     marginVertical:'1%',
-     height:constant.resW(11),
-     marginRight:'1%'
-    },
-    text3:{
-        fontFamily:constant.typeN_Bold,
-        fontSize:constant.font20,
-        color:constant.blackColor,
-        marginLeft:'4%',
-        marginTop:"3%"
-    },
-    custumButtinMainView:{
-        borderWidth:1.5,
-        borderRadius:10,
-        borderColor:constant.blackColor,
-        flexDirection:'row',
-        marginHorizontal:'4%',
-        backgroundColor:constant.baseColor,
-        paddingVertical:'2%',
-        paddingLeft:'2%',
-        alignItems:'center',
-        marginTop:'2%'
-        
-    },
-    custumImage:{
-        height:constant.resW(18),
-        width:constant.resW(18),
-    },
-    custumButtinSubView:{
-        paddingLeft:'2%'
+    marginTop:constant.moderateScale(15),
+    marginBottom:constant.moderateScale(20),
+    flex:1,
+    // backgroundColor:'red'
 
     },
-    text4:{
-        fontFamily:constant.typeSemibold,
-        fontSize:constant.font18,
-        color:constant.blackColor,
-        
-    },
-    text5:{
-        fontFamily:constant.typeRegular,
-        fontSize:constant.font14,
-        color:constant.whiteColor,   
-    },
-    text6:{
-        fontFamily:constant.typeN_Bold,
-        fontSize:constant.font20,
-        color:constant.blackColor,
-    },
-    profileMainViewTitle:{
-        marginHorizontal:'4%',
-        marginTop:'3%',
+    driveListTopView:{
+        flex:1,
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-between'
+
     },
-    text7:{
+    driveText1:{
+        fontSize:constant.moderateScale(18),
+        color:'#2E2E2E',
         fontFamily:constant.typeRegular,
-        fontSize:constant.font15,
-        color:'#A5A7AC',
-        paddingVertical:'2%',
     },
-    orderD_BiderMainView:{
-        flexDirection:'row',
-        alignItems:'center',
-        backgroundColor:constant.gray,
-        marginBottom:constant.resW(30),
-        marginTop:constant.resW(3),
-        width:constant.resW(85),
-        // paddingVertical:'3.5%',
-        // paddingHorizontal:'2.5%',
-        borderRadius:15,
-        height:constant.resW(25)
-      },
-      orderBiderImage:{
-        width: constant.resW(21),
-        height: constant.resW(21),
-        borderRadius:10,
-        marginLeft:constant.resW(2)
-      },
-      listBiderSubView:{
+    listDriveIcon:{
+        height:constant.moderateScale(20),
+        width:constant.moderateScale(20),
+        marginRight:constant.moderateScale(10),
+    },
+    driveListDetailView:{
+    //  flex:1,
+    // width:'100%',
+     flexDirection:"row",
+    //  alignItems:'center',
+    //  justifyContent:'space-between',
+    },
+    driveListDetailSubView:{
+      // width:'38%',
+      // width:constant.resW(25)
+    // alignItems:'center',
+    // flex:1,
+    height:constant.moderateScale(30),
+    width:'50%'
+    },
+    driveListDetailSubView2:{
+      // width:constant.resW(31),
+      
+      
         flex:1,
-        marginHorizontal:constant.resW(3),
-        
+        height:constant.moderateScale(30)
         },
-      orderBiderTitle:{
+    listText2:{
+        fontSize:constant.moderateScale(8),
+        color:'#434343',
         fontFamily:constant.typeRegular,
-        fontSize:constant.font16,
-        color:constant.blackColor,
-        // marginTop:'1%'
-      },
-      orderBiderDes:{
-        fontFamily:constant.typeRegular,
-        fontSize:constant.font13,
-        color:'#8F9BB3',
-        // marginVertical:"3.5%"
-      },
+    },
+    fuelText2:{
+      fontSize:constant.moderateScale(12),
+      color:'#434343',
+      fontFamily:constant.typeRegular,
+    },
+    listText3:{
+        fontSize:constant.moderateScale(9.5),
+        color:'#434343',
+        fontFamily:constant.typeMedium,
+    },
+    ModelText3:{
+      fontSize:constant.moderateScale(12),
+      color:'#434343',
+      fontFamily:constant.typeMedium,
+    },
+    listImageStyle:{
+      // height:'100%',
+      // width:'100%',
+      position:'absolute',
+      top:0,
+      bottom:0,
+      left:0,
+      right:0,
+      // flex:1,
+      height:undefined,
+      width:constant.resW(100)
+      // backgroundColor:'transparent'
+    },
+    listBgStyle:{
+      // flex:1,
+      height:undefined,
+      width:undefined,
+      // flexDirection:'row'
+      marginHorizontal:constant.moderateScale(8),
+      // alignSelf:'center',
+    //  backgroundColor:'red',
+     marginBottom:'3%'
+    },
+    listCardMainView:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    // justifyContent:'space-between'
+    },
+    carImage:{
+      height:constant.moderateScale(110),
+      width:constant.moderateScale(130),
+    },
     
-      orderBiderText:{
-        fontFamily:constant.typeSemibold,
-        fontSize:constant.font18,
-        color:constant.blue,
-        includeFontPadding:false,
-      },
-      categoryMainView:{
-        backgroundColor:'#CCFBF366',
-        marginTop:"5%"
-      },
-      linearStyle:{
-       height:constant.resW(25),
-       width:constant.resW(44),
-       borderRadius:10,
-       paddingHorizontal:'3.5%',
-       paddingVertical:'3.5%'
-      },
-      categoryImage:{
-        width: constant.resW(10),
-        height: constant.resW(10),
-      },
-      categoryText:{
-        fontFamily:constant.typeN_Bold,
-        fontSize:constant.font15,
-        color:constant.whiteColor,
-        marginTop:'2%'
-      },
-      listContainerStyle:{
-      paddingHorizontal:'4%',
-      },
+    //upcomming
+    headerImageStyle:{
+      height:undefined,
+      width:undefined,
+      marginHorizontal:constant.moderateScale(8),
+     marginBottom:'1%'
+    },
+    up_ListText:{
+      fontSize:constant.moderateScale(17),
+      color:'#3B3B3B',
+      fontFamily:constant.typeMedium,
+      marginLeft:constant.moderateScale(26)
+    },
+    upRightArrow:{
+      height:constant.moderateScale(18),
+      width:constant.moderateScale(18),
+      marginRight:constant.moderateScale(10)
+    },
 })
 
 export default styles;
