@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { userData_Action,emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
-import styles from './HomeScreenStyle'
+import styles from './ActionTodayStyle'
 import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
@@ -26,21 +26,12 @@ const data = [
 
   ]
 
-export default function ActionUpcomingList(props) {
+export default function ActionList(props) {
 
     const dispatch = useDispatch()
-    const [activeIndex,setActiveIndex] = useState(-1)
 
     const renderItem=({item,index})=>{
         return(
-            <View>
-                <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
-                 <Pressable onPress={()=>setActiveIndex(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                 <Text style={styles.up_ListText}>11-Feb-2024</Text>
-                 <FastImage source={ activeIndex === index ? images.downArrow : images.rightArrow} style={styles.upRightArrow} />
-                 </Pressable>
-                 </ImageBackground>
-                 {activeIndex=== index &&
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
                    <View style={styles.driveListMainView}>
                 <View style={styles.driveListTopView}>
@@ -92,9 +83,7 @@ export default function ActionUpcomingList(props) {
                     </View>
                     </View>
                 </View>  
-                 </ImageBackground>
-                 }
-                 </View>         
+                 </ImageBackground>         
         )
       }
     
@@ -108,7 +97,8 @@ export default function ActionUpcomingList(props) {
       ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
       ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(0))}
       ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
-            />         
+            />
+          
          </View>
     );
 }

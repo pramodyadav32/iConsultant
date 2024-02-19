@@ -35,7 +35,10 @@ export default function ActionTodayList(props) {
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
                    <View style={styles.driveListMainView}>
                 <View style={styles.driveListTopView}>
+                    <View>
                     <Text style={styles.driveText1}>Mr. Amarjeet Singh</Text>
+                    <View style={styles.horizontalLine} />
+                    </View>
                     <FastImage source={images.graph} resizeMode='contain' style={styles.listDriveIcon} />
                 </View>
                 <View style={{flex:1,flexDirection:'row'}}>

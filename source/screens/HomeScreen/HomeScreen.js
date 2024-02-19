@@ -78,7 +78,7 @@ export default function HomeScreen(props) {
   }
 
 const fn_buttonClick=(type)=>{
-
+ props.navigation.navigate("ActionTodayScreen")
 }
 
 
@@ -98,8 +98,8 @@ const fn_buttonClick=(type)=>{
           <FastImage source={images.rightArrow} tintColor={constant.whiteColor} resizeMode='contain' style={styles.userStyle} />
         </Pressable>
       </View>
-      {/* <ActionTodayList /> */}
-      <ActionUpcomingList />
+      <ActionTodayList />
+      {/* <ActionUpcomingList /> */}
 
 
     </SafeAreaView>

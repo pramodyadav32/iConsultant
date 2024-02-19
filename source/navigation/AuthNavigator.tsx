@@ -7,7 +7,7 @@ import ProspectScreen from '../screens/ProspectScreen/ProspectScreen';
 import CalenderScreen from '../screens/CalenderScreen/CalenderScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
 import SelectBranchScreen from '../screens/SelectBranch/SelectBranchScreen';
-
+import ActionTodayScreen from '../screens/ActionTodayScreen/ActionTodayScreen';
 const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {
@@ -24,6 +24,8 @@ export default function AuthNavigator() {
        <Stack.Screen  name='ProspectScreen' component={ProspectScreen}/>
        <Stack.Screen  name='CalenderScreen' component={CalenderScreen}/>
        <Stack.Screen  name='SelectBranchScreen' component={SelectBranchScreen}/>
+       <Stack.Screen  name='ActionTodayScreen' component={ActionTodayScreen}/>
+
 
 
 

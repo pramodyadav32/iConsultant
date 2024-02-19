@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
       paddingVertical: constant.moderateScale(14),
       borderRadius: 5,
       paddingHorizontal:constant.moderateScale(10),
-      borderWidth:1,
+      borderWidth:1.5,
       borderColor:constant.whiteColor,
-      elevation:1
+      elevation:2
   },
 
   userStyle: {
@@ -140,13 +140,21 @@ const styles = StyleSheet.create({
       height:constant.moderateScale(110),
       width:constant.moderateScale(130),
     },
+    horizontalLine:{
+      height:constant.moderateScale(2),
+      width:constant.moderateScale(70),
+      backgroundColor:constant.red,
+      borderRadius:constant.moderateScale(100),
+      marginTop:constant.moderateScale(4)
+    },
     
     //upcomming
     headerImageStyle:{
       height:undefined,
       width:undefined,
       marginHorizontal:constant.moderateScale(8),
-     marginBottom:'1%'
+     marginBottom:'1%',
+
     },
     up_ListText:{
       fontSize:constant.moderateScale(17),
