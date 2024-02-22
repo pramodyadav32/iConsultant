@@ -36,7 +36,9 @@ export default function ActionTodayScreen(props) {
         <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
-     <ActionList />
+     <ActionList
+      onClick={()=>navigation.navigate("ProspectDataSheetScreen")}
+       />
      </SafeAreaView>
   )
 }

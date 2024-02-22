@@ -19,10 +19,10 @@ const CommonHeader = (props) => {
      <Text style={styles.title}>{title}</Text>
      </View>
      <View style={styles.rightView}>
-   <Pressable style={styles.infoButton}>
+  {showInfo && <Pressable style={styles.infoButton}>
    <FastImage source={images.bellIcon} style={styles.bellIcon} resizeMode="contain" />
      </Pressable>
-
+}
 </View>
      </View> 
     )
@@ -31,7 +31,7 @@ const CommonHeader = (props) => {
 CommonHeader.defaultProps = {
     onRequestClose: function () { },
     isVisible: false,
-    showInfo:false
+    showInfo:true
 }
 
 export default CommonHeader;

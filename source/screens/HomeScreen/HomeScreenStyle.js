@@ -167,6 +167,57 @@ const styles = StyleSheet.create({
       width:constant.moderateScale(18),
       marginRight:constant.moderateScale(10)
     },
+    homeBoxStyle:{
+      backgroundColor:constant.whiteColor,
+      height:constant.moderateScale(130),
+      width:constant.resW(46),
+      borderRadius:10,
+      borderColor:constant.whiteColor,
+      borderWidth:1,
+      elevation:3,
+      shadowColor: constant.blackColor,
+      shadowOpacity: 0,
+      shadowOffset: { width: 20, height: 30},
+      shadowRadius: 4,
+      paddingHorizontal:constant.moderateScale(10),
+      paddingVertical:constant.moderateScale(10),
+      justifyContent:'space-between',
+      // backgroundColor:"green",
+    },
+   
+    homeHorz:{
+      height:5,
+      width:constant.resW(45.5),
+      backgroundColor:"red",
+      position:"absolute",
+       borderBottomLeftRadius:20,
+       borderBottomRightRadius:20,
+    },
+    boxText:{
+      fontSize:constant.moderateScale(13),
+      color:'#3B3B3B',
+      fontFamily:constant.typeMedium,
+    },
+    homeSubBox:{
+    flexDirection:'row',
+    alignItems:'flex-end',
+    justifyContent:'space-between',
+    },
+    homeSubBox1:{
+     flexDirection:'row',
+     alignItems:'flex-end',
+    },
+    dashBoardIcon:{
+      height:constant.moderateScale(30),
+      width:constant.moderateScale(30),
+    },
+    homeSubBoxText:{
+      fontSize:constant.moderateScale(30),
+      color:'#2E2E2E',
+      fontFamily:constant.typeRegular,
+      includeFontPadding:false,
+    },
+ 
 })
 
 export default styles;

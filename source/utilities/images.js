@@ -26,6 +26,7 @@ const listCard = require('../assets/Icons/listCard.png')
 const listHeaderCard = require('../assets/Icons/listHeaderCard.png')
 const listImage2 = require('../assets/Icons/listImage2.png')
 const graph = require('../assets/Icons/graph.png')
+const DashboardIcon = require('../assets/Icons/DashboardIcon.png')
 
 
 
@@ -60,4 +61,5 @@ export default {
   listHeaderCard,
   listImage2,
   graph,
+  DashboardIcon,
 };

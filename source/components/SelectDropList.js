@@ -1,7 +1,7 @@
 import React,{useRef,useEffect} from "react"
 import { View, StyleSheet,Text, Image, } from "react-native"
 import * as constant from '../utilities/constants'
-// import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import SelectDropdown from 'react-native-select-dropdown'
 import images from "../utilities/images"
 import FastImage from "react-native-fast-image"
@@ -32,12 +32,7 @@ const SelectDropList = (props) => {
         renderDropdownIcon={isOpened => {
             return (
                 <View style={{alignItems:'center',justifyContent:'center'}}>
-                {isOpened ?
-                 <FastImage source={ images.upArrow } resizeMode="cover" style={styles.upIcon} />
-                :
-               <FastImage source={images.downArrow} resizeMode="cover" style={styles.downIcon} />
-
-            }
+                 <AntDesign name={isOpened ?'up' : 'down'} style={styles.upIcon} />
              </View>
             );
           }}
@@ -120,12 +115,14 @@ const styles = StyleSheet.create({
         width:constant.resW(5),
     },
     upIcon:{
-        height:constant.resW(3),
-        width:constant.resW(3),
+        color:constant.blackColor,
+        fontFamily:constant.typeBold,
+        fontSize:constant.moderateScale(13),
     },
     downArrow:{
-        height:constant.resW(1),
-        width:constant.resW(1),
+        color:constant.blackColor,
+    fontFamily:constant.typeBold,
+    fontSize:constant.font5,
     }
    
 })

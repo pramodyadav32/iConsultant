@@ -8,6 +8,12 @@ import CalenderScreen from '../screens/CalenderScreen/CalenderScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
 import SelectBranchScreen from '../screens/SelectBranch/SelectBranchScreen';
 import ActionTodayScreen from '../screens/ActionTodayScreen/ActionTodayScreen';
+import UpcomingActionScreen from '../screens/UpcomingActionScreen/UpcomingActionScreen';
+import TodayTestDriveScreen from '../screens/TodayTestDriveScreen/TodayTestDriveScreen';
+import ActionProspectScreen from '../screens/ActiveProspectScreen/ActiveProspectScreen';
+import ProspectDataSheetScreen from '../screens/ProspectDataSheetScreen/ProspectDataSheetScreen';
+import CreatePerforma from '../screens/CreatePerforma/CreatePerforma';
+
 const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {
@@ -25,8 +31,11 @@ export default function AuthNavigator() {
        <Stack.Screen  name='CalenderScreen' component={CalenderScreen}/>
        <Stack.Screen  name='SelectBranchScreen' component={SelectBranchScreen}/>
        <Stack.Screen  name='ActionTodayScreen' component={ActionTodayScreen}/>
-
-
+       <Stack.Screen  name='UpcomingActionScreen' component={UpcomingActionScreen}/>
+       <Stack.Screen  name='TodayTestDriveScreen' component={TodayTestDriveScreen}/>
+       <Stack.Screen  name='ActionProspectScreen' component={ActionProspectScreen}/>
+       <Stack.Screen  name='ProspectDataSheetScreen' component={ProspectDataSheetScreen}/>
+       <Stack.Screen  name='CreatePerforma' component={CreatePerforma}/>
 
 
       </Stack.Navigator>

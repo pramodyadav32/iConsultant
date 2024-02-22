@@ -27,13 +27,14 @@ const data = [
   ]
 
 export default function ActionList(props) {
-
+    const {onClick} = props
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
         return(
+
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <View style={styles.driveListMainView}>
+               <Pressable style={styles.driveListMainView} onPress={(item,index)=>onClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
                     <Text style={styles.driveText1}>Mr. Amarjeet Singh</Text>
@@ -82,7 +83,7 @@ export default function ActionList(props) {
                 </View>
                     </View>
                     </View>
-                </View>  
+                </Pressable>  
                  </ImageBackground>         
         )
       }
@@ -95,7 +96,7 @@ export default function ActionList(props) {
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
       ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
-      ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(0))}
+      ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(7))}
       ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
             />
           
