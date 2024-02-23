@@ -32,7 +32,7 @@ const fn_TabClick=(type)=>{
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
-     <CommonHeader title='Create Prospect' mainExt={styles.drawerStyle} />
+     <CommonHeader title='Create Prospect' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
    
      <View style={styles.mainTopView}>
      <View style={styles.tabMainView}>

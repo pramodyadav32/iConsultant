@@ -31,7 +31,7 @@ export default function TodayTestDriveScreen(props) {
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
-     <CommonHeader title='Test Drive Today' mainExt={styles.drawerStyle} />
+     <CommonHeader title='Test Drive Today' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
       <View style={styles.inputView}>
         <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />

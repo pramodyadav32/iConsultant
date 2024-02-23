@@ -27,13 +27,13 @@ const data = [
   ]
 
 export default function ActionTodayList(props) {
-
+   const {cardClick} = props
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
         return(
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <View style={styles.driveListMainView}>
+                   <Pressable style={styles.driveListMainView} onPress={()=>cardClick()}>
                 <View style={styles.driveListTopView}>
                     <View>
                     <Text style={styles.driveText1}>Mr. Amarjeet Singh</Text>
@@ -82,7 +82,7 @@ export default function ActionTodayList(props) {
                 </View>
                     </View>
                     </View>
-                </View>  
+                </Pressable>  
                  </ImageBackground>         
         )
       }

@@ -210,12 +210,17 @@ const styles = StyleSheet.create({
     dashBoardIcon:{
       height:constant.moderateScale(30),
       width:constant.moderateScale(30),
+      marginLeft:constant.moderateScale(16),
+      marginBottom:constant.moderateScale(4),
+     
     },
     homeSubBoxText:{
-      fontSize:constant.moderateScale(30),
+      fontSize:constant.moderateScale(32),
       color:'#2E2E2E',
       fontFamily:constant.typeRegular,
       includeFontPadding:false,
+      paddingLeft:constant.moderateScale(10),
+   
     },
  
 })

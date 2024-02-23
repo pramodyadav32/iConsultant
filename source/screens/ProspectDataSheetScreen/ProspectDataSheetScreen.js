@@ -12,6 +12,7 @@ import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import DataSheetModal from '../../components/DataSheetModal';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -31,17 +32,17 @@ export default function ProspectDataSheetScreen(props) {
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
-
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
    });
 
+   const [detailModal,setDetailModal] = useState(false)
    const renderItem = () => {
       return (
          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
-            <Pressable style={styles.driveListMainView} >
-               <Pressable style={styles.driveListTopView1}>
+            <Pressable style={styles.driveListMainView}  >
+               <Pressable style={styles.driveListTopView1} onPress={()=>setDetailModal(true)}>
                   <Text style={styles.text2}>OLM</Text>
                   <AntDesign name='close' style={styles.closeIcon} />
                </Pressable>
@@ -197,7 +198,7 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_Create = () => {
-      props.navigation.navigate("CreatePerforma")
+      props.navigation.navigate("EditProspectScreen")
    }
 
    return (
@@ -431,7 +432,12 @@ export default function ProspectDataSheetScreen(props) {
             }
          </View>
          <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
-
+     
+      <DataSheetModal 
+       isVisible={detailModal}
+       onRequestClose={()=>setDetailModal(false)}
+      
+      />
       </SafeAreaView>
    )
 }

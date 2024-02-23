@@ -43,14 +43,14 @@ const styles = StyleSheet.create({
         backgroundColor: constant.blackColor,
         alignItems: "center",
         flexDirection:'row',
-        height:constant.resW(17),
+        height:constant.moderateScale(50),
         borderBottomWidth:1,
         borderBottomColor:constant.gainsboro,
     },
     title:{
     color:constant.whiteColor,
     fontFamily:constant.typeRegular,
-    fontSize:constant.moderateScale(17),
+    fontSize:constant.moderateScale(16),
     includeFontPadding:false,
 
     },
@@ -63,35 +63,33 @@ const styles = StyleSheet.create({
     infoButton:{
     alignItems:'center',
     justifyContent:'center',
-    width:constant.resW(10),
-    height:constant.resW(10),
+    width:constant.moderateScale(40),
+    height:constant.moderateScale(40),
    
     },
     infoImage:{
-        width:constant.resW(5),
-        height:constant.resW(5),
+        width:constant.moderateScale(20),
+        height:constant.moderateScale(20),
     },
     midView:{
      flex:1,
      justifyContent:'center'
     },
     rightView:{
-        flex:0.3,
+        flex:0.2,
         justifyContent:'center',
         flexDirection:'row',
         justifyContent:'space-between',
-        paddingRight:constant.moderateScale(15)
-     
+        paddingRight:constant.moderateScale(15),     
     },
     drawerButton:{
-    flex:0.3,
-    justifyContent:'center'
-   
+    flex:0.18,
+    justifyContent:'center',   
     },
     drawerIconStyle:{
-        width:constant.resW(7),
-        height:constant.resW(7), 
-        marginLeft:constant.resW(5)
+        width:constant.moderateScale(25),
+        height:constant.moderateScale(25), 
+        marginLeft:constant.moderateScale(15)
 
     }
    

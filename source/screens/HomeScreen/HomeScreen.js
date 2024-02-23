@@ -11,7 +11,7 @@ import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
 import ActionTodayList from './ActionTodayList';
 import ActionUpcomingList from './ActionUpcomingList';
 import DeviceInfo from 'react-native-device-info';
-
+import * as Progress from 'react-native-progress';
 const data = [
   { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
   { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
@@ -78,7 +78,12 @@ export default function HomeScreen(props) {
   }
 
 const fn_buttonClick=(type)=>{
- props.navigation.navigate("ActionTodayScreen")
+  if(type===1){
+ props.navigation.navigate("ProspectScreen")
+  }
+  else{
+    props.navigation.navigate("CalenderScreen")
+  }
 }
 
 const fn_Button=(type)=>{
@@ -117,25 +122,25 @@ const fn_Button1=(type)=>{
 const fn_Button2=(type)=>{
   if(type==1){
     Animated.spring(position, {
-      toValue: { x: constant.resW(3), y: constant.moderateScale(130) }, // Example new position
+      toValue: { x: constant.resW(2), y: constant.moderateScale(132) }, // Example new position
       useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
     }).start();
   // props.navigation.navigate("ActionTodayScreen")
   }else if(type==2){
     Animated.spring(position, {
-      toValue: { x: constant.resW(52), y: constant.moderateScale(130) }, // Example new position
+      toValue: { x: constant.resW(52), y: constant.moderateScale(132) }, // Example new position
       useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
     }).start();
     // props.navigation.navigate('UpcomingActionScreen')
   }else if(type==3){
     Animated.spring(position, {
-      toValue: { x: constant.moderateScale(12), y: constant.moderateScale(265) }, // Example new position
+      toValue: { x: constant.moderateScale(12), y: constant.moderateScale(268) }, // Example new position
       useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
     }).start();
     // props.navigation.navigate("TodayTestDriveScreen")
   }else{
     Animated.spring(position, {
-      toValue: { x: constant.moderateScale(200), y: constant.moderateScale(265) }, // Example new position
+      toValue: { x: constant.moderateScale(277), y: constant.moderateScale(268) }, // Example new position
       useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
     }).start();
     // props.navigation.navigate("ActionProspectScreen")
@@ -145,24 +150,59 @@ const fn_Button2=(type)=>{
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
       <StatusBar translucent={false} />
-      <HomeHeader title='Home' mainExt={styles.drawerStyle} />
+      <HomeHeader title='Home' mainExt={styles.drawerStyle} showDrawer={navigation} />
+      <ScrollView>
        <View style={{position:"relative",paddingHorizontal:constant.moderateScale(10),paddingVertical:constant.moderateScale(5)}}>
         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
           <Pressable onPress={()=>fn_Button(1)} style={styles.homeBoxStyle}  >
             <Text style={styles.boxText}>Actions Today</Text>
             <View style={styles.homeSubBox}> 
               <View style={styles.homeSubBox1}>
-              <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
+              <Progress.Circle 
+              size={constant.moderateScale(50)} 
+              indeterminate={false} 
+              progress={0.2}
+              color={'#FE0F17'}
+              unfilledColor={'#FE0F1730'}
+              borderWidth={0}
+              thickness={8}
+              showsText={true}
+              textStyle={{
+                fontSize:constant.moderateScale(15),
+                fontFamily:constant.typeRegular,
+                color:'#535353'
+              }}
+
+              />
+              <FastImage source={images.DashboardIcon}  resizeMode='contain' style={styles.dashBoardIcon} />
               </View>
-              <Text style={styles.homeSubBoxText}>5</Text>
+              <Text onPress={()=>navigation.navigate("ActionTodayScreen")} style={styles.homeSubBoxText}>5</Text>
 
             </View>
       
             </Pressable>
           <Pressable onPress={()=>fn_Button(2)}  style={styles.homeBoxStyle} >
           <Text style={styles.boxText}>Upcoming Actions</Text>
-            <View>
-              
+          <View style={styles.homeSubBox}> 
+              <View style={styles.homeSubBox1}>
+              {/* <Progress.Circle 
+              size={constant.moderateScale(50)}
+              indeterminate={false} 
+              progress={0.2}
+              color={'#FE0F17'}
+              unfilledColor={'#FE0F1730'}
+              borderWidth={0}
+              thickness={8}
+              showsText={true}
+              textStyle={{
+                fontSize:constant.moderateScale(15),
+                fontFamily:constant.typeRegular,
+                color:'#535353'
+              }}
+              /> */}
+              {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
+              </View>
+              <Text onPress={()=>navigation.navigate("UpcomingActionScreen")}  style={styles.homeSubBoxText}>5</Text>
             </View>
             </Pressable>
 
@@ -170,14 +210,54 @@ const fn_Button2=(type)=>{
         <View style={{flexDirection:'row',justifyContent:'space-between',paddingTop:constant.moderateScale(6)}}>
           <Pressable onPress={()=>fn_Button(3)}  style={styles.homeBoxStyle} >
           <Text style={styles.boxText}>Test Drives Today</Text>
-            <View>
-              
+          <View style={styles.homeSubBox}> 
+              <View style={styles.homeSubBox1}>
+              <Progress.Circle 
+              size={constant.moderateScale(50)}
+              indeterminate={false} 
+              progress={0.2}
+              color={'#FE0F17'}
+              unfilledColor={'#FE0F1730'}
+              borderWidth={0}
+              thickness={8}
+              showsText={true}
+              textStyle={{
+                fontSize:constant.moderateScale(15),
+                fontFamily:constant.typeRegular,
+                color:'#535353'
+              }}
+
+              />
+              <FastImage source={images.DashboardIcon}  resizeMode='contain' style={styles.dashBoardIcon} />
+              </View>
+              <Text onPress={()=>navigation.navigate("TodayTestDriveScreen")} style={styles.homeSubBoxText}>5</Text>
+
             </View>
             </Pressable>
           <Pressable onPress={()=>fn_Button(4)}  style={styles.homeBoxStyle} >
           <Text style={styles.boxText}>Active Prospect</Text>
-            <View>
-              
+          <View style={styles.homeSubBox}> 
+              <View style={styles.homeSubBox1}>
+              <Progress.Circle 
+              size={constant.moderateScale(50)}
+              indeterminate={false} 
+              progress={0.5}
+              color={'#FE0F17'}
+              unfilledColor={'#FE0F1730'}
+              borderWidth={0}
+              thickness={8}
+              showsText={true}
+              textStyle={{
+                fontSize:constant.moderateScale(15),
+                fontFamily:constant.typeRegular,
+                color:'#535353'
+              }}
+
+              />
+              <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
+              </View>
+              <Text onPress={()=>navigation.navigate("ActionProspectScreen")} style={styles.homeSubBoxText}>10</Text>
+
             </View>
             </Pressable>
         </View>
@@ -194,10 +274,12 @@ const fn_Button2=(type)=>{
           <FastImage source={images.rightArrow} tintColor={constant.whiteColor} resizeMode='contain' style={styles.userStyle} />
         </Pressable>
       </View>
-      <ActionTodayList />
+      <ActionTodayList 
+       cardClick={()=>navigation.navigate("ProspectDataSheetScreen")}
+      />
       {/* <ActionUpcomingList /> */}
 
-
+      </ScrollView>
     </SafeAreaView>
   )
 }

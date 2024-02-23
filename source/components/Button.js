@@ -12,7 +12,7 @@ const Button = (props) => {
 }
 
 Button.defaultProps = {
-    onRequestClose: function () { },
+    click_Action: function () { },
     buttonExt:{},
     textExt:{}
 }

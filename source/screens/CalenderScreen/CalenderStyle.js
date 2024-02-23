@@ -14,6 +14,23 @@ const styles = StyleSheet.create({
      borderRadius:8,
      marginBottom:constant.moderateScale(6),
     },
+    calenderheaderText:{
+        fontSize:constant.moderateScale(16),
+        color:constant.red,
+        fontFamily:constant.typeRegular,
+    },
+    cal_DayButton:{
+         width: 30, 
+          height: 30, 
+           justifyContent: 'center',
+             alignItems: 'center', 
+ 
+    },
+    cal_DayText:{
+        fontSize:constant.moderateScale(11),
+        color:constant.red,
+        fontFamily:constant.typeRegular,
+    },
     tabMainView:{
         paddingBottom:'1%',
         height:constant.moderateScale(50)

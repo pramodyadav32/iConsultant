@@ -1,15 +1,23 @@
-import React, { useEffect } from 'react';
-import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView,StatusBar } from 'react-native';
+import React, { useEffect,useState } from 'react';
+import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView,StatusBar, Animated } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux'
 import { userData_Action, selectedBranch_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import styles from './splashScreenStyle'
+import FastImage from 'react-native-fast-image';
+import Button from '../../components/Button';
+import * as constant from '../../utilities/constants'
 
 export default function SplashScreen(props) {
 
   const dispatch = useDispatch()
+  const [fadeAnimation,setFadeAnimation] = useState(new Animated.Value(0))
+  const [buttonFadeAnimation,setButtonFadeAnimation] = useState(new Animated.Value(0))
+
+  const [moveUpAnimation,setMoveUpAnimation] = useState(new Animated.Value(0))
+  const [showButton,setShowButton] = useState(false)
 
   useEffect(() => {
           setTimeout(() => {
@@ -22,6 +30,15 @@ export default function SplashScreen(props) {
               }),
             );
         }, 1000);
+    //     animateOpacity()
+    //         setTimeout(() => {
+    //           animateMoveUp()
+    //     }, 1500);
+
+    //     setTimeout(() => {
+    //      buttonAnimateOpacity()
+    //      setShowButton(true)
+    // }, 1700);
   
     // getData()
   }, [])
@@ -58,13 +75,101 @@ export default function SplashScreen(props) {
   //   })
   // }
 
+  animateOpacity = () => {
+    Animated.timing(
+    fadeAnimation,
+      {
+        toValue: 1, // Target opacity (0 for fully transparent)
+        duration: 1000, // Animation duration in milliseconds
+        useNativeDriver: true, // To improve performance, use the native driver for animation
+      }
+    ).start();
+  };
+
+  buttonAnimateOpacity = () => {
+    Animated.timing(
+   buttonFadeAnimation,
+      {
+        toValue: 1, // Target opacity (0 for fully transparent)
+        duration: 1000, // Animation duration in milliseconds
+        useNativeDriver: true, // To improve performance, use the native driver for animation
+      }
+    ).start();
+  };
+
+  animateMoveUp = () => {
+    Animated.timing(
+      moveUpAnimation,
+      {
+        toValue: -100, // Target position (negative values move the view up)
+        duration: 1000, // Animation duration in milliseconds
+        useNativeDriver: true, // To improve performance, use the native driver for animation
+      }
+    ).start();
+  };
+
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
-      <StatusBar backgroundColor={'#ffffff'} barStyle={'dark-content'} />
-      {/* <ImageBackground source={require("../../assets/images/splashImage.png")}
+    <SafeAreaView style={{flex:1,backgroundColor:'#000'}}>
+      <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
+      <ImageBackground source={images.SplashScreen}
         style={styles.splashImage}
         resizeMode='cover'
-      /> */}
+      >
+        <View style={styles.mainView}>
+              <Animated.View  
+               style={{
+                opacity: fadeAnimation,
+                alignItems:'center',
+                justifyContent:'center',
+                transform: [{ translateY: moveUpAnimation }],
+               
+              }}
+              >
+                    <FastImage source={images.logo} resizeMode='contain' style={styles.logoStyle} />
+                    <Text style={styles.text1}>iConsultant</Text>   
+                    </Animated.View>  
+{showButton &&
+
+                   <Animated.View
+                   style={{
+                    backgroundColor:'#FFFFFF29',
+                    borderWidth:1,
+                    borderColor:'#fff',
+                    width:constant.moderateScale(300),
+                    borderRadius:20,
+                    paddingTop:constant.moderateScale(10),
+                    paddingBottom:constant.moderateScale(10),
+                    opacity: buttonFadeAnimation,
+                    position:'absolute',
+                    top:constant.moderateScale(340)
+                   }}
+                   >
+                    <Button 
+                    title='DEMO OFFLINE'
+                    buttonExt={{backgroundColor:'#ABABAB'}}
+                    />
+                     <Button 
+                    title='DEMO ONLINE'
+                    buttonExt={{backgroundColor:'#ABABAB',marginTop:constant.moderateScale(10),}}
+                    />
+                      <Button 
+                    title='LIVE'
+                    buttonExt={{marginTop:constant.moderateScale(10),}}
+                    click_Action={()=>
+                          props.navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                // routes: [{ name: 'StackNavigator' }],
+
+                routes: [{ name: 'HomeScreen' }],
+              }),
+            )
+                    }
+                    />
+                    </Animated.View>  
+}   
+                </View>
+        </ImageBackground>
     </SafeAreaView>
   );
 }

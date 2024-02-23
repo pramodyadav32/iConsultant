@@ -13,6 +13,7 @@ import TodayTestDriveScreen from '../screens/TodayTestDriveScreen/TodayTestDrive
 import ActionProspectScreen from '../screens/ActiveProspectScreen/ActiveProspectScreen';
 import ProspectDataSheetScreen from '../screens/ProspectDataSheetScreen/ProspectDataSheetScreen';
 import CreatePerforma from '../screens/CreatePerforma/CreatePerforma';
+import EditProspectScreen from '../screens/EditProspectScreen/EditProspectScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,8 @@ export default function AuthNavigator() {
        <Stack.Screen  name='ActionProspectScreen' component={ActionProspectScreen}/>
        <Stack.Screen  name='ProspectDataSheetScreen' component={ProspectDataSheetScreen}/>
        <Stack.Screen  name='CreatePerforma' component={CreatePerforma}/>
+       <Stack.Screen  name='EditProspectScreen' component={EditProspectScreen}/>
+
 
 
       </Stack.Navigator>
