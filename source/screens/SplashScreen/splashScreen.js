@@ -20,25 +20,28 @@ export default function SplashScreen(props) {
   const [showButton,setShowButton] = useState(false)
 
   useEffect(() => {
-          setTimeout(() => {
-           props.navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                // routes: [{ name: 'StackNavigator' }],
+        //   setTimeout(() => {
+        //    props.navigation.dispatch(
+        //       CommonActions.reset({
+        //         index: 0,
+        //         // routes: [{ name: 'StackNavigator' }],
 
-                routes: [{ name: 'HomeScreen' }],
-              }),
-            );
-        }, 1000);
-    //     animateOpacity()
-    //         setTimeout(() => {
-    //           animateMoveUp()
-    //     }, 1500);
+        //         routes: [{ name: 'HomeScreen' }],
+        //       }),
+        //     );
+        // }, 1000);
+        setTimeout(() => {
+          animateOpacity()
+    }, 500);
+      
+            setTimeout(() => {
+              animateMoveUp()
+        }, 1500);
 
-    //     setTimeout(() => {
-    //      buttonAnimateOpacity()
-    //      setShowButton(true)
-    // }, 1700);
+        setTimeout(() => {
+         buttonAnimateOpacity()
+         setShowButton(true)
+    }, 1900);
   
     // getData()
   }, [])
