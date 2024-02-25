@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
-import { userData_Action,emptyLoader_Action } from '../../redux/actions/AuthAction'
+import { useDispatch,useSelector } from 'react-redux'
+import { userData_Action,emptyLoader_Action, selectedBranch_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import styles from './SelectBranchStyle'
@@ -11,7 +11,7 @@ import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
-import { set_UserData } from '../../utilities/AsyncStorage';
+import * as Async from '../../utilities/AsyncStorage'
 
 const data =[
     {"key":1,'title':'SECUNDERABAD WK'},
@@ -29,32 +29,30 @@ export default function SelectBranchScreen(props) {
 
     const dispatch = useDispatch()
     const [active, setActive] = useState(-1)
-
+    const {outlets,token} = useSelector(state=>state.AuthReducer)
+    const [branchList,setBranchList] = useState(outlets)
+  
+    useEffect(()=>{
+      setBranchList(outlets)
+      console.log("outlets",outlets)
+    },[])
+  
 
     const fn_Veify = (item,index) => {
-        setActive(index)
-        props.navigation.navigate("HomeScreen")
-    //    fn_Login()
+        dispatch(emptyLoader_Action(true));
+        setActive(index);
+        dispatch(selectedBranch_Action(item));
+        Async.set_SelectBranch(item)
+        setTimeout(() => {
+          dispatch(emptyLoader_Action(false));
+          props.navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'HomeScreen'}],
+            }),
+          );
+        }, 3000);    
     }
-
-    // const fn_Login = () => {
-    //     dispatch(emptyLoader_Action(true))
-    //     let param = {
-    //         'email': email,
-    //         'password': password
-    //     }
-    //     apiCall(loginCallBack, APIName.login, "POST", param)
-    // }
-
-    // const loginCallBack = (res) => {
-    //     dispatch(emptyLoader_Action(false))
-    //     if (res.status === 'success') {
-    //         set_UserData("true", res.data, res.token)
-    //         props.navigation.goBack()
-    //     } else {
-    //         constant.showMsg(res.message)
-    //     }
-    // }
 
 
     return (
@@ -66,12 +64,12 @@ export default function SelectBranchScreen(props) {
                     <Text style={styles.text1}>iConsultant</Text>
                     <View style={styles.detailMainView}>
                       <FlatList
-                       data={data}
+                       data={branchList}
                        style={{maxHeight:constant.moderateScale(300)}}
                        renderItem={({item,index})=>{
                         return(
                             <Pressable onPress={()=>fn_Veify(item,index)} style={active=== index ? styles.inputMainView2 : styles.inputMainView} >
-                            <Text style={active === index ? styles.text3 : styles.text2}>{item?.title}</Text>
+                            <Text style={active === index ? styles.text3 : styles.text2}>{item?.locationDesc}</Text>
                            </Pressable>
                         )
                        }}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, ScrollView, SafeAreaView, useWindowDimensions,Animated, StatusBar, Pressable, Text, TouchableOpacity } from 'react-native';
+import { FlatList, View, ScrollView, SafeAreaView, useWindowDimensions,Animated, StatusBar, Pressable, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import * as constant from '../../utilities/constants'
 import styles from './CalenderStyle';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,13 +16,6 @@ import CallCustScreen from './CallCustScreen';
 import VisitCustScreen from './VisitCustScreen';
 import moment from 'moment';
 
-LocaleConfig.defaultLocale = 'custom';
-LocaleConfig.locales['custom'] = {
-  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  monthNamesShort: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'],
-  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-};
 const data =[
   {'key':1,"title":'Your Profile','source':images.profile,'screenName':'HomeScreen'},
   {'key':2,"title":'Help Center','source':images.info,'screenName':'HomeScreen'},
@@ -45,6 +38,7 @@ export default function CalenderScreen(props) {
   const layout = useWindowDimensions();
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
+  const [selectDate,setSelectDate] = useState(moment( new Date).format("yyyy-MM-DD"))
   const tabWidth = constant.resW(38); 
   const [monthChange,setMonthChange] = useState(moment(new Date).format("MMMM - YYYY"))
 
@@ -64,17 +58,38 @@ const fn_TabClick=(type)=>{
   }).start();
 
 }
+
+const fn_Cal_dateSelect=(date,state,marking)=>{
+    setSelectDate(date.dateString)
+}
+
 const dayRender = (date,state,marking) => {
-  console.log("day",marking)
+  console.log("se"+selectDate)
+  console.log("day",moment(date.dateString).isSame(selectDate))
   return (
+    moment(date.dateString).isSame(selectDate) ?
+    <ImageBackground source={images.dateIcon} style={styles.calenderDateImage} >
     <TouchableOpacity
-      onPress={() => { console.log('selected day', date.dateString) }}
+      onPress={() => { console.log('selected day', date) }}
+       style={styles.cal_DayButton}> 
+       <Text  style={[styles.cal_DayText,{color: '#fff'}]} > 
+       {date.day} 
+       </Text>
+       <View />   
+        </TouchableOpacity>
+        
+        </ImageBackground>
+        :
+        <ImageBackground source={images.dateIcon} tintColor={constant.whiteColor} style={styles.calenderDateImage} >
+        <TouchableOpacity
+      onPress={() => { fn_Cal_dateSelect(date,state,marking) }}
        style={styles.cal_DayButton}> 
        <Text  style={[styles.cal_DayText,{color:  moment(date.dateString).day()===0 ? 'red' : 'black'}]} > 
        {date.day} 
        </Text>
        <View />   
         </TouchableOpacity>
+        </ImageBackground>
         )
 };
 
@@ -98,7 +113,7 @@ const dayRender = (date,state,marking) => {
   }}
   monthFormat={'MMMM - yyyy'}
   onMonthChange={month => {
-    setMonthChange(moment(month.dateString).format("MMMM - YYYY"))
+    // setMonthChange(moment(month.dateString).format("MMMM - YYYY"))
     console.log('month changed', month);
   }}
 renderArrow={direction =>

@@ -1,20 +1,19 @@
 import React from 'react'
 import store from '../redux/configureStore';
 import axios from 'react-native-axios'
-export const baseUrl = 'http://3.111.186.19/'
+
+const businessOwnerCode = 'ISUZU'
+const brandCode = 'ISUZU'
+const baseUrlLogin = 'https://orbitsys-demo-apimanagementservice.azure-api.net/OrbitsysIdentityApi/api/'
+
+export const baseUrl = 'https://g2.orbitsys.com/OrbitsysLmsApi/api/'
 export const imageUrl = 'http://3.111.186.19/media/category/'
 
 
 export const APIName = {
-  login: baseUrl + 'login',
-  signup:baseUrl + 'registration',
-  verifyOTP : baseUrl +'verifyOTP',
-  resendOTP : baseUrl + 'resendOTP',
-  getBanner : baseUrl + 'getBanner',
-  getCategories : baseUrl + 'getCategories',
-  getSubCategory : baseUrl + 'getSubCategory',
-  getPopularProfile : baseUrl + 'popularProfile',
-  getAttribute : baseUrl + 'getAttribute',
+  login: baseUrlLogin + 'Identity/AppAuthenticate',
+  GetProspectsList : baseUrl + 'Prospect/GetProspectsList',
+  GetDataCounts : baseUrl + 'Prospect/GetDataCounts',
 
 }
 
@@ -27,12 +26,15 @@ export const apiCall = (callback, url, method, param, data) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'countryCode': 'IN',
+      'BusinessOwnerCode': businessOwnerCode,
+      'x-api-key': '6138571815404a49a8bc1339d2e16aca',
     }
   }
-  // console.log("header" + JSON.stringify(options))
+  console.log("header" + JSON.stringify(options))
 
   axios(options).then(function (response) {
-    console.log(response?.data);
+    console.log(response.data);
     if (response.status === 200) {
       if (data != undefined)
         callback(response?.data)
@@ -57,6 +59,11 @@ export const tokenApiCall = (callback, url, method, param, data) => {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'countryCode': 'IN',
+      'BusinessOwnerCode': businessOwnerCode,
+      'brandCode': brandCode,
+      'Ocp-Apim-Subscription-Key': '6138571815404a49a8bc1339d2e16aca',
+      'x-api-key': '6138571815404a49a8bc1339d2e16aca',
       "Authorization": state.AuthReducer.token
     },
   }

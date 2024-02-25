@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     fontFamily:constant.typeRegular,
     fontSize:constant.moderateScale(16),
     includeFontPadding:false,
+    marginLeft:constant.moderateScale(20)
 
     },
     closeIcon:{
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
     infoButton:{
     alignItems:'center',
     justifyContent:'center',
-    width:constant.moderateScale(40),
-    height:constant.moderateScale(40),
+    width:constant.moderateScale(35),
+    height:constant.moderateScale(35),
    
     },
     infoImage:{
@@ -76,14 +77,14 @@ const styles = StyleSheet.create({
      justifyContent:'center'
     },
     rightView:{
-        flex:0.2,
+        flex:0.23,
         justifyContent:'center',
         flexDirection:'row',
         justifyContent:'space-between',
         paddingRight:constant.moderateScale(15),     
     },
     drawerButton:{
-    flex:0.18,
+    // flex:0.18,
     justifyContent:'center',   
     },
     drawerIconStyle:{

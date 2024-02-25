@@ -14,6 +14,8 @@ import ActionProspectScreen from '../screens/ActiveProspectScreen/ActiveProspect
 import ProspectDataSheetScreen from '../screens/ProspectDataSheetScreen/ProspectDataSheetScreen';
 import CreatePerforma from '../screens/CreatePerforma/CreatePerforma';
 import EditProspectScreen from '../screens/EditProspectScreen/EditProspectScreen';
+import EmiCalculatorScreen from '../screens/EmiCalculatorScreen/EmiCalculator';
+import ActiveOfferScreen from '../screens/ActiveOfferScreen/ActiveOffer';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +40,9 @@ export default function AuthNavigator() {
        <Stack.Screen  name='ProspectDataSheetScreen' component={ProspectDataSheetScreen}/>
        <Stack.Screen  name='CreatePerforma' component={CreatePerforma}/>
        <Stack.Screen  name='EditProspectScreen' component={EditProspectScreen}/>
+       <Stack.Screen  name='EmiCalculatorScreen' component={EmiCalculatorScreen}/>
+       <Stack.Screen  name='ActiveOfferScreen' component={ActiveOfferScreen}/>
+
 
 
 

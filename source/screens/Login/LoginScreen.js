@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable } from 'react-native';
 import images from '../../utilities/images';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Async from '../../utilities/AsyncStorage'
 import { useDispatch } from 'react-redux'
 import { userData_Action,emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
@@ -16,13 +16,14 @@ import { set_UserData } from '../../utilities/AsyncStorage';
 export default function LoginScreen(props) {
 
     const dispatch = useDispatch()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [comp_Id, setComp_Id] = useState('Aras')
+    const [user_Id,setUser_Id] = useState('dilip')
+    const [password, setPassword] = useState('orbit')
     const [active, setActive] = useState(true)
 
     const fn_Veify = () => {
-        if (email === '') common.showMsg("Please enter email")
-        else if (!common.validEmail) common.showMsg("Please enter valid email")
+        if (comp_Id === '') common.showMsg("Please enter company ID")
+        else if (user_Id === '') common.showMsg("Please enter user ID")
         else if (password === '') common.showMsg("Please enter password")
         else fn_Login()
     }
@@ -30,20 +31,35 @@ export default function LoginScreen(props) {
     const fn_Login = () => {
         dispatch(emptyLoader_Action(true))
         let param = {
-            'email': email,
-            'password': password
-        }
+            "loginType": active ? "USER" : "CDB_ADMIN",
+            "companyId": comp_Id.toUpperCase(),
+            "password": password,
+            "userId": user_Id.toUpperCase(),
+            "appVersion": "2",
+            "versionCode": "SERVICE_RECEPTION",
+            "macAddress": "90:e7:c4:04:cb:39"
+          }
         apiCall(loginCallBack, APIName.login, "POST", param)
     }
 
     const loginCallBack = (res) => {
         dispatch(emptyLoader_Action(false))
-        if (res.status === 'success') {
-            set_UserData("true", res.data, res.token)
-            props.navigation.goBack()
-        } else {
-            constant.showMsg(res.message)
-        }
+        console.log("loginres"+JSON.stringify(res))
+        if (res != undefined && res?.isAuthenticated) {
+            dispatch(emptyLoader_Action(false))
+            let data = { loginStatus : true , data: res?.loginContext, token: res?.token, outlets: res?.outlets }
+            Async.set_UserData('true', res?.loginContext, res?.token, res?.outlets)
+            dispatch(userData_Action(data))
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'SelectBranchScreen' }],
+              }),
+            );
+          } else {
+            constant.showMsg("Invalid login Details")
+            setTimeout(() => { dispatch(emptyLoader_Action(false)) }, 1000);
+          }
     }
 
     const fn_buttonClick = (type) => {
@@ -76,23 +92,23 @@ export default function LoginScreen(props) {
 
                         <View style={styles.inputMainView}>
                             <Image source={images.scanIcon} resizeMode='contain' style={styles.scanIconStyle} />
-                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='Company ID' ></TextInput>
+                            <TextInput style={styles.inputStyle} onChangeText={(t)=>setComp_Id(t)} placeholderTextColor={'#797979'} placeholder='Company ID' >{comp_Id}</TextInput>
                             <Image source={images.eyeIcon} resizeMode='contain' style={styles.eyeStyle} />
                         </View>
                         <View style={styles.inputMainView}>
                             <FastImage source={images.userIcon} resizeMode='contain' style={styles.userIconStyle} />
-                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='User ID' ></TextInput>
+                            <TextInput style={styles.inputStyle} onChangeText={(t)=>setUser_Id(t)}  placeholderTextColor={'#797979'} placeholder='User ID' >{user_Id}</TextInput>
                         </View>
-
+ 
                         <View style={styles.inputMainView}>
                             <Image source={images.lock} resizeMode='contain' style={styles.scanIconStyle} />
-                            <TextInput style={styles.inputStyle} placeholderTextColor={'#797979'} placeholder='Password' ></TextInput>
+                            <TextInput style={styles.inputStyle} onChangeText={(t)=>setPassword(t)} placeholderTextColor={'#797979'} placeholder='Password' >{password}</TextInput>
                             <Image source={images.eyeIcon} resizeMode='contain' style={styles.eyeStyle} />
                         </View>
                         <Button
                             title='Log In'
                             buttonExt={styles.loginButton}
-                           click_Action={()=>fn_LoginClick()}
+                           click_Action={()=>fn_Veify()}
                         />
                     </View>
                 </View>

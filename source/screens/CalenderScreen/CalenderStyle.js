@@ -19,11 +19,17 @@ const styles = StyleSheet.create({
         color:constant.red,
         fontFamily:constant.typeRegular,
     },
+    calenderDateImage:{
+        height:constant.moderateScale(25),
+        width:constant.moderateScale(25),
+        alignItems:'center',
+        justifyContent:'center',
+    },
     cal_DayButton:{
-         width: 30, 
-          height: 30, 
-           justifyContent: 'center',
-             alignItems: 'center', 
+        height:constant.moderateScale(25),
+        width:constant.moderateScale(25),
+        justifyContent: 'center',
+        alignItems: 'center', 
  
     },
     cal_DayText:{

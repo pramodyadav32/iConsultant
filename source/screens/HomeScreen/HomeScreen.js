@@ -22,7 +22,7 @@ const data = [
 export default function HomeScreen(props) {
   const { navigation } = props
   const dispatch = useDispatch()
-  const [bannerData, setbannerData] = useState([])
+  const [prospectData, setProspectData] = useState([])
   const [categoryData, setCategoryData] = useState([])
   const [profileData, setProfileData] = useState([])
   const [bannerLoader, setBannerLoader] = useState(false)
@@ -31,34 +31,53 @@ export default function HomeScreen(props) {
   
   const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
   useEffect(() => {
-    //  getBanner()
-    //  getCategory()
+     getProspectData()
+     getDataCount()
     //  getProfiles()
   }, [])
 
-  const getBanner = () => {
-    setBannerLoader(true)
-    tokenApiCall(bannerCallBack, APIName.getBanner, "GET", '')
+  const getProspectData = () => {
+    let param={
+      "brandCode": "ISUZU",
+      "countryCode": "IN",
+      "companyId": "ARAS",
+      "branchCode": "MADU01",
+      "prospectStatus": "A",
+      "prospectNo": 0,
+      "rating": "ALL",
+      "loginUserCompanyId": "ARAS",
+      "loginUserId": "vinod",
+      "ipAddress": "1::1"
+  }
+    tokenApiCall(bannerCallBack, APIName.GetProspectsList, "POST",param)
   }
 
   const bannerCallBack = (res) => {
-    setBannerLoader(false)
-    if (res.status === 'success') {
-      setbannerData(res.data)
+    console.log("prospect",JSON.stringify(res))
+    if (res.statusCode === 200) {
+      setProspectData(res?.result)
     } else {
       constant.showMsg(res.message)
     }
   }
 
-  const getCategory = () => {
-    setLoader(true)
-    tokenApiCall(categoryCallBack, APIName.getCategories, "GET", '')
+  const getDataCount = () => {
+   let param ={
+    "brandCode": "ISUZU",
+    "countryCode": "IN",
+    "companyId": "ARAS",
+    "branchCode": "MADU01",
+    "loginUserCompanyId": "ORBIT",
+    "loginUserId": "VINOD",
+    "ipAddress": "1::1"
+}
+    tokenApiCall(dataCountCallBack, APIName.GetDataCounts, "POST", param)
   }
 
-  const categoryCallBack = (res) => {
-    setLoader(false)
-    if (res.status === 'success') {
-      setCategoryData(res.data)
+  const dataCountCallBack = (res) => {
+    console.log("dataCount"+JSON.stringify(res))
+    if (res.statusCode === 200) {
+      
     } else {
       constant.showMsg(res.message)
     }
@@ -82,7 +101,7 @@ const fn_buttonClick=(type)=>{
  props.navigation.navigate("ProspectScreen")
   }
   else{
-    props.navigation.navigate("CalenderScreen")
+    props.navigation.navigate("EmiCalculatorScreen")
   }
 }
 

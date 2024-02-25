@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
       marginHorizontal:constant.moderateScale(8),
       // alignSelf:'center',
     //  backgroundColor:'red',
-     marginBottom:'3%'
+    //  marginBottom:'3%'
     },
     listCardMainView:{
     flex:1,

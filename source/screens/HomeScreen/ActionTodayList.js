@@ -95,7 +95,7 @@ export default function ActionTodayList(props) {
               renderItem={renderItem}
               showsVerticalScrollIndicator={false}
       ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
-      ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(0))}
+      ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
       ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
             />
           

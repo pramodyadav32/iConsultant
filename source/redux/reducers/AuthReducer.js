@@ -51,6 +51,7 @@ const AuthReducer = (state = initialState, action) => {
         userData: action.payload.data,
         token: action.payload.token,
         isLogin: action.payload.loginStatus,
+        outlets : action.payload.outlets,
       };
       case EMPTY_LOADER:
         console.log("userAction1"+JSON.stringify(action))

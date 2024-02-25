@@ -27,10 +27,15 @@ const listHeaderCard = require('../assets/Icons/listHeaderCard.png')
 const listImage2 = require('../assets/Icons/listImage2.png')
 const graph = require('../assets/Icons/graph.png')
 const DashboardIcon = require('../assets/Icons/DashboardIcon.png')
-
-
-
-
+const dateIcon = require('../assets/Icons/dateIcon.png')
+const checkIcon = require('../assets/Icons/checkIcon.png')
+const unCheckIcon = require('../assets/Icons/unCheckIcon.png')
+const DashBoard = require('../assets/Icons/DashBoard.png')
+const emiCalculatorIcon = require('../assets/Icons/emiCalculatorIcon.png')
+const aboutIcon = require('../assets/Icons/aboutIcon.png')
+const activeOffer = require('../assets/Icons/activeOffer.png')
+const homeIcon = require('../assets/Icons/homeIcon.png')
+const notify = require('../assets/Icons/notify.png')
 
 export default {
   backIcon,
@@ -62,4 +67,13 @@ export default {
   listImage2,
   graph,
   DashboardIcon,
+  dateIcon,
+  checkIcon,
+  unCheckIcon,
+  DashBoard,
+  aboutIcon,
+  emiCalculatorIcon,
+  notify,
+  activeOffer,
+  homeIcon,
 };

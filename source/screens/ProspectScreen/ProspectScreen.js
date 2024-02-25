@@ -11,6 +11,7 @@ import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
 import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
+import CalenderModal from '../../components/CalenderModal';
 
 const data =[
   {'key':1,"title":'Your Profile','source':images.profile,'screenName':'HomeScreen'},
@@ -24,6 +25,7 @@ export default function ProspectScreen(props) {
   const dispatch = useDispatch()
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
+  const [calenderModalShow,setCalenderModalShow] = useState(false)
  
 const fn_TabClick=(type)=>{
   setActive(type)
@@ -142,7 +144,7 @@ const fn_TabClick=(type)=>{
         </View>
         <View style={styles.detailMainView2}>
             <Text style={styles.detailText}>Closure Date</Text>
-         <Pressable style={styles.calenderMainView}>
+         <Pressable style={styles.calenderMainView} onPress={()=> setCalenderModalShow(true)}>
             <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
             <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
          </Pressable>
@@ -358,10 +360,10 @@ const fn_TabClick=(type)=>{
 }
      </View>
 
-    
-  
-    
-  
+    <CalenderModal
+     isVisible={calenderModalShow}
+     onRequestClose={()=>setCalenderModalShow(false)}
+    />
      </SafeAreaView>
   )
 }
