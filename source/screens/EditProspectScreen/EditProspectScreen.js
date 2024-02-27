@@ -36,6 +36,7 @@ export default function EditProspectScreen(props) {
     const { navigation } = props
     const dispatch = useDispatch()
     const tabWidth = constant.resW(49);
+    const { userData } = useSelector(state => state.AuthReducer)
     const [active, setActive] = useState(1)
     const [animatedValue] = useState(new Animated.Value(1));
     const interpolateX = animatedValue.interpolate({
@@ -45,6 +46,33 @@ export default function EditProspectScreen(props) {
 
     const [detailModal, setDetailModal] = useState(false)
     const [updateModal,setUpdateModal] = useState(false)
+
+ useEffect(()=>{
+
+ },[])
+
+ const fn_GetProspectBasicInfo = () => {
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "prospectNo": 8325,
+      "loginUserCompanyId": "ORBIT",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetProspectBasicInfoCallBack, APIName.GetProspectBasicInfo, "POST", param)
+  }
+
+  const GetProspectBasicInfoCallBack = (res) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+
+    } else {
+      constant.showMsg(res.message)
+    }
+  }
+
     const renderItem = () => {
         return (
             <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>

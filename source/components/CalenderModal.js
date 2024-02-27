@@ -9,10 +9,12 @@ import images from "../utilities/images"
 import moment from "moment"
 
 const CalenderModal = (props) => {
-    const { isVisible, onRequestClose } = props
+    const { isVisible, onRequestClose,onDateClick } = props
     const [selectDate, setSelectDate] = useState(moment(new Date).format("yyyy-MM-DD"))
     const tabWidth = constant.resW(38);
     const [monthChange, setMonthChange] = useState(moment(new Date).format("MMMM - YYYY"))
+
+   
 
     const dayRender = (date, state, marking) => {
         console.log("se" + selectDate)
@@ -21,7 +23,7 @@ const CalenderModal = (props) => {
             moment(date.dateString).isSame(selectDate) ?
                 <ImageBackground source={images.dateIcon} style={styles.calenderDateImage} >
                     <TouchableOpacity
-                        onPress={() => { console.log('selected day', date) }}
+                        onPress={() => { fn_Cal_dateSelect(date, state, marking)  }}
                         style={styles.cal_DayButton}>
                         <Text style={[styles.cal_DayText, { color: '#fff' }]} >
                             {date.day}
@@ -45,6 +47,7 @@ const CalenderModal = (props) => {
 
     const fn_Cal_dateSelect = (date, state, marking) => {
         setSelectDate(date.dateString)
+        onDateClick(date)
     }
 
     return (

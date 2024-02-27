@@ -18,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default function EditBasicInfo(props) {
     const { cardClick } = props
     const dispatch = useDispatch()
+    const [checkStatus,setCheckStatus] = useState(false)
 
 
     return (
@@ -66,9 +67,10 @@ export default function EditBasicInfo(props) {
                     <View style={[styles.basicDetailSubView,]}>
                         <Text style={styles.detailText}>Corporate Case</Text>
                     </View>
-                    <View style={styles.basicDetailSubView2}>
-                        <MaterialCommunityIcons name='checkbox-blank-outline' style={styles.uncheckBoxStyle} />
-                    </View>
+                    <Pressable style={styles.basicDetailSubView2} onPress={()=>setCheckStatus(!checkStatus)}>
+                        <FastImage resizeMode='contain' source={checkStatus ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
+                        {/* <MaterialCommunityIcons name='checkbox-blank-outline' style={styles.uncheckBoxStyle} /> */}
+                    </Pressable>
                 </View>
 
                 <View style={[styles.basicDetailView, { marginTop: constant.moderateScale(10) }]}>
@@ -217,7 +219,8 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top'
     },
     uncheckBoxStyle: {
-        fontSize: constant.moderateScale(32),
+        height: constant.moderateScale(28),
+        width:constant.moderateScale(28),
         color: '#ABABAB',
     },
     detailText: {

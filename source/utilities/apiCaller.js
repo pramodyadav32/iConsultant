@@ -14,6 +14,13 @@ export const APIName = {
   login: baseUrlLogin + 'Identity/AppAuthenticate',
   GetProspectsList : baseUrl + 'Prospect/GetProspectsList',
   GetDataCounts : baseUrl + 'Prospect/GetDataCounts',
+  GetCustomerSearchResults : baseUrl + 'Prospect/GetCustomerSearchResults',
+  ProspectTagList : baseUrl + 'Prospect/ProspectTagList',
+  GetProspectMaster : baseUrl + 'Prospect/GetProspectMaster',
+  GeneralMasterList : baseUrl + 'Prospect/GeneralMasterList',
+  SaveNewProspect : baseUrl + 'Prospect/SaveNewProspect',
+  GetProspectBasicInfo : baseUrl + 'Prospect/GetProspectBasicInfo',
+  GetProspectDetails : baseUrl + 'Prospect/GetProspectDetails',
 
 }
 

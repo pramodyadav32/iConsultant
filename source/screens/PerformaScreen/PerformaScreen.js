@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated } from 'react-native';
 import * as constant from '../../utilities/constants'
-import styles from './ProspectDataSheetStyle';
+import styles from './PerformaStyle';
 import { useDispatch, useSelector } from 'react-redux';
 import HomeHeader from '../../components/HomeHeader';
 import FastImage from 'react-native-fast-image';
@@ -26,7 +26,7 @@ const data2 = [
 
 ]
 
-export default function ProspectDataSheetScreen(props) {
+export default function PerformaScreen(props) {
    const { navigation } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
@@ -256,7 +256,7 @@ export default function ProspectDataSheetScreen(props) {
    return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
-         <CommonHeader title='Prospect Datasheet' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
+         <CommonHeader title='Performa' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
          <View>
             <FlatList
                data={data}

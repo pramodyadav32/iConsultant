@@ -66,7 +66,7 @@ export default function ActiveOfferScreen(props) {
                     renderItem={renderItem}
                    showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
-                    ItemSeparatorComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
+                    ItemSeparatorComponent={() => common_fn.listVer_Space(constant.moderateScale(3))}
                     ListFooterComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
                 />
                 </View>

@@ -7,13 +7,15 @@ const styles = StyleSheet.create({
         width:constant.moderateScale(100),
         },
         listSubImage:{
-            height:constant.moderateScale(80),
+            height:constant.moderateScale(70),
             width:constant.moderateScale(80),
+            marginLeft:constant.moderateScale(5)
            
         },
         listImageMainView:{
          flex:1,
-         justifyContent:'space-between',
+         elevation:3
+        //  justifyContent:'space-between',
         //  backgroundColor:'red'
         },
         listText:{
