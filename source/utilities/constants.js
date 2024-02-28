@@ -62,7 +62,7 @@ export const typeRegular= 'Roboto-Regular'
 
 // Color
 
-export const baseColor = '#12A89D';
+export const baseColor = '#FE0F17';
 export const baseLight = '#F0FDFA'
 export const whiteColor = '#ffffff';
 export const blackColor = '#000000';
@@ -75,7 +75,7 @@ export const whiteGhost = '#F9F9F9'
 export const aliceBlue ='#F7FAFC'
 export const dimGray = '#707070'
 export const green = '#609749'
-export const red = '#ED1C24'
+export const red = '#FE0F17'
 export const blue = '#4E74F9'
 export const silver = '#BBBBBB'
 export const textColor = '#606060'

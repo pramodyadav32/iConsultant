@@ -92,7 +92,7 @@ const CalenderModal = (props) => {
                                 borderColor: '#FFFFFF',
                                 elevation: 1,
                                 borderRadius: 10,
-                                marginHorizontal: constant.moderateScale(5),
+                                // marginHorizontal: constant.moderateScale(5),
                                 marginVertical: constant.moderateScale(5),
                                 paddingVertical: '0%'
                             }}
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#00000090",
         justifyContent: "center",
-        alignItems: "center"
+        // alignItems: "center"
     },
     closeIcon: {
         fontSize: constant.moderateScale(20),

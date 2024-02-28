@@ -21,7 +21,10 @@ export const APIName = {
   SaveNewProspect : baseUrl + 'Prospect/SaveNewProspect',
   GetProspectBasicInfo : baseUrl + 'Prospect/GetProspectBasicInfo',
   GetProspectDetails : baseUrl + 'Prospect/GetProspectDetails',
-
+  GetVehicleMaster : baseUrl + 'Prospect/GetVehicleMaster',
+  GetDemoVehicleList : baseUrl + 'Action/GetDemoVehicleList',
+  GetActionSlots : baseUrl + 'Action/GetActionSlots',
+  
 }
 
 export const apiCall = (callback, url, method, param, data) => {

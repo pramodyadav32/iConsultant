@@ -49,6 +49,7 @@ export default function SplashScreen(props) {
 
 
   const getData = () => {
+    dispatch(emptyLoader_Action(true))
     AsyncStorage.multiGet(['isLogin', 'userData', 'token', 'outlets', 'selectedOutlet']).then(response => {
       let login = response[0][1] != null ? JSON.parse(response[0][1]) : false
       if (login === true) {
@@ -60,6 +61,8 @@ export default function SplashScreen(props) {
         dispatch(userData_Action(newObj))
         dispatch(selectedBranch_Action(usselectedOutleterData));
         setTimeout(() => {
+        dispatch(emptyLoader_Action(false))
+
           if (usselectedOutleterData === undefined) {
             props.navigation.dispatch(
               CommonActions.reset({
@@ -78,6 +81,7 @@ export default function SplashScreen(props) {
         }, 1000);
 
       } else {
+        dispatch(emptyLoader_Action(false))
         props.navigation.dispatch(
           CommonActions.reset({
             index: 0,

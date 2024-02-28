@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
       fontSize:constant.moderateScale(12),
       color:'#434343',
       fontFamily:constant.typeMedium,
+      width:constant.moderateScale(70),
     },
     listImageStyle:{
       // height:'100%',
@@ -163,8 +164,13 @@ const styles = StyleSheet.create({
       marginLeft:constant.moderateScale(26)
     },
     upRightArrow:{
-      height:constant.moderateScale(18),
-      width:constant.moderateScale(18),
+      height:constant.moderateScale(25),
+      width:constant.moderateScale(25),
+      marginRight:constant.moderateScale(10)
+    },
+    upRightArrow2:{
+      height:constant.moderateScale(15),
+      width:constant.moderateScale(15),
       marginRight:constant.moderateScale(10)
     },
     homeBoxStyle:{

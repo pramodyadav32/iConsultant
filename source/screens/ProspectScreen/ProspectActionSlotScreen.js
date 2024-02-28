@@ -9,6 +9,8 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import moment from 'moment';
+import DeviceInfo from 'react-native-device-info';
+
 
 const data = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -22,7 +24,8 @@ const data = [
 ]
 
 const ProspectActionSlotScreen = (props) => {
-    const {isVisible,onRequestClose,date} = props
+    const {isVisible,onRequestClose,date,vehicleList,slotList} = props
+    let isTablet = DeviceInfo.isTablet();
     const [active,setActive] = useState(-1)
 
  const fn_Click=(item,index)=>{
@@ -33,8 +36,8 @@ const ProspectActionSlotScreen = (props) => {
         return (
            <ImageBackground source={images.listImage2} imageStyle={{borderRadius:10}} resizeMode='contain' style={[styles.listImage,{}]} >
            <Pressable style={styles.listImageMainView} onPress={()=>fn_Click(item,index)}>
-            <FastImage style={styles.listSubImage} resizeMode='contain' source={require('../../assets/dummy/car.png')} />
-            <Text style={styles.listText}>Isusz V - Cross</Text>
+            <FastImage style={styles.listSubImage} resizeMode='contain' source={{uri:item?.modelUrl}} />
+            <Text numberOfLines={1} style={styles.listText}>{item?.modelName}</Text>
             </Pressable>
            </ImageBackground>
         )
@@ -47,6 +50,15 @@ const ProspectActionSlotScreen = (props) => {
                 <Text style={styles.eventText2}>Test Drive [Mr. Amarjeet Singh]</Text>
             </View>
         )
+    }
+
+    const slotListRender=({item,index})=>{
+        return(
+            <Pressable style={styles.slotButton}>
+                <Text style={styles.slotText}>{item?.slot}</Text>
+            </Pressable>
+        )
+
     }
 
     return (
@@ -70,14 +82,25 @@ const ProspectActionSlotScreen = (props) => {
  
 <View>
                 <FlatList
-                    data={data}
+                    data={vehicleList}
                     horizontal
                     renderItem={renderItem}
                    showsHorizontalScrollIndicator={false}
-                    ListHeaderComponent={() => common_fn.listVer_Space(constant.moderateScale(8))}
-                    ItemSeparatorComponent={() => common_fn.listVer_Space(constant.moderateScale(0))}
+                    ListHeaderComponent={() => common_fn.listVer_Space(constant.moderateScale(3))}
+                    ItemSeparatorComponent={() => common_fn.listVer_Space(constant.moderateScale(5))}
                     ListFooterComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
                 />
+                </View>
+                <View style={styles.slotMainView}>
+                <FlatList
+                     data={slotList}
+                     numColumns={isTablet ? 6 : 4}
+                     renderItem={slotListRender}
+                     ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(8))}
+                     ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+                     ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+                
+                    />
                 </View>
                 <View style={styles.eventListMainView}>
                     <FlatList
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
       },
       modalSubView:{
      width:constant.resW(96),
-     maxHeight:constant.resH(60),
+     maxHeight:constant.resH(70),
      marginTop:constant.moderateScale(70)
       },
       innerView:{
@@ -208,6 +231,25 @@ const styles = StyleSheet.create({
                     color:'#434343',
                     fontFamily:constant.typeRegular,
                     marginTop:constant.moderateScale(2)
+                },
+                slotMainView:{
+                    marginHorizontal:constant.moderateScale(0),
+
+                },
+                slotButton:{
+                flex:1,
+                alignItems:'center',
+                justifyContent:'center',
+                borderWidth:1,
+                borderRadius:5,
+                borderColor:'#ABABAB',
+                paddingVertical:constant.moderateScale(8),
+                marginHorizontal:constant.moderateScale(5)
+                },
+                slotText:{
+                    fontSize:constant.moderateScale(10),
+                    color:'#434343',
+                    fontFamily:constant.typeLight,
                 },
              
 })

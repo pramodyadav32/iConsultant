@@ -42,35 +42,15 @@ const SelectDropList = (props) => {
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
-           if( desName === '1')
             return selectedItem.description
-            else if(desName === '2')
-            return selectedItem.itemDescription
-            else if(desName === '5')
-            return selectedItem.drivenByDescription
-            else if(desName === '15')
-            return selectedItem.dataDescription
-            else if(desName === '16')
-            return selectedItem.r_Text
-            else
-            return selectedItem.categoryDescription
+           
         }}
         rowTextForSelection={(item, index) => {
             // text represented for each item in dropdown
             // if data array is an array of objects then return item.property to represent item in dropdown
             // return item.description
-            if( desName === '1')
             return item.description
-            else if(desName === '2')
-            return item.itemDescription
-            else if(desName === '5')
-            return item.drivenByDescription
-            else if(desName === '15')
-            return item.dataDescription
-            else if(desName === '16')
-            return item.r_Text
-            else
-            return item.categoryDescription
+         
         }}
     />
     )
