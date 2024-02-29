@@ -27,30 +27,33 @@ const data2 = [
 ]
 
 export default function ProspectDataSheetScreen(props) {
-   const { navigation } = props
+   const { navigation,route } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
+   const [cardData,setcardData] = useState(route.params.cardData)
+   const [prospectBasicInfo,setProspectBasicInfo] = useState({})
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
    });
 
    useEffect(()=>{
-   //  fn_GetProspectBasicInfo()
-   fn_GetProspectDetail()
+    fn_GetProspectBasicInfo()
+   // fn_GetProspectDetail()
    },[])
 
    const fn_GetProspectBasicInfo = () => {
+      console.log("userDat",userData)
       let param = {
         "brandCode": userData?.brandCode,
         "countryCode": userData?.countryCode,
         "companyId": userData?.companyId,
-        "prospectNo": 8325,
-        "loginUserCompanyId": "ORBIT",
+        "prospectNo":Number(route.params.cardData?.prospectId),
+        "loginUserCompanyId": userData?.userCompanyId,
         "loginUserId": userData?.userId,
         "ipAddress": "1::1"
       }
@@ -60,7 +63,7 @@ export default function ProspectDataSheetScreen(props) {
     const GetProspectBasicInfoCallBack = (res) => {
       console.log("search", JSON.stringify(res))
       if (res.statusCode === 200) {
-  
+          setProspectBasicInfo(res.result?.prospectBasicInfo)
       } else {
         constant.showMsg(res.message)
       }
@@ -90,7 +93,7 @@ export default function ProspectDataSheetScreen(props) {
 
 
 
-   const renderItem = () => {
+   const renderItem = ({item,index}) => {
       return (
          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -100,11 +103,11 @@ export default function ProspectDataSheetScreen(props) {
                </Pressable>
                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View style={{ flex: 1, }}>
-                     <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                     <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                            <Text style={styles.listName3}>PID : </Text>
-                           <Text style={[styles.listName3]}>12443</Text>
+                           <Text style={[styles.listName3]}>{item?.prospectId}</Text>
                         </View>
                         <View style={styles.cardHorLine} />
                      </View>
@@ -113,11 +116,11 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>Mr.Amarjeet Singh</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Model</Text>
-                           <Text style={styles.listName3}>D-MAX</Text>
+                           <Text style={styles.listName3}>{item?.model}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
@@ -133,7 +136,7 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Rating</Text>
-                           <Text style={styles.listName3}>HOT</Text>
+                           <Text style={styles.listName3}>{item?.prospectRating}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Color</Text>
@@ -259,7 +262,7 @@ export default function ProspectDataSheetScreen(props) {
          <CommonHeader title='Prospect Datasheet' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
          <View>
             <FlatList
-               data={data}
+               data={[cardData]}
                renderItem={renderItem}
                showsVerticalScrollIndicator={false}
                ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}

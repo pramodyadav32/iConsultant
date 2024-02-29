@@ -31,6 +31,7 @@ export default function HomeScreen(props) {
   const [Action_Today, setActionToday] = useState([])
   const [upComing_Action, setUpComingAction] = useState([])
   const [filterUpComing,setFilterUpcomingAction] = useState({})
+  const [upComingListData,SetUpComingListData] = useState([])
   const [test_DriveData, setTestDriveData] = useState([])
   const [activeProspect, setActiveProspect] = useState([])
   const [active, setActive] = useState(1)
@@ -75,10 +76,9 @@ export default function HomeScreen(props) {
        )
        setTestDriveCount(sumWithInitial)
       res?.result.actionTodayList != null ? setActionToday(res?.result.actionTodayList) : null
-      // res?.result.upcommingActionList != null ? setUpComingAction(res.result?.upcommingActionList) : null
+      res?.result.upcommingActionList != null ? SetUpComingListData(res.result?.upcommingActionList) : null
       res?.result.testDeriveTodayList != null ? setTestDriveData(res.result?.testDeriveTodayList) : null
       res?.result.activeProspectList != null ? setActiveProspect(res.result?.activeProspectList) : null
-      //  groupByDate(res.result?.upcommingActionList)
        const groupedData = {};
 
    await res.result?.upcommingActionList.forEach(item => {
@@ -126,7 +126,7 @@ export default function HomeScreen(props) {
       props.navigation.navigate("ProspectScreen")
     }
     else {
-      props.navigation.navigate("CalenderScreen")
+      props.navigation.navigate("PerformaScreen")
     }
   }
 
@@ -229,7 +229,7 @@ export default function HomeScreen(props) {
                   />
                   <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
                 </View>
-                <Text onPress={() => navigation.navigate("ActionTodayScreen")} style={styles.homeSubBoxText}>{Action_Today.length}</Text>
+                <Text onPress={() => navigation.navigate("ActionTodayScreen",{dataList:Action_Today})} style={styles.homeSubBoxText}>{Action_Today.length}</Text>
 
               </View>
 
@@ -239,7 +239,7 @@ export default function HomeScreen(props) {
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                 </View>
-                <Text onPress={() => navigation.navigate("UpcomingActionScreen")} style={styles.homeSubBoxText}>{upComing_Action.length}</Text>
+                <Text onPress={() => navigation.navigate("UpcomingActionScreen",{dataList : upComingListData})} style={styles.homeSubBoxText}>{upComing_Action.length}</Text>
               </View>
             </Pressable>
 
@@ -267,7 +267,7 @@ export default function HomeScreen(props) {
                   />
                   <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
                 </View>
-                <Text onPress={() => navigation.navigate("TodayTestDriveScreen")} style={styles.homeSubBoxText}>{testdriveCount}</Text>
+                <Text onPress={() => navigation.navigate("TodayTestDriveScreen",{dataList : test_DriveData})} style={styles.homeSubBoxText}>{testdriveCount}</Text>
 
               </View>
             </Pressable>
@@ -293,7 +293,7 @@ export default function HomeScreen(props) {
                   />
                   <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
                 </View>
-                <Text onPress={() => navigation.navigate("ActionProspectScreen")} style={styles.homeSubBoxText}>{activeProspect.length}</Text>
+                <Text onPress={() => navigation.navigate("ActionProspectScreen",{dataList:activeProspect})} style={styles.homeSubBoxText}>{activeProspect.length}</Text>
 
               </View>
             </Pressable>
@@ -314,26 +314,28 @@ export default function HomeScreen(props) {
         {active === 1 &&
           <ActionTodayList
             data={Action_Today}
-            cardClick={() => navigation.navigate("ProspectDataSheetScreen")}
+            cardClick={(item,index) => navigation.navigate("ProspectDataSheetScreen",{cardData:item})}
           />
         }
         {active === 2 &&
           <ActionUpcomingList
             data={upComing_Action}
             filterData={filterUpComing}
+            cardClick={(item,index) => navigation.navigate("ProspectDataSheetScreen",{cardData:item})}
+
           />
         }
         {active === 3 &&
           <TestDriveList
             data={test_DriveData}
-            cardClick={() => navigation.navigate("ProspectDataSheetScreen")}
+            cardClick={(item,index) => navigation.navigate("ProspectDataSheetScreen",{cardData:item})}
           />
 
         }
         {active === 4 &&
           <ActiveProspectList
             data={activeProspect}
-            cardClick={() => navigation.navigate("ProspectDataSheetScreen")}
+            cardClick={(item,index) => navigation.navigate("ProspectDataSheetScreen",{cardData:item})}
           />
         }
 

@@ -16,12 +16,11 @@ import * as common_fn from '../../utilities/common_fn'
 
 
 export default function ActionUpcomingList(props) {
-    const {data, filterData} =  props
+    const {data, filterData,cardClick} =  props
     const dispatch = useDispatch()
     const [activeIndex,setActiveIndex] = useState(-1)
 
-    const renderItem=({item,index})=>{console.log("item",item)
-
+    const renderItem=({item,index})=>{
         return(
             <View>
                 <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
@@ -31,10 +30,10 @@ export default function ActionUpcomingList(props) {
                  </Pressable>
                  </ImageBackground>
                  {activeIndex=== index &&
-                   filterData[item].map((item)=>{
+                   filterData[item].map((item,index)=>{
                     return(
                      <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                     <View style={styles.driveListMainView}>
+                     <Pressable style={styles.driveListMainView} onPress={()=> cardClick(item,index)} >
                   <View style={styles.driveListTopView}>
                       <View>
                       <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
@@ -58,7 +57,7 @@ export default function ActionUpcomingList(props) {
                    </View>
                    <View style={styles.driveListDetailSubView2}>
                       <Text style={styles.listText2}>Next Action</Text>
-                      <Text style={styles.listText3}>Call to Custumer</Text>
+                      <Text style={styles.listText3}>{item?.action}</Text>
                    </View>
                   </View>
                   <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
@@ -83,7 +82,7 @@ export default function ActionUpcomingList(props) {
                   </View>
                       </View>
                       </View>
-                  </View>  
+                  </Pressable>  
                    </ImageBackground>
                     )
                    })

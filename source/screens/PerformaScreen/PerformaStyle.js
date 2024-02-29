@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
                   paddingTop:constant.moderateScale(7),
                  },
                  tabButton:{
-                 width:constant.resW(23),
+                 width:constant.resW(15),
                  justifyContent:'center'
                  },
                  tabButtonText:{
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
              
                  },
                  tabButton2:{
-                     width:constant.resW(23),
+                     width:constant.resW(15),
                      justifyContent:'center'  
                  },
                  tabButtonText2:{
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
                      width:constant.moderateScale(45),
                      backgroundColor:'red',
                      position:'absolute',
-                     bottom:constant.moderateScale(2.4),
+                     bottom:-constant.moderateScale(1),
                      borderRadius:constant.resW(20)
                  },
          

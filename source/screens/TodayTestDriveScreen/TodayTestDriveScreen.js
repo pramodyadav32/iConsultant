@@ -21,8 +21,9 @@ const data =[
 ]
 
 export default function TodayTestDriveScreen(props) {
-  const { navigation } = props
+  const { navigation,route } = props
   const dispatch = useDispatch()
+  const [listData,setListData] = useState(route.params.dataList)
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
  
@@ -36,7 +37,9 @@ export default function TodayTestDriveScreen(props) {
         <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
-     <TodayTestDriveList />
+     <TodayTestDriveList
+      data={listData}
+     />
      </SafeAreaView>
   )
 }

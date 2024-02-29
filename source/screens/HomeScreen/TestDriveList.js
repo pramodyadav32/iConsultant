@@ -21,7 +21,7 @@ export default function TestDriveList(props) {
     const renderItem=({item,index})=>{
         return(
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <Pressable style={styles.driveListMainView} onPress={()=>cardClick()}>
+                   <Pressable style={styles.driveListMainView} onPress={()=>cardClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
                     <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
@@ -45,7 +45,7 @@ export default function TestDriveList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView2}>
                     <Text style={styles.listText2}>Next Action</Text>
-                    <Text style={styles.listText3}>Call to Custumer</Text>
+                    <Text style={styles.listText3}>{item?.action}</Text>
                  </View>
                 </View>
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>

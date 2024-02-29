@@ -15,6 +15,7 @@ import CalenderModal from '../../components/CalenderModal';
 import ProspectActionSlotScreen from './ProspectActionSlotScreen';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 import moment from 'moment';
+import CustumerSearch from '../../components/CustumerSearch';
 
 const data = [
   { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -48,7 +49,7 @@ export default function ProspectScreen(props) {
   const [usageValue, setUsageValue] = useState({})
   const [entityData, setEntityData] = useState([])
   const [entityValue, setEntityValue] = useState({})
-  const [mobileno, setMobileNo] = useState('')
+  const [mobileno, setMobileNo] = useState('7339506778')
   const [pinCode, setPinCode] = useState('')
   const [generlCloserdata, setGeneralClosureData] = useState('')
   const [name, setName] = useState("")
@@ -74,7 +75,7 @@ export default function ProspectScreen(props) {
   const [vy_DataValue,setVyDataValue] = useState({})
 
   const [actionData,setActionDate] = useState('')
-
+  const [custumerSearchModal,setCustumerSearchModal] = useState({show:false,data:[]})
   useEffect(() => {
     fn_GetProspectMaster()
     fn_GetVehicleMaster ()
@@ -188,6 +189,7 @@ export default function ProspectScreen(props) {
     if (mobileno === '') { constant.showMsg("Please enter mobile no") }
     else if (mobileno.length != 10) { constant.showMsg('Please enter valid mobile no') }
     else {
+      dispatch(emptyLoader_Action(true))
       let param = {
         "brandCode": userData?.brandCode,
         "countryCode": userData?.countryCode,
@@ -203,8 +205,13 @@ export default function ProspectScreen(props) {
 
   const getSearchCustCallBack = (res) => {
     console.log("search", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
-
+      if(res?.result?.pospectTagList.length>0){
+     setCalenderModalShow({show:true,data:res?.result?.pospectTagList})
+      }else{
+        constant.showMsg("Opps, Record not found")
+      }
     } else {
       constant.showMsg(res.message)
     }
@@ -449,8 +456,8 @@ const  GetActionSlotsCallBack= async (res) => {
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={title}
-                  title=''
-                  buttonExt={styles.dropNameList}
+                  title=' '
+                  buttonExt={styles.dropNameList2}
                   textExt={styles.dropNameListText}
                   on_Select={(d) => setTitleValue(d)}
                 />
@@ -778,6 +785,12 @@ const  GetActionSlotsCallBack= async (res) => {
         date={timeSlotModal.date}
         vehicleList = {timeSlotModal.vehicleList}
         slotList = {timeSlotModal.slotList}
+      />
+
+      <CustumerSearch 
+        isVisible={calenderModalShow.show}
+        onRequestClose={() => setCalenderModalShow(s => { return { ...s, show: false } })}
+        data={calenderModalShow.data}
       />
     </SafeAreaView>
   )

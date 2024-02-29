@@ -14,18 +14,6 @@ import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
 
-// const data = [
-//     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
-//     { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
-//     { 'key': 3, "title": 'Privacy Policy', 'source': images.lock, 'screenName': 'HomeScreen' },
-//     { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-//     { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-//     { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-//     { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-//     { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-
-//   ]
-
 export default function ActionTodayList(props) {
    const {cardClick,data} = props
     const dispatch = useDispatch()
@@ -33,7 +21,7 @@ export default function ActionTodayList(props) {
     const renderItem=({item,index})=>{
         return(
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <Pressable style={styles.driveListMainView} onPress={()=>cardClick()}>
+                   <Pressable style={styles.driveListMainView} onPress={()=>cardClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
                     <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
@@ -57,7 +45,7 @@ export default function ActionTodayList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView2}>
                     <Text style={styles.listText2}>Next Action</Text>
-                    <Text style={styles.listText3}>Call to Custumer</Text>
+                    <Text style={styles.listText3}>{item?.action}</Text>
                  </View>
                 </View>
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>

@@ -14,20 +14,8 @@ import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
 
-const data = [
-    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
-    { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
-    { 'key': 3, "title": 'Privacy Policy', 'source': images.lock, 'screenName': 'HomeScreen' },
-    { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-    { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-    { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-    { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-    { 'key': 4, "title": 'Logout', 'source': images.logout, 'screenName': 'HomeScreen' },
-
-  ]
-
 export default function ActionList(props) {
-    const {onClick} = props
+    const {onClick,data} = props
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
@@ -37,28 +25,28 @@ export default function ActionList(props) {
                <Pressable style={styles.driveListMainView} onPress={(item,index)=>onClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
-                    <Text style={styles.driveText1}>Mr. Amarjeet Singh</Text>
+                    <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
                     <View style={styles.horizontalLine} />
                     </View>
                     <FastImage source={images.graph} resizeMode='contain' style={styles.listDriveIcon} />
                 </View>
                 <View style={{flex:1,flexDirection:'row'}}>
                     <View style={{flex:1,}}>
-                    <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                    <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
                     <View style={[{flexDirection:'row',justifyContent:'space-between',flex:1,paddingRight:constant.moderateScale(18)}]}>
-                    <Text style={styles.ModelText3}>D-MAX</Text>
-                    <Text style={styles.fuelText2}>Desel</Text>
+                    <Text style={styles.ModelText3}>{item?.model}</Text>
+                    <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>
                  </View>
                     </View>
                     <View style={{flex:1.7}}>
                     <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(2)}]}>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Prospect ID</Text>
-                    <Text style={styles.listText3}>12247</Text>
+                    <Text style={styles.listText3}>{item?.prospectId}</Text>
                  </View>
                  <View style={styles.driveListDetailSubView2}>
                     <Text style={styles.listText2}>Next Action</Text>
-                    <Text style={styles.listText3}>Call to Custumer</Text>
+                    <Text style={styles.listText3}>{item?.action}</Text>
                  </View>
                 </View>
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
@@ -74,7 +62,7 @@ export default function ActionList(props) {
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
                 <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Rating</Text>
-                    <Text style={styles.listText3}>HOT</Text>
+                    <Text style={styles.listText3}>{item?.prospectRating}</Text>
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>

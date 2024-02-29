@@ -271,25 +271,33 @@ export default function PerformaScreen(props) {
          <View style={styles.cal_SubView}>
             <View style={styles.tabMainView}>
                <View style={styles.tabSubView}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} >
                   <Pressable style={active === 1 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(1)} >
-                     <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Data Sheet</Text>
+                     <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Basic Info</Text>
+                    {active===1 && <View style={[styles.horixontalLine]} /> }
                   </Pressable>
-                  <Pressable style={active === 2 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(2)} >
-                     <Text style={active === 2 ? styles.tabButtonText : styles.tabButtonText2}>Basic Info</Text>
+                  <Pressable style={active === 2 ? [styles.tabButton, { width: constant.resW(18), }] : [styles.tabButton2, { width: constant.resW(18) }]} onPress={() => fn_TabClick(2)} >
+                     <Text style={active === 2 ? styles.tabButtonText : styles.tabButtonText2}>Accessories</Text>
+                     {active===2 && <View style={[styles.horixontalLine]} /> }               
                   </Pressable>
-                  <Pressable style={active === 3 ? [styles.tabButton, { width: constant.resW(30), }] : [styles.tabButton2, { width: constant.resW(30) }]} onPress={() => fn_TabClick(3)} >
-                     <Text style={active === 3 ? styles.tabButtonText : styles.tabButtonText2}>Prospect Info</Text>
+                  <Pressable style={active === 3 ? [styles.tabButton, { width: constant.resW(15), }] : [styles.tabButton2, { width: constant.resW(15) }]} onPress={() => fn_TabClick(3)} >
+                     <Text style={active === 3 ? styles.tabButtonText : styles.tabButtonText2}>Packages</Text>
+                     {active===3 && <View style={[styles.horixontalLine]} /> }                
                   </Pressable>
-                  <Pressable style={active === 4 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(4)} >
-                     <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Actions</Text>
+                  <Pressable style={active === 4 ? [styles.tabButton, {width: constant.resW(15)}] : [styles.tabButton2, {width: constant.resW(15)}]} onPress={() => fn_TabClick(4)} >
+                     <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Insurance</Text>
+                     {active===4 && <View style={[styles.horixontalLine]} /> }               
                   </Pressable>
+                  <Pressable style={active === 5 ? [styles.tabButton, {width: constant.resW(18)}] : [styles.tabButton2, {width: constant.resW(18)}]} onPress={() => fn_TabClick(5)} >
+                     <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Registration</Text>
+                     {active===5 && <View style={[styles.horixontalLine]} /> }               
+                  </Pressable>
+                  <Pressable style={active === 6 ? [styles.tabButton, {width: constant.resW(10)}] : [styles.tabButton2, {width: constant.resW(10)}]} onPress={() => fn_TabClick(6)} >
+                     <Text style={active === 6 ? styles.tabButtonText : styles.tabButtonText2}>Terms</Text>
+                     {active===6 && <View style={[styles.horixontalLine]} /> }               
+                  </Pressable>
+                  </ScrollView>
                </View>
-               <Animated.View
-                  style={[styles.horixontalLine, {
-                     transform: [{ translateX: interpolateX }],
-                  }]}
-               >
-               </Animated.View>
             </View>
             {
                active === 1 &&

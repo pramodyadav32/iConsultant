@@ -21,10 +21,15 @@ const data =[
 ]
 
 export default function ActionTodayScreen(props) {
-  const { navigation } = props
+  const { navigation,route } = props
   const dispatch = useDispatch()
+  const [actionToday,setActionToday] = useState(route.params.dataList)
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
+
+  useEffect(()=>{
+   
+  },)
  
 
 
@@ -37,6 +42,7 @@ export default function ActionTodayScreen(props) {
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
      <ActionList
+      data={actionToday}
       onClick={()=>navigation.navigate("ProspectDataSheetScreen")}
        />
      </SafeAreaView>

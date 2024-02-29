@@ -13,20 +13,11 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import ActionProspectList from './ActionProspectList';
 
-const data =[
-  {'key':1,"title":'Your Profile','source':images.profile,'screenName':'HomeScreen'},
-  {'key':2,"title":'Help Center','source':images.info,'screenName':'HomeScreen'},
-  {'key':3,"title":'Privacy Policy','source':images.lock,'screenName':'HomeScreen'},
-  {'key':4,"title":'Logout','source':images.logout,'screenName':'HomeScreen'},
-]
 
 export default function ActionProspectScreen(props) {
-  const { navigation } = props
+  const { navigation,route } = props
   const dispatch = useDispatch()
-  const [active,setActive] = useState(1)
-  const [count,setCount] = useState(0)
- 
-
+  const [listData,setListData] = useState(route.params.dataList)
 
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
@@ -36,7 +27,7 @@ export default function ActionProspectScreen(props) {
         <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
-     <ActionProspectList />
+     <ActionProspectList data={listData} />
      </SafeAreaView>
   )
 }

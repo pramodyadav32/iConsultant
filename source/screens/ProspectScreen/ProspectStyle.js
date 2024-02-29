@@ -165,6 +165,15 @@ const styles = StyleSheet.create({
         backgroundColor:constant.whiteColor,
        paddingHorizontal:0
       },
+      dropNameList2:{
+        borderWidth:1,
+        height:constant.moderateScale(40),
+        borderRadius:8,
+        width:constant.resW(17),
+        borderColor:'#ABABAB',
+        backgroundColor:constant.whiteColor,
+       paddingHorizontal:constant.moderateScale(5)
+      },
       dropNameListText:{
           fontSize:constant.moderateScale(14),
           color:constant.textColor,
