@@ -51,11 +51,11 @@ export default function ActiveProspectList(props) {
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Mobile No</Text>
-                    <Text style={styles.listText3}>1234567898</Text>
+                    <Text style={styles.listText3}>{item?.custMobile}</Text>
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Day Since</Text>
-                    <Text style={styles.listText3}>423</Text>
+                    <Text style={styles.listText3}>{item?.prospectAge}</Text>
                  </View>
                 </View>
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
@@ -65,7 +65,7 @@ export default function ActiveProspectList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>10-Feb-2024 4:00 PM</Text>
+                    <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
                  </View>
                 </View>
                     </View>

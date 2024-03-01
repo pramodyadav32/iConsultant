@@ -2,7 +2,7 @@ import React from 'react'
 import Snackbar from 'react-native-snackbar';
 import images from './images';
 import * as constant from './constants'
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View,Text,StyleSheet } from 'react-native';
 
 export const showMsg = (msg) => {
   Snackbar.show({
@@ -37,3 +37,26 @@ return(
 )
 }
 
+export const listEmpty=(msg,h = 0)=>{
+  return(
+  <View style={[styles.emptyView,{marginTop:h}]}>
+  <Text style={styles.emptyListText} >{msg}</Text>
+ </View>
+  )
+}
+
+
+const styles = StyleSheet.create({
+  emptyListText:{
+    fontSize:constant.moderateScale(18),
+    color:'#434343',
+    fontFamily:constant.blackColor,
+
+},
+emptyView:{
+flex:1,
+ alignItems:'center',
+ justifyContent:'center',
+ marginTop:constant.moderateScale(150)
+},
+})

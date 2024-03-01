@@ -8,7 +8,7 @@ import FastImage from 'react-native-fast-image';
 import images from '../../utilities/images';
 import * as common_fn from '../../utilities/common_fn'
 import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
-import CommonHeader from '../../components/CommonHeader';
+import moment from 'moment';
 
 const data =[
   {'key':1,"title":'Your Profile','source':images.profile,'screenName':'HomeScreen'},
@@ -18,39 +18,47 @@ const data =[
 ]
 
 export default function VisitCustScreen(props) {
-  const { navigation } = props
+  const { navigation,listData,listLoader } = props
   const dispatch = useDispatch()
   const layout = useWindowDimensions();
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
 
-  const renderItem=()=>{
+const fn_EmptyComp=()=>{
+  return(
+    <View style={styles.emptyView}>
+     {!listLoader && <Text style={styles.emptyListText} > No Data Found</Text>}
+    </View>
+  )
+}
+
+  const renderItem=({item,index})=>{
     return(
         <View style={styles.driveListMainView}>
             <View style={styles.driveListTopView}>
-                <Text style={styles.driveText1}>Mr. Amarjeet Singh</Text>
+                <Text style={styles.driveText1}>{item?.custName}</Text>
                 <FastImage source={images.visitCust} resizeMode='contain' style={styles.listDriveIcon} />
             </View>
 
             <View style={styles.driveListDetailView}>
              <View style={styles.driveListDetailSubView}>
                 <Text style={styles.listText2}>Prospect ID</Text>
-                <Text style={styles.listText3}>12247</Text>
+                <Text style={styles.listText3}>{item?.pNo}</Text>
              </View>
              <View style={styles.driveListDetailSubView2}>
                 <Text style={styles.listText2}>Next Action</Text>
-                <Text style={styles.listText3}>Call to Custumer</Text>
+                <Text style={styles.listText3}>{item?.actionDescription}</Text>
              </View>
             </View>
 
             <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
              <View style={styles.driveListDetailSubView}>
                 <Text style={styles.listText2}>Mobile No</Text>
-                <Text style={styles.listText3}>1234567898</Text>
+                <Text style={styles.listText3}>{item?.custMobile}</Text>
              </View>
              <View style={styles.driveListDetailSubView}>
                 <Text style={styles.listText2}>Closure</Text>
-                <Text style={styles.listText3}>10-Feb-2024 4:00 PM</Text>
+                <Text style={styles.listText3}>{item.projectedCloserDate}</Text>
              </View>
             </View>
         </View>
@@ -60,12 +68,13 @@ export default function VisitCustScreen(props) {
   return (  
 <View style={styles.test_MainView}>
     <FlatList
-      data={data}
+      data={listData}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
       ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
       ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(30))}
+      ListEmptyComponent={()=>fn_EmptyComp()}
     />
 </View>
   )

@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
          paddingTop:constant.moderateScale(5),
         },
         tabButton:{
-        width:constant.resW(35),
+        // width:constant.resW(35),
         justifyContent:'center'
         },
         tabButtonText:{
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     
         },
         tabButton2:{
-            width:constant.resW(35),
+            // width:constant.resW(35),
             justifyContent:'center'  
         },
-        tabButtonText2:{
+         tabButtonText2:{
         fontSize:constant.moderateScale(15),
         color:constant.textColor,
         fontFamily:constant.typeLight,
@@ -131,6 +131,17 @@ const styles = StyleSheet.create({
             fontSize:constant.moderateScale(12),
             color:'#434343',
             fontFamily:constant.typeMedium,
+        },
+        emptyListText:{
+            fontSize:constant.moderateScale(18),
+            color:'#434343',
+            fontFamily:constant.blackColor,
+        
+        },
+        emptyView:{
+         height:'100%',
+         alignItems:'center',
+         marginTop:constant.moderateScale(150)
         },
 })
 

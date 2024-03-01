@@ -28,10 +28,12 @@ export default function UpcomingActionScreen(props) {
   const [filterList,setFilterList] = useState([])
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
+  const [searchText,setSearchText] = useState("")
 
   useEffect(()=>{
   fn_GetData()
   },[])
+  
 
   const fn_GetData=async()=>{
     const groupedData = {};
@@ -50,19 +52,60 @@ export default function UpcomingActionScreen(props) {
    setFilterList(groupdate)
   }
  
+  const fn_Search=(d)=>{
+    setSearchText(d)
+     if(d.length > 0 ){
+     let text = d.toLowerCase()
+       let filteredName = route.params.dataList.filter((item) => {
+        if (item.firstName.toLowerCase().match(text) || item.action.toLowerCase().match(text) || item.custMobile.toLowerCase().match(text) || item.model.toLowerCase().match(text) ) {
+          return item
+        }
+      })
+      const groupedData = {};
 
+     filteredName.forEach(item => {
+     const dateKey = item.actionDate;
+   
+     if (!groupedData[dateKey]) {
+       groupedData[dateKey] = [item];
+     } else {
+       groupedData[dateKey].push(item);
+     }
+   });
+    let groupdate = Object.keys(groupedData)
+     setFilterData(groupedData)
+     setFilterList(groupdate)
+     }else{
+      const groupedData = {};
+
+     route.params.dataList.forEach(item => {
+     const dateKey = item.actionDate;
+   
+     if (!groupedData[dateKey]) {
+       groupedData[dateKey] = [item];
+     } else {
+       groupedData[dateKey].push(item);
+     }
+   });
+    let groupdate = Object.keys(groupedData)
+     setFilterData(groupedData)
+     setFilterList(groupdate)
+     }
+  }
 
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
      <CommonHeader title='Upcoming Actions' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
       <View style={styles.inputView}>
-        <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
+        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
      <UpcomingActionList
        data={filterList}
        filterData={filterData}
+       onClick={(item,index)=>navigation.navigate("ProspectDataSheetScreen",{cardData: item})}
+
      />
      </SafeAreaView>
   )

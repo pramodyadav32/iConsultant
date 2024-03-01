@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
           fontSize:constant.moderateScale(12),
           color:'#434343',
           fontFamily:constant.typeMedium,
+          width:'60%',
         },
         listImageStyle:{
           // height:'100%',

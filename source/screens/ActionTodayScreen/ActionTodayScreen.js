@@ -26,24 +26,38 @@ export default function ActionTodayScreen(props) {
   const [actionToday,setActionToday] = useState(route.params.dataList)
   const [active,setActive] = useState(1)
   const [count,setCount] = useState(0)
+  const [searchText,setSearchText] = useState("")
 
   useEffect(()=>{
    
-  },)
+  },[])
  
-
+  const fn_Search=(d)=>{
+    setSearchText(d)
+     if(d.length > 0 ){
+     let text = d.toLowerCase()
+       let filteredName = route.params.dataList.filter((item) => {
+        if (item.firstName.toLowerCase().match(text) || item.action.toLowerCase().match(text) || item.custMobile.toLowerCase().match(text) || item.model.toLowerCase().match(text) ) {
+          return item
+        }
+      })
+      setActionToday([...filteredName])
+     }else{
+      setActionToday([...route.params.dataList])
+     }
+  }
 
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
      <CommonHeader title='Actions Today' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
       <View style={styles.inputView}>
-        <TextInput style={styles.input} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
+        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
      <ActionList
       data={actionToday}
-      onClick={()=>navigation.navigate("ProspectDataSheetScreen")}
+      onClick={(item,index)=>navigation.navigate("ProspectDataSheetScreen",{cardData: item})}
        />
      </SafeAreaView>
   )

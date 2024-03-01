@@ -64,7 +64,7 @@ export default function HomeScreen(props) {
   }
 
   const prospectCallBack = async(res) => {
-    // console.log("prospect", JSON.stringify(res))
+    console.log("prospect", JSON.stringify(res))
      setrefresh(false)
      dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
@@ -126,7 +126,7 @@ export default function HomeScreen(props) {
       props.navigation.navigate("ProspectScreen")
     }
     else {
-      props.navigation.navigate("PerformaScreen")
+      props.navigation.navigate("CalenderScreen")
     }
   }
 
@@ -278,7 +278,7 @@ export default function HomeScreen(props) {
                   <Progress.Circle
                     size={constant.moderateScale(50)}
                     indeterminate={false}
-                    progress={activeProspect.length}
+                    progress={activeProspect.length/100}
                     color={'#FE0F17'}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}

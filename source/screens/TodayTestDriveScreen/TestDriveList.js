@@ -17,13 +17,13 @@ import * as common_fn from '../../utilities/common_fn'
 
 
 export default function ActionList(props) {
-    const {data} = props 
+    const {data,onClick} = props 
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
         return(
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <View style={styles.driveListMainView}>
+                   <Pressable style={styles.driveListMainView} onPress={()=>onClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
                     <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
@@ -53,11 +53,11 @@ export default function ActionList(props) {
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Mobile No</Text>
-                    <Text style={styles.listText3}>1234567898</Text>
+                    <Text style={styles.listText3}>{item?.custMobile}</Text>
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Day Since</Text>
-                    <Text style={styles.listText3}>423</Text>
+                    <Text style={styles.listText3}>{item?.prospectAge}</Text>
                  </View>
                 </View>
                 <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
@@ -67,12 +67,12 @@ export default function ActionList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>10-Feb-2024 4:00 PM</Text>
+                    <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
                  </View>
                 </View>
                     </View>
                     </View>
-                </View>  
+                </Pressable>  
                  </ImageBackground>         
         )
       }
@@ -87,6 +87,7 @@ export default function ActionList(props) {
       ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
       ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(7))}
       ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
+       ListEmptyComponent={()=>common_fn.listEmpty("Data not found",constant.moderateScale(200))}
             />
           
          </View>
