@@ -16,16 +16,156 @@ import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function EditProspectInfo(props) {
-    const { cardClick } = props
+    const { data,prospectMaster, prospectDetail} = props
     const dispatch = useDispatch()
     const [activeIndex,setActiveIndex] = useState(true)
     const [active, setActive] = useState(1)
+    const [stateData, setStateData] = useState([])
+    const [stateValue, setStateValue] = useState({})
+    const [cityData, setCityData] = useState([])
+    const [cityValue, setCityValue] = useState({})
+    const [title, setTitle] = useState([])
+    const [titleValue, setTitleValue] = useState({})
+    const [titleSonValue,setTitleSonValue] = useState({"code" : "","description":" "})
+    const [name,setName] = useState("")
+    const [sonName,setSonName] = useState("")
+    const [mobileno,setMobileno] = useState("")
+    const [email,setEmail] = useState("")
+    const [panData,setPanData] = useState("")
+    const [empName,setEmpName] = useState("")
+    const [empMail,setEmpMail] = useState("")
+    const [destination,setDestination] = useState("")
+    const [prospectTypeData,setProspectData] = useState([])
+    const [prospectTypeValue,setProspectTypeValue] = useState({})
+
+    const [resAdd1,setRes_Add1] = useState("")
+    const [resAdd2,setRes_Add2] = useState("")
+    const [resAdd3,setRes_Add3] = useState("")
+    const [res_State,setRes_State] = useState({})
+    const [res_City,setRes_City] = useState({})
+    const [res_destict,setRes_Destict] = useState({})
+    const [res_Pin,setRes_Pin] = useState("")
+    const [res_Phone,setRes_Phone] = useState('')
+
+      const [regAdd1,setReg_Add1] = useState("")
+    const [regAdd2,setReg_Add2] = useState("")
+    const [regAdd3,setReg_Add3] = useState("")
+    const [reg_State,setReg_State] = useState({})
+    const [reg_City,setReg_City] = useState({})
+    const [reg_destict,setReg_Destict] = useState({})
+    const [reg_Pin,setReg_Pin] = useState("")
+    const [reg_Phone,setReg_Phone] = useState('')
+
+   const [offAdd1,setOff_Add1] = useState("")
+    const [offAdd2,setOff_Add2] = useState("")
+    const [offAdd3,setOff_Add3] = useState("")
+    const [off_State,setOff_State] = useState({})
+    const [off_City,setOff_City] = useState({})
+    const [off_destict,setOff_Destict] = useState({})
+    const [off_Pin,setOff_Pin] = useState("")
+    const [off_Phone,setOff_Phone] = useState('')
+
+    const [copyToRes,setCopyToRes] = useState(false)
+    const [copyToOff,setCopyToOff] = useState(false)
+    const [copyRegToOff,setCopyRegToOff] = useState(false)
+useEffect(()=>{
+ prospectMaster.map((item) => {
+         if (item.listType === 'TITLE') {
+          setTitle(item.prospectMasterList)
+           item.prospectMasterList.map((item)=>{
+                item?.code === prospectDetail?.title ? setTitleValue(item) : null
+            })
+        } else if (item.listType === 'STATE') {
+          setStateData(item.prospectMasterList)
+           item.prospectMasterList.map((item)=>{
+                item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != ''?  setReg_State(item) : null : null
+                item?.code === prospectDetail?.resState ? prospectDetail?.resState != ''? setRes_State(item): null : null
+                item?.code === prospectDetail?.offcState ? prospectDetail?.offcState != ''? setOff_State(item): null : null
+                      
+            })
+        } else if (item.listType === 'CITY') {
+             item.prospectMasterList.map((item)=>{
+                item?.code === prospectDetail?.regnCity ? prospectDetail?.regnCity != ''?  setReg_City(item) : null : null
+                item?.code === prospectDetail?.resCity ? prospectDetail?.resCity != ''? setRes_City(item): null : null
+                item?.code === prospectDetail?.offcCity ? prospectDetail?.offcCity != ''? setOff_City(item): null : null
+                      
+            })
+          setCityData(item.prospectMasterList)
+        } else if(item.listType==='PROSPECT_CATEGORY'){
+            setProspectData(item.prospectMasterList)
+            // item.prospectMasterList.map((item)=>{
+            //     item?.code === data?.prospectType ? setProspectTypeValue(item) : null
+            // })
+        }
+      })
+      setMobileno(prospectDetail?.mobile)
+      setEmail(prospectDetail?.email)
+      setPanData(prospectDetail?.pan)
+      setEmpName(prospectDetail?.employerNam)
+      setEmpMail(prospectDetail?.employerEmailId)
+      setDestination(prospectDetail?.designation)
+
+      setOff_Add1(prospectDetail?.offcAddress1)
+      setOff_Add2(prospectDetail?.offcAddress2)
+      setOff_Add3(prospectDetail?.offcAddress3)
+      setOff_Phone(prospectDetail?.offcPincode)
+      setOff_Pin(prospectDetail?.offcPhone)
+
+      setReg_Add1(prospectDetail?.regnAddress1)
+      setReg_Add2(prospectDetail?.regnAddress2)
+      setReg_Add3(prospectDetail?.regnAddress3)
+      setReg_Phone(prospectDetail?.regnPhone)
+      setReg_Pin(prospectDetail?.regnPincode)
+
+      setRes_Add1(prospectDetail?.resAddress1)
+      setRes_Add2(prospectDetail?.resAddress2)
+      setRes_Add3(prospectDetail?.resAddress3)
+      setRes_Phone(prospectDetail?.resPhone)
+      setRes_Pin(prospectDetail?.resPincode)
+
+},[prospectMaster])
 
 
     const fn_TabClick = (type) => {
         setActive(type)
       
     }
+
+  const fn_copyAddress1=()=>{
+    setRes_Add1(regAdd1)
+    setRes_Add2(regAdd2)
+    setRes_Add3(regAdd3)
+    setRes_State(reg_State)
+    setRes_City(reg_City)
+    setRes_Destict(reg_destict)
+    setRes_Pin(reg_Pin)
+    setRes_Phone(reg_Phone)
+    setCopyToRes(!copyToRes)
+  }
+
+  const fn_copyAddress2=()=>{
+    setOff_Add1(regAdd1)
+    setOff_Add2(regAdd2)
+    setOff_Add3(regAdd3)
+    setOff_State(reg_State)
+    setOff_City(reg_City)
+    setOff_Destict(reg_destict)
+    setOff_Pin(reg_Pin)
+    setOff_Phone(reg_Phone)
+    setCopyToOff(!copyToOff)
+  }
+
+  const fn_copyAddress3=()=>{
+    setOff_Add1(resAdd1)
+    setOff_Add2(resAdd2)
+    setOff_Add3(resAdd3)
+    setOff_State(res_State)
+    setOff_City(res_City)
+    setOff_Destict(res_destict)
+    setOff_Pin(res_Pin)
+    setOff_Phone(res_Phone)
+    setCopyRegToOff(!copyRegToOff)
+  }
 
     return (
         <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
@@ -41,9 +181,10 @@ export default function EditProspectInfo(props) {
             <Text style={styles.detailText}>Prospect Type</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={prospectTypeData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setProspectTypeValue(d)}
            />
             </View>
         </View>
@@ -53,12 +194,14 @@ export default function EditProspectInfo(props) {
             <Text style={styles.detailText}>Name</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
-             title='Mr.'
+             list={title}
+             title={titleValue?.description}
              buttonExt={styles.dropNameList}
              textExt={styles.dropNameListText}
+             on_Select={(d)=>setTitleValue(d)}
+             
            />
-            <TextInput style={[styles.input1,{marginLeft:'2%'}]} >Alfred Rosario</TextInput>
+            <TextInput onChangeText={(d)=>setName(d)} style={[styles.input1,{marginLeft:'2%'}]} >{name}</TextInput>
         
             </View>
         </View>
@@ -67,12 +210,13 @@ export default function EditProspectInfo(props) {
             <Text style={styles.detailText}>Son of</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
-             title='Mr.'
+             list={title}
+             title={titleSonValue?.description}
              buttonExt={styles.dropNameList}
              textExt={styles.dropNameListText}
+             on_Select={(d)=>setTitleSonValue(d)}
            />
-            <TextInput style={[styles.input1,{marginLeft:'2%'}]} >Alfred Rosario</TextInput>
+            <TextInput onChangeText={(d)=>setSonName(d)} style={[styles.input1,{marginLeft:'2%'}]} >{sonName}</TextInput>
         
             </View>
         </View>
@@ -80,31 +224,31 @@ export default function EditProspectInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Mobile No.<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
-                <TextInput style={styles.input1} keyboardType='numeric'>+91 8470068493</TextInput>
+                <TextInput style={styles.input1} onChangeText={(d)=>setMobileno(d)} keyboardType='numeric'>{mobileno}</TextInput>
             </View>
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Email ID</Text>
-                <TextInput style={styles.input1} >a.r@gmail.com</TextInput>
+                <TextInput onChangeText={(d)=>setEmail(d)} style={styles.input1} >{email}</TextInput>
         </View>
 
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>I-Tax PAN</Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>setPanData(d)} style={styles.input1} >{panData}</TextInput>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Employer Name</Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>setEmpName(d)} style={styles.input1} >{empName}</TextInput>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Employer Mail</Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>setEmpMail(d)} style={styles.input1} >{empMail}</TextInput>
         </View>
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Designation</Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
         </View>
         </View>
 }
@@ -135,27 +279,29 @@ export default function EditProspectInfo(props) {
                             </Pressable>
                     </View>
                 </View>
-
+          {active=== 1 &&      
+         <View>
                     <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Address (Regn.)</Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>{setReg_Add1(d)}} style={styles.input1} >{regAdd1}</TextInput>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}></Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>{setReg_Add2(d)}} style={styles.input1} >{regAdd2}</TextInput>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}></Text>
-                <TextInput style={styles.input1} ></TextInput>
+                <TextInput onChangeText={(d)=>{setReg_Add3(d)}} style={styles.input1} >{regAdd3}</TextInput>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>State</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
-             title=' '
+             list={stateData}
+             title={reg_State?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setReg_State(d)}
            />
             </View>
         </View>
@@ -164,10 +310,12 @@ export default function EditProspectInfo(props) {
             <Text style={styles.detailText}>City</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
-             title=' '
+             list={cityData}
+             title={reg_City?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setReg_City(d)}
+
            />
             </View>
         </View>
@@ -180,6 +328,7 @@ export default function EditProspectInfo(props) {
              title=' '
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setReg_Destict(d)}
            />
             </View>
         </View>
@@ -187,41 +336,186 @@ export default function EditProspectInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Pin</Text>
             <View style={styles.mobileSubView}>
-            <SelectDropList 
-             list={[]}
-             title=' '
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-           />
+                <TextInput onChangeText={(d)=>{setReg_Pin(d)}} style={styles.input1} >{reg_Pin}</TextInput>
+            
             </View>
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Phone</Text>
             <View style={styles.mobileSubView}>
-            <SelectDropList 
-             list={[]}
-             title=' '
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-           />
+        <TextInput onChangeText={(d)=>{setReg_Phone(d)}} style={styles.input1} >{reg_Phone}</TextInput>
+
             </View>
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Copy to Add(Res)</Text>
+            <Pressable style={styles.mobileSubView} onPress={()=> fn_copyAddress1() }>
+            <FastImage resizeMode='contain' source={copyToRes ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
+
+            </Pressable>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Copy to Add(Off)</Text>
+            <Pressable style={[styles.mobileSubView,{marginLeft:constant.moderateScale(0)}]} onPress={()=> fn_copyAddress2() }>
+            <FastImage resizeMode='contain' source={copyToOff ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
+
+            </Pressable>
+        </View>
+        </View>
+    }
+      {active=== 2 &&      
+         <View>
+                    <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Address (Regn.)</Text>
+                <TextInput onChangeText={(d)=>{setRes_Add1(d)}} style={styles.input1} >{resAdd1}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}></Text>
+                <TextInput onChangeText={(d)=>{setRes_Add2(d)}} style={styles.input1} >{resAdd2}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}></Text>
+                <TextInput onChangeText={(d)=>{setRes_Add3(d)}} style={styles.input1} >{resAdd3}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>State</Text>
             <View style={styles.mobileSubView}>
-          
+            <SelectDropList 
+             list={stateData}
+             title={res_State?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setRes_State(d)}
+           />
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>City</Text>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={cityData}
+             title={res_City?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setRes_City(d)}
+
+           />
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>District</Text>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={[]}
+             title=' '
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setRes_Destict(d)}
+           />
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Pin</Text>
+            <View style={styles.mobileSubView}>
+                <TextInput onChangeText={(d)=>{setRes_Pin(d)}} style={styles.input1} >{res_Pin}</TextInput>
+            
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Phone</Text>
+            <View style={styles.mobileSubView}>
+        <TextInput onChangeText={(d)=>{setRes_Phone(d)}} style={styles.input1} >{res_Phone}</TextInput>
+
             </View>
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Copy to Add(Off)</Text>
+            <Pressable style={styles.mobileSubView} onPress={()=> fn_copyAddress3() }>
+            <FastImage resizeMode='contain' source={copyRegToOff ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
+
+            </Pressable>
+        </View>
+        </View>
+    }
+{active=== 3 &&      
+         <View>
+                    <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Address (Regn.)</Text>
+                <TextInput onChangeText={(d)=>{setOff_Add1(d)}} style={styles.input1} >{offAdd1}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}></Text>
+                <TextInput onChangeText={(d)=>{setOff_Add2(d)}} style={styles.input1} >{offAdd2}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}></Text>
+                <TextInput onChangeText={(d)=>{setOff_Add3(d)}} style={styles.input1} >{offAdd3}</TextInput>
+        </View>
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>State</Text>
             <View style={styles.mobileSubView}>
-          
+            <SelectDropList 
+             list={stateData}
+             title={off_State?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setOff_State(d)}
+           />
             </View>
         </View>
 
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>City</Text>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={cityData}
+             title={off_City?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setOff_City(d)}
+
+           />
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>District</Text>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={[]}
+             title=' '
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setOff_Destict(d)}
+           />
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Pin</Text>
+            <View style={styles.mobileSubView}>
+                <TextInput onChangeText={(d)=>{setOff_Pin(d)}} style={styles.input1} >{off_Pin}</TextInput>
+            
+            </View>
+        </View>
+
+        <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Phone</Text>
+            <View style={styles.mobileSubView}>
+        <TextInput onChangeText={(d)=>{setOff_Phone(d)}} style={styles.input1} >{off_Phone}</TextInput>
+
+            </View>
+        </View>
+        </View>
+    }
        
         </View>
 }
@@ -359,7 +653,7 @@ const styles = StyleSheet.create({
             borderWidth:1,
             height:constant.moderateScale(40),
             borderRadius:8,
-            width:constant.resW(17),
+            width:constant.resW(19),
             borderColor:'#ABABAB',
             backgroundColor:constant.whiteColor,
         //    paddingHorizontal:0
@@ -442,7 +736,7 @@ const styles = StyleSheet.create({
              paddingTop:constant.moderateScale(7),
             },
             tabButton:{
-            width:constant.resW(20),
+            width:constant.resW(23),
             justifyContent:'center'
             },
             tabButtonText:{
@@ -453,7 +747,7 @@ const styles = StyleSheet.create({
         
             },
             tabButton2:{
-                width:constant.resW(20),
+                width:constant.resW(23),
                 justifyContent:'center'  
             },
             tabButtonText2:{
@@ -470,5 +764,10 @@ const styles = StyleSheet.create({
                 position:'absolute',
                 bottom:-constant.moderateScale(2),
                 borderRadius:constant.resW(20)
+            },
+            uncheckBoxStyle: {
+                height: constant.moderateScale(28),
+                width:constant.moderateScale(28),
+                color: '#ABABAB',
             },
 })

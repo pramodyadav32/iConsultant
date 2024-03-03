@@ -26,7 +26,7 @@ const data = [
 
 export default function ProspectScreen(props) {
   const { navigation } = props
-  const { userData } = useSelector(state => state.AuthReducer)
+  const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
   const dispatch = useDispatch()
   const [active, setActive] = useState(1)
   const [count, setCount] = useState(0)
@@ -74,11 +74,24 @@ export default function ProspectScreen(props) {
   const [vy_Data,setVyData] = useState([])
   const [vy_DataValue,setVyDataValue] = useState({})
 
-  const [actionData,setActionDate] = useState('')
+  const [actionData,setActionData] = useState('')
   const [custumerSearchModal,setCustumerSearchModal] = useState({show:false,data:[]})
+  const [SaveDataObj,setSaveDataObj] = useState({})
+
+  const [actionTypeData,SetActionTypeData] = useState([])
+  const [actionTypeValue,setActionTypeValue] = useState({})
+  const [actionModelData,setActionModelData] = useState([])
+  const [actionModelValue,setActionModelValue] = useState({})
+  const [actionDate,setActionDate] = useState('')
+  const [actionSlotValue,setActionSlotValue] = useState(' ')
+  const [actionSlotValue2,setActionSlotValue2] = useState(' ')
+  const [vinData,setVinData] = useState('')
+  const [regData,setRegData] = useState('')
+  const [comment,setComment] = useState('')
+
   useEffect(() => {
     fn_GetProspectMaster()
-    fn_GetVehicleMaster ()
+    // fn_GetVehicleMasterModel()
   }, [])
 
 
@@ -163,23 +176,26 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_GetGeneralMasterList = () => {
+  const fn_GetActionMasterList = () => {
+    dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "type": "E",
-      "value": "",
+      "calledBy": "FUP_TYPE",
+      "loginUserCompanyId": "ORBIT",
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
-    tokenApiCall(GetGeneralMasterListCallBack, APIName.GeneralMasterList, "POST", param)
+    tokenApiCall(GetActionMasterListCallBack, APIName.GetActionMaster, "POST", param)
   }
 
-  const GetGeneralMasterListCallBack = (res) => {
+  const GetActionMasterListCallBack = (res) => {
     console.log("search", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
-
+     SetActionTypeData(res?.result[0]?.actionMasterList)
+     setActive(3)
     } else {
       constant.showMsg(res.message)
     }
@@ -217,64 +233,101 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_SaveNewProspect = () => {
+  const fn_General_Validation=()=>{
+      if(mobileno===''){
+        constant.showMsg("Please enter mobile number")
+      }else if(mobileno.length != 10){
+        constant.showMsg("Please enter valid mobile number")
+      }else if(Object.keys(entityValue).length===0){
+         constant.showMsg("Please Select Entity")
+      }else if(Object.keys(titleValue).length===0){
+        constant.showMsg("Please select name title")
+      }else if(name===''){
+        constant.showMsg("Please enter name")
+      }else if(email===''){
+        constant.showMsg("Please enter email")
+      }else if(!common_fn.validEmail(email)){
+       constant.showMsg("Please enter valid email")
+      }else if(Object.keys(stateValue).length===0){
+        constant.showMsg("Please select State")
+      }else if(Object.keys(cityValue).length===0){
+        constant.showMsg("Please select City")
+      }else if(pinCode===''){
+        constant.showMsg("Please enter pin code")
+      }else if(Object.keys(sourceValue).length===0){
+        constant.showMsg("Please select Source")
+      }else if(Object.keys(referenceValue).length===0){
+        constant.showMsg("Please select Reference")
+      }else if(Object.keys(usageValue).length===0){
+        constant.showMsg("Please select Usage")
+      }else if(generlCloserdata===''){
+        constant.showMsg("Please select Closure Data")
+      }else if(Object.keys(ratingValue).length===0){
+        constant.showMsg("Please select Rating")
+      }else{
+        let newObj={
+      "title": titleValue.code,
+      "entity": entityValue.code,
+      "firstName": name,
+      "middleName": "",
+      "lastName": "",
+      "pincode": pinCode,
+      "email": email,
+      "contactName": mobileno,
+      "mobile": mobileno,
+      "source": sourceValue.code,
+      "usage": usageValue.code,
+      "activeRate": ratingValue.code,
+      "regnState": stateValue.code,
+      "regnCity": cityValue.code,
+      "projectedClosureDate": generlCloserdata,
+      "refFrom": referenceValue.code,
+        }
+        setSaveDataObj(newObj)
+        fn_GetVehicleMasterModel ()
+      }
+  }
+
+  const fn_CreateProspect=()=>{
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "branchCode": "string",
-      "prospectLocation": "string",
-      "title": "string",
-      "entity": "string",
-      "firstName": "string",
-      "middleName": "string",
-      "lastName": "string",
-      "suffix": "string",
-      "regnState": "string",
-      "regnCity": "string",
-      "pincode": "string",
-      "email": "string",
-      "contactName": "string",
-      "mobile": "string",
-      "assembly": "string",
-      "edition": "string",
-      "source": "string",
-      "usage": "string",
-      "refFrom": "string",
-      "firstAction": "string",
-      "actionDate": "string",
-      "actionComment": "string",
+      "branchCode": selectedBranch?.branchCode,
+      "prospectLocation": "",
+      "suffix": "",
+      "firstAction": actionTypeValue.code,
+      "actionDate": actionDate,
+      "actionComment": comment,
       "campaign": 0,
-      "dealerCompanyDocket": "string",
-      "corporateFlag": "string",
-      "dealType": "string",
-      "approveFlag": "string",
-      "corporateComment": "string",
-      "salesperson": "string",
-      "projectedClosureDate": "string",
-      "hour": "string",
-      "demoVehModel": "string",
-      "demoVehVariant": "string",
-      "demoVehChassisNo": "string",
-      "make": "string",
-      "subModel": "string",
-      "model": "string",
-      "qty": 0,
-      "color": "string",
-      "interiorColor": "string",
-      "style": "string",
-      "my": 0,
-      "vy": 0,
-      "activeRate": "string",
+      "dealerCompanyDocket": "",
+      "corporateFlag": "",
+      "dealType": "",
+      "approveFlag": "",
+      "corporateComment": "",
+      "salesperson": "",
+      "hour": "",
+      "demoVehModel": "",
+      "demoVehChassisNo": vinData,
+      "make": "",
+      "subModel": "",
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
-      "slotMins": "string",
+      "slotMins": actionSlotValue,
       "slotCount": 0,
-      "valueString": "string",
-      "testDriveZone": "string",
-      "teamCode": "string"
+      "valueString": "",
+      "testDriveZone": "",
+      "teamCode": ""
     }
-    tokenApiCall(SaveNewProspectCallBack, APIName.SaveNewProspect, "POST", param)
+
+    let newObj = Object.assign( {}, SaveDataObj,param )
+    fn_SaveNewProspect(newObj)
+  }
+
+  const fn_SaveNewProspect = (newObj) => {
+    console.log("newObj",JSON.stringify(newObj))
+   
+    tokenApiCall(SaveNewProspectCallBack, APIName.SaveNewProspect, "POST", newObj)
   }
 
   const SaveNewProspectCallBack = (res) => {
@@ -286,13 +339,13 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_GetVehicleMaster = () => {
-    // dispatch(emptyLoader_Action(true))
+  const fn_GetVehicleMasterModel = () => {
+    dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "calledBy": "EDITION,ASSEMBLY,MODEL,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "calledBy": "EDITION,ASSEMBLY,MODEL",
       "edition": "",
       "assembly": "",
       "subModel": "",
@@ -301,33 +354,18 @@ export default function ProspectScreen(props) {
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
-    tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param)
+    tokenApiCall(GetVehicleMasterModelCallBack, APIName.GetVehicleMaster, "POST", param)
   }
 
-  const GetVehicleMasterCallBack = async (res) => {
+  const GetVehicleMasterModelCallBack = async (res) => {
     console.log("search", JSON.stringify(res))
     if (res.statusCode === 200) {
       await res.result.map((item) => {
-        if (item.listType === 'EDITION') {
-          setEditionData(item.vehicleMaster)
-        } else if (item.listType === 'ASSEMBLY') {
-          setAssemblyData(item.vehicleMaster)
-        }else if (item.listType === 'MODEL') {
+       if (item.listType === 'MODEL') {
           setModalData(item.vehicleMaster)
-        }else if (item.listType === 'VARIANT') {
-          setvarientData(item.vehicleMaster)
-        }else if (item.listType === 'STYLE') {
-          setStyleData(item.vehicleMaster)
-        }else if (item.listType === 'EXT_COLOR') {
-          setExteriorData(item.vehicleMaster)
-        }else if (item.listType === 'INT_COLOR') {
-          setInteriorData(item.vehicleMaster)
-        }else if (item.listType === 'VY') {
-          setVyData(item.vehicleMaster)
-        }else if (item.listType === 'MY') {
-          setMyData(item.vehicleMaster)
         }
       })
+      setActive(2)
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
@@ -336,7 +374,47 @@ export default function ProspectScreen(props) {
   }
 
   const fn_TabClick = (type) => {
-    setActive(type)
+    // setActive(type)
+    // fn_GetActionMasterList()
+  }
+ 
+  const fn_VehicleValidation=()=>{
+    if(Object.keys(modelValue).length===0){
+      constant.showMsg("Please Select Model")
+   }else if(Object.keys(editionValue).length===0){
+    constant.showMsg("Please Select Edition")
+   }else if(Object.keys(varientValue).length===0){
+    constant.showMsg("Please Select Varient")
+   }else if(Object.keys(styleValue).length===0){
+    constant.showMsg("Please Select Style")
+   }else if(Object.keys(exteriorValue).length===0){
+    constant.showMsg("Please Select Exterior")
+   }else if(Object.keys(interiorValue).length===0){
+    constant.showMsg("Please Select Interior")
+   }else if(Object.keys(my_DataValue).length===0){
+    constant.showMsg("Please Select My")
+   }else if(Object.keys(vy_DataValue).length===0){
+    constant.showMsg("Please Select VY")
+   }else if(Object.keys(assemblyValue).length===0){
+    constant.showMsg("Please Select Assembly")
+   }else if(count <= 0){
+    constant.showMsg("Count must be greater than 0")
+   }else{
+    let newObj={
+      "my": my_DataValue.code,
+      "vy": vy_DataValue.code,
+      "model": modelValue.code,
+      "qty": count,
+      "color": exteriorValue.code,
+      "interiorColor": interiorValue.code,
+      "style": styleValue.code,
+      "assembly": assemblyValue.code,
+      "edition": editionValue.code,
+      "demoVehVariant": varientValue.code,
+    }
+    setSaveDataObj(Object.assign( {}, SaveDataObj, newObj ))
+    fn_GetActionMasterList()
+   }
   }
 
   const fn_DateSelect = (data) => {
@@ -345,18 +423,24 @@ export default function ProspectScreen(props) {
   }
 
   const fn_ActionDateSelect = (data) => {
+    if(Object.keys(actionModelValue).length === 0){
+      constant.showMsg("Please select Model")
+    }else{
     setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
     setTimeSlotModal(s=>{return{ ...s,date: data }})
-    fn_GetActionSlots()
+    // fn_GetActionSlots()
+    fn_GetDemoVehicleList()
+    }
   }
 
   const fn_GetDemoVehicleList=()=>{
+    dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "calledBy": "MODEL",
-      "model": "DMAX",
+      "calledBy": "VEHICLE",
+      "model": actionModelValue.code,
       "loginUserCompanyId": "ORBIT",
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
@@ -377,7 +461,7 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_GetActionSlots=()=>{
+  const fn_GetActionSlots=(item,index)=>{
     dispatch(emptyLoader_Action(true))
   let param = {
     "brandCode": userData?.brandCode,
@@ -386,7 +470,7 @@ export default function ProspectScreen(props) {
     "branchcode": "MADU01",
     "calledBy": "TIME_SLOTS",
     "actionCode": "",
-    "chassisNo": "",
+    "chassisNo": item.chassisNo,
     "empCode": "",
     "date": "2024-02-21T09:10:47.522Z",
     "loginUserId": userData?.userId,
@@ -398,14 +482,87 @@ export default function ProspectScreen(props) {
 const  GetActionSlotsCallBack= async (res) => {
   console.log("searchvehi", JSON.stringify(res))
   if (res.statusCode === 200) {
-    setTimeSlotModal(s=>{return{ ...s,slotList:res.result?.actionSlotList}})
-    fn_GetDemoVehicleList()
+      let data = []
+     await res.result?.actionSlotList.map((item)=>{
+        item["Select"] = false
+        data.push(item)
+       })
+    setTimeSlotModal(s=>{return{ ...s,slotList:data}})
+    dispatch(emptyLoader_Action(false))
   } else {
     dispatch(emptyLoader_Action(false))
     constant.showMsg(res.message)
   }
 }
 
+const fn_ModelSelect=(d)=>{
+   setModelValue(d)
+   fn_GetVehicleModel(d)
+
+}
+
+const fn_GetVehicleModel = (d) => {
+  dispatch(emptyLoader_Action(true))
+  let param = {
+    "brandCode": userData?.brandCode,
+    "countryCode": userData?.countryCode,
+    "companyId": userData?.companyId,
+    "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+    "edition": "",
+    "assembly": "",
+    "subModel": "",
+    "model":d.code,
+    "code": "",
+    "loginUserId": userData?.userId,
+    "ipAddress": "1::1"
+  }
+  tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param)
+}
+
+const GetVehicleMasterCallBack = async (res) => {
+  console.log("search", JSON.stringify(res))
+  if (res.statusCode === 200) {
+    await res.result.map((item) => {
+      if (item.listType === 'EDITION') {
+        setEditionData(item.vehicleMaster)
+      } else if (item.listType === 'ASSEMBLY') {
+        setAssemblyData(item.vehicleMaster)
+      }else if (item.listType === 'VARIANT') {
+        setvarientData(item.vehicleMaster)
+      }else if (item.listType === 'STYLE') {
+        setStyleData(item.vehicleMaster)
+      }else if (item.listType === 'EXT_COLOR') {
+        setExteriorData(item.vehicleMaster)
+      }else if (item.listType === 'INT_COLOR') {
+        setInteriorData(item.vehicleMaster)
+      }else if (item.listType === 'VY') {
+        setVyData(item.vehicleMaster)
+      }else if (item.listType === 'MY') {
+        setMyData(item.vehicleMaster)
+      }
+    })
+    dispatch(emptyLoader_Action(false))
+  } else {
+    dispatch(emptyLoader_Action(false))
+    constant.showMsg(res.message)
+  }
+}
+
+const fn_CalenderClick=()=>{
+  if(Object.keys(actionModelValue).length === 0){
+    constant.showMsg("Please select Model")
+  }else{
+  setActionCal_Modal(true)
+  }
+}
+
+const fn_SlotDone=(selectVeh,slotData)=>{
+  setVinData(selectVeh?.chassisNo)
+  setRegData(selectVeh?.regn)
+  console.log("slotdata",slotData)
+  setActionSlotValue(slotData[0]?.slot)
+  setTimeSlotModal(s => { return { ...s, show: false } })
+}
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -446,7 +603,7 @@ const  GetActionSlotsCallBack= async (res) => {
                 list={entityData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setUsageValue(d)}
+                on_Select={(d) => setEntityValue(d)}
               />
               {/* <TextInput style={styles.input1} keyboardType='numeric'>+91 8470068493</TextInput> */}
             </View>
@@ -552,6 +709,7 @@ const  GetActionSlotsCallBack= async (res) => {
               title='Proceed'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
+              click_Action={()=>fn_General_Validation()}
             />
           </ScrollView>
         }
@@ -565,7 +723,7 @@ const  GetActionSlotsCallBack= async (res) => {
                 list={modelData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setModelValue(d)}
+                on_Select={(d) => fn_ModelSelect(d)}
               />
             </View>
             <View style={styles.detailMainView}>
@@ -605,7 +763,7 @@ const  GetActionSlotsCallBack= async (res) => {
                 list={exteriorData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setEditionValue(d)}
+                on_Select={(d) => setExteriorValue(d)}
               />
             </View>
 
@@ -689,6 +847,7 @@ const  GetActionSlotsCallBack= async (res) => {
               title='Proceed'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
+              click_Action={()=>fn_VehicleValidation()}
             />
           </ScrollView>
         }
@@ -699,42 +858,46 @@ const  GetActionSlotsCallBack= async (res) => {
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
-                list={[]}
+                list={actionTypeData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
+                on_Select={(d)=>setActionTypeValue(d)}
               />
             </View>
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
-                list={[]}
+                list={modelData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
+                on_Select={(d)=>setActionModelValue(d)}
               />
             </View>
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
-              <Pressable style={styles.calenderMainView} onPress={() => setActionCal_Modal(true)}>
-                <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+              <Pressable style={styles.calenderMainView} onPress={() => fn_CalenderClick()}>
+                <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{actionDate}</TextInput>
                 <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
               </Pressable>
             </View>
 
-            <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>From</Text>
+            <View style={styles.detailMainView}>  
+              <Text style={styles.detailText}>Time</Text>
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={[]}
-                  title='Mr.'
+                  disable={true}
+                  title={actionSlotValue}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                 />
                 <Text> </Text>
                 <SelectDropList
-                  list={[]}
-                  title='Mr.'
+                   list={[]}
+                   disable={true}
+                   title={actionSlotValue2}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                 />
@@ -744,24 +907,25 @@ const  GetActionSlotsCallBack= async (res) => {
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>VIN</Text>
-              <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+              <TextInput placeholder='Type here' editable={false} style={styles.input1} >{vinData}</TextInput>
             </View>
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
-              <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+              <TextInput placeholder='Type here' editable={false} style={styles.input1} >{regData}</TextInput>
             </View>
 
             <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
               <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
-              <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
+              <TextInput placeholder='Enter Comment' style={styles.commentInput} >{comment}</TextInput>
             </View>
 
 
             <Button
-              title='Proceed'
+              title='Create Prospect'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
+              click_Action={()=>fn_CreateProspect()}
             />
           </ScrollView>
         }
@@ -785,6 +949,8 @@ const  GetActionSlotsCallBack= async (res) => {
         date={timeSlotModal.date}
         vehicleList = {timeSlotModal.vehicleList}
         slotList = {timeSlotModal.slotList}
+        VehicleClick={(item,index)=>{fn_GetActionSlots(item,index)}}
+        done_Click={(selectVeh,slotData)=>{fn_SlotDone(selectVeh,slotData)}}
       />
 
       <CustumerSearch 

@@ -16,146 +16,162 @@ import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function ActionInfo(props) {
-    const { cardClick,updateClick } = props
+    const { cardClick,updateClick,data } = props
     const dispatch = useDispatch()
+    
+const renderItem=(item,index)=>{
+    console.log("item",item)
+return(
+    <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+                
+    <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
+        <View style={[styles.driveListDetailSubView, {}]}>
+            <Text style={styles.listText3}>Active Action</Text>
+            <View style={styles.horizontalLine} />
+        </View>
+      
+    </View>
 
+    <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
+        <View style={[styles.driveListDetailSubView, {}]}>
+            <Text style={styles.listText2}>Action</Text>
+            <Text style={styles.listText3}>{item?.actionDescription}</Text>
+        </View>
+        <View style={styles.driveListDetailSubView2}>
+            <Text style={styles.listText2}>Due on </Text>
+            <Text style={styles.listText3}>{item?.dueOn}</Text>
+        </View>
+    </View>
+
+    <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
+        <View style={styles.driveListDetailSubView}>
+            <Text style={styles.listText2}>Stutus</Text>
+            <Text style={styles.listText3}>{item?.statusDesc}</Text>
+        </View>
+        <View style={styles.driveListDetailSubView2}>
+            <Text style={styles.listText2}>Completed on</Text>
+            <Text style={styles.listText3}>{item?.performedOn}</Text>
+        </View>
+    </View>
+
+    <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
+        <View style={styles.driveListDetailSubView}>
+            <Text style={styles.listText2}>Remarks</Text>
+            <Text style={styles.listText3}>{item?.remark}</Text>
+        </View>
+        <View style={styles.driveListDetailSubView2}>
+            <Text style={styles.listText2}>Projected Closure Data</Text>
+            <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+        </View>
+    </View>
+
+    <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(15) }]}>
+    <View style={styles.buttonView2}>
+        
+        </View>
+        <View style={styles.buttonView}>
+           <Button title='Update'
+            buttonExt={styles.updateButton}
+            click_Action={()=>updateClick()}
+           />
+        </View>
+    </View>
+
+
+
+</View>
+)
+}
+
+const fn_Footer=()=>{
+    return(
+        <View style={{ backgroundColor: '#F9F9F9',
+        borderWidth: 2, borderRadius: 10,
+         borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), 
+         paddingBottom: constant.moderateScale(10), elevation: 1,
+         marginTop:constant.moderateScale(10) }}>
+             <View style={styles.detailMainView}>
+             <View style={[styles.driveListDetailSubView, {}]}>
+                   <Text style={styles.listText3}>New Action</Text>
+                   <View style={styles.horizontalLine} />
+               </View>
+   </View>
+       <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
+      <SelectDropList 
+        list={[]}
+        buttonExt={styles.dropList}
+        textExt={styles.dropListText}
+      />
+   </View>
+
+   <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
+      <SelectDropList 
+        list={[]}
+        buttonExt={styles.dropList}
+        textExt={styles.dropListText}
+      />
+   </View>
+
+   <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
+    <Pressable style={styles.calenderMainView}>
+       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+       <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
+    </Pressable>
+   </View>
+
+   <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>Time</Text>
+       <View style={styles.mobileSubView}>
+       <SelectDropList 
+        list={[]}
+        title='03:00 PM'
+        buttonExt={styles.dropList}
+        textExt={styles.timeDropListText}
+      />
+      <Text> </Text>
+       <SelectDropList 
+        list={[]}
+        title='03:00 PM'
+        buttonExt={styles.dropList}
+        textExt={styles.timeDropListText}
+      />
+   
+       </View>
+   </View>
+
+   <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>VIN</Text>
+           <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+   </View>
+
+   <View style={styles.detailMainView}>
+       <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
+           <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+   </View>
+
+   <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
+       <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
+           <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
+   </View>
+
+        </View>
+    )
+}
 
     return (
         <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
-      
-           <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
-                
-                <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
-                    <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText3}>Active Action</Text>
-                        <View style={styles.horizontalLine} />
-                    </View>
-                  
-                </View>
-
-                <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
-                    <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Action</Text>
-                        <Text style={styles.listText3}>Test Drive</Text>
-                    </View>
-                    <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Due on </Text>
-                        <Text style={styles.listText3}>14-Feb-2024</Text>
-                    </View>
-                </View>
-
-                <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
-                    <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Stutus</Text>
-                        <Text style={styles.listText3}>Active</Text>
-                    </View>
-                    <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Completed on</Text>
-                        <Text style={styles.listText3}>-</Text>
-                    </View>
-                </View>
-
-                <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(10) }]}>
-                    <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Remarks</Text>
-                        <Text style={styles.listText3}>-</Text>
-                    </View>
-                    <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Projected Closure Data</Text>
-                        <Text style={styles.listText3}>Standard</Text>
-                    </View>
-                </View>
-
-                <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(15) }]}>
-                <View style={styles.buttonView2}>
-                    
-                    </View>
-                    <View style={styles.buttonView}>
-                       <Button title='Update'
-                        buttonExt={styles.updateButton}
-                        click_Action={()=>updateClick()}
-                       />
-                    </View>
-                </View>
-
-
-
-            </View>
-
-            <View style={{ backgroundColor: '#F9F9F9',
-             borderWidth: 2, borderRadius: 10,
-              borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), 
-              paddingBottom: constant.moderateScale(10), elevation: 1,
-              marginTop:constant.moderateScale(10) }}>
-                  <View style={styles.detailMainView}>
-                  <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText3}>New Action</Text>
-                        <View style={styles.horizontalLine} />
-                    </View>
-        </View>
-            <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
-           <SelectDropList 
-             list={[]}
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-           />
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
-           <SelectDropList 
-             list={[]}
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-           />
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
-         <Pressable style={styles.calenderMainView}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
-            <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
-         </Pressable>
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Time</Text>
-            <View style={styles.mobileSubView}>
-            <SelectDropList 
-             list={[]}
-             title='03:00 PM'
-             buttonExt={styles.dropList}
-             textExt={styles.timeDropListText}
-           />
-           <Text> </Text>
-            <SelectDropList 
-             list={[]}
-             title='03:00 PM'
-             buttonExt={styles.dropList}
-             textExt={styles.timeDropListText}
-           />
+          <FlatList 
+           data={data}
+           renderItem={({item,index})=>renderItem(item,index)}
+           ListFooterComponent={()=>fn_Footer()}
+          />
         
-            </View>
-        </View>
 
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>VIN</Text>
-                <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
-                <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
-        </View>
-
-        <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
-            <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
-                <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
-        </View>
-
-             </View>
+     
     
      </ScrollView>
         </View>

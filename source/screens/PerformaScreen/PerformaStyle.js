@@ -51,43 +51,7 @@ const styles = StyleSheet.create({
                 width:constant.moderateScale(20),
                 marginRight:constant.moderateScale(10),
             },
-            driveListDetailView:{
-            //  flex:1,
-            // width:'100%',
-             flexDirection:"row",
-            //  alignItems:'center',
-            //  justifyContent:'space-between',
-            },
-            driveListDetailSubView:{
-              // width:'38%',
-              // width:constant.resW(25)
-            // alignItems:'center',
-            // flex:1,
-            height:constant.moderateScale(30),
-            width:'50%'
-            },
-            driveListDetailSubView2:{
-              // width:constant.resW(31),
-              
-              
-                flex:1,
-                height:constant.moderateScale(30)
-                },
-            listText2:{
-                fontSize:constant.moderateScale(8),
-                color:'#434343',
-                fontFamily:constant.typeRegular,
-            },
-            fuelText2:{
-              fontSize:constant.moderateScale(12),
-              color:'#434343',
-              fontFamily:constant.typeRegular,
-            },
-            listText3:{
-                fontSize:constant.moderateScale(9.5),
-                color:'#434343',
-                fontFamily:constant.typeMedium,
-            },
+             
             ModelText3:{
               fontSize:constant.moderateScale(12),
               color:'#434343',
@@ -146,16 +110,16 @@ const styles = StyleSheet.create({
                 
                  },
                  tabSubView:{
-                  flex:1,
-                  borderBottomWidth:0.5,
-                  borderBottomColor:'#FE0F1780',
+                  // flex:1,
+                 //  borderBottomWidth:0.8,
+                  borderBottomColor:'red',
                   flexDirection:'row',
                   justifyContent:'space-between',
                   marginHorizontal:'3%',
-                  paddingTop:constant.moderateScale(7),
+                  paddingTop:constant.moderateScale(5),
                  },
                  tabButton:{
-                 width:constant.resW(15),
+                 // width:constant.resW(35),
                  justifyContent:'center'
                  },
                  tabButtonText:{
@@ -163,17 +127,20 @@ const styles = StyleSheet.create({
                      color:constant.red,
                      fontFamily:constant.typeMedium,
                  marginTop:constant.moderateScale(4),
+                 paddingBottom:constant.moderateScale(2)
+
              
                  },
                  tabButton2:{
-                     width:constant.resW(15),
+                     // width:constant.resW(35),
                      justifyContent:'center'  
                  },
-                 tabButtonText2:{
+                  tabButtonText2:{
                  fontSize:constant.moderateScale(15),
                  color:constant.textColor,
                  fontFamily:constant.typeLight,
                  marginTop:constant.moderateScale(4),
+                 paddingBottom:constant.moderateScale(2)
              
                  },
                  horixontalLine:{
@@ -206,31 +173,8 @@ const styles = StyleSheet.create({
                      justifyContent:'space-between'
          
                  },
-                 driveText1:{
-                     fontSize:constant.moderateScale(18),
-                     color:'#2E2E2E',
-                     fontFamily:constant.typeRegular,
-                 },
-                 listDriveIcon:{
-                     height:constant.moderateScale(40),
-                     width:constant.moderateScale(40),
-                     marginRight:constant.moderateScale(10),
-                 },
-                 driveListDetailView:{
-                  flex:1,
-                  flexDirection:"row",
-                 },
-                 driveListDetailSubView:{
-                 flex:1,
-                 },
-                 driveListDetailSubView2:{
-                     flex:1,
-                     },
-                 listText2:{
-                     fontSize:constant.moderateScale(10),
-                     color:'#434343',
-                     fontFamily:constant.typeRegular,
-                 },
+               
+                
                  listText3:{
                      fontSize:constant.moderateScale(12),
                      color:'#434343',
@@ -241,14 +185,7 @@ const styles = StyleSheet.create({
                   color:'#434343',
                   fontFamily:constant.typeMedium,
               },
-              cardHorLine:{
-              height:2,
-              width:constant.moderateScale(40),
-              backgroundColor:constant.red,
-              borderRadius:30,
-              marginTop:constant.moderateScale(3),
-              marginRight:constant.moderateScale(20)
-              },
+            
 
                  //BasicInfor
                  driveListDetailView:{
@@ -268,11 +205,7 @@ const styles = StyleSheet.create({
                      color:'#727272',
                      fontFamily:constant.typeRegular,
                  },
-                 list3:{
-                     fontSize:constant.moderateScale(12),
-                     color:'#434343',
-                     fontFamily:constant.typeRegular,
-                 },
+                
                  performaButton:{
                   marginBottom:constant.moderateScale(30),
                   marginTop:constant.moderateScale(10),
@@ -280,7 +213,83 @@ const styles = StyleSheet.create({
                   paddingVertical:constant.moderateScale(10),
                   borderWidth:1,
                   borderColor:constant.whiteColor,
-                 }
+                 },
+                 detailMainView:{
+                  paddingHorizontal:"3%",
+                  flexDirection:'row',
+                  alignItems:'center',
+                  justifyContent:'space-between',
+                  marginTop:constant.moderateScale(5)
+                  },
+                  detailText:{
+                      fontSize:constant.moderateScale(14),
+                      color:'#424242',
+                      width:constant.moderateScale(115),
+                      fontFamily:constant.typeLight
+                  },
+                  text2:{
+                      fontSize:constant.moderateScale(14),
+                      color:constant.red,  
+                  },
+                  dropList:{
+                    borderWidth:1,
+                    height:constant.moderateScale(40),
+                    flex:1,
+                    borderRadius:10,
+                    borderColor:'#ABABAB',
+                    backgroundColor:constant.whiteColor,
+                  },
+                  dropListText:{
+                      fontSize:constant.moderateScale(15),
+                      color:constant.textColor,
+                      fontFamily:constant.typeLight,
+                  },
+                  costListMainView:{
+                    flexDirection:"row",
+                    marginHorizontal:constant.moderateScale(5),
+                    marginTop:constant.moderateScale(15)
+                },
+            costListSubView:{
+               flex:1,
+                height:constant.moderateScale(30)
+                },
+                costListText2:{
+                  fontSize:constant.moderateScale(10),
+                  color:'#434343',
+                  fontFamily:constant.typeRegular,
+              },
+              costListText3:{
+                  fontSize:constant.moderateScale(12),
+                  color:'#434343',
+                  fontFamily:constant.typeMedium,
+              },
+              costListSubView3:{
+                flex:1,
+                alignItems:'center',
+                justifyContent:'flex-end'
+                },
+                button1:{
+                  marginBottom:constant.moderateScale(10),
+                  marginTop:constant.moderateScale(10),
+                  marginHorizontal:constant.moderateScale(0),
+                  paddingVertical:constant.moderateScale(10),
+                  borderWidth:1,
+                  borderColor:constant.whiteColor,
+                  width:constant.moderateScale(150)
+                 },
+                 input1:{
+                  borderWidth:1,
+                  height:constant.moderateScale(40),
+                  flex:1,
+                  borderRadius:10,
+                  borderColor:'#ABABAB',
+                  backgroundColor:constant.whiteColor,
+                  color:constant.blackColor,
+                  fontFamily:constant.typeLight,
+                  paddingHorizontal:"3%",
+                  fontSize:constant.moderateScale(15)
+              },
+
   
 })
 

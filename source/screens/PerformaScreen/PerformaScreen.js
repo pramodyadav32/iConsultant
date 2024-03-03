@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated } from 'react-native';
+import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput } from 'react-native';
 import * as constant from '../../utilities/constants'
 import styles from './PerformaStyle';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import DataSheetModal from '../../components/DataSheetModal';
+import AddPackageModel from './AddPackageModel';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -26,6 +27,17 @@ const data2 = [
 
 ]
 
+const data3 = [
+   { 'key': 1, "title": 'Basic Info', },
+   { 'key': 2, "title": 'Accessories', },
+   { 'key': 3, "title": 'Package', },
+   { 'key': 4, "title": 'Insurance', },
+   { 'key': 5, "title": 'Registration', },
+   { 'key': 6, "title": 'Term', },
+
+   
+]
+
 export default function PerformaScreen(props) {
    const { navigation } = props
    const dispatch = useDispatch()
@@ -34,6 +46,8 @@ export default function PerformaScreen(props) {
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
+   const [packageModel,setPackageModel] = useState(false)
+   const [addListModel,setAddListModel] = useState(false)
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
@@ -253,6 +267,63 @@ export default function PerformaScreen(props) {
       props.navigation.navigate("EditProspectScreen")
    }
 
+  const accessoriesList=({item,index})=>{
+   return(
+      <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+      <View style={[styles.driveListDetailSubView,{}]}>
+         <Text style={styles.costListText2}> </Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}>00.00</Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}>0</Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}>00.00</Text>
+      </View>
+      </View>
+   )
+  }
+
+  const accessoriesHeaderList=()=>{
+   return(
+      <View style={[styles.costListMainView,{}]}>
+      <View style={[styles.driveListDetailSubView,{}]}>
+         <Text style={styles.costListText2}>Description</Text>
+      </View>
+      <View style={styles.costListSubView3}>
+         <Text style={styles.costListText2}>MRP</Text>
+      </View>
+      <View style={styles.costListSubView3}>
+         <Text style={styles.costListText2}>QTY</Text>
+      </View>
+      <View style={styles.costListSubView3}>
+         <Text style={styles.costListText2}>Total Amt</Text>
+      </View>
+     </View>
+   )
+  }
+
+  const accessoriesFooterList=()=>{
+   return(
+      <View style={[styles. costListMainView,{backgroundColor:'#F0F0F0',borderBottomRightRadius:10,borderBottomLeftRadius:10,paddingVertical:constant.moderateScale(7),paddingHorizontal:10,marginHorizontal:0}]}>
+      <View style={[styles.driveListDetailSubView,{}]}>
+         <Text style={styles.costListText2}>Total</Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}> </Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}>0</Text>
+      </View>
+      <View style={[styles.costListSubView3,{}]}>
+      <Text style={styles.costListText3}>00.00</Text>
+      </View>
+      </View>
+   )
+  }
+
    return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -269,198 +340,312 @@ export default function PerformaScreen(props) {
          </View>
 
          <View style={styles.cal_SubView}>
-            <View style={styles.tabMainView}>
-               <View style={styles.tabSubView}>
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-                  <Pressable style={active === 1 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(1)} >
-                     <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Basic Info</Text>
-                    {active===1 && <View style={[styles.horixontalLine]} /> }
-                  </Pressable>
-                  <Pressable style={active === 2 ? [styles.tabButton, { width: constant.resW(18), }] : [styles.tabButton2, { width: constant.resW(18) }]} onPress={() => fn_TabClick(2)} >
-                     <Text style={active === 2 ? styles.tabButtonText : styles.tabButtonText2}>Accessories</Text>
-                     {active===2 && <View style={[styles.horixontalLine]} /> }               
-                  </Pressable>
-                  <Pressable style={active === 3 ? [styles.tabButton, { width: constant.resW(15), }] : [styles.tabButton2, { width: constant.resW(15) }]} onPress={() => fn_TabClick(3)} >
-                     <Text style={active === 3 ? styles.tabButtonText : styles.tabButtonText2}>Packages</Text>
-                     {active===3 && <View style={[styles.horixontalLine]} /> }                
-                  </Pressable>
-                  <Pressable style={active === 4 ? [styles.tabButton, {width: constant.resW(15)}] : [styles.tabButton2, {width: constant.resW(15)}]} onPress={() => fn_TabClick(4)} >
-                     <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Insurance</Text>
-                     {active===4 && <View style={[styles.horixontalLine]} /> }               
-                  </Pressable>
-                  <Pressable style={active === 5 ? [styles.tabButton, {width: constant.resW(18)}] : [styles.tabButton2, {width: constant.resW(18)}]} onPress={() => fn_TabClick(5)} >
-                     <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Registration</Text>
-                     {active===5 && <View style={[styles.horixontalLine]} /> }               
-                  </Pressable>
-                  <Pressable style={active === 6 ? [styles.tabButton, {width: constant.resW(10)}] : [styles.tabButton2, {width: constant.resW(10)}]} onPress={() => fn_TabClick(6)} >
-                     <Text style={active === 6 ? styles.tabButtonText : styles.tabButtonText2}>Terms</Text>
-                     {active===6 && <View style={[styles.horixontalLine]} /> }               
-                  </Pressable>
-                  </ScrollView>
-               </View>
-            </View>
+         <View style={styles.tabSubView}>
+          <FlatList
+          horizontal
+          data={data3}
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={()=>common_fn.listVer_Space(constant.moderateScale(15))}
+          renderItem={({item,index}) => {
+            return(
+              <Pressable style={index === active ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(index, item)} >
+              <Text style={active === index ? styles.tabButtonText : styles.tabButtonText2}>{item?.title}</Text>
+              {active === index && <View style={styles.horixontalLine} />}
+            </Pressable>
+            )
+          }}
+        />
+          </View>
+        
             {
-               active === 1 &&
+               active === 0 &&
                <View style={{ flex: 1, paddingHorizontal: '1%',paddingBottom:constant.moderateScale(15)  }}>
                   <ScrollView showsVerticalScrollIndicator={false}>
+                  <View style={styles.detailMainView}>
+              <Text style={styles.detailText}>Source</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
                   <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15)}]}>
                      <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Prospect Stage</Text>
-                        <Text style={styles.listText3}>Primary</Text>
+                        <Text style={styles.listText2}>Proforma Inv no</Text>
+                        <Text style={styles.listText3}>New</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Zone</Text>
-                        <Text style={styles.listText3}>North</Text>
+                        <Text style={styles.listText2}>Dated</Text>
+                        <Text style={styles.listText3}>_</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Usage</Text>
-                        <Text style={styles.listText3}>Personal</Text>
+                        <Text style={styles.listText2}>Model</Text>
+                        <Text style={styles.listText3}>SCRAB</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Compaings</Text>
-                        <Text style={styles.listText3}>-</Text>
+                        <Text style={styles.listText2}>Varient</Text>
+                        <Text style={styles.listText3}>DMAX FlatDesk </Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Importance</Text>
-                        <Text style={styles.listText3}>-</Text>
+                        <Text style={styles.listText2}>Style</Text>
+                        <Text style={styles.listText3}>STANDARD</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>General Comments</Text>
-                        <Text style={styles.listText3}>-</Text>
+                        <Text style={styles.listText2}>MY/VY</Text>
+                        <Text style={styles.listText3}>2024/2024</Text>
+                     </View>
+                  </View>
+
+                  <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Price List</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Billing Location</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+            <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(10)}}>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Discount</Text>
+              <TextInput style={styles.input1} ></TextInput>
+
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Usage</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Sale Group</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>End Use</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Loyalty Disc Amt</Text>
+              <TextInput style={styles.input1} ></TextInput>
+
+            </View>
+
+            <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>HSN Code</Text>
+                        <Text style={styles.listText3}>New</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Basic Price</Text>
+                        <Text style={styles.listText3}>_</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>First Action</Text>
-                        <Text style={styles.listText3}>Call to Customer on{'\n'}13-Feb-2024</Text>
+                        <Text style={styles.listText2}>Discount</Text>
+                        <Text style={styles.listText3}>_</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Current Action</Text>
-                        <Text style={styles.listText3}>Test Drive on 19-Feb-2024</Text>
+                        <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
+                        <Text style={styles.listText3}>_</Text>
+                     </View>
+                  </View>
+                  </View>
+                  <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(0)}}>
+            <View style={[styles.costListMainView,{}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>HEAD</Text>
+             </View>
+             <View style={styles.costListSubView3}>
+                <Text style={styles.costListText2}>CGST</Text>
+             </View>
+             <View style={styles.costListSubView3}>
+                <Text style={styles.costListText2}>SGST</Text>
+             </View>
+             <View style={styles.costListSubView3}>
+                <Text style={styles.costListText2}>Total</Text>
+             </View>
+            </View>
+
+            <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>Tex%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>14.00%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>14.00%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}></Text>
+             </View>
+             </View>
+
+             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>Tax Amount</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             </View>
+             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>Surcharge%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0.00%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0.00%</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}></Text>
+             </View>
+             </View>
+
+             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>Surcharge Amt</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             </View>
+
+             <View style={[styles. costListMainView,{backgroundColor:'#F0F0F0',borderBottomRightRadius:10,borderBottomLeftRadius:10,paddingVertical:constant.moderateScale(7),paddingHorizontal:10,marginHorizontal:0}]}>
+             <View style={[styles.driveListDetailSubView,{}]}>
+                <Text style={styles.costListText2}>Total</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             <View style={[styles.costListSubView3,{}]}>
+             <Text style={styles.costListText3}>0</Text>
+             </View>
+             </View>
+             
+             </View>
+             <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(20)}}>
+
+             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Trnx Basic</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>TCS</Text>
+              <SelectDropList
+                list={[]}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+            </View>
+
+            <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>Ex-Showroom(Pre-Discount)</Text>
+                        <Text style={styles.listText3}>_</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Ex-Showroom(Post Discount)</Text>
+                        <Text style={styles.listText3}>_</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Sub Zone</Text>
-                        <Text style={styles.listText3}>-</Text>
+                        <Text style={styles.listText2}>Booking Amount</Text>
+                        <Text style={styles.listText3}>_</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Reference</Text>
-                        <Text style={styles.listText3}>Newspaper</Text>
+                        {/* <Text style={styles.listText2}>MY/VY</Text>
+                        <Text style={styles.listText3}>2024/2024</Text> */}
                      </View>
                   </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Finance Case</Text>
-                        <Text style={styles.listText3}>No</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Project Closure</Text>
-                        <Text style={styles.listText3}>30-Mar-2024</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Action Comment</Text>
-                        <Text style={styles.listText3}>Organiser</Text>
-                     </View>
-
-                  </View>
+            </View>
                   </ScrollView>
                </View>
             }
             {
-               active === 2 &&
-               <View style={{ flex: 1, paddingHorizontal: '1%' }}>
+               active === 1 &&
+               <View style={{ flex: 1, paddingHorizontal: '1%',paddingBottom:constant.moderateScale(15)  }}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
-                     <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Opened on</Text>
-                        <Text style={styles.listText3}>11-Feb-2024</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>OLM Lead</Text>
-                        <Text style={styles.listText3}>NA</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Price Quote</Text>
-                        <Text style={styles.listText3}>Quote not generated</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>source</Text>
-                        <Text style={styles.listText3}>Walk-in</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Customer Refrence</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Finance Case</Text>
-                        <Text style={styles.listText3}>No</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Financer</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Finance Location</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Corporate Case</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Deal Category</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Deal Type</Text>
-                        <Text style={styles.listText3}>No</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Company</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Corporate Case Comment</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>General Comment</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-
-                  </View>
+                  <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(0)}}>
+                 <FlatList 
+                  data={data2}
+                  ListHeaderComponent={()=>accessoriesHeaderList()}
+                  renderItem={accessoriesList}
+                  ListFooterComponent={()=>accessoriesFooterList()}
+                 />
+                </View>
+          
                   </ScrollView>
+                  <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
+                  <Button title='Add To List' click_Action={() => setAddListModel(true)} buttonExt={styles.button1} />
+                  <Button title='Add Packages' click_Action={() => setPackageModel(true)} buttonExt={styles.button1} />
+
+                  </View>
                </View>
             }
             {active === 3 &&
@@ -493,10 +678,10 @@ export default function PerformaScreen(props) {
          </View>
          <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
      
-      <DataSheetModal 
-       isVisible={detailModal}
-       onRequestClose={()=>setDetailModal(false)}
-      
+
+      <AddPackageModel
+       isVisible={packageModel}
+       onRequestClose={()=>setPackageModel(false)} 
       />
       </SafeAreaView>
    )

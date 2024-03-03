@@ -16,10 +16,42 @@ import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function EditBasicInfo(props) {
-    const { cardClick } = props
+    const { cardClick,data,prospectMaster } = props
     const dispatch = useDispatch()
     const [checkStatus,setCheckStatus] = useState(false)
+    const [sourceData, setSourceData] = useState([])
+    const [sourceValue, setSourceValue] = useState({})
+    const [dealCategoryData, setDealCategoryData] = useState([])
+    const [dealCategoryValue, setDealCategoryValue] = useState({})
+    const [dealTypeData, setDealTypeData] = useState([])
+    const [dealTypeValue, setDealTypeValue] = useState({})
+    const [companyData, setCompanyData] = useState([])
+    const [companyValue, setCompanyValue] = useState({})
+    const [corporateComment, setCorporateComment] = useState("")
+    const [generalComment, setGeneralComment] = useState("")
+    const [corporateCase, setCorporateCase] = useState("N")
 
+    useEffect(()=>{
+        console.log("prospec",prospectMaster)
+        prospectMaster.map((item) => {
+            if (item.listType === 'SOURCE') {
+                setSourceData(item.prospectMasterList)
+                item.prospectMasterList.map((item)=>{
+                    item?.code === data?.sourceCode ? setSourceValue(item) : null
+                })
+            } else if (item.listType === 'DEALCATEGORY') {
+                setDealCategoryData(item.prospectMasterList)
+            } else if (item.listType === 'DEALTYPE') {
+                setDealTypeData(item.prospectMasterList)
+            } else if (item.listType === 'CORPORATE') {
+                setCompanyData(item.prospectMasterList)
+            }
+        })
+        setCorporateCase(data?.isCorporateCase)
+        setCorporateComment(data?.corporateComment)
+        setGeneralComment(data?.comment)
+
+    },[prospectMaster])
 
     return (
         <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
@@ -27,11 +59,11 @@ export default function EditBasicInfo(props) {
                 <View style={[styles.listDetailView, { marginTop: constant.moderateScale(15) }]}>
                     <View style={[styles.listDetailSubView, {}]}>
                         <Text style={styles.text2}>Opened on</Text>
-                        <Text style={styles.list3}>11-Feb-2024</Text>
+                        <Text style={styles.list3}>{data?.prospectOpenedOn}</Text>
                     </View>
                     <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.text2}>OLM Lead</Text>
-                        <Text style={styles.list3}>NA</Text>
+                        <Text style={styles.list3}>{data?.isOlmCase==="N" ? "No" : "Yes"}</Text>
                     </View>
                 </View>
 
@@ -41,10 +73,11 @@ export default function EditBasicInfo(props) {
                     </View>
                     <View style={styles.basicDetailSubView2}>
                         <SelectDropList
-                            list={[]}
-                            title='Walk-in'
+                            list={sourceData}
+                            title={sourceValue?.description}
                             buttonExt={styles.dropList}
                             textExt={styles.dropListText}
+                            on_Select={(d)=>setSourceValue(d)}
                         />
                     </View>
                 </View>
@@ -67,9 +100,8 @@ export default function EditBasicInfo(props) {
                     <View style={[styles.basicDetailSubView,]}>
                         <Text style={styles.detailText}>Corporate Case</Text>
                     </View>
-                    <Pressable style={styles.basicDetailSubView2} onPress={()=>setCheckStatus(!checkStatus)}>
-                        <FastImage resizeMode='contain' source={checkStatus ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
-                        {/* <MaterialCommunityIcons name='checkbox-blank-outline' style={styles.uncheckBoxStyle} /> */}
+                    <Pressable style={styles.basicDetailSubView2} onPress={()=> corporateCase === "Y" ? setCorporateCase("N") : setCorporateCase("Y")}>
+                        <FastImage resizeMode='contain' source={corporateCase === "Y"  ? images.checkIcon :images.unCheckIcon} style={styles.uncheckBoxStyle} />
                     </Pressable>
                 </View>
 
@@ -79,10 +111,12 @@ export default function EditBasicInfo(props) {
                     </View>
                     <View style={styles.basicDetailSubView2}>
                         <SelectDropList
-                            list={[]}
+                            list={dealCategoryData}
                             title=' '
                             buttonExt={styles.dropList}
                             textExt={styles.dropListText}
+                            on_Select={(d)=>setDealCategoryValue(d)}
+
                         />
                     </View>
                 </View>
@@ -94,10 +128,12 @@ export default function EditBasicInfo(props) {
                     </View>
                     <View style={styles.basicDetailSubView2}>
                         <SelectDropList
-                            list={[]}
+                            list={dealTypeData}
                             title=' '
                             buttonExt={styles.dropList}
                             textExt={styles.dropListText}
+                            on_Select={(d)=>setDealTypeValue(d)}
+
                         />
                     </View>
                 </View>
@@ -109,10 +145,12 @@ export default function EditBasicInfo(props) {
                     </View>
                     <View style={styles.basicDetailSubView2}>
                         <SelectDropList
-                            list={[]}
+                            list={companyData}
                             title=' '
                             buttonExt={styles.dropList}
                             textExt={styles.dropListText}
+                            on_Select={(d)=>setCompanyValue(d)}
+
                         />
                     </View>
                 </View>
@@ -122,7 +160,7 @@ export default function EditBasicInfo(props) {
                         <Text style={styles.detailText}>Corporate Case Comment</Text>
                     </View>
                     <View style={styles.basicDetailSubView2}>
-                        <TextInput style={styles.commentInput} ></TextInput>
+                        <TextInput onChangeText={(d)=>setCorporateComment(d)} style={styles.commentInput} >{corporateComment}</TextInput>
 
                     </View>
                 </View>
@@ -132,7 +170,7 @@ export default function EditBasicInfo(props) {
                         <Text style={styles.detailText}>General Comment</Text>
                     </View>
                     <View style={styles.basicDetailSubView2}>
-                        <TextInput style={styles.commentInput} ></TextInput>
+                        <TextInput onChangeText={(d)=>setGeneralComment(d)} style={styles.commentInput} >{generalComment}</TextInput>
 
                     </View>
                 </View>

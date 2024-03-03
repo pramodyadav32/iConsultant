@@ -24,12 +24,117 @@ const data = [
 ]
 
 const ProspectActionSlotScreen = (props) => {
-    const {isVisible,onRequestClose,date,vehicleList,slotList} = props
+    const {isVisible,onRequestClose,date,vehicleList,slotList,VehicleClick,done_Click} = props
     let isTablet = DeviceInfo.isTablet();
     const [active,setActive] = useState(-1)
+    const [selectVeh,setSelectVeh] = useState({})
+    const [slotIndex,setSlotIndex] = useState(-1)
+    const [slotData,setSlotData] = useState({})
+    const [slotListData,setSlotListData] = useState([])
+
+    useEffect(()=>{
+     setSlotListData(slotList)
+    },[slotList])
 
  const fn_Click=(item,index)=>{
      setActive(index)
+     setSelectVeh(item)
+     VehicleClick(item,index)
+ }
+
+ const fn_SlotClick=async(item,index)=>{
+     let data = slotListData
+   let filteredData = await data.filter((item)=>item.Select === true)
+   console.log("filter",filteredData)
+   if(filteredData.length>0){
+    if(index===0){
+        console.log(slotListData)
+        if(item.slotAvailabilityFlag === 'Y'){
+            if(item.Select){
+             let newArray = []
+             data.map((item,currentIndex)=>{  
+                  item.Select = false
+                  newArray.push(item)
+               
+             })
+             setSlotListData([...newArray])
+            }else{
+             let newArray = []
+             data.map((item,currentIndex)=>{
+                if(currentIndex > index){
+                  item.Select = false
+                  newArray.push(item)
+                }else{
+                    item.Select = true
+                  newArray.push(item)
+                }
+             })
+             setSlotListData([...newArray])
+            }
+      
+        }
+     }else{
+        if(item.slotAvailabilityFlag === 'Y'){
+            if(item.Select){
+                console.log("if true")
+                let newArray = []
+             data.map((item,currentIndex)=>{
+                if(currentIndex >= index){
+                  item.Select = false
+                  newArray.push(item)
+                }else{
+                    newArray.push(item) 
+                }
+             })
+             setSlotListData([...newArray])
+        }else{
+            console.log("if false",item?.Select)
+            
+            if(slotListData[index-1].Select === true && slotListData[index-1].slotAvailabilityFlag === "Y" ){
+             let newObj = slotListData
+             item.Select = true
+            newObj.splice(index,1,item)
+            setSlotListData([...newObj])
+            }
+        }
+        }
+     }
+     
+   }else{
+      if(index===0){
+        if(item.slotAvailabilityFlag === 'Y'){
+             let newObj = slotListData
+             item.Select = !item.Select
+            newObj.splice(index,1,item)
+            setSlotListData([...newObj])
+        }
+     }else{
+        if(item.slotAvailabilityFlag === 'Y'){
+              let newObj = slotListData
+             item.Select = !item.Select
+            newObj.splice(index,1,item)
+            setSlotListData([...newObj])
+        }
+     }
+   }
+   
+    setSlotIndex(index)
+    setSlotData(item)
+ }
+
+ const fn_Done=()=>{
+    if(Object.keys(selectVeh).length === 0){
+        constant.showMsg("Please select vehicle")
+    }else{
+        let data = slotListData.filter((item)=>item.Select===true)
+        if(data.length > 0 ){
+            done_Click(selectVeh,data)
+        }else{
+            constant.showMsg("Please select time slot")
+        }
+      
+    }
+
  }
 
     const renderItem = ({item,index}) => {
@@ -43,19 +148,21 @@ const ProspectActionSlotScreen = (props) => {
         )
     }
 
-    const listRender=()=>{
+    const listRender=({item,index})=>{
         return(
+            item.slotAvailabilityFlag === 'Y' ?
             <View style={styles.eventMainView}>
-                <Text style={styles.eventText}>09:00 AM</Text>
+                <Text style={styles.eventText}>{item?.slot}</Text>
                 <Text style={styles.eventText2}>Test Drive [Mr. Amarjeet Singh]</Text>
             </View>
+            : null
         )
     }
 
     const slotListRender=({item,index})=>{
         return(
-            <Pressable style={styles.slotButton}>
-                <Text style={styles.slotText}>{item?.slot}</Text>
+            <Pressable onPress={()=> item.slotAvailabilityFlag === 'Y' ? fn_SlotClick(item,index) : null} style={item.slotAvailabilityFlag === 'Y' ? item.Select ? styles.slotButton3  :styles.slotButton : styles.slotButton2}>
+                <Text style={item.Select? styles.slotText2 : styles.slotText}>{item?.slot}</Text>
             </Pressable>
         )
 
@@ -93,7 +200,7 @@ const ProspectActionSlotScreen = (props) => {
                 </View>
                 <View style={styles.slotMainView}>
                 <FlatList
-                     data={slotList}
+                     data={slotListData}
                      numColumns={isTablet ? 6 : 4}
                      renderItem={slotListRender}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(8))}
@@ -102,9 +209,9 @@ const ProspectActionSlotScreen = (props) => {
                 
                     />
                 </View>
-                <View style={styles.eventListMainView}>
+              {slotList.length > 0 &&  <View style={styles.eventListMainView}>
                     <FlatList
-                     data={data}
+                     data={slotList}
                      renderItem={listRender}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(8))}
                      ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(0))}
@@ -112,10 +219,12 @@ const ProspectActionSlotScreen = (props) => {
                 
                     />
                 </View>
+         }
         </ScrollView>
         <View style={[styles.detailMainView,{alignItems:'center',justifyContent:'center',marginTop:constant.moderateScale(20)}]}>
            <Button title='Done'
             buttonExt={styles.SaveButton}
+            click_Action={()=>fn_Done()}
            />
         </View>
               </View>
@@ -244,11 +353,40 @@ const styles = StyleSheet.create({
                 borderRadius:5,
                 borderColor:'#ABABAB',
                 paddingVertical:constant.moderateScale(8),
-                marginHorizontal:constant.moderateScale(5)
+                marginHorizontal:constant.moderateScale(5),
+                backgroundColor:constant.whiteColor,
                 },
+                slotButton2:{
+                    flex:1,
+                    alignItems:'center',
+                    justifyContent:'center',
+                    borderWidth:1,
+                    borderRadius:5,
+                    borderColor:'#DFDFDF',
+                    paddingVertical:constant.moderateScale(8),
+                    marginHorizontal:constant.moderateScale(5),
+                    backgroundColor:"#F9F9F9"
+                    },
+                    slotButton3:{
+                        flex:1,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        borderWidth:1,
+                        borderRadius:5,
+                        borderColor:'#DFDFDF',
+                        paddingVertical:constant.moderateScale(8),
+                        marginHorizontal:constant.moderateScale(5),
+                        backgroundColor:constant.red
+                        },
+                        
                 slotText:{
                     fontSize:constant.moderateScale(10),
                     color:'#434343',
+                    fontFamily:constant.typeLight,
+                },
+                slotText2:{
+                    fontSize:constant.moderateScale(10),
+                    color:constant.whiteColor,
                     fontFamily:constant.typeLight,
                 },
              

@@ -13,6 +13,7 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import DataSheetModal from '../../components/DataSheetModal';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -27,83 +28,134 @@ const data2 = [
 ]
 
 export default function ProspectDataSheetScreen(props) {
-   const { navigation,route } = props
+   const { navigation, route } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
-   const [detailModal,setDetailModal] = useState(false)
-   const [cardData,setcardData] = useState(route.params.cardData)
-   const [prospectBasicInfo,setProspectBasicInfo] = useState({})
+   const [detailModal, setDetailModal] = useState(false)
+   const [cardData, setcardData] = useState(route.params.cardData)
+   const [prospectBasicInfo, setProspectBasicInfo] = useState({})
+   const [dataSheet, setDataSheet] = useState({})
+   const [prospectInfo, setProspectInfo] = useState({})
+   const [actionInfo,setActionInfo] = useState([])
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
    });
 
-   useEffect(()=>{
-    fn_GetProspectBasicInfo()
-   // fn_GetProspectDetail()
-   },[])
+   useEffect(() => {
+       fn_GetProspectBasicInfo()
+      // fn_GetProspectDetail()
+      // fn_GetDataSheetDetail()
+   }, [])
+
+   const fn_GetDataSheetDetail = () => {
+      dispatch(emptyLoader_Action(true))
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo": Number(route.params.cardData?.prospectId),
+         "calledBy": "PROSPECT_ID",
+         "type": "",
+         "code": "",
+         "status": "All",
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
+         "actionDate": "29-Feb-2024"
+      }
+      tokenApiCall(GetDataSheetDetailCallBack, APIName.GetActionsList, "POST", param)
+   }
+
+   const GetDataSheetDetailCallBack = (res) => {
+      console.log("Actiomsearch", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         setDataSheet(res?.result?.actionInfoList[0])
+         //  setProspectBasicInfo(res.result?.prospectBasicInfo)
+      } else {
+         constant.showMsg(res.message)
+      }
+   }
 
    const fn_GetProspectBasicInfo = () => {
-      console.log("userDat",userData)
+      dispatch(emptyLoader_Action(true))
       let param = {
-        "brandCode": userData?.brandCode,
-        "countryCode": userData?.countryCode,
-        "companyId": userData?.companyId,
-        "prospectNo":Number(route.params.cardData?.prospectId),
-        "loginUserCompanyId": userData?.userCompanyId,
-        "loginUserId": userData?.userId,
-        "ipAddress": "1::1"
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo": Number(route.params.cardData?.prospectId),
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
       }
       tokenApiCall(GetProspectBasicInfoCallBack, APIName.GetProspectBasicInfo, "POST", param)
-    }
-  
-    const GetProspectBasicInfoCallBack = (res) => {
-      console.log("search", JSON.stringify(res))
-      if (res.statusCode === 200) {
-          setProspectBasicInfo(res.result?.prospectBasicInfo)
-      } else {
-        constant.showMsg(res.message)
-      }
-    }
+   }
 
-    const fn_GetProspectDetail= () => {
+   const GetProspectBasicInfoCallBack = (res) => {
+      console.log("search", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         setProspectBasicInfo(res.result?.prospectBasicInfo)
+         setActive(1)
+         Animated.timing(animatedValue, {
+            toValue: 1,
+            duration: 800, // Adjust the duration of the animation
+            useNativeDriver: false,
+         }).start();
+      } else {
+         constant.showMsg(res.message)
+      }
+   }
+
+   const fn_GetProspectDetail = () => {
+      dispatch(emptyLoader_Action(true))
       let param = {
-        "brandCode": userData?.brandCode,
-        "countryCode": userData?.countryCode,
-        "companyId": userData?.companyId,
-        "prospectNo": 8325,
-        "loginUserCompanyId": "ORBIT",
-        "loginUserId": userData?.userId,
-        "ipAddress": "1::1"
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo": Number(route.params.cardData?.prospectId),
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
+
       }
       tokenApiCall(GetProspectDetailCallBack, APIName.GetProspectDetails, "POST", param)
-    }
-  
-    const GetProspectDetailCallBack = (res) => {
+   }
+
+   const GetProspectDetailCallBack = (res) => {
       console.log("search", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
-  
+         setProspectInfo(res.result?.prospectDetails)
+         setActive(3)
+         Animated.timing(animatedValue, {
+            toValue: 3,
+            duration: 800, // Adjust the duration of the animation
+            useNativeDriver: false,
+         }).start();
       } else {
-        constant.showMsg(res.message)
+         constant.showMsg(res.message)
       }
-    }
+   }
 
 
 
-   const renderItem = ({item,index}) => {
+   const renderItem = ({ item, index }) => {
       return (
          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
-               <Pressable style={styles.driveListTopView1} onPress={()=>setDetailModal(true)}>
+             {prospectBasicInfo?.isOlmCase === "Y" && <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
                   <Text style={styles.text2}>OLM</Text>
                   <AntDesign name='close' style={styles.closeIcon} />
                </Pressable>
+          }
                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View style={{ flex: 1, }}>
-                     <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
+                     <FastImage source={{ uri: item?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                            <Text style={styles.listName3}>PID : </Text>
@@ -151,13 +203,63 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_TabClick = (type) => {
-      setActive(type)
-      Animated.timing(animatedValue, {
-         toValue: type,
-         duration: 800, // Adjust the duration of the animation
-         useNativeDriver: false,
-      }).start();
+
+      if (type === 1) {
+         setActive(type)
+         Animated.timing(animatedValue, {
+            toValue: type,
+            duration: 800, // Adjust the duration of the animation
+            useNativeDriver: false,
+         }).start();
+      } else if (type === 2) {
+         setActive(2)
+         Animated.timing(animatedValue, {
+            toValue: 2,
+            duration: 800, // Adjust the duration of the animation
+            useNativeDriver: false,
+         }).start();
+      } else if (type === 3) {
+         fn_GetProspectDetail()
+      }else{
+         fn_GetActionDetail()
+      }
    }
+
+   const fn_GetActionDetail = () => {
+      dispatch(emptyLoader_Action(true))
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "calledBy": "PROSPECT_ID",
+         "prospectNo": Number(route.params.cardData?.prospectId),
+          "type": "",
+         "code": "",
+         "status": "A",
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
+         "actionDate": ""
+
+      }
+      tokenApiCall(GetActionDetailCallBack, APIName.GetActionsList, "POST", param)
+   }
+
+   const GetActionDetailCallBack = (res) => {
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         setActionInfo(res.result?.actionInfoList)
+         setActive(4)
+         Animated.timing(animatedValue, {
+            toValue: 4,
+            duration: 800, // Adjust the duration of the animation
+            useNativeDriver: false,
+         }).start();
+      } else {
+         constant.showMsg(res.message)
+      }
+   }
+
 
    const actionRenderItem = ({ item, index }) => {
       return (
@@ -165,33 +267,33 @@ export default function ProspectDataSheetScreen(props) {
             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
                <View style={[styles.driveListDetailSubView, {}]}>
                   <Text style={styles.listText2}>Action</Text>
-                  <Text style={styles.listText3}>Test Drive</Text>
+                  <Text style={styles.listText3}>{item?.actionDescription}</Text>
                </View>
                <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Due on </Text>
-                  <Text style={styles.listText3}>14-Feb-2024</Text>
+                  <Text style={styles.listText3}>{item?.dueOn}</Text>
                </View>
             </View>
 
             <View style={styles.driveListDetailView}>
                <View style={styles.driveListDetailSubView}>
                   <Text style={styles.listText2}>Stutus</Text>
-                  <Text style={styles.listText3}>Active</Text>
+                  <Text style={styles.listText3}>{item?.statusDesc}</Text>
                </View>
                <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Completed on</Text>
-                  <Text style={styles.listText3}>-</Text>
+                  <Text style={styles.listText3}>{item?.performedOn}</Text>
                </View>
             </View>
 
             <View style={styles.driveListDetailView}>
                <View style={styles.driveListDetailSubView}>
                   <Text style={styles.listText2}>Remarks</Text>
-                  <Text style={styles.listText3}>-</Text>
+                  <Text style={styles.listText3}>{item?.remark}</Text>
                </View>
                <View style={styles.driveListDetailSubView2}>
-                  <Text style={styles.listText2}>Projected Closure Data</Text>
-                  <Text style={styles.listText3}>Standard</Text>
+                  <Text style={styles.listText2}>Projected Closure Date</Text>
+                  <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
                </View>
             </View>
 
@@ -201,59 +303,156 @@ export default function ProspectDataSheetScreen(props) {
       )
    }
 
-   const prospectInfoRenderItem=({item,index})=>{
-      return(
-         <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
-         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
-            <View style={[styles.driveListDetailSubView, {}]}>
-               <Text style={styles.listText2}>Address(Regn)</Text>
-               <Text style={styles.listText3}>-</Text>
-            </View>
-            <View style={styles.driveListDetailSubView2}>
-               <Text style={styles.listText2}>State </Text>
-               <Text style={styles.listText3}>Haryana</Text>
-            </View>
-         </View>
+   const prospectInfoRenderItem = ({ item, index }) => {
 
-         <View style={styles.driveListDetailView}>
-            <View style={styles.driveListDetailSubView}>
-               <Text style={styles.listText2}>City</Text>
-               <Text style={styles.listText3}>Faridabad</Text>
-            </View>
-            <View style={styles.driveListDetailSubView2}>
-               <Text style={styles.listText2}>Sub-Zone</Text>
-               <Text style={styles.listText3}>-</Text>
-            </View>
-         </View>
+      return (
+         index === 0 ?
+            <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+               <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
+                  <View style={[styles.driveListDetailSubView, {}]}>
+                     <Text style={styles.listText2}>Address(Res)</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resAddress1} {prospectInfo?.resAddress2} {prospectInfo?.resAddress3}</Text>
+                  </View>
+                  <View style={styles.driveListDetailSubView2}>
+                     <Text style={styles.listText2}>State </Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resState}</Text>
+                  </View>
+               </View>
 
-         <View style={styles.driveListDetailView}>
-            <View style={styles.driveListDetailSubView}>
-               <Text style={styles.listText2}>District</Text>
-               <Text style={styles.listText3}>Faridabad</Text>
-            </View>
-            <View style={styles.driveListDetailSubView2}>
-               <Text style={styles.listText2}>PIN</Text>
-               <Text style={styles.listText3}>121001</Text>
-            </View>
-         </View>
+               <View style={styles.driveListDetailView}>
+                  <View style={styles.driveListDetailSubView}>
+                     <Text style={styles.listText2}>City</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resCity}</Text>
+                  </View>
+                  <View style={styles.driveListDetailSubView2}>
+                     <Text style={styles.listText2}>Sub-Zone</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resSubZone}</Text>
+                  </View>
+               </View>
 
-         <View style={styles.driveListDetailView}>
-            <View style={styles.driveListDetailSubView}>
-               <Text style={styles.listText2}>Phone</Text>
-               <Text style={styles.listText3}>9888888888</Text>
-            </View>
-            <View style={styles.driveListDetailSubView2}>
-               <Text style={styles.listText2}>Fax</Text>
-               <Text style={styles.listText3}>46364</Text>
-            </View>
-         </View>
+               <View style={styles.driveListDetailView}>
+                  <View style={styles.driveListDetailSubView}>
+                     <Text style={styles.listText2}>District</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resDistrict}</Text>
+                  </View>
+                  <View style={styles.driveListDetailSubView2}>
+                     <Text style={styles.listText2}>PIN</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resPincode}</Text>
+                  </View>
+               </View>
 
-      </View>
+               <View style={styles.driveListDetailView}>
+                  <View style={styles.driveListDetailSubView}>
+                     <Text style={styles.listText2}>Phone</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resPhone}</Text>
+                  </View>
+                  <View style={styles.driveListDetailSubView2}>
+                     <Text style={styles.listText2}>Fax</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resFax}</Text>
+                  </View>
+               </View>
+
+            </View>
+            : index === 1 ?
+               <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
+                     <View style={[styles.driveListDetailSubView, {}]}>
+                        <Text style={styles.listText2}>Address(Regn)</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnAddress1} {prospectInfo?.regnAddress2} {prospectInfo?.regnAddress3}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>State </Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnState}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>City</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnCity}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Sub-Zone</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnSubZone}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>District</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnDistrict}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>PIN</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnPincode}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>Phone</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnPhone}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Fax</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnFax}</Text>
+                     </View>
+                  </View>
+
+               </View>
+               :
+               <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
+                     <View style={[styles.driveListDetailSubView, {}]}>
+                        <Text style={styles.listText2}>Address(Off)</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcAddress1} {prospectInfo?.offcAddress2} {prospectInfo?.offcAddress3}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>State </Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcState}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>City</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcCity}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Sub-Zone</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcSubZone}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>District</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcDistrict}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>PIN</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcPincode}</Text>
+                     </View>
+                  </View>
+
+                  <View style={styles.driveListDetailView}>
+                     <View style={styles.driveListDetailSubView}>
+                        <Text style={styles.listText2}>Phone</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcPhone}</Text>
+                     </View>
+                     <View style={styles.driveListDetailSubView2}>
+                        <Text style={styles.listText2}>Fax</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offcFax}</Text>
+                     </View>
+                  </View>
+
+               </View>
+
       )
    }
 
    const fn_Create = () => {
-      props.navigation.navigate("EditProspectScreen")
+      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData})
    }
 
    return (
@@ -296,81 +495,63 @@ export default function ProspectDataSheetScreen(props) {
             </View>
             {
                active === 1 &&
-               <View style={{ flex: 1, paddingHorizontal: '1%',paddingBottom:constant.moderateScale(15)  }}>
+               <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15)}]}>
-                     <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Prospect Stage</Text>
-                        <Text style={styles.listText3}>Primary</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Zone</Text>
-                        <Text style={styles.listText3}>North</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
+                        <View style={[styles.driveListDetailSubView, {}]}>
+                           <Text style={styles.listText2}>Prospect Stage</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.prospectStage}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Usage</Text>
-                        <Text style={styles.listText3}>Personal</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.usageDescription}</Text>
                      </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Compaings</Text>
-                        <Text style={styles.listText3}>-</Text>
                      </View>
-                  </View>
 
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Importance</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>General Comments</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>First Action</Text>
-                        <Text style={styles.listText3}>Call to Customer on{'\n'}13-Feb-2024</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Current Action</Text>
-                        <Text style={styles.listText3}>Test Drive on 19-Feb-2024</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Sub Zone</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Reference</Text>
-                        <Text style={styles.listText3}>Newspaper</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.referenceId}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Compaings</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.campaignCode}</Text>
+                        </View>
                      </View>
-                  </View>
 
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Importance</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.importance}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>General Comments</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.generalComment}</Text>
+                        </View>
+                     </View>
+
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Finance Case</Text>
-                        <Text style={styles.listText3}>No</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.financeCaseFlag === 'N' ? "No" : "Yes"}</Text>
                      </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Project Closure</Text>
-                        <Text style={styles.listText3}>30-Mar-2024</Text>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Current Action</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.currentActionDesc} on {prospectBasicInfo?.currentActionDate}</Text>
+                        </View>
                      </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
+                 <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Action Comment</Text>
-                        <Text style={styles.listText3}>Organiser</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.comment}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Project Closure</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.projectedClosureDate}</Text>
+                        </View>
                      </View>
 
-                  </View>
+                   
                   </ScrollView>
                </View>
             }
@@ -378,104 +559,102 @@ export default function ProspectDataSheetScreen(props) {
                active === 2 &&
                <View style={{ flex: 1, paddingHorizontal: '1%' }}>
                   <ScrollView showsVerticalScrollIndicator={false}>
-                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
-                     <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Opened on</Text>
-                        <Text style={styles.listText3}>11-Feb-2024</Text>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
+                        <View style={[styles.driveListDetailSubView, {}]}>
+                           <Text style={styles.listText2}>Opened on</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.prospectOpenedOn}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>OLM Lead</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.isOlmCase=== 'N' ? "No" : "Yes"}</Text>
+                        </View>
                      </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>OLM Lead</Text>
-                        <Text style={styles.listText3}>NA</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Price Quote</Text>
-                        <Text style={styles.listText3}>Quote not generated</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>source</Text>
-                        <Text style={styles.listText3}>Walk-in</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Customer Refrence</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Finance Case</Text>
-                        <Text style={styles.listText3}>No</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Financer</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Finance Location</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Corporate Case</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Deal Category</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Deal Type</Text>
-                        <Text style={styles.listText3}>No</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Company</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Corporate Case Comment</Text>
-                        <Text style={styles.listText3}>-</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>General Comment</Text>
-                        <Text style={styles.listText3}>-</Text>
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Price Quote</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.priceQuote==='N'? "No" : "Yes"}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>source</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.sourceDescription}</Text>
+                        </View>
                      </View>
 
-                  </View>
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Customer Refrence</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.custReference}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Finance Case</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.financeCaseFlag==="N" ? "No" : "Yes"}</Text>
+                        </View>
+                     </View>
+
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Financer</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.financerDesc}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Finance Location</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.financerLocation}</Text>
+                        </View>
+                     </View>
+
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Corporate Case</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.isCorporateCase==="N" ? "No" : "Yes"}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Deal Category</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.dealCategoryDesc}</Text>
+                        </View>
+                     </View>
+
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Deal Type</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.dealType}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Company</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.dealCompanyDesc}</Text>
+                        </View>
+                     </View>
+
+                     <View style={styles.driveListDetailView}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Corporate Case Comment</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.corporateComment}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>General Comment</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.generalComment}</Text>
+                        </View>
+
+                     </View>
                   </ScrollView>
                </View>
             }
             {active === 3 &&
                <View style={{ flex: 1 }}>
-                   <FlatList
+                  <FlatList
                      data={data2}
                      showsVerticalScrollIndicator={false}
                      renderItem={prospectInfoRenderItem}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(1))}
                      ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(7))}
                      ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
-
                   />
-            
+
                </View>
             }
             {active === 4 &&
                <View style={{ flex: 1 }}>
                   <FlatList
-                     data={data2}
+                     data={actionInfo}
                      renderItem={actionRenderItem}
                      showsVerticalScrollIndicator={false}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(1))}
@@ -487,12 +666,12 @@ export default function ProspectDataSheetScreen(props) {
             }
          </View>
          <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
-     
-      <DataSheetModal 
-       isVisible={detailModal}
-       onRequestClose={()=>setDetailModal(false)}
-      
-      />
+
+         <DataSheetModal
+            isVisible={detailModal}
+            onRequestClose={() => setDetailModal(false)}
+
+         />
       </SafeAreaView>
    )
 }

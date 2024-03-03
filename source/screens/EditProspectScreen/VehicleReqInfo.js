@@ -16,10 +16,53 @@ import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function VehicleReqInfo(props) {
-    const { cardClick } = props
+    const { cardClick,modelData, modelSelect, vehicledata } = props
     const [count,setCount] = useState(0)
     const dispatch = useDispatch()
+  const [modelValue, setModelValue] = useState({})
+  const [editionData, setEditionData] = useState([])
+  const [editionValue, setEditionValue] = useState({})
+  const [assemblyData, setAssemblyData] = useState([])
+  const [assemblyValue, setAssemblyValue] = useState({})
+  const [varientData, setvarientData] = useState([])
+  const [varientValue, setVarientValue] = useState({})
+  const [styleData, setStyleData] = useState([])
+  const [styleValue, setStyleValue] = useState({})
+  const [exteriorData,setExteriorData] = useState([])
+  const [exteriorValue,setExteriorValue] = useState({})
+  const [inteiorData,setInteriorData] = useState([])
+  const [interiorValue,setInteriorValue] = useState({})
+  const [my_Data,setMyData] = useState([])
+  const [my_DataValue,setMyDataValue] = useState({})
+  const [vy_Data,setVyData] = useState([])
+  const [vy_DataValue,setVyDataValue] = useState({})
 
+ useEffect(()=>{
+   vehicledata.map((item) => {
+    if (item.listType === 'EDITION') {
+      setEditionData(item.vehicleMaster)
+    } else if (item.listType === 'ASSEMBLY') {
+      setAssemblyData(item.vehicleMaster)
+    }else if (item.listType === 'VARIANT') {
+      setvarientData(item.vehicleMaster)
+    }else if (item.listType === 'STYLE') {
+      setStyleData(item.vehicleMaster)
+    }else if (item.listType === 'EXT_COLOR') {
+      setExteriorData(item.vehicleMaster)
+    }else if (item.listType === 'INT_COLOR') {
+      setInteriorData(item.vehicleMaster)
+    }else if (item.listType === 'VY') {
+      setVyData(item.vehicleMaster)
+    }else if (item.listType === 'MY') {
+      setMyData(item.vehicleMaster)
+    }
+  })
+ },[vehicledata])
+
+ const fn_ModelSelect=(d)=>{
+  setModelValue(d)
+  modelSelect(d)
+ }
 
     return (
         <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
@@ -28,63 +71,92 @@ export default function VehicleReqInfo(props) {
      <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={modelData}
              buttonExt={styles.dropList}
+             title={modelValue?.description}
              textExt={styles.dropListText}
+             on_Select={(d)=> fn_ModelSelect(d)}
            />
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Edition<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={editionData}
+             title={editionValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setEditionData(d)}
+
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Varient</Text>
-                <TextInput style={styles.input1} >a.r@gmail.com</TextInput>
+            <SelectDropList 
+             list={varientData}
+             title={varientValue?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=> setVarientValue(d)}
+
+           />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Style<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={styleData}
+             title={styleValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setStyleValue(d)}
+
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Exterior<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={exteriorData}
+             title={exteriorValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setExteriorValue(d)}
+
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Internal</Text>
-                <TextInput style={styles.input1} >a.r@gmail.com</TextInput>
-        </View>
+            <SelectDropList 
+             list={inteiorData}
+             title={interiorValue?.description}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=> setInteriorValue(d)}
+
+           />        
+           </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>MY/VY</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
-             title='2024'
+             list={my_Data}
+             title={my_DataValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setMyDataValue(d)}
+
            />
            <Text> </Text>
             <SelectDropList 
-             list={[]}
-             title='2024'
+             list={vy_Data}
+             title={vy_DataValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setVyDataValue(d)}
+
            />
         
             </View>
@@ -93,14 +165,17 @@ export default function VehicleReqInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Assembly Type</Text>
            <SelectDropList 
-             list={[]}
+             list={assemblyData}
+             title={assemblyValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setAssemblyValue(d)}
+
            />
         </View>
 
         <View style={styles.bottomMainView}>
-        <View style={styles.detailMainView2}>
+        {/* <View style={styles.detailMainView2}>
             <Text style={styles.detailText}>Fuel</Text>
            <SelectDropList 
              list={[]}
@@ -108,7 +183,7 @@ export default function VehicleReqInfo(props) {
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
            />
-        </View>
+        </View> */}
 
         <View style={styles.detailMainView2}>
             <Text style={styles.detailText}>Reference</Text>

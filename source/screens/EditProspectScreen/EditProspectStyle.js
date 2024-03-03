@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
                 marginRight:constant.moderateScale(10),
             },
             driveListDetailView:{
-            //  flex:1,
+             flex:1,
             // width:'100%',
              flexDirection:"row",
             //  alignItems:'center',
@@ -78,6 +78,16 @@ const styles = StyleSheet.create({
                 color:'#434343',
                 fontFamily:constant.typeRegular,
             },
+            listText4:{
+              fontSize:constant.moderateScale(10),
+              color:'#434343',
+              fontFamily:constant.typeRegular,
+          },
+          listName3:{
+            fontSize:constant.moderateScale(12),
+            color:'#434343',
+            fontFamily:constant.typeMedium,
+        },
             fuelText2:{
               fontSize:constant.moderateScale(12),
               color:'#434343',
@@ -190,7 +200,7 @@ const styles = StyleSheet.create({
                      width:constant.moderateScale(45),
                      backgroundColor:'red',
                      position:'absolute',
-                     bottom:-constant.moderateScale(2),
+                     bottom:-constant.moderateScale(1),
                      borderRadius:constant.resW(20)
                  },
                  performaButton: {
