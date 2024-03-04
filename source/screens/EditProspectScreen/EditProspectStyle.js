@@ -154,15 +154,18 @@ const styles = StyleSheet.create({
             //tabList
             cal_SubView:{
               flex:1,
-              backgroundColor:constant.whiteColor,
+              // backgroundColor:constant.whiteColor,
               marginHorizontal:constant.moderateScale(6),
-              borderRadius:8,
-              marginBottom:constant.moderateScale(6),
+              // borderRadius:8,
+              // marginBottom:constant.moderateScale(6),
              },
              tabMainView:{
                  paddingBottom:'1%',
                  height:constant.moderateScale(50),
-                
+                 backgroundColor:constant.whiteColor,
+                 borderTopLeftRadius:10,
+                 borderTopRightRadius:10
+
                  },
                  tabSubView:{
                   flex:1,
@@ -174,7 +177,8 @@ const styles = StyleSheet.create({
                   paddingTop:constant.moderateScale(7),
                  },
                  tabButton:{
-                 width:constant.resW(20),
+                  flex:1,
+                //  width:constant.resW(20),
                  justifyContent:'center'
                  },
                  tabButtonText:{
@@ -185,7 +189,7 @@ const styles = StyleSheet.create({
              
                  },
                  tabButton2:{
-                     width:constant.resW(20),
+                     flex:1,
                      justifyContent:'center'  
                  },
                  tabButtonText2:{

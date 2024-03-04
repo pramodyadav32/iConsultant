@@ -126,7 +126,7 @@ export default function HomeScreen(props) {
       props.navigation.navigate("ProspectScreen")
     }
     else {
-      props.navigation.navigate("CalenderScreen")
+      props.navigation.navigate("PerformaScreen")
     }
   }
 

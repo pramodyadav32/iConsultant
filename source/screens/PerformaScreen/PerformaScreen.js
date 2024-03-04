@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput } from 'react-native';
+import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput, StyleSheet } from 'react-native';
 import * as constant from '../../utilities/constants'
 import styles from './PerformaStyle';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import DataSheetModal from '../../components/DataSheetModal';
 import AddPackageModel from './AddPackageModel';
+import PerformaBasicInfo from './PerformaBasicInfo';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -106,25 +107,19 @@ export default function PerformaScreen(props) {
 
    const renderItem = () => {
       return (
-         <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+         <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
                <Pressable style={styles.driveListTopView1} onPress={()=>setDetailModal(true)}>
                   <Text style={styles.text2}>OLM</Text>
                   <AntDesign name='close' style={styles.closeIcon} />
                </Pressable>
                <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <View style={{ flex: 1, }}>
-                     <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
-                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                        <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
-                           <Text style={styles.listName3}>PID : </Text>
-                           <Text style={[styles.listName3]}>12443</Text>
-                        </View>
-                        <View style={styles.cardHorLine} />
-                     </View>
-                  </View>
-                  <View style={{ flex: 1.8 }}>
+                  <View style={{ flex: 1.8,marginTop:constant.moderateScale(7) }}>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
+                     <View style={styles.driveListDetailSubView}>
+                     <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+
+                     </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
                            <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>Mr.Amarjeet Singh</Text>
@@ -133,25 +128,46 @@ export default function PerformaScreen(props) {
                            <Text style={styles.listText2}>Model</Text>
                            <Text style={styles.listName3}>D-MAX</Text>
                         </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>MY/VY</Text>
+                           <Text style={styles.listName3}>2024/2024</Text>
+                        </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
-                        <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Mobile No</Text>
-                           <Text style={styles.listName3}>1234567898</Text>
+                     <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Vehicle Cost</Text>
+                           <Text style={styles.listName3}>907,300.00</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Closure Date</Text>
+                           <Text style={styles.listText2}>Temp Regn</Text>
+                           <Text style={styles.listName3}>NIL</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Hypo Charges</Text>
+                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Service Charges</Text>
                            <Text style={styles.listName3}>22-Jan-2024</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Rating</Text>
-                           <Text style={styles.listName3}>HOT</Text>
+                           <Text style={styles.listText2}>Extd Warr Pack</Text>
+                           <Text style={styles.listName3}>NIL</Text>
+                        </View>
+                       
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Accessories (Performa)</Text>
+                           <Text style={styles.listName3}>3500.00</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Color</Text>
-                           <Text style={styles.listName3}>Brilliant Silver</Text>
+                           {/* <Text style={styles.listText2}>Accessories (Performa)</Text> */}
+                           {/* <Text style={styles.listName3}>3500.00</Text> */}
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Total</Text>
+                           <Text style={styles.listName3}>910950.00</Text>
                         </View>
                      </View>
                   </View>
@@ -359,273 +375,7 @@ export default function PerformaScreen(props) {
         
             {
                active === 0 &&
-               <View style={{ flex: 1, paddingHorizontal: '1%',paddingBottom:constant.moderateScale(15)  }}>
-                  <ScrollView showsVerticalScrollIndicator={false}>
-                  <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Source</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-                  <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15)}]}>
-                     <View style={[styles.driveListDetailSubView, {}]}>
-                        <Text style={styles.listText2}>Proforma Inv no</Text>
-                        <Text style={styles.listText3}>New</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Dated</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Model</Text>
-                        <Text style={styles.listText3}>SCRAB</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Varient</Text>
-                        <Text style={styles.listText3}>DMAX FlatDesk </Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Style</Text>
-                        <Text style={styles.listText3}>STANDARD</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>MY/VY</Text>
-                        <Text style={styles.listText3}>2024/2024</Text>
-                     </View>
-                  </View>
-
-                  <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Price List</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Billing Location</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-            <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(10)}}>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Discount</Text>
-              <TextInput style={styles.input1} ></TextInput>
-
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Usage</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Sale Group</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>End Use</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Loyalty Disc Amt</Text>
-              <TextInput style={styles.input1} ></TextInput>
-
-            </View>
-
-            <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>HSN Code</Text>
-                        <Text style={styles.listText3}>New</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Basic Price</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Discount</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                  </View>
-                  </View>
-                  <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(0)}}>
-            <View style={[styles.costListMainView,{}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>HEAD</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>CGST</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>SGST</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>Total</Text>
-             </View>
-            </View>
-
-            <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Tex%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>14.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>14.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}></Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Tax Amount</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Surcharge%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}></Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Surcharge Amt</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{backgroundColor:'#F0F0F0',borderBottomRightRadius:10,borderBottomLeftRadius:10,paddingVertical:constant.moderateScale(7),paddingHorizontal:10,marginHorizontal:0}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Total</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-             
-             </View>
-             <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(20)}}>
-
-             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>Trnx Basic</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
-              <Text style={styles.detailText}>TCS</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-            </View>
-
-            <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Ex-Showroom(Pre-Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Ex-Showroom(Post Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                  </View>
-
-                  <View style={styles.driveListDetailView}>
-                     <View style={styles.driveListDetailSubView}>
-                        <Text style={styles.listText2}>Booking Amount</Text>
-                        <Text style={styles.listText3}>_</Text>
-                     </View>
-                     <View style={styles.driveListDetailSubView2}>
-                        {/* <Text style={styles.listText2}>MY/VY</Text>
-                        <Text style={styles.listText3}>2024/2024</Text> */}
-                     </View>
-                  </View>
-            </View>
-                  </ScrollView>
-               </View>
+             <PerformaBasicInfo />
             }
             {
                active === 1 &&
@@ -676,7 +426,7 @@ export default function PerformaScreen(props) {
                </View>
             }
          </View>
-         <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+         {/* <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}
      
 
       <AddPackageModel
@@ -686,3 +436,4 @@ export default function PerformaScreen(props) {
       </SafeAreaView>
    )
 }
+

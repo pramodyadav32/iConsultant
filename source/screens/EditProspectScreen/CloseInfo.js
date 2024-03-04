@@ -21,9 +21,10 @@ export default function CloseInfo(props) {
 
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
+        <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
-      
+           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+
       <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
@@ -86,7 +87,9 @@ export default function CloseInfo(props) {
             <Text style={[styles.detailText,{marginTop:'3%'}]}>Remarks</Text>
                 <TextInput placeholder='Enter Remarks' style={styles.commentInput} ></TextInput>
         </View>
-    
+    </View>
+    <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+
      </ScrollView>
         </View>
     );
@@ -171,6 +174,14 @@ const styles = StyleSheet.create({
             paddingHorizontal:"3%",
             fontSize:constant.moderateScale(14),
             textAlignVertical:'top'
+        },
+        performaButton: {
+            marginBottom: constant.moderateScale(30),
+            marginTop: constant.moderateScale(10),
+            marginHorizontal: constant.moderateScale(70),
+            paddingVertical: constant.moderateScale(10),
+            borderWidth: 1,
+            borderColor: constant.whiteColor,
         },
    
 })

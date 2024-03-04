@@ -21,15 +21,20 @@ import ActionInfo from './ActionInfo';
 import UpdateActionModal from '../../components/UpdateActionModal';
 import FeedBackModal from '../../components/FeedBackModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import CustumerInfo from './CustumerInfo';
 const data = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
 
 ]
 
 const data2 = [
-    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
-    { 'key': 2, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
-    { 'key': 3, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
+    { 'key': 1, "title": 'Basic Info', },
+    { 'key': 2, "title": 'Prospect Info', },
+    { 'key': 3, "title": 'Vehicle Required'},
+    { 'key':4, "title": 'Actions'},
+    { 'key': 5, "title": 'Custumer Profile'},
+    { 'key': 6, "title": 'Close'},
+
 
 ]
 
@@ -38,7 +43,7 @@ export default function EditProspectScreen(props) {
     const dispatch = useDispatch()
     const tabWidth = constant.resW(49);
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
-    const [active, setActive] = useState(1)
+    const [active, setActive] = useState(0)
     const [animatedValue] = useState(new Animated.Value(1));
     const [basicInfo, setBasicInfo] = useState({})
    const [prospectMasterData,setProspectMasterData] = useState([]) 
@@ -51,7 +56,10 @@ export default function EditProspectScreen(props) {
     });
 
     const [detailModal, setDetailModal] = useState(false)
-    const [updateModal, setUpdateModal] = useState(false)
+    const [updateModal, setUpdateModal] = useState({show:false,data:{}})
+    const [feedBackModal, setFeedBackModal] = useState({show:false,data:{}})
+    const [actionTypeData,SetActionTypeData] = useState([])
+
     const [actionInfo ,setActionInfo] = useState([])
 
     useEffect(() => {
@@ -119,7 +127,7 @@ export default function EditProspectScreen(props) {
         if (res.statusCode === 200) {
            setProspectMasterData(res?.result)
 
-            setActive(1)
+            setActive(0)
             Animated.timing(animatedValue, {
                 toValue: 1,
                 duration: 800, // Adjust the duration of the animation
@@ -151,12 +159,7 @@ export default function EditProspectScreen(props) {
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
            setProspectInfo(res.result?.prospectDetails)
-           setActive(2)
-           Animated.timing(animatedValue, {
-              toValue: 2,
-              duration: 800, // Adjust the duration of the animation
-              useNativeDriver: false,
-           }).start();
+           setActive(1)
         } else {
            constant.showMsg(res.message)
         }
@@ -188,7 +191,7 @@ export default function EditProspectScreen(props) {
               setVeh_ModelData(item.vehicleMaster)
             }
           })
-          setActive(3)
+          setActive(2)
           dispatch(emptyLoader_Action(false))
         } else {
           dispatch(emptyLoader_Action(false))
@@ -248,12 +251,38 @@ export default function EditProspectScreen(props) {
      const GetActionDetailCallBack = (res) => {
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
+            fn_GetActionMasterList()
            setActionInfo(res.result?.actionInfoList)
-           setActive(4)   
         } else {
            constant.showMsg(res.message)
         }
      }
+
+     const fn_GetActionMasterList = () => {
+        // dispatch(emptyLoader_Action(true))
+        let param = {
+          "brandCode": userData?.brandCode,
+          "countryCode": userData?.countryCode,
+          "companyId": userData?.companyId,
+          "calledBy": "FUP_TYPE",
+          "loginUserCompanyId": "ORBIT",
+          "loginUserId": userData?.userId,
+          "ipAddress": "1::1"
+        }
+        tokenApiCall(GetActionMasterListCallBack, APIName.GetActionMaster, "POST", param)
+      }
+    
+      const GetActionMasterListCallBack = (res) => {
+        console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+         SetActionTypeData(res?.result[0]?.actionMasterList)
+         setActive(3)   
+
+        } else {
+          constant.showMsg(res.message)
+        }
+      }
 
     const renderItem = () => {
         return (
@@ -313,19 +342,23 @@ export default function EditProspectScreen(props) {
     }
 
     const fn_TabClick = (type) => {
-        if(type===1){
+        if(type===0){
  setActive(type)
         Animated.timing(animatedValue, {
             toValue: type,
             duration: 800, // Adjust the duration of the animation
             useNativeDriver: false,
         }).start();
-        }else if(type===2){
+        }else if(type===1){
             fn_GetProspectDetail()
-        }else if(type===3){
+        }else if(type===2){
             fn_GetVehicleMasterModel()
-        }else if(type===4){
+        }else if(type===3){
             fn_GetActionDetail()
+        }else if(type===4){
+            setActive(4)
+        }else{
+            setActive(5)
         }
        
     }
@@ -339,7 +372,9 @@ export default function EditProspectScreen(props) {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
             <StatusBar translucent={false} backgroundColor={constant.blackColor} />
+          
             <CommonHeader title='Edit Prospect' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
+           <ScrollView>
             <View>
                 <FlatList
                     data={data}
@@ -354,49 +389,41 @@ export default function EditProspectScreen(props) {
             <View style={styles.cal_SubView}>
                 <View style={styles.tabMainView}>
                     <View style={styles.tabSubView}>
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                            <Pressable style={active === 1 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(1)} >
-                                <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Basic Info</Text>
-                                {active === 1 && <View style={styles.horixontalLine} />}
-                            </Pressable>
-                            <Pressable style={active === 2 ? [styles.tabButton, { width: constant.resW(28), }] : [styles.tabButton2, { width: constant.resW(28) }]} onPress={() => fn_TabClick(2)} >
-                                <Text style={active === 2 ? styles.tabButtonText : styles.tabButtonText2}>Prospect Info</Text>
-                                {active === 2 && <View style={styles.horixontalLine} />}
-                            </Pressable>
-                            <Pressable style={active === 3 ? [styles.tabButton, { width: constant.resW(32), }] : [styles.tabButton2, { width: constant.resW(32) }]} onPress={() => fn_TabClick(3)} >
-                                <Text style={active === 3 ? styles.tabButtonText : styles.tabButtonText2}>Vehicle Required</Text>
-                                {active === 3 && <View style={styles.horixontalLine} />}
+                        <FlatList 
+                         data={data2}
+                         horizontal
+                         showsHorizontalScrollIndicator={false}
+                        ItemSeparatorComponent={()=>common_fn.listVer_Space(constant.moderateScale(10))}
+                        ListFooterComponent={()=>common_fn.listVer_Space(constant.moderateScale(10))}
 
+                         renderItem={({item,index})=>{
+                            return(
+                                <Pressable style={active === index ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(index)} >
+                                <Text style={active === index ? styles.tabButtonText : styles.tabButtonText2}>{item?.title}</Text>
+                                {active === index && <View style={styles.horixontalLine} />}
                             </Pressable>
-                            <Pressable style={active === 4 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(4)} >
-                                <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Actions</Text>
-                                {active === 4 && <View style={styles.horixontalLine} />}
-
-                            </Pressable>
-                            <Pressable style={active === 5 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(5)} >
-                                <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Close</Text>
-                                {active === 5 && <View style={styles.horixontalLine} />}
-
-                            </Pressable>
-                        </ScrollView>
+                            )
+                         }}
+                        />
                     </View>
                 </View>
+                
                 {
-                    active === 1 &&
+                    active === 0 &&
                     <EditBasicInfo 
                     data={basicInfo}
                     prospectMaster={prospectMasterData}
                     />
                 }
                 {
-                    active === 2 &&
+                    active === 1 &&
                     <EditProspectInfo
                     data={basicInfo}
                     prospectDetail={prospectInfo}
                     prospectMaster={prospectMasterData}
                     />
                 }
-                {active === 3 &&
+                {active === 2 &&
                     <VehicleReqInfo
                      modelData={veh_ModelData}
                      vehicledata={vehicleData}
@@ -404,29 +431,42 @@ export default function EditProspectScreen(props) {
 
                     />
                 }
-                {active === 4 &&
+                {active === 3 &&
                     <ActionInfo 
-                    updateClick={() => setUpdateModal(true)}
+                    updateClick={(item,index) => setUpdateModal({show:true,data:item})}
+                    actionType_Data={actionTypeData}
+                    modelData={veh_ModelData}
                     data={actionInfo} />
+                }
+                 {active === 4 &&
+                     <CustumerInfo
+                     data={basicInfo}
+                     prospectDetail={prospectInfo}
+                     prospectMaster={prospectMasterData}
+                     />
                 }
                 {
                     active === 5 && <CloseInfo />
                 }
             </View>
-            <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+            </ScrollView>
+            {/* <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}
 
             <DataSheetModal
                 isVisible={detailModal}
                 onRequestClose={() => setDetailModal(false)}
             />
-            {/* <UpdateActionModal
-                  isVisible={updateModal}
-                  onRequestClose={() => setUpdateModal(false)}
-            /> */}
-            <FeedBackModal
+            <UpdateActionModal
+                  isVisible={updateModal.show}
+                  data={updateModal.data}
+                  actionType_Data={actionTypeData}
+                  modelData={veh_ModelData}
+                  onRequestClose={() => setUpdateModal(s=>{return{...s,show:false}})}
+            />
+            {/* <FeedBackModal
                 isVisible={updateModal}
                 onRequestClose={() => setUpdateModal(false)}
-            />
+            /> */}
         </SafeAreaView>
     )
 }

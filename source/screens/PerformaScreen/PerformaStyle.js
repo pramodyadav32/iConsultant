@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
                 alignItems:'center',
                 justifyContent:'space-between',
                 position:'absolute',
-                top:-5,
-                right:0,
+                top:0,
+                right:2,
                 borderWidth:1,
                 borderColor:'#727272',
                 borderRadius:4,
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
             // justifyContent:'space-between'
             },
             carImage:{
-              height:constant.moderateScale(110),
-              width:constant.moderateScale(130),
+              height:constant.moderateScale(50),
+              width:constant.moderateScale(70),
             },
             horizontalLine:{
               height:constant.moderateScale(2),
@@ -227,10 +227,7 @@ const styles = StyleSheet.create({
                       width:constant.moderateScale(115),
                       fontFamily:constant.typeLight
                   },
-                  text2:{
-                      fontSize:constant.moderateScale(14),
-                      color:constant.red,  
-                  },
+                
                   dropList:{
                     borderWidth:1,
                     height:constant.moderateScale(40),

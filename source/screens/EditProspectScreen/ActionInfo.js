@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
@@ -10,19 +10,33 @@ import FastImage from 'react-native-fast-image'
 import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
-import { apiCall, APIName } from '../../utilities/apiCaller'
+import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import CalenderModal from '../../components/CalenderModal';
+import moment from 'moment';
+import ProspectActionSlotScreen from '../ProspectScreen/ProspectActionSlotScreen';
 
 export default function ActionInfo(props) {
-    const { cardClick,updateClick,data } = props
+    const { cardClick,updateClick,data,actionType_Data,modelData } = props
     const dispatch = useDispatch()
+    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
+    const [actionTypeValue,setActionTypeValue] = useState({})
+    const [modelValue,setModelValue] = useState({})
+    const [actionCal_Modal, setActionCal_Modal] = useState(false)
+    const [actionModelValue,setActionModelValue] = useState({})
+    const [actionDate,setActionDate] = useState('')
+    const [actionSlotValue,setActionSlotValue] = useState(' ')
+    const [actionSlotValue2,setActionSlotValue2] = useState(' ')
+    const [vinData,setVinData] = useState('')
+    const [regData,setRegData] = useState('')
+    const [comment,setComment] = useState('')
+    const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '',vehicleList:[],slotList:[],utcDateFormate:'' })
     
 const renderItem=(item,index)=>{
-    console.log("item",item)
 return(
-    <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+    <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5),marginHorizontal:constant.moderateScale(5) ,paddingBottom: constant.moderateScale(10), elevation: 1 }}>
                 
     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
         <View style={[styles.driveListDetailSubView, {}]}>
@@ -72,7 +86,7 @@ return(
         <View style={styles.buttonView}>
            <Button title='Update'
             buttonExt={styles.updateButton}
-            click_Action={()=>updateClick()}
+            click_Action={()=>updateClick(item,index)}
            />
         </View>
     </View>
@@ -83,13 +97,109 @@ return(
 )
 }
 
+const fn_CalenderClick=()=>{
+    if(Object.keys(actionModelValue).length === 0){
+      constant.showMsg("Please select Model")
+    }else{
+    setActionCal_Modal(true)
+    }
+  }
+const fn_ActionDateSelect = (data) => {
+    if(Object.keys(actionModelValue).length === 0){
+      constant.showMsg("Please select Model")
+    }else{
+      const originalDate = moment(data.timestamp);
+      const utcDate = originalDate.utc();
+      const zoneData = utcDate.toISOString()
+    setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
+    setTimeSlotModal(s=>{return{ ...s,date: data,utcDateFormate:zoneData }}) 
+    fn_GetDemoVehicleList()
+    }
+  }
+
+const fn_GetDemoVehicleList=()=>{
+    dispatch(emptyLoader_Action(true))
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "VEHICLE",
+      "model": actionModelValue.code,
+      "loginUserCompanyId": "ORBIT",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetDemoVehicleListCallBack, APIName.GetDemoVehicleList, "POST", param)
+  }
+
+  const GetDemoVehicleListCallBack= async (res) => {
+    console.log("searchvehi", JSON.stringify(res))
+    if (res.statusCode === 200) {
+      setActionCal_Modal(false)
+      setTimeSlotModal(s=>{return{ ...s,show:true,vehicleList: res?.result?.demoVehicleList }})
+      dispatch(emptyLoader_Action(false))
+
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
+  }
+
+  const fn_GetActionSlots=(item,index)=>{
+    dispatch(emptyLoader_Action(true))
+  let param = {
+    "brandCode": userData?.brandCode,
+    "countryCode": userData?.countryCode,
+    "companyId": userData?.companyId,
+    "branchcode": "MADU01",
+    "calledBy": "TIME_SLOTS",
+    "actionCode": "",
+    "chassisNo": item.chassisNo,
+    "empCode": "",
+    "date": timeSlotModal?.utcDateFormate,
+    "loginUserId": userData?.userId,
+    "ipAddress": "1::1"
+  }
+  tokenApiCall( GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
+}
+
+const  GetActionSlotsCallBack= async (res) => {
+  console.log("searchvehi", JSON.stringify(res))
+  if (res.statusCode === 200) {
+      let data = []
+     await res.result?.actionSlotList.map((item)=>{
+        item["Select"] = false
+        data.push(item)
+       })
+    setTimeSlotModal(s=>{return{ ...s,slotList:data}})
+    dispatch(emptyLoader_Action(false))
+  } else {
+    dispatch(emptyLoader_Action(false))
+    constant.showMsg(res.message)
+  }
+}
+
+const fn_SlotDone=(selectVeh,slotData)=>{
+    setVinData(selectVeh?.chassisNo)
+    setRegData(selectVeh?.regn)
+    console.log("slotdata",slotData)
+const originalTime = slotData[slotData.length-1].slot;
+const originalMoment = moment(originalTime, 'hh:mm A');
+const updatedMoment = originalMoment.add(30, 'minutes');
+const updatedTime = updatedMoment.format('hh:mm A');
+console.log(updatedTime);
+    setActionSlotValue(slotData[0]?.slot)
+    setActionSlotValue2(updatedTime)
+    setTimeSlotModal(s => { return { ...s, show: false } })
+  }
+
 const fn_Footer=()=>{
     return(
         <View style={{ backgroundColor: '#F9F9F9',
         borderWidth: 2, borderRadius: 10,
-         borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(10), 
+         borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5), 
          paddingBottom: constant.moderateScale(10), elevation: 1,
-         marginTop:constant.moderateScale(10) }}>
+         marginTop:constant.moderateScale(10),marginHorizontal:constant.moderateScale(5)  }}>
              <View style={styles.detailMainView}>
              <View style={[styles.driveListDetailSubView, {}]}>
                    <Text style={styles.listText3}>New Action</Text>
@@ -99,25 +209,27 @@ const fn_Footer=()=>{
        <View style={styles.detailMainView}>
        <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
       <SelectDropList 
-        list={[]}
+        list={actionType_Data}
         buttonExt={styles.dropList}
         textExt={styles.dropListText}
+        on_Select={(d)=>setActionTypeValue(d)}
       />
    </View>
 
    <View style={styles.detailMainView}>
        <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
       <SelectDropList 
-        list={[]}
+        list={modelData}
         buttonExt={styles.dropList}
         textExt={styles.dropListText}
+        on_Select={(d)=>setActionModelValue(d)}
       />
    </View>
 
    <View style={styles.detailMainView}>
        <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
-    <Pressable style={styles.calenderMainView}>
-       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+    <Pressable style={styles.calenderMainView} onPress={()=>fn_CalenderClick()}>
+       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{actionDate}</TextInput>
        <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
     </Pressable>
    </View>
@@ -127,14 +239,15 @@ const fn_Footer=()=>{
        <View style={styles.mobileSubView}>
        <SelectDropList 
         list={[]}
-        title='03:00 PM'
+        title={actionSlotValue}
+        disable={true}
         buttonExt={styles.dropList}
         textExt={styles.timeDropListText}
       />
       <Text> </Text>
        <SelectDropList 
         list={[]}
-        title='03:00 PM'
+        title={actionSlotValue2}
         buttonExt={styles.dropList}
         textExt={styles.timeDropListText}
       />
@@ -144,17 +257,17 @@ const fn_Footer=()=>{
 
    <View style={styles.detailMainView}>
        <Text style={styles.detailText}>VIN</Text>
-           <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+           <TextInput placeholder='Type here' editable={false} style={styles.input1} >{vinData}</TextInput>
    </View>
 
    <View style={styles.detailMainView}>
        <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
-           <TextInput placeholder='Type here' style={styles.input1} ></TextInput>
+           <TextInput placeholder='Type here' editable={false} style={styles.input1} >{regData}</TextInput>
    </View>
 
    <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
        <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
-           <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
+           <TextInput placeholder='Enter Comment' onChangeText={(d)=>setComment(d)} style={styles.commentInput} >{comment}</TextInput>
    </View>
 
         </View>
@@ -162,18 +275,37 @@ const fn_Footer=()=>{
 }
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
-           <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
+           {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+
           <FlatList 
            data={data}
+           keyboardShouldPersistTaps={'handled'}
            renderItem={({item,index})=>renderItem(item,index)}
-           ListFooterComponent={()=>fn_Footer()}
+           ListFooterComponent={()=>fn_Footer()}  
           />
         
 
-     
-    
-     </ScrollView>
+     </View>
+     <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+
+     {/* </ScrollView> */}
+     <CalenderModal
+        isVisible={actionCal_Modal}
+        onRequestClose={() => setActionCal_Modal(false)}
+        onDateClick={(data) => fn_ActionDateSelect(data)}
+      />
+
+<ProspectActionSlotScreen
+        isVisible={timeSlotModal.show}
+        onRequestClose={() => setTimeSlotModal(s => { return { ...s, show: false } })}
+        date={timeSlotModal.date}
+        vehicleList = {timeSlotModal.vehicleList}
+        slotList = {timeSlotModal.slotList}
+        VehicleClick={(item,index)=>{fn_GetActionSlots(item,index)}}
+        done_Click={(selectVeh,slotData)=>{fn_SlotDone(selectVeh,slotData)}}
+      />
         </View>
     );
 }
@@ -226,7 +358,7 @@ const styles = StyleSheet.create({
 
 
           detailMainView:{
-            paddingHorizontal:"3%",
+            // paddingHorizontal:"3%",
             flexDirection:'row',
             alignItems:'center',
             justifyContent:'space-between',
@@ -408,7 +540,15 @@ const styles = StyleSheet.create({
             minusStyle:{
                 height:constant.moderateScale(20),
                 width:constant.moderateScale(20),
-            }
+            },
+            performaButton: {
+              marginBottom: constant.moderateScale(30),
+              marginTop: constant.moderateScale(10),
+              marginHorizontal: constant.moderateScale(70),
+              paddingVertical: constant.moderateScale(10),
+              borderWidth: 1,
+              borderColor: constant.whiteColor,
+          },
           
    
 })

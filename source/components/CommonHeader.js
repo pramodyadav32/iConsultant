@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import FastImage from "react-native-fast-image";
 
 const CommonHeader = (props) => {
-    const{title,onBack,showInfo,mainExt,}= props
+    const{title,onBack,showInfo,mainExt,edit,editClick,notifyClick}= props
     const dispatch = useDispatch()
 
     return (
@@ -23,6 +23,10 @@ const CommonHeader = (props) => {
    <FastImage source={images.bellIcon} style={styles.bellIcon} resizeMode="contain" />
      </Pressable>
 }
+{edit && <Pressable style={styles.infoButton} onPress={()=>editClick()}>
+   <FastImage source={images.editIcon} style={styles.editIcon} resizeMode="contain" />
+     </Pressable>
+}
 </View>
      </View> 
     )
@@ -31,7 +35,10 @@ const CommonHeader = (props) => {
 CommonHeader.defaultProps = {
     onRequestClose: function () { },
     isVisible: false,
-    showInfo:true
+    showInfo:true,
+    edit : false,
+    editClick:function () { },
+    notifyClick : function () {} ,
 }
 
 export default CommonHeader;
@@ -66,6 +73,10 @@ const styles = StyleSheet.create({
    bellIcon:{
     width:constant.moderateScale(18),
     height:constant.moderateScale(18), 
+   },
+   editIcon:{
+    width:constant.moderateScale(25),
+    height:constant.moderateScale(25), 
    },
     midView:{
      flex:1,

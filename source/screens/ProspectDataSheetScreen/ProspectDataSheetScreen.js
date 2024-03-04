@@ -455,10 +455,20 @@ export default function ProspectDataSheetScreen(props) {
       props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData})
    }
 
+   const fn_Edit=()=>{
+      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData})
+
+   }
+
    return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
-         <CommonHeader title='Prospect Datasheet' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
+         <CommonHeader title='Prospect Datasheet' 
+         edit={true} showInfo={false} 
+         mainExt={styles.drawerStyle} 
+         onBack={() => navigation.goBack()}
+         editClick={()=>fn_Edit()}
+         />
          <View>
             <FlatList
                data={[cardData]}

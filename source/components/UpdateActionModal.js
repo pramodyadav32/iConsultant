@@ -1,4 +1,4 @@
-import React from "react"
+import React,{useState,useEffect} from "react"
 import { View, Modal, StyleSheet,Text,Pressable,TextInput} from "react-native"
 import * as constant from '../utilities/constants'
 import { useSelector } from "react-redux"
@@ -7,8 +7,31 @@ import SelectDropList from "./SelectDropList"
 import FastImage from "react-native-fast-image"
 import images from "../utilities/images"
 import Button from "./Button"
+import CalenderModal from "./CalenderModal"
+import moment from "moment"
 const UpdateActionModal = (props) => {
-    const {isVisible,onRequestClose} = props
+    const {isVisible,onRequestClose,data,modelData,actionType_Data} = props
+    console.log("data",actionType_Data)
+    const [actionCal_Modal, setActionCal_Modal] = useState(false)
+    const [actionDate,setActionDate] = useState('')
+    const [actionTypeValue,setActionTypeValue] = useState({})
+    const [modelValue,setModelValue] = useState({})
+    const [performData,setPerformData] = useState([])
+    const [performValue,setPerformValue] = useState({})
+    const [comment,setComment] = useState('')
+
+  useEffect(()=>{
+    actionType_Data.map((item)=>{
+          item.code===data?.actionCode ? setActionTypeValue(item) : null
+    })
+  },[actionType_Data])
+
+    const fn_ActionDateSelect = (data) => {
+      
+        setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
+        setActionCal_Modal(false)
+      }
+
     return (
         <Modal
             transparent={true}
@@ -22,18 +45,21 @@ const UpdateActionModal = (props) => {
               <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={actionType_Data}
+             title={actionTypeValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setActionTypeValue(d)}
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={modelData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setModelValue(d)}
            />
         </View>
 
@@ -49,8 +75,8 @@ const UpdateActionModal = (props) => {
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed Date<Text style={styles.text2}>*</Text></Text>
-         <Pressable style={styles.calenderMainView}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+         <Pressable style={styles.calenderMainView} onPress={()=>setActionCal_Modal(true)}>
+            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{actionDate}</TextInput>
             <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
          </Pressable>
         </View>
@@ -58,7 +84,7 @@ const UpdateActionModal = (props) => {
 
         <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
             <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
-                <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
+                <TextInput placeholder='Enter Comment' onChangeText={(d)=>setComment(d)} style={styles.commentInput} >{comment}</TextInput>
         </View>
         <View style={[styles.detailMainView,{alignItems:'center',justifyContent:'center',marginTop:constant.moderateScale(20)}]}>
            <Button title='Save'
@@ -67,6 +93,11 @@ const UpdateActionModal = (props) => {
         </View>
               </View>
               </View>
+              <CalenderModal
+        isVisible={actionCal_Modal}
+        onRequestClose={() => setActionCal_Modal(false)}
+        onDateClick={(data) => fn_ActionDateSelect(data)}
+      />
             </View>
         </Modal>
     )

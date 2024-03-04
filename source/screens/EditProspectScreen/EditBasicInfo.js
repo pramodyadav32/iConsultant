@@ -54,9 +54,10 @@ export default function EditBasicInfo(props) {
     },[prospectMaster])
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
+        <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={[styles.listDetailView, { marginTop: constant.moderateScale(15) }]}>
+                <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+                <View style={[styles.listDetailView, { marginTop: constant.moderateScale(15),marginHorizontal:constant.moderateScale(5) }]}>
                     <View style={[styles.listDetailSubView, {}]}>
                         <Text style={styles.text2}>Opened on</Text>
                         <Text style={styles.list3}>{data?.prospectOpenedOn}</Text>
@@ -174,6 +175,8 @@ export default function EditBasicInfo(props) {
 
                     </View>
                 </View>
+                </View>
+                <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
 
 
             </ScrollView>
@@ -266,5 +269,13 @@ const styles = StyleSheet.create({
         color: '#424242',
         width: constant.moderateScale(115),
         fontFamily: constant.typeLight
+    },
+    performaButton: {
+        marginBottom: constant.moderateScale(30),
+        marginTop: constant.moderateScale(10),
+        marginHorizontal: constant.moderateScale(70),
+        paddingVertical: constant.moderateScale(10),
+        borderWidth: 1,
+        borderColor: constant.whiteColor,
     },
 })

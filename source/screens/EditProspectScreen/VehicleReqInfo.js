@@ -65,9 +65,10 @@ export default function VehicleReqInfo(props) {
  }
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
+        <View style={{ flex: 1,paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
-     
+           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+
      <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
@@ -207,7 +208,9 @@ export default function VehicleReqInfo(props) {
         </View>
       
         </View>
-     
+      </View>
+      <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+
      </ScrollView>
         </View>
     );
@@ -384,5 +387,13 @@ const styles = StyleSheet.create({
         minusStyle:{
             height:constant.moderateScale(20),
             width:constant.moderateScale(20),
-        }
+        },
+        performaButton: {
+          marginBottom: constant.moderateScale(30),
+          marginTop: constant.moderateScale(10),
+          marginHorizontal: constant.moderateScale(70),
+          paddingVertical: constant.moderateScale(10),
+          borderWidth: 1,
+          borderColor: constant.whiteColor,
+      },
 })

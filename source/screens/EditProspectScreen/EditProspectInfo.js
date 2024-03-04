@@ -168,8 +168,10 @@ useEffect(()=>{
   }
 
     return (
-        <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
+        <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
+           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+
            <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
                  <Pressable onPress={()=>setActiveIndex(true)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                  <Text style={styles.up_ListText}>Customer Info</Text>
@@ -519,6 +521,10 @@ useEffect(()=>{
        
         </View>
 }
+
+</View>
+<Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+
      </ScrollView>
         </View>
     );
@@ -769,5 +775,13 @@ const styles = StyleSheet.create({
                 height: constant.moderateScale(28),
                 width:constant.moderateScale(28),
                 color: '#ABABAB',
+            },
+            performaButton: {
+                marginBottom: constant.moderateScale(30),
+                marginTop: constant.moderateScale(10),
+                marginHorizontal: constant.moderateScale(70),
+                paddingVertical: constant.moderateScale(10),
+                borderWidth: 1,
+                borderColor: constant.whiteColor,
             },
 })

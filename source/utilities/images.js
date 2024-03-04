@@ -36,6 +36,11 @@ const aboutIcon = require('../assets/Icons/aboutIcon.png')
 const activeOffer = require('../assets/Icons/activeOffer.png')
 const homeIcon = require('../assets/Icons/homeIcon.png')
 const notify = require('../assets/Icons/notify.png')
+const logoutIcon = require('../assets/Icons/logoutIcon.png')
+const settingIcon = require('../assets/Icons/settingIcon.png')
+const editIcon = require('../assets/Icons/editIcon.png')
+const performaCard = require('../assets/Icons/performaCard.png')
+
 
 export default {
   backIcon,
@@ -76,4 +81,8 @@ export default {
   notify,
   activeOffer,
   homeIcon,
+  logoutIcon,
+  editIcon,
+  settingIcon,
+  performaCard
 };

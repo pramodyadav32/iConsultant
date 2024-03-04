@@ -32,7 +32,7 @@ export default function ProspectScreen(props) {
   const [count, setCount] = useState(0)
   const [calenderModalShow, setCalenderModalShow] = useState(false)
   const [actionCal_Modal, setActionCal_Modal] = useState(false)
-  const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '',vehicleList:[],slotList:[] })
+  const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '',vehicleList:[],slotList:[],utcDateFormate:'' })
   const [stateData, setStateData] = useState([])
   const [stateValue, setStateValue] = useState({})
   const [cityData, setCityData] = useState([])
@@ -426,9 +426,11 @@ export default function ProspectScreen(props) {
     if(Object.keys(actionModelValue).length === 0){
       constant.showMsg("Please select Model")
     }else{
+      const originalDate = moment(data.timestamp);
+      const utcDate = originalDate.utc();
+      const zoneData = utcDate.toISOString()
     setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
-    setTimeSlotModal(s=>{return{ ...s,date: data }})
-    // fn_GetActionSlots()
+    setTimeSlotModal(s=>{return{ ...s,date: data,utcDateFormate:zoneData }}) 
     fn_GetDemoVehicleList()
     }
   }
@@ -560,7 +562,13 @@ const fn_SlotDone=(selectVeh,slotData)=>{
   setVinData(selectVeh?.chassisNo)
   setRegData(selectVeh?.regn)
   console.log("slotdata",slotData)
+const originalTime = slotData[slotData.length-1].slot;
+const originalMoment = moment(originalTime, 'hh:mm A');
+const updatedMoment = originalMoment.add(30, 'minutes');
+const updatedTime = updatedMoment.format('hh:mm A');
+console.log(updatedTime);
   setActionSlotValue(slotData[0]?.slot)
+  setActionSlotValue2(updatedTime)
   setTimeSlotModal(s => { return { ...s, show: false } })
 }
   return (
