@@ -30,22 +30,26 @@ const ProspectActionSlotScreen = (props) => {
     const [selectVeh,setSelectVeh] = useState({})
     const [slotIndex,setSlotIndex] = useState(-1)
     const [slotData,setSlotData] = useState({})
+    const [showlist,setShowList] = useState(true)
     const [slotListData,setSlotListData] = useState([])
+    const [flagData,setFlagData] = useState([])
 
     useEffect(()=>{
-     setSlotListData(slotList)
+     setSlotListData([...slotList])
+   let flagFilter =  slotList.filter((item)=>item?.slotAvailabilityFlag==="N")
+   setFlagData(flagFilter)
     },[slotList])
 
  const fn_Click=(item,index)=>{
      setActive(index)
      setSelectVeh(item)
      VehicleClick(item,index)
+    
  }
 
  const fn_SlotClick=async(item,index)=>{
      let data = slotListData
    let filteredData = await data.filter((item)=>item.Select === true)
-   console.log("filter",filteredData)
    if(filteredData.length>0){
     if(index===0){
         console.log(slotListData)
@@ -54,8 +58,7 @@ const ProspectActionSlotScreen = (props) => {
              let newArray = []
              data.map((item,currentIndex)=>{  
                   item.Select = false
-                  newArray.push(item)
-               
+                  newArray.push(item)             
              })
              setSlotListData([...newArray])
             }else{
@@ -76,7 +79,6 @@ const ProspectActionSlotScreen = (props) => {
      }else{
         if(item.slotAvailabilityFlag === 'Y'){
             if(item.Select){
-                console.log("if true")
                 let newArray = []
              data.map((item,currentIndex)=>{
                 if(currentIndex >= index){
@@ -87,9 +89,7 @@ const ProspectActionSlotScreen = (props) => {
                 }
              })
              setSlotListData([...newArray])
-        }else{
-            console.log("if false",item?.Select)
-            
+        }else{            
             if(slotListData[index-1].Select === true && slotListData[index-1].slotAvailabilityFlag === "Y" ){
              let newObj = slotListData
              item.Select = true
@@ -129,6 +129,7 @@ const ProspectActionSlotScreen = (props) => {
         let data = slotListData.filter((item)=>item.Select===true)
         if(data.length > 0 ){
             done_Click(selectVeh,data)
+            setSelectVeh({})
         }else{
             constant.showMsg("Please select time slot")
         }
@@ -150,7 +151,7 @@ const ProspectActionSlotScreen = (props) => {
 
     const listRender=({item,index})=>{
         return(
-            item.slotAvailabilityFlag === 'Y' ?
+            item.slotAvailabilityFlag === 'N' ?
             <View style={styles.eventMainView}>
                 <Text style={styles.eventText}>{item?.slot}</Text>
                 <Text style={styles.eventText2}>Test Drive [Mr. Amarjeet Singh]</Text>
@@ -198,6 +199,7 @@ const ProspectActionSlotScreen = (props) => {
                     ListFooterComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
                 />
                 </View>
+                {Object.keys(selectVeh).length > 0 &&
                 <View style={styles.slotMainView}>
                 <FlatList
                      data={slotListData}
@@ -209,13 +211,15 @@ const ProspectActionSlotScreen = (props) => {
                 
                     />
                 </View>
-              {slotList.length > 0 &&  <View style={styles.eventListMainView}>
+}
+              {(slotList.length > 0 &&flagData.length >0) &&   <View style={styles.eventListMainView}>
                     <FlatList
                      data={slotList}
-                     renderItem={listRender}
+                     renderItem={flagData}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(8))}
                      ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(0))}
                      ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+                     ListEmptyComponent={()=>common_fn.listEmpty("All slot are free",constant.moderateScale(20))}
                 
                     />
                 </View>

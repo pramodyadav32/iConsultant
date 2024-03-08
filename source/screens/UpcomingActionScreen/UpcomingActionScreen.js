@@ -98,14 +98,13 @@ export default function UpcomingActionScreen(props) {
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
      <CommonHeader title='Upcoming Actions' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
       <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
+        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search by Name, Mobile no, Model' placeholderTextColor={'#3B3B3B40'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
      <UpcomingActionList
        data={filterList}
        filterData={filterData}
        onClick={(item,index)=>navigation.navigate("ProspectDataSheetScreen",{cardData: item})}
-
      />
      </SafeAreaView>
   )

@@ -27,6 +27,9 @@ export const APIName = {
   GetProspectBasicInfo: baseUrl + 'Prospect/GetProspectBasicInfo',
   GetActionsList : baseUrl + 'Action/GetActionsList',
   GetActionMaster : baseUrl +'Action/GetActionMaster',
+  SaveProspectBasicInfo : baseUrl +'Prospect/SaveProspectBasicInfo',
+  GetTestDriveFeedbackQuestions : baseUrl +'Action/GetTestDriveFeedbackQuestions',
+  GetTestDriveFeedbackDetails : baseUrl + 'Action/GetTestDriveFeedbackDetails',
   
 }
 

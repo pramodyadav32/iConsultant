@@ -52,7 +52,7 @@ export default function ActionTodayScreen(props) {
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
      <CommonHeader title='Actions Today' mainExt={styles.drawerStyle} onBack={()=>navigation.goBack()} />
       <View style={styles.inputView}>
-        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
+        <TextInput style={styles.input} onChangeText={(d)=>fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search by Name, Mobile no, Model' placeholderTextColor={'#3B3B3B40'} ></TextInput>
         <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
       </View>
      <ActionList

@@ -452,7 +452,7 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_Create = () => {
-      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData})
+      props.navigation.navigate("PerformaScreen",{"cardData" : route.params?.cardData})
    }
 
    const fn_Edit=()=>{

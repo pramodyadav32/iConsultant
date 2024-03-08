@@ -19,7 +19,7 @@ import moment from 'moment';
 import ProspectActionSlotScreen from '../ProspectScreen/ProspectActionSlotScreen';
 
 export default function ActionInfo(props) {
-    const { cardClick,updateClick,data,actionType_Data,modelData } = props
+    const { cardClick,updateClick,data,actionType_Data,modelData,feedBackClick } = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionTypeValue,setActionTypeValue] = useState({})
@@ -80,14 +80,21 @@ return(
     </View>
 
     <View style={[styles.driveListDetailView, {marginTop:constant.moderateScale(15) }]}>
-    <View style={styles.buttonView2}>
+    <View style={[styles.buttonView2,{flex:0.45}]}>
         
         </View>
-        <View style={styles.buttonView}>
+        <View style={[styles.buttonView,{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}]}>
            <Button title='Update'
             buttonExt={styles.updateButton}
             click_Action={()=>updateClick(item,index)}
            />
+           <Pressable style={styles.feedbackButton} onPress={()=>feedBackClick(item,index)}>
+            <FastImage resizeMode='contain' source={images.feedBackIcon}  style={styles.updateIcn} />
+           </Pressable>
+            {/* <Button title='Update'
+            buttonExt={styles.updateButton}
+            click_Action={()=>feedBackClick(item,index)}
+           /> */}
         </View>
     </View>
 
@@ -191,6 +198,28 @@ console.log(updatedTime);
     setActionSlotValue(slotData[0]?.slot)
     setActionSlotValue2(updatedTime)
     setTimeSlotModal(s => { return { ...s, show: false } })
+
+    const timeIntervals = [...slotData];
+    console.log("timeslot",timeIntervals)
+    
+        let totalMinutes = 0;
+    
+    for (let i = 0; i < timeIntervals.length - 1; i++) {
+        const startTime = moment(timeIntervals[i].slot, 'h:mm A');
+        const endTime = moment(timeIntervals[i + 1].slot, 'h:mm A');
+        
+        const duration = moment.duration(endTime.diff(startTime));
+        totalMinutes += duration.asMinutes();
+        console.log("totoalminute",totalMinutes)
+    }
+    
+    const minutes = totalMinutes+30;
+    const duration = moment.duration(minutes, 'minutes');
+    
+    const hours = duration.hours();
+    const  totalmin = moment(duration).format("HH:mm:ss A")
+    const minutesRemaining = duration.minutes();
+    console.log("tottalhoiur"+hours + "  " + minutesRemaining +"  "+totalmin)
   }
 
 const fn_Footer=()=>{
@@ -352,8 +381,23 @@ const styles = StyleSheet.create({
                   
           },
           updateButton:{
-            width:constant.moderateScale(180),
+            width:constant.moderateScale(160),
             paddingVertical:constant.moderateScale(6)
+          },
+          feedbackButton:{
+            width:constant.moderateScale(110),
+            alignItems:'center',
+            justifyContent:'center',
+            backgroundColor:constant.red,
+            // marginHorizontal:'5%',
+            paddingTop:constant.moderateScale(6),
+            paddingBottom:constant.moderateScale(3),
+            borderRadius:10,
+            elevation:2
+          },
+          updateIcn:{
+           height:constant.moderateScale(25),
+           width:constant.moderateScale(25)
           },
 
 

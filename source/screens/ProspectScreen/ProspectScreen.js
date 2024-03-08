@@ -26,13 +26,13 @@ const data = [
 
 export default function ProspectScreen(props) {
   const { navigation } = props
-  const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
+  const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const dispatch = useDispatch()
   const [active, setActive] = useState(1)
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
   const [calenderModalShow, setCalenderModalShow] = useState(false)
   const [actionCal_Modal, setActionCal_Modal] = useState(false)
-  const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '',vehicleList:[],slotList:[],utcDateFormate:'' })
+  const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '', vehicleList: [], slotList: [], utcDateFormate: '' })
   const [stateData, setStateData] = useState([])
   const [stateValue, setStateValue] = useState({})
   const [cityData, setCityData] = useState([])
@@ -53,7 +53,8 @@ export default function ProspectScreen(props) {
   const [pinCode, setPinCode] = useState('')
   const [generlCloserdata, setGeneralClosureData] = useState('')
   const [name, setName] = useState("")
-  const [email,setEmail] = useState('')
+  const [email, setEmail] = useState('')
+  const [contactPerson,setContactPerson] = useState('')
 
   const [modelData, setModalData] = useState([])
   const [modelValue, setModelValue] = useState({})
@@ -65,31 +66,33 @@ export default function ProspectScreen(props) {
   const [varientValue, setVarientValue] = useState({})
   const [styleData, setStyleData] = useState([])
   const [styleValue, setStyleValue] = useState({})
-  const [exteriorData,setExteriorData] = useState([])
-  const [exteriorValue,setExteriorValue] = useState({})
-  const [inteiorData,setInteriorData] = useState([])
-  const [interiorValue,setInteriorValue] = useState({})
-  const [my_Data,setMyData] = useState([])
-  const [my_DataValue,setMyDataValue] = useState({})
-  const [vy_Data,setVyData] = useState([])
-  const [vy_DataValue,setVyDataValue] = useState({})
+  const [exteriorData, setExteriorData] = useState([])
+  const [exteriorValue, setExteriorValue] = useState({})
+  const [inteiorData, setInteriorData] = useState([])
+  const [interiorValue, setInteriorValue] = useState({})
+  const [my_Data, setMyData] = useState([])
+  const [my_DataValue, setMyDataValue] = useState({})
+  const [vy_Data, setVyData] = useState([])
+  const [vy_DataValue, setVyDataValue] = useState({})
 
-  const [actionData,setActionData] = useState('')
-  const [custumerSearchModal,setCustumerSearchModal] = useState({show:false,data:[]})
-  const [SaveDataObj,setSaveDataObj] = useState({})
+  const [actionData, setActionData] = useState('')
+  const [custumerSearchModal, setCustumerSearchModal] = useState({ show: false, data: [] })
+  const [SaveDataObj, setSaveDataObj] = useState({})
 
-  const [actionTypeData,SetActionTypeData] = useState([])
-  const [actionTypeValue,setActionTypeValue] = useState({})
-  const [actionModelData,setActionModelData] = useState([])
-  const [actionModelValue,setActionModelValue] = useState({})
-  const [actionDate,setActionDate] = useState('')
-  const [actionSlotValue,setActionSlotValue] = useState(' ')
-  const [actionSlotValue2,setActionSlotValue2] = useState(' ')
-  const [vinData,setVinData] = useState('')
-  const [regData,setRegData] = useState('')
-  const [comment,setComment] = useState('')
+  const [actionTypeData, SetActionTypeData] = useState([])
+  const [actionTypeValue, setActionTypeValue] = useState({})
+  const [actionModelData, setActionModelData] = useState([])
+  const [actionModelValue, setActionModelValue] = useState({})
+  const [actionDate, setActionDate] = useState('')
+  const [actionSlotValue, setActionSlotValue] = useState(' ')
+  const [actionSlotValue2, setActionSlotValue2] = useState(' ')
+  const [vinData, setVinData] = useState('')
+  const [regData, setRegData] = useState('')
+  const [comment, setComment] = useState('')
+  const [actionSlotLength,setActionSlotLength] = useState([])
 
   useEffect(() => {
+    console.log("selectBranchh",selectedBranch)
     fn_GetProspectMaster()
     // fn_GetVehicleMasterModel()
   }, [])
@@ -158,7 +161,7 @@ export default function ProspectScreen(props) {
         } else if (item.listType === 'STATE') {
           setStateData(item.prospectMasterList)
         } else if (item.listType === 'CITY') {
-          setCityData(item.prospectMasterList)
+          // setCityData(item.prospectMasterList)
         } else if (item.listType === 'REFERENCE') {
           setReferenceData(item.prospectMasterList)
         } else if (item.listType === 'SOURCE') {
@@ -194,8 +197,8 @@ export default function ProspectScreen(props) {
     console.log("search", JSON.stringify(res))
     dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
-     SetActionTypeData(res?.result[0]?.actionMasterList)
-     setActive(3)
+      SetActionTypeData(res?.result[0]?.actionMasterList)
+      setActive(3)
     } else {
       constant.showMsg(res.message)
     }
@@ -223,9 +226,9 @@ export default function ProspectScreen(props) {
     console.log("search", JSON.stringify(res))
     dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
-      if(res?.result?.pospectTagList.length>0){
-     setCalenderModalShow({show:true,data:res?.result?.pospectTagList})
-      }else{
+      if (res?.result?.pospectTagList.length > 0) {
+        setCalenderModalShow({ show: true, data: res?.result?.pospectTagList })
+      } else {
         constant.showMsg("Opps, Record not found")
       }
     } else {
@@ -233,107 +236,140 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_General_Validation=()=>{
-      if(mobileno===''){
-        constant.showMsg("Please enter mobile number")
-      }else if(mobileno.length != 10){
-        constant.showMsg("Please enter valid mobile number")
-      }else if(Object.keys(entityValue).length===0){
-         constant.showMsg("Please Select Entity")
-      }else if(Object.keys(titleValue).length===0){
-        constant.showMsg("Please select name title")
-      }else if(name===''){
-        constant.showMsg("Please enter name")
-      }else if(email===''){
-        constant.showMsg("Please enter email")
-      }else if(!common_fn.validEmail(email)){
-       constant.showMsg("Please enter valid email")
-      }else if(Object.keys(stateValue).length===0){
-        constant.showMsg("Please select State")
-      }else if(Object.keys(cityValue).length===0){
-        constant.showMsg("Please select City")
-      }else if(pinCode===''){
-        constant.showMsg("Please enter pin code")
-      }else if(Object.keys(sourceValue).length===0){
-        constant.showMsg("Please select Source")
-      }else if(Object.keys(referenceValue).length===0){
-        constant.showMsg("Please select Reference")
-      }else if(Object.keys(usageValue).length===0){
-        constant.showMsg("Please select Usage")
-      }else if(generlCloserdata===''){
-        constant.showMsg("Please select Closure Data")
-      }else if(Object.keys(ratingValue).length===0){
-        constant.showMsg("Please select Rating")
-      }else{
-        let newObj={
-      "title": titleValue.code,
-      "entity": entityValue.code,
-      "firstName": name,
-      "middleName": "",
-      "lastName": "",
-      "pincode": pinCode,
-      "email": email,
-      "contactName": mobileno,
-      "mobile": mobileno,
-      "source": sourceValue.code,
-      "usage": usageValue.code,
-      "activeRate": ratingValue.code,
-      "regnState": stateValue.code,
-      "regnCity": cityValue.code,
-      "projectedClosureDate": generlCloserdata,
-      "refFrom": referenceValue.code,
-        }
-        setSaveDataObj(newObj)
-        fn_GetVehicleMasterModel ()
+  const fn_General_Validation = () => {
+    if (mobileno === '') {
+      constant.showMsg("Please enter mobile number")
+    } else if (mobileno.length != 10) {
+      constant.showMsg("Please enter valid mobile number")
+    } else if (Object.keys(entityValue).length === 0) {
+      constant.showMsg("Please Select Entity")
+    }else if( contactPerson===''){
+        constant.showMsg("Please enter contact Person name")    
+    }else if (Object.keys(titleValue).length === 0) {
+      constant.showMsg("Please select name title")
+    } else if (name === '') {
+      constant.showMsg("Please enter name")
+    } else if (email === '') {
+      constant.showMsg("Please enter email")
+    } else if (!common_fn.validEmail(email)) {
+      constant.showMsg("Please enter valid email")
+    } else if (Object.keys(stateValue).length === 0) {
+      constant.showMsg("Please select State")
+    } else if (Object.keys(cityValue).length === 0) {
+      constant.showMsg("Please select City")
+    } else if (pinCode === '') {
+      constant.showMsg("Please enter pin code")
+    } else if (Object.keys(sourceValue).length === 0) {
+      constant.showMsg("Please select Source")
+    } else if (Object.keys(referenceValue).length === 0) {
+      constant.showMsg("Please select Reference")
+    } else if (Object.keys(usageValue).length === 0) {
+      constant.showMsg("Please select Usage")
+    } else if (generlCloserdata === '') {
+      constant.showMsg("Please select Closure Data")
+    } else if (Object.keys(ratingValue).length === 0) {
+      constant.showMsg("Please select Rating")
+    } else {
+      let newObj = {
+        "title": titleValue.code,
+        "entity": entityValue.code,
+        "firstName": name,
+        "middleName": "",
+        "lastName": "",
+        "suffix":"",
+        "pincode": pinCode,
+        "email": email,
+       "contactName" : contactPerson,
+        "mobile": mobileno,
+        "source": sourceValue.code,
+        "usage": usageValue.code,
+        "activeRate": ratingValue.code,
+        "regnState": stateValue.code,
+        "regnCity": cityValue.code,
+        "projectedClosureDate": generlCloserdata,
+        "refFrom": referenceValue.code,
       }
+      setSaveDataObj(newObj)
+      fn_GetVehicleMasterModel()
+    }
   }
 
-  const fn_CreateProspect=()=>{
+  const fn_CreateProspect = () => {
+   if(Object.keys(actionTypeValue).length===0){
+    constant.showMsg("Please select Action Type")
+   }else if(actionDate===''){
+    constant.showMsg("Please select Action Date")
+   }else if(actionSlotValue===''){
+    constant.showMsg("Please select Action Slot")
+   }else{
+    dispatch(emptyLoader_Action(true))
+    const timeIntervals = [...actionSlotLength]; 
+    let totalTimeSlot = ""   
+    let totalMinutes = 0;
+    let totalhours = ''
+    for (let i = 0; i < timeIntervals.length - 1; i++) {
+        const startTime = moment(timeIntervals[i].slot, 'h:mm A');
+        const endTime = moment(timeIntervals[i + 1].slot, 'h:mm A');    
+        const duration = moment.duration(endTime.diff(startTime));
+        totalMinutes += duration.asMinutes();
+    } 
+    const minutes = totalMinutes+30;
+    const duration = moment.duration(minutes, 'minutes');
+    const hours = duration.hours() > 10 ? duration.hours() : "0"+duration.hours() ;
+    const minutesRemaining = duration.minutes()>10 ? duration.minutes() : "0"+duration.minutes();
+    totalTimeSlot = hours+":"+minutesRemaining+":"+"00"
+
+    const originalMoment = moment(actionSlotValue, 'hh:mm A');
+     totalhours = originalMoment.format('hh:mm:ss A');
+
+
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
       "branchCode": selectedBranch?.branchCode,
-      "prospectLocation": "",
-      "suffix": "",
+      "prospectLocation": selectedBranch?.branchCode,
       "firstAction": actionTypeValue.code,
       "actionDate": actionDate,
       "actionComment": comment,
       "campaign": 0,
       "dealerCompanyDocket": "",
-      "corporateFlag": "",
+      "corporateFlag": "N",
       "dealType": "",
       "approveFlag": "",
       "corporateComment": "",
-      "salesperson": "",
-      "hour": "",
+      "salesperson": userData?.empCode,
+      "hour":  totalhours,
       "demoVehModel": "",
-      "demoVehChassisNo": vinData,
-      "make": "",
-      "subModel": "",
+      "demoVehVariant": "",
+      "demoVehChassisNo": "",
+      "make": "ISUZU",
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
-      "slotMins": actionSlotValue,
-      "slotCount": 0,
-      "valueString": "",
-      "testDriveZone": "",
-      "teamCode": ""
+      "slotMins":totalTimeSlot,
+      "slotCount": actionSlotLength.length,
     }
 
-    let newObj = Object.assign( {}, SaveDataObj,param )
+    let newObj = Object.assign({}, SaveDataObj, param)
     fn_SaveNewProspect(newObj)
+  }
   }
 
   const fn_SaveNewProspect = (newObj) => {
-    console.log("newObj",JSON.stringify(newObj))
-   
+    console.log("newObj", JSON.stringify(newObj))
+
     tokenApiCall(SaveNewProspectCallBack, APIName.SaveNewProspect, "POST", newObj)
   }
 
   const SaveNewProspectCallBack = (res) => {
     console.log("saveProspect", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
-
+         if(res.result?.resultCode==="Y"){
+          navigation.goBack()
+         }else{
+          constant.showMsg("Opps. Somethings wents wrong.")
+         }
     } else {
       constant.showMsg(res.message)
     }
@@ -361,7 +397,7 @@ export default function ProspectScreen(props) {
     console.log("search", JSON.stringify(res))
     if (res.statusCode === 200) {
       await res.result.map((item) => {
-       if (item.listType === 'MODEL') {
+        if (item.listType === 'MODEL') {
           setModalData(item.vehicleMaster)
         }
       })
@@ -377,65 +413,70 @@ export default function ProspectScreen(props) {
     // setActive(type)
     // fn_GetActionMasterList()
   }
- 
-  const fn_VehicleValidation=()=>{
-    if(Object.keys(modelValue).length===0){
+
+  const fn_VehicleValidation = () => {
+    if (Object.keys(modelValue).length === 0) {
       constant.showMsg("Please Select Model")
-   }else if(Object.keys(editionValue).length===0){
-    constant.showMsg("Please Select Edition")
-   }else if(Object.keys(varientValue).length===0){
-    constant.showMsg("Please Select Varient")
-   }else if(Object.keys(styleValue).length===0){
-    constant.showMsg("Please Select Style")
-   }else if(Object.keys(exteriorValue).length===0){
-    constant.showMsg("Please Select Exterior")
-   }else if(Object.keys(interiorValue).length===0){
-    constant.showMsg("Please Select Interior")
-   }else if(Object.keys(my_DataValue).length===0){
-    constant.showMsg("Please Select My")
-   }else if(Object.keys(vy_DataValue).length===0){
-    constant.showMsg("Please Select VY")
-   }else if(Object.keys(assemblyValue).length===0){
-    constant.showMsg("Please Select Assembly")
-   }else if(count <= 0){
-    constant.showMsg("Count must be greater than 0")
-   }else{
-    let newObj={
-      "my": my_DataValue.code,
-      "vy": vy_DataValue.code,
-      "model": modelValue.code,
-      "qty": count,
-      "color": exteriorValue.code,
-      "interiorColor": interiorValue.code,
-      "style": styleValue.code,
-      "assembly": assemblyValue.code,
-      "edition": editionValue.code,
-      "demoVehVariant": varientValue.code,
+    } else if (Object.keys(editionValue).length === 0) {
+      constant.showMsg("Please Select Edition")
+    } else if (Object.keys(varientValue).length === 0) {
+      constant.showMsg("Please Select Varient")
+    } else if (Object.keys(styleValue).length === 0) {
+      constant.showMsg("Please Select Style")
+    } else if (Object.keys(exteriorValue).length === 0) {
+      constant.showMsg("Please Select Exterior")
+    } else if (Object.keys(interiorValue).length === 0) {
+      constant.showMsg("Please Select Interior")
+    } else if (Object.keys(my_DataValue).length === 0) {
+      constant.showMsg("Please Select My")
+    } else if (Object.keys(vy_DataValue).length === 0) {
+      constant.showMsg("Please Select VY")
+    } else if (Object.keys(assemblyValue).length === 0) {
+      constant.showMsg("Please Select Assembly")
+    } else if (count <= 0) {
+      constant.showMsg("Count must be greater than 0")
+    } else {
+      let newObj = {
+        "my": Number(my_DataValue.code),
+        "vy": Number(vy_DataValue.code),
+        "model": modelValue.code,
+        "qty": count,
+        "color": exteriorValue.code,
+        "interiorColor": interiorValue.code,
+        "style": styleValue.code,
+        "assembly": assemblyValue.code,
+        "edition": editionValue.code,
+        "subModel": varientValue?.code,
+      }
+      setSaveDataObj(Object.assign({}, SaveDataObj, newObj))
+      fn_GetActionMasterList()
     }
-    setSaveDataObj(Object.assign( {}, SaveDataObj, newObj ))
-    fn_GetActionMasterList()
-   }
   }
 
   const fn_DateSelect = (data) => {
-    setCalenderModalShow(false)
-    setGeneralClosureData(moment(data.timestamp).format("DD-MM-yyyy"))
+    dispatch(emptyLoader_Action(true))
+    setTimeout(()=>{
+      dispatch(emptyLoader_Action(false))
+      setCalenderModalShow(false)
+      setGeneralClosureData(moment(data.timestamp).format("DD-MMM-yyyy"))
+    },1000)
+  
   }
 
   const fn_ActionDateSelect = (data) => {
-    if(Object.keys(actionModelValue).length === 0){
+    if (Object.keys(actionModelValue).length === 0) {
       constant.showMsg("Please select Model")
-    }else{
+    } else {
       const originalDate = moment(data.timestamp);
       const utcDate = originalDate.utc();
       const zoneData = utcDate.toISOString()
-    setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
-    setTimeSlotModal(s=>{return{ ...s,date: data,utcDateFormate:zoneData }}) 
-    fn_GetDemoVehicleList()
+      setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"))
+      setTimeSlotModal(s => { return { ...s, date: data, utcDateFormate: zoneData } })
+      fn_GetDemoVehicleList()
     }
   }
 
-  const fn_GetDemoVehicleList=()=>{
+  const fn_GetDemoVehicleList = () => {
     dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
@@ -450,11 +491,11 @@ export default function ProspectScreen(props) {
     tokenApiCall(GetDemoVehicleListCallBack, APIName.GetDemoVehicleList, "POST", param)
   }
 
-  const GetDemoVehicleListCallBack= async (res) => {
+  const GetDemoVehicleListCallBack = async (res) => {
     console.log("searchvehi", JSON.stringify(res))
     if (res.statusCode === 200) {
       setActionCal_Modal(false)
-      setTimeSlotModal(s=>{return{ ...s,show:true,vehicleList: res?.result?.demoVehicleList }})
+      setTimeSlotModal(s => { return { ...s, show: true, vehicleList: res?.result?.demoVehicleList } })
       dispatch(emptyLoader_Action(false))
 
     } else {
@@ -463,114 +504,159 @@ export default function ProspectScreen(props) {
     }
   }
 
-  const fn_GetActionSlots=(item,index)=>{
+  const fn_GetActionSlots = (item, index) => {
     dispatch(emptyLoader_Action(true))
-  let param = {
-    "brandCode": userData?.brandCode,
-    "countryCode": userData?.countryCode,
-    "companyId": userData?.companyId,
-    "branchcode": "MADU01",
-    "calledBy": "TIME_SLOTS",
-    "actionCode": "",
-    "chassisNo": item.chassisNo,
-    "empCode": "",
-    "date": "2024-02-21T09:10:47.522Z",
-    "loginUserId": userData?.userId,
-    "ipAddress": "1::1"
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchcode": selectedBranch?.branchCode,
+      "calledBy": "TIME_SLOTS",
+      "actionCode": "",
+      "chassisNo": item.chassisNo,
+      "empCode": "",
+      "date": "2024-02-21T09:10:47.522Z",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
   }
-  tokenApiCall( GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
-}
 
-const  GetActionSlotsCallBack= async (res) => {
-  console.log("searchvehi", JSON.stringify(res))
-  if (res.statusCode === 200) {
+  const GetActionSlotsCallBack = async (res) => {
+    console.log("searchvehi", JSON.stringify(res))
+    if (res.statusCode === 200) {
       let data = []
-     await res.result?.actionSlotList.map((item)=>{
+      await res.result?.actionSlotList.map((item) => {
         item["Select"] = false
         data.push(item)
-       })
-    setTimeSlotModal(s=>{return{ ...s,slotList:data}})
-    dispatch(emptyLoader_Action(false))
-  } else {
-    dispatch(emptyLoader_Action(false))
-    constant.showMsg(res.message)
+      })
+      setTimeSlotModal(s => { return { ...s, slotList: data } })
+      dispatch(emptyLoader_Action(false))
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
   }
-}
 
-const fn_ModelSelect=(d)=>{
-   setModelValue(d)
-   fn_GetVehicleModel(d)
+  const fn_ModelSelect = (d) => {
+    setModelValue(d)
+    fn_GetVehicleModel(d)
 
-}
-
-const fn_GetVehicleModel = (d) => {
-  dispatch(emptyLoader_Action(true))
-  let param = {
-    "brandCode": userData?.brandCode,
-    "countryCode": userData?.countryCode,
-    "companyId": userData?.companyId,
-    "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
-    "edition": "",
-    "assembly": "",
-    "subModel": "",
-    "model":d.code,
-    "code": "",
-    "loginUserId": userData?.userId,
-    "ipAddress": "1::1"
   }
-  tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param)
-}
 
-const GetVehicleMasterCallBack = async (res) => {
-  console.log("search", JSON.stringify(res))
-  if (res.statusCode === 200) {
-    await res.result.map((item) => {
-      if (item.listType === 'EDITION') {
-        setEditionData(item.vehicleMaster)
-      } else if (item.listType === 'ASSEMBLY') {
-        setAssemblyData(item.vehicleMaster)
-      }else if (item.listType === 'VARIANT') {
-        setvarientData(item.vehicleMaster)
-      }else if (item.listType === 'STYLE') {
-        setStyleData(item.vehicleMaster)
-      }else if (item.listType === 'EXT_COLOR') {
-        setExteriorData(item.vehicleMaster)
-      }else if (item.listType === 'INT_COLOR') {
-        setInteriorData(item.vehicleMaster)
-      }else if (item.listType === 'VY') {
-        setVyData(item.vehicleMaster)
-      }else if (item.listType === 'MY') {
-        setMyData(item.vehicleMaster)
-      }
-    })
-    dispatch(emptyLoader_Action(false))
-  } else {
-    dispatch(emptyLoader_Action(false))
-    constant.showMsg(res.message)
+  const fn_GetVehicleModel = (d) => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "edition": "",
+      "assembly": "",
+      "subModel": "",
+      "model": d.code,
+      "code": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param)
   }
-}
 
-const fn_CalenderClick=()=>{
-  if(Object.keys(actionModelValue).length === 0){
-    constant.showMsg("Please select Model")
-  }else{
-  setActionCal_Modal(true)
+  const GetVehicleMasterCallBack = async (res) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+      await res.result.map((item) => {
+        if (item.listType === 'EDITION') {
+          setEditionData(item.vehicleMaster)
+        } else if (item.listType === 'ASSEMBLY') {
+          setAssemblyData(item.vehicleMaster)
+        } else if (item.listType === 'VARIANT') {
+          setvarientData(item.vehicleMaster)
+        } else if (item.listType === 'STYLE') {
+          setStyleData(item.vehicleMaster)
+        } else if (item.listType === 'EXT_COLOR') {
+          setExteriorData(item.vehicleMaster)
+        } else if (item.listType === 'INT_COLOR') {
+          setInteriorData(item.vehicleMaster)
+        } else if (item.listType === 'VY') {
+          setVyData(item.vehicleMaster)
+        } else if (item.listType === 'MY') {
+          setMyData(item.vehicleMaster)
+        }
+      })
+      dispatch(emptyLoader_Action(false))
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
   }
-}
 
-const fn_SlotDone=(selectVeh,slotData)=>{
-  setVinData(selectVeh?.chassisNo)
-  setRegData(selectVeh?.regn)
-  console.log("slotdata",slotData)
-const originalTime = slotData[slotData.length-1].slot;
-const originalMoment = moment(originalTime, 'hh:mm A');
-const updatedMoment = originalMoment.add(30, 'minutes');
-const updatedTime = updatedMoment.format('hh:mm A');
-console.log(updatedTime);
-  setActionSlotValue(slotData[0]?.slot)
-  setActionSlotValue2(updatedTime)
-  setTimeSlotModal(s => { return { ...s, show: false } })
-}
+  const fn_CalenderClick = () => {
+    if (Object.keys(actionModelValue).length === 0) {
+      constant.showMsg("Please select Model")
+    } else {
+      setActionCal_Modal(true)
+    }
+  }
+
+  const fn_SlotDone = (selectVeh, slotData) => {
+    setVinData(selectVeh?.chassisNo)
+    setRegData(selectVeh?.regn)
+    console.log("slotdata", slotData)
+    const originalTime = slotData[slotData.length - 1].slot;
+    const originalMoment = moment(originalTime, 'hh:mm A');
+    const updatedMoment = originalMoment.add(30, 'minutes');
+    const updatedTime = updatedMoment.format('hh:mm A');
+    console.log(updatedTime);
+    setActionSlotLength(slotData)
+    setActionSlotValue(slotData[0]?.slot)
+    setActionSlotValue2(updatedTime)
+    setTimeSlotModal(s => { return { ...s, show: false } })
+   
+  }
+
+  const fn_State = (d) => {
+    setStateValue(d)
+    dispatch(emptyLoader_Action(true))
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchCode": selectedBranch.branchCode,
+      "calledBy": "CITY,",
+      "entityCode": "",
+      "title": "",
+      "stateCode": d.code,
+      "corpDealCategory": "",
+      "dealType": "",
+      "purchaseIntension": "",
+      "prospectType": "",
+      "importance": "",
+      "financer": "",
+      "drivenBy": "",
+      "gender": "",
+      "teams": "",
+      "empId": "",
+      "custType": "",
+      "competitionModelSearch": "",
+      "loginUserId": userData?.userId,
+      "loginUserCompanyId": "ORBIT",
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetStateProspectCallBack, APIName.GetProspectMaster, "POST", param)
+  }
+
+  const GetStateProspectCallBack = (res) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+      dispatch(emptyLoader_Action(false))
+      setCityData(res?.result[0]?.prospectMasterList)
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -615,7 +701,13 @@ console.log(updatedTime);
               />
               {/* <TextInput style={styles.input1} keyboardType='numeric'>+91 8470068493</TextInput> */}
             </View>
-
+           
+             <View style={styles.detailMainView}>
+             <Text style={styles.detailText}>Contact Person<Text style={styles.text2}>*</Text></Text>
+            
+             <TextInput style={styles.input1} onChangeText={(d)=>setContactPerson(d)}>{contactPerson}</TextInput>
+           </View>
+          
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Name<Text style={styles.text2}>*</Text></Text>
               <View style={styles.mobileSubView}>
@@ -642,7 +734,7 @@ console.log(updatedTime);
                 list={stateData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setStateValue(d)}
+                on_Select={(d) => fn_State(d)}
               />
             </View>
 
@@ -717,7 +809,7 @@ console.log(updatedTime);
               title='Proceed'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
-              click_Action={()=>fn_General_Validation()}
+              click_Action={() => fn_General_Validation()}
             />
           </ScrollView>
         }
@@ -819,7 +911,7 @@ console.log(updatedTime);
             </View>
 
             <View style={styles.bottomMainView}>
-              <View style={styles.detailMainView2}>
+              {/* <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Fuel</Text>
                 <SelectDropList
                   list={[]}
@@ -827,7 +919,7 @@ console.log(updatedTime);
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                 />
-              </View>
+              </View> */}
 
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Reference</Text>
@@ -837,14 +929,14 @@ console.log(updatedTime);
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Count</Text>
                 <View style={styles.coutMainView}>
-                  <Pressable style={styles.coutButton} onPress={()=> count <= 0 ? null : setCount(count-1)}>
+                  <Pressable style={styles.coutButton} onPress={() => count <= 1 ? null : setCount(count - 1)}>
                     <FastImage source={images.minussign} tintColor={constant.red} resizeMode='contain' style={styles.minusStyle} />
                   </Pressable>
                   <View style={styles.countInput}>
                     <Text style={styles.countInputText}>{count}</Text>
                   </View>
 
-                  <Pressable style={styles.coutButton} onPress={()=> setCount(count+1)}>
+                  <Pressable style={styles.coutButton} onPress={() => setCount(count + 1)}>
                     <FastImage source={images.add} tintColor={constant.red} resizeMode='contain' style={styles.minusStyle} />
                   </Pressable>
                 </View>
@@ -855,7 +947,7 @@ console.log(updatedTime);
               title='Proceed'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
-              click_Action={()=>fn_VehicleValidation()}
+              click_Action={() => fn_VehicleValidation()}
             />
           </ScrollView>
         }
@@ -869,7 +961,7 @@ console.log(updatedTime);
                 list={actionTypeData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d) => setActionTypeValue(d)}
               />
             </View>
 
@@ -879,7 +971,7 @@ console.log(updatedTime);
                 list={modelData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d)=>setActionModelValue(d)}
+                on_Select={(d) => setActionModelValue(d)}
               />
             </View>
 
@@ -891,7 +983,7 @@ console.log(updatedTime);
               </Pressable>
             </View>
 
-            <View style={styles.detailMainView}>  
+            <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Time</Text>
               <View style={styles.mobileSubView}>
                 <SelectDropList
@@ -903,9 +995,9 @@ console.log(updatedTime);
                 />
                 <Text> </Text>
                 <SelectDropList
-                   list={[]}
-                   disable={true}
-                   title={actionSlotValue2}
+                  list={[]}
+                  disable={true}
+                  title={actionSlotValue2}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                 />
@@ -933,7 +1025,7 @@ console.log(updatedTime);
               title='Create Prospect'
               buttonExt={styles.proceedButton}
               textExt={styles.proccedButtonText}
-              click_Action={()=>fn_CreateProspect()}
+              click_Action={() => fn_CreateProspect()}
             />
           </ScrollView>
         }
@@ -955,13 +1047,13 @@ console.log(updatedTime);
         isVisible={timeSlotModal.show}
         onRequestClose={() => setTimeSlotModal(s => { return { ...s, show: false } })}
         date={timeSlotModal.date}
-        vehicleList = {timeSlotModal.vehicleList}
-        slotList = {timeSlotModal.slotList}
-        VehicleClick={(item,index)=>{fn_GetActionSlots(item,index)}}
-        done_Click={(selectVeh,slotData)=>{fn_SlotDone(selectVeh,slotData)}}
+        vehicleList={timeSlotModal.vehicleList}
+        slotList={timeSlotModal.slotList}
+        VehicleClick={(item, index) => { fn_GetActionSlots(item, index) }}
+        done_Click={(selectVeh, slotData) => { fn_SlotDone(selectVeh, slotData) }}
       />
 
-      <CustumerSearch 
+      <CustumerSearch
         isVisible={calenderModalShow.show}
         onRequestClose={() => setCalenderModalShow(s => { return { ...s, show: false } })}
         data={calenderModalShow.data}

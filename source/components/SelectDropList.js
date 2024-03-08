@@ -42,6 +42,9 @@ const SelectDropList = (props) => {
           buttonTextAfterSelection={(selectedItem, index) => {
             // text represented after item is selected
             // if data array is an array of objects then return selectedItem.property to render after item is selected
+            if( desName === '1')
+            return selectedItem.responseText
+          else
             return selectedItem.description
            
         }}
@@ -49,6 +52,9 @@ const SelectDropList = (props) => {
             // text represented for each item in dropdown
             // if data array is an array of objects then return item.property to represent item in dropdown
             // return item.description
+            if( desName === '1')
+            return item.responseText
+           else
             return item.description
          
         }}

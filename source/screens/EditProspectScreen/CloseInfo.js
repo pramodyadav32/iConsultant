@@ -18,7 +18,22 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default function CloseInfo(props) {
     const { cardClick } = props
     const dispatch = useDispatch()
+    const [actionTypeData,setActionTypeData] = useState([])
+    const [actionTypeValue,setActionTypeValue] = useState({})
+    const [modelData,setModelData] = useState([])
+    const [modelValue,setModelValue] = useState({})
+    const [performData,setPerformData] = useState([])
+    const [performValue,setPerformValue] = useState({})
+    const [performDate,setPerformdate] = useState('')
+    const [comment,setcomment] = useState('')
+    const [closureDate,setClosureDate] = useState('')
+    const [closureData,setClosureData] = useState([])
+    const [closureValue,setClosureValue] = useState({})
+    const [remark,setRemark] = useState('')
 
+  const fn_Create =()=>{
+
+   }
 
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
@@ -28,47 +43,52 @@ export default function CloseInfo(props) {
       <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={actionTypeData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setActionTypeValue(d)}
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
-             list={[]}
+             list={modelData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setModelValue(d)}
+
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed</Text>
            <SelectDropList 
-             list={[]}
+             list={performData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=> setPerformValue(d)}
+
            />
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed Date<Text style={styles.text2}>*</Text></Text>
          <Pressable style={styles.calenderMainView}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{performDate}</TextInput>
             <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
          </Pressable>
         </View>
 
         <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
             <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
-                <TextInput placeholder='Enter Comment' style={styles.commentInput} ></TextInput>
+                <TextInput placeholder='Enter Comment' onChangeText={(d)=>setcomment(d)} style={styles.commentInput} >{comment}</TextInput>
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Closure Date</Text>
          <Pressable style={styles.calenderMainView}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{closureDate}</TextInput>
             <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
          </Pressable>
         </View>
@@ -76,16 +96,18 @@ export default function CloseInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Closure Type</Text>
            <SelectDropList 
-             list={[]}
+             list={closureData}
              title=' '
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setClosureValue(d)}
+
            />
         </View>
 
         <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
             <Text style={[styles.detailText,{marginTop:'3%'}]}>Remarks</Text>
-                <TextInput placeholder='Enter Remarks' style={styles.commentInput} ></TextInput>
+                <TextInput placeholder='Enter Remarks' onChangeText={(d)=>setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
         </View>
     </View>
     <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />

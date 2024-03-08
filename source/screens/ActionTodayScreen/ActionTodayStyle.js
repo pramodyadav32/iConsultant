@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     // paddingBottom:constant.moderateScale(10)
     },
     input:{
-        fontSize:constant.moderateScale(18),
+        fontSize:constant.moderateScale(15),
         color:'#434343',
         fontFamily:constant.typeRegular,
         flex:1,

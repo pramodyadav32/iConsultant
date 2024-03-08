@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
@@ -10,14 +10,16 @@ import FastImage from 'react-native-fast-image'
 import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
-import { apiCall, APIName } from '../../utilities/apiCaller'
+import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import moment from 'moment';
 
 export default function EditBasicInfo(props) {
-    const { cardClick,data,prospectMaster } = props
+    const { cardClick,data,prospectMaster,fn_SaveBasicInfo } = props
     const dispatch = useDispatch()
+    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [checkStatus,setCheckStatus] = useState(false)
     const [sourceData, setSourceData] = useState([])
     const [sourceValue, setSourceValue] = useState({})
@@ -32,7 +34,6 @@ export default function EditBasicInfo(props) {
     const [corporateCase, setCorporateCase] = useState("N")
 
     useEffect(()=>{
-        console.log("prospec",prospectMaster)
         prospectMaster.map((item) => {
             if (item.listType === 'SOURCE') {
                 setSourceData(item.prospectMasterList)
@@ -44,6 +45,9 @@ export default function EditBasicInfo(props) {
             } else if (item.listType === 'DEALTYPE') {
                 setDealTypeData(item.prospectMasterList)
             } else if (item.listType === 'CORPORATE') {
+                item.prospectMasterList.map((item)=>{
+                    item?.code === data?.dealCompany ? setCompanyValue(item) : null
+                })
                 setCompanyData(item.prospectMasterList)
             }
         })
@@ -52,6 +56,67 @@ export default function EditBasicInfo(props) {
         setGeneralComment(data?.comment)
 
     },[prospectMaster])
+
+  const fn_Create=()=>{
+    if(Object.keys(sourceValue).length===0){
+        constant.showMsg("Please select source")
+    }else if(Object.keys(dealCategoryValue).length===0){
+        constant.showMsg("Please select Deal Category")
+    }else if(Object.keys(dealTypeValue).length === 0){
+        constant.showMsg("Please select Deal Type")
+    }else if(Object.keys(companyValue).length===0){
+        constant.showMsg("Please select Company")
+    }else{
+        const param ={
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectLocation": selectedBranch.brandCode,
+            "prospectNo": Number(data?.prospectID),
+            "openedOn": moment(data?.prospectOpenedOn).format("DD-MMM-YYYY"),
+            "projectedClosureDate": moment(data?.projectedClosureDate).format("DD-MMM-YYYY"),
+            "importance": data?.impCode,
+            "financeCase": data?.financeCaseFlag,
+            "financeLocation": data?.financerLocation,
+            "financer": "",
+            "activeRate": "",
+            "usage": data?.usageCode,
+            "source": sourceValue?.code,
+            "refFrom": data?.referenceId,
+            "corporateFlag": data?.corpApprovedFlag,
+            "corporateComment": data?.corporateComment,
+            "comment": data?.comment,
+            "approveFlag": "",
+            "dealType": dealTypeValue?.code,
+            "dealerCompanyDocket": 0,
+            "agencyLeadId": 0,
+            "agencyId": 0,
+            "refCustomer": data?.custReference,
+            "category": "",
+            "valueString": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+            "branchCode": selectedBranch?.branchCode,
+            "campaign": "",
+            "competitionModels": ""
+        }
+        console.log("param",param)
+        tokenApiCall(saveBasicInfoCallBack , APIName.SaveProspectBasicInfo, "POST", param)
+
+    }
+    
+  }
+
+  const saveBasicInfoCallBack = (res) => {
+    console.log("res",res)
+    if (res.statusCode === 200) {
+      
+    } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+    }
+}
 
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>

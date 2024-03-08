@@ -40,6 +40,7 @@ const logoutIcon = require('../assets/Icons/logoutIcon.png')
 const settingIcon = require('../assets/Icons/settingIcon.png')
 const editIcon = require('../assets/Icons/editIcon.png')
 const performaCard = require('../assets/Icons/performaCard.png')
+const feedBackIcon = require('../assets/Icons/feedBackIcon.png')
 
 
 export default {
@@ -84,5 +85,6 @@ export default {
   logoutIcon,
   editIcon,
   settingIcon,
-  performaCard
+  performaCard,
+  feedBackIcon,
 };

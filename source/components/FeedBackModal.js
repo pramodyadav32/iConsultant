@@ -1,5 +1,5 @@
-import React from "react"
-import { View, Modal, StyleSheet,Text,Pressable,TextInput, ScrollView} from "react-native"
+import React, { useEffect,useState } from "react"
+import { View, Modal, StyleSheet,Text,Pressable,TextInput, ScrollView,FlatList} from "react-native"
 import * as constant from '../utilities/constants'
 import { useSelector } from "react-redux"
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -9,7 +9,38 @@ import images from "../utilities/images"
 import Button from "./Button"
 
 const FeedBackModal = (props) => {
-    const {isVisible,onRequestClose} = props
+    const {isVisible,onRequestClose, QuestionList} = props
+    const [questionData,setQuestionData] = useState(QuestionList)
+
+  useEffect(()=>{
+    setQuestionData(QuestionList)
+  },[QuestionList])
+
+    const fn_Header=()=>{
+      return(
+        <View style={[styles.feedBackMainView,{backgroundColor:'#ABABAB40',paddingVertical:constant.moderateScale(10),borderTopLeftRadius:10,borderTopRightRadius:10}]} >
+        <View style={styles.feedBackSubView1}>
+       <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Feedback Question</Text>
+       </View>
+       <View style={styles.feedBackSubView}>
+       <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Weight</Text>
+       </View>
+       <View style={styles.feedBackSubView2}>
+       <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Response</Text>
+       </View>
+       <View style={styles.feedBackSubView}>
+       <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Point</Text>
+       </View>
+       </View>
+      )
+    }
+
+    const fn_SelectResponse=(d,item,index)=>{
+        let data = questionData
+        data[index].answer= d
+        setQuestionData([...data])
+    }
+
     return (
         <Modal
             transparent={true}
@@ -66,22 +97,41 @@ const FeedBackModal = (props) => {
         </View>
 
         <View style={{ backgroundColor: '#F9F9F9', marginVertical:constant.moderateScale(5),borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(0), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
-           <View style={[styles.feedBackMainView,{backgroundColor:'#ABABAB40',paddingVertical:constant.moderateScale(10),borderTopLeftRadius:10,borderTopRightRadius:10}]} >
-            <View style={styles.feedBackSubView1}>
-           <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Feedback Question</Text>
-           </View>
-           <View style={styles.feedBackSubView}>
-           <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Weight</Text>
-           </View>
-           <View style={styles.feedBackSubView2}>
-           <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Response</Text>
-           </View>
-           <View style={styles.feedBackSubView}>
-           <Text style={[styles.feedBackText,{marginTop:'0%'}]}>Point</Text>
-           </View>
-           </View>
+          
+          <FlatList
+           data={QuestionList}
+           ListHeaderComponent={()=>fn_Header()}
+           renderItem={({item,index})=>{
+            {console.log('item',item)}
+            return(
+              <View style={styles.feedBackMainView} >
+              <View style={styles.feedBackSubView1}>
+             <Text style={[styles.feedBackText2,{marginTop:'0%'}]}>{item?.questionText}</Text>
+             </View>
+             <View style={styles.feedBackSubView}>
+             <Text style={[styles.feedBackText2,{marginTop:'0%'}]}>5</Text>
+             </View>
+             <View style={styles.feedBackSubView2}>
+             <SelectDropList 
+               list={item?.responseList}
+               title=' '
+               desName="1"
+               buttonExt={styles.feedBackDropList}
+               textExt={styles.feedBackDropListText}
+               on_Select={(d)=>fn_SelectResponse(d,item,index)}
+             />
+             </View>
+             <View style={styles.feedBackSubView}>
+             <Text style={[styles.feedBackText,{marginTop:'0%'}]}>0</Text>
+             </View>
+             </View>
+            )
+           }}
+          />
+          
+          
 
-           <View style={styles.feedBackMainView} >
+           {/* <View style={styles.feedBackMainView} >
             <View style={styles.feedBackSubView1}>
            <Text style={[styles.feedBackText2,{marginTop:'0%'}]}>Engine Performance</Text>
            </View>
@@ -179,7 +229,7 @@ const FeedBackModal = (props) => {
            <View style={styles.feedBackSubView}>
            <Text style={[styles.feedBackText,{marginTop:'0%'}]}>0</Text>
            </View>
-           </View>
+           </View> */}
        
          </View>
 

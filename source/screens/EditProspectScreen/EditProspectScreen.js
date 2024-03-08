@@ -265,7 +265,7 @@ export default function EditProspectScreen(props) {
           "countryCode": userData?.countryCode,
           "companyId": userData?.companyId,
           "calledBy": "FUP_TYPE",
-          "loginUserCompanyId": "ORBIT",
+          "loginUserCompanyId": userData?.userCompanyId,
           "loginUserId": userData?.userId,
           "ipAddress": "1::1"
         }
@@ -363,6 +363,41 @@ export default function EditProspectScreen(props) {
        
     }
 
+    const fn_FeedBack=(item,index)=>{
+        // console.log("item",item)
+        // setFeedBackModal({show:true,data:item})
+        dispatch(emptyLoader_Action(true))
+        const param ={
+            "brandCode": userData?.brandCode,
+          "countryCode": userData?.countryCode,
+          "companyId": userData?.companyId,
+            "branchCode":selectedBranch?.branchCode,
+            "prospectNo": Number(item?.prospectId),
+            "serial": 0,
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+          }
+          tokenApiCall(GetTestDriveFeedbackDetailsCallBack, APIName.GetTestDriveFeedbackQuestions, "POST", param)
+
+    }
+
+    const GetTestDriveFeedbackDetailsCallBack = (res) => {
+        console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+         let newData = res.result?.feedbackList.map((item)=>{
+                item["answer"] = {}
+                return(item)
+            })
+            console.log("newDat",newData)
+           setFeedBackModal({show:true,data:newData})
+        } else {
+          constant.showMsg(res.message)
+        }
+      }
+
+
 
 
     const fn_Create = () => {
@@ -436,7 +471,10 @@ export default function EditProspectScreen(props) {
                     updateClick={(item,index) => setUpdateModal({show:true,data:item})}
                     actionType_Data={actionTypeData}
                     modelData={veh_ModelData}
-                    data={actionInfo} />
+                    data={actionInfo}
+                    feedBackClick={(item,index)=>{fn_FeedBack(item,index)}}
+                    />
+                    
                 }
                  {active === 4 &&
                      <CustumerInfo
@@ -463,10 +501,11 @@ export default function EditProspectScreen(props) {
                   modelData={veh_ModelData}
                   onRequestClose={() => setUpdateModal(s=>{return{...s,show:false}})}
             />
-            {/* <FeedBackModal
-                isVisible={updateModal}
-                onRequestClose={() => setUpdateModal(false)}
-            /> */}
+            <FeedBackModal
+                isVisible={feedBackModal.show}
+                 QuestionList={feedBackModal?.data}
+                onRequestClose={() => setFeedBackModal(s=>{return{...s,show:false}})}
+                />
         </SafeAreaView>
     )
 }

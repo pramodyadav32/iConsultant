@@ -167,6 +167,11 @@ useEffect(()=>{
     setCopyRegToOff(!copyRegToOff)
   }
 
+  const fn_Create=()=>{
+   
+
+  }
+
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>

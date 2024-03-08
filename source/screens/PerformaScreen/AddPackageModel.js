@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
                },
             mrpSubView:{
                 flex:1,
-                backgroundColor:'red'
+                justifyContent:'center'
                 // height:constant.moderateScale(30)
                 },
                 mrpSubView2:{

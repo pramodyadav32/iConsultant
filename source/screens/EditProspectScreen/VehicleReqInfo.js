@@ -64,6 +64,50 @@ export default function VehicleReqInfo(props) {
   modelSelect(d)
  }
 
+ const fn_Create=()=>{
+    if(Object.keys(modelValue).length===0){
+      constant.showMsg("Please select model")
+    }else if(Object.keys(editionValue).length===0){
+      constant.showMsg("Please Select edition")
+    }else if(Object.keys(varientValue).length===0){
+       constant.showMsg("Please Select Varient")
+    }else if(Object.keys(exteriorValue).length===0){
+      constant.showMsg("Please Select exterior ")
+    }else if(Object.keys(styleValue).length===0){
+      constant.showMsg('Please select style')
+    }else if(Object.keys(exteriorValue).length===0){
+      constant.showMsg("Please select exterior ")
+    }else if(Object.keys(interiorValue).length===0){
+      constant.showMsg("Please select interior")
+    }else if(Object.keys(my_DataValue).length===0){
+      constant.showMsg("Please select MV")
+    }else if(Object.keys(vy_DataValue).length===0){
+      constant.showMsg("Please select VY")
+    }else if(Object.keys(assemblyValue).length===0){
+      constant.showMsg("Please select assembly ")
+    }else if(count <= 0){
+      constant.showMsg("Count must be greater than zero")
+    }else{
+    //  fn_VehicleSave()
+    }
+ 
+ }
+
+ const fn_VehicleSave=()=>{
+  tokenApiCall(VehicleSaveCallBack , APIName.SaveProspectBasicInfo, "POST", param)
+
+ }
+
+ const VehicleSaveCallBack = (res) => {
+  console.log("res",res)
+  if (res.statusCode === 200) {
+    
+  } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+  }
+}
+
     return (
         <View style={{ flex: 1,paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
