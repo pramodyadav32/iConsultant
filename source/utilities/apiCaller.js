@@ -31,6 +31,9 @@ export const APIName = {
   GetTestDriveFeedbackQuestions : baseUrl +'Action/GetTestDriveFeedbackQuestions',
   GetTestDriveFeedbackDetails : baseUrl + 'Action/GetTestDriveFeedbackDetails',
   
+
+  GetProformaVehicleMasters : baseUrl + 'Proforma/GetProformaVehicleMasters',
+  GetProformaTaxMasters : baseUrl + 'Proforma/GetProformaTaxMasters',
 }
 
 export const apiCall = (callback, url, method, param, data) => {
