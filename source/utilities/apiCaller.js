@@ -30,6 +30,10 @@ export const APIName = {
   SaveProspectBasicInfo : baseUrl +'Prospect/SaveProspectBasicInfo',
   GetTestDriveFeedbackQuestions : baseUrl +'Action/GetTestDriveFeedbackQuestions',
   GetTestDriveFeedbackDetails : baseUrl + 'Action/GetTestDriveFeedbackDetails',
+  SaveVehiclesRequired : baseUrl +'VehicleRequired/SaveVehiclesRequired',
+  GetProformaGeneralMasters : baseUrl + 'Proforma/GetProformaGeneralMasters',
+  GetVehiclesRequiredList : baseUrl + 'VehicleRequired/GetVehiclesRequiredList',
+  SaveProspectClosure : baseUrl + 'Prospect/SaveProspectClosure',
   
 }
 

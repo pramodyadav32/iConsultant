@@ -9,7 +9,8 @@ import images from "../utilities/images"
 import Button from "./Button"
 
 const FeedBackModal = (props) => {
-    const {isVisible,onRequestClose, QuestionList} = props
+    const {isVisible,onRequestClose, QuestionList,data} = props
+    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [questionData,setQuestionData] = useState(QuestionList)
 
   useEffect(()=>{
@@ -39,6 +40,70 @@ const FeedBackModal = (props) => {
         let data = questionData
         data[index].answer= d
         setQuestionData([...data])
+    }
+
+    const fn_Create = () => {
+      // if (Object.keys(actionTypeValue).length === 0) {
+      //     constant.showMsg("Please select action type")
+      // } else if (Object.keys(modelValue).length === 0) {
+      //     constant.showMsg("Please select Model")
+      // } else if (Object.keys(performValue).length === 0) {
+      //     constant.showMsg("Please select Performed")
+      // } else if (performData==='') {
+      //     constant.showMsg("Please select Performed Date")
+      // } else {
+      const param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "prospectNo": Number(data?.prospectId),
+  "serial": 0,
+  "scoreYN": "string",
+  "version": "string",
+  "maxScore": 0,
+  "score": 0,
+  "remark": "string",
+  "tdStartKM": 0,
+  "tdEndKM": 0,
+  "purchasePotential": "string",
+  "timeFrame": "string",
+  "otherModelInterest": "string",
+  "brandModelInterest": "string",
+  "model": "string",
+  "variant": "string",
+  "driverName": "string",
+  "tdGivenBy": "string",
+  "tdPosition": "string",
+  "tdCurrentVeh": "string",
+  "loginUserCompanyId": userData?.userCompanyId,
+  "loginUserId": userData?.userId,
+  "ipAddress": "1::1",
+  "feedbackResponseList": [
+    {
+      "cssQSRNO": 0,
+      "cssQResponseType": "string",
+      "cssRSRNO": 0,
+      "cssScore": 0,
+      "cssQWeight": 0
+    }
+  ]
+  
+      }
+      console.log("param", param)
+      tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectBasicInfo, "POST", param)
+  
+      // }
+  
+    }
+  
+    const saveBasicInfoCallBack = (res) => {
+      console.log("res", res)
+      if (res.statusCode === 200) {
+  
+      } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+      }
     }
 
     return (
@@ -275,6 +340,7 @@ const FeedBackModal = (props) => {
         <View style={[styles.detailMainView,{alignItems:'center',justifyContent:'center',marginTop:constant.moderateScale(20)}]}>
            <Button title='Save'
             buttonExt={styles.SaveButton}
+            click_Action={()=>fn_Create()}
            />
         </View>
               </View>

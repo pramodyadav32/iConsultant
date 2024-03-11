@@ -50,7 +50,7 @@ export default function PerformaScreen(props) {
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
-   const [active, setActive] = useState(1)
+   const [active, setActive] = useState(0)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
    const [packageModel,setPackageModel] = useState(false)

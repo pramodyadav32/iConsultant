@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react"
 import { View, Modal, StyleSheet,Text,Pressable,TextInput} from "react-native"
 import * as constant from '../utilities/constants'
-import { useSelector } from "react-redux"
+import { useSelector,useDispatch } from "react-redux"
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import SelectDropList from "./SelectDropList"
 import FastImage from "react-native-fast-image"
@@ -9,9 +9,11 @@ import images from "../utilities/images"
 import Button from "./Button"
 import CalenderModal from "./CalenderModal"
 import moment from "moment"
+import { APIName, tokenApiCall } from "../utilities/apiCaller"
 const UpdateActionModal = (props) => {
     const {isVisible,onRequestClose,data,modelData,actionType_Data} = props
     console.log("data",actionType_Data)
+    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionCal_Modal, setActionCal_Modal] = useState(false)
     const [actionDate,setActionDate] = useState('')
     const [actionTypeValue,setActionTypeValue] = useState({})
@@ -26,10 +28,73 @@ const UpdateActionModal = (props) => {
     })
   },[actionType_Data])
 
-    const fn_ActionDateSelect = (data) => {
-      
-        setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
+    const fn_ActionDateSelect = (data) => {  
+        setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"))
         setActionCal_Modal(false)
+      }
+
+      const fn_Create = () => {
+        if (Object.keys(actionTypeValue).length === 0) {
+            constant.showMsg("Please select action type")
+        } else if (Object.keys(modelValue).length === 0) {
+            constant.showMsg("Please select Model")
+        } else if (Object.keys(performValue).length === 0) {
+            constant.showMsg("Please select Performed")
+        } else if (performData==='') {
+            constant.showMsg("Please select Performed Date")
+        } else {
+        const param = {
+          "brandCode": userData?.brandCode,
+          "countryCode": userData?.countryCode,
+          "companyId": userData?.companyId,
+          // "prospectLocation": selectedBranch.brandCode,
+          "prospectNo": Number(data?.prospectId),   
+          "fy": "2023-2024",
+          "actionPerformed": "Test",
+          "actionComment": comment,
+          "salesperson": "string",
+          "currentAction": "string",
+          "actionDate": "09-Mar-2024",
+          "actionCloseDate":actionDate,
+          "hour1": 1,
+          "minutes1": 30,
+          "hour2": 1,
+          "minutes2": 2,
+          "demoVehModel": "string",
+          "demoVehVariant": "string",
+          "demoVehChassisNo": "string",
+          "projectDate": "09-Mar-2024",
+          "activeRate": "",
+          "loginUserId": userData?.userId,
+          "ipAddress": "1::1",
+          "nextRemark": "Test next Remark",
+          "slotCount": 2,
+          "slotMins": "01:00:00",
+          "testDriveZone": "",
+          "tagCode": "",
+          "serial": 0,
+          "orderFY": "2023-2024",
+          "orderNo": 8371,
+          "nextActionComment": "Test next Action Comment",
+          "purchaseProbability": "",
+          "branchCode": selectedBranch?.branchCode,
+    
+        }
+        console.log("param", param)
+        tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectBasicInfo, "POST", param)
+    
+        }
+    
+      }
+    
+      const saveBasicInfoCallBack = (res) => {
+        console.log("res", res)
+        if (res.statusCode === 200) {
+    
+        } else {
+          dispatch(emptyLoader_Action(false))
+          constant.showMsg(res.message)
+        }
       }
 
     return (
@@ -89,6 +154,7 @@ const UpdateActionModal = (props) => {
         <View style={[styles.detailMainView,{alignItems:'center',justifyContent:'center',marginTop:constant.moderateScale(20)}]}>
            <Button title='Save'
             buttonExt={styles.SaveButton}
+            click_Action={()=>fn_Create()}
            />
         </View>
               </View>
