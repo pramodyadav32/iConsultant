@@ -31,7 +31,7 @@ export default function LoginScreen(props) {
     const fn_Login = () => {
         dispatch(emptyLoader_Action(true))
         let param = {
-            "loginType": active ? "USER" : "CDB_ADMIN",
+            "loginType": active ? "CDB_USER" : "CDB_ADMIN",
             "companyId": comp_Id.toUpperCase(),
             "password": password,
             "userId": user_Id.toUpperCase(),

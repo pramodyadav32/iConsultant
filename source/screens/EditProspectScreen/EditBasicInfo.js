@@ -71,13 +71,13 @@ export default function EditBasicInfo(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "prospectLocation": selectedBranch.brandCode,
+            "prospectLocation": selectedBranch.branchCode,
             "prospectNo": Number(data?.prospectID),
-            "openedOn": moment(data?.prospectOpenedOn).format("DD-MMM-YYYY"),
-            "projectedClosureDate": moment(data?.projectedClosureDate).format("DD-MMM-YYYY"),
-            "importance": data?.impCode,
-            "financeCase": data?.financeCaseFlag,
-            "financeLocation": data?.financerLocation,
+            "openedOn": moment(data?.prospectOpenedOn, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY'), //moment(data?.prospectOpenedOn).format("DD-MMM-YYYY"),
+            "projectedClosureDate": moment(data?.projectedClosureDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY'), //moment(data?.projectedClosureDate).format("DD-MMM-YYYY"),
+            "importance": data?.impCode === null ? "" : data?.impCode,
+            "financeCase": data?.financeCaseFlag === null ? "" : data?.financeCaseFlag,
+            "financeLocation": data?.financerLocation === null ? "" : data?.financerLocation,
             "financer": "",
             "activeRate": "",
             "usage": data?.usageCode,
@@ -85,13 +85,13 @@ export default function EditBasicInfo(props) {
             "refFrom": data?.referenceId,
             "corporateFlag": data?.corpApprovedFlag,
             "corporateComment": data?.corporateComment,
-            "comment": data?.comment,
+            "comment": data?.comment === null ? "" : data?.comment,
             "approveFlag": "",
             "dealType": dealTypeValue?.code,
             "dealerCompanyDocket": 0,
             "agencyLeadId": 0,
             "agencyId": 0,
-            "refCustomer": data?.custReference,
+            "refCustomer": 0,//data?.custReference,
             "category": "",
             "valueString": "",
             "loginUserCompanyId": userData?.userCompanyId,
@@ -111,7 +111,7 @@ export default function EditBasicInfo(props) {
   const saveBasicInfoCallBack = (res) => {
     console.log("res",res)
     if (res.statusCode === 200) {
-      
+        res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
     } else {
         dispatch(emptyLoader_Action(false))
         constant.showMsg(res.message)

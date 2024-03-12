@@ -122,7 +122,7 @@ export default function EditProspectScreen(props) {
     }
 
     const GetProspectMasterCallBack = async (res) => {
-        console.log("search11", JSON.stringify(res))
+        console.log("search1111", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             setProspectMasterData(res?.result)
@@ -523,9 +523,6 @@ export default function EditProspectScreen(props) {
             constant.showMsg(res.message)
         }
     }
-
-
-
 
     const fn_Create = () => {
         props.navigation.navigate("CreatePerforma")

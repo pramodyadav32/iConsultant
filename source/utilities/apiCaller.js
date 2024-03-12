@@ -4,7 +4,7 @@ import axios from 'react-native-axios'
 
 const businessOwnerCode = 'ISUZU'
 const brandCode = 'ISUZU'
-const baseUrlLogin = 'https://orbitsys-demo-apimanagementservice.azure-api.net/OrbitsysIdentityApi/api/'
+const baseUrlLogin = 'https://g2.orbitsys.com/OrbitsysIServiceCoreApi/api/'
 
 export const baseUrl = 'https://g2.orbitsys.com/OrbitsysLmsApi/api/'
 export const imageUrl = 'http://3.111.186.19/media/category/'
@@ -34,6 +34,7 @@ export const APIName = {
   GetProformaGeneralMasters : baseUrl + 'Proforma/GetProformaGeneralMasters',
   GetVehiclesRequiredList : baseUrl + 'VehicleRequired/GetVehiclesRequiredList',
   SaveProspectClosure : baseUrl + 'Prospect/SaveProspectClosure',
+  GetCampaignsMaster : baseUrl + 'GetCampaignsMaster'
   
 }
 
@@ -48,6 +49,7 @@ export const apiCall = (callback, url, method, param, data) => {
       'Content-Type': 'application/json',
       'countryCode': 'IN',
       'BusinessOwnerCode': businessOwnerCode,
+      'BrandCode': brandCode,
       'x-api-key': '6138571815404a49a8bc1339d2e16aca',
     }
   }

@@ -14,6 +14,7 @@ import Button from '../../components/Button';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import DataSheetModal from '../../components/DataSheetModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import moment from 'moment';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -127,7 +128,7 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const GetProspectDetailCallBack = (res) => {
-      console.log("search", JSON.stringify(res))
+      console.log("search adadad = ", JSON.stringify(res))
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setProspectInfo(res.result?.prospectDetails)
@@ -145,6 +146,7 @@ export default function ProspectDataSheetScreen(props) {
 
 
    const renderItem = ({ item, index }) => {
+      console.log("iiiitem = ", item)
       return (
          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -178,11 +180,11 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Mobile No</Text>
-                           <Text style={styles.listName3}>1234567898</Text>
+                           <Text style={styles.listName3}>{item?.custMobile}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Closure Date</Text>
-                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                           <Text style={styles.listText2}>Projected Closure Date</Text>
+                           <Text style={styles.listName3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
@@ -260,7 +262,6 @@ export default function ProspectDataSheetScreen(props) {
       }
    }
 
-
    const actionRenderItem = ({ item, index }) => {
       return (
          <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
@@ -271,7 +272,7 @@ export default function ProspectDataSheetScreen(props) {
                </View>
                <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Due on </Text>
-                  <Text style={styles.listText3}>{item?.dueOn}</Text>
+                  <Text style={styles.listText3}>{moment(item?.dueOn, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                </View>
             </View>
 
@@ -282,7 +283,7 @@ export default function ProspectDataSheetScreen(props) {
                </View>
                <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Completed on</Text>
-                  <Text style={styles.listText3}>{item?.performedOn}</Text>
+                  <Text style={styles.listText3}>{item?.performedOn === null ? "" : moment(item?.performedOn, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                </View>
             </View>
 
@@ -293,7 +294,7 @@ export default function ProspectDataSheetScreen(props) {
                </View>
                <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Projected Closure Date</Text>
-                  <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+                  <Text style={styles.listText3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                </View>
             </View>
 
@@ -547,7 +548,7 @@ export default function ProspectDataSheetScreen(props) {
                      </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Current Action</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.currentActionDesc} on {prospectBasicInfo?.currentActionDate}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.currentActionDesc} on {moment(prospectBasicInfo?.currentActionDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                         </View>
                      </View>
                  <View style={styles.driveListDetailView}>
@@ -557,7 +558,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Project Closure</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.projectedClosureDate}</Text>
+                           <Text style={styles.listText3}>{moment(prospectBasicInfo?.projectedClosureDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                         </View>
                      </View>
 

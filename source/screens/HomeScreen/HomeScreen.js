@@ -227,7 +227,7 @@ export default function HomeScreen(props) {
                     }}
 
                   />
-                  <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
+                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("ActionTodayScreen",{dataList:Action_Today})} style={styles.homeSubBoxText}>{Action_Today.length}</Text>
 
@@ -265,7 +265,7 @@ export default function HomeScreen(props) {
                     }}
 
                   />
-                  <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
+                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("TodayTestDriveScreen",{dataList : test_DriveData})} style={styles.homeSubBoxText}>{testdriveCount}</Text>
 
@@ -291,7 +291,7 @@ export default function HomeScreen(props) {
                     }}
 
                   />
-                  <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} />
+                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("ActionProspectScreen",{dataList:activeProspect})} style={styles.homeSubBoxText}>{activeProspect.length}</Text>
 
