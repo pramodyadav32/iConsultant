@@ -194,7 +194,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Color</Text>
-                           <Text style={styles.listName3}>Brilliant Silver</Text>
+                           <Text style={styles.listName3}>{item?.vehColor}</Text>
                         </View>
                      </View>
                   </View>
