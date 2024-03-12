@@ -265,7 +265,7 @@ export default function EditProspectInfo(props) {
 
             }
             console.log("param", param)
-            tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectBasicInfo, "POST", param)
+            tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectDetails, "POST", param)
 
         // }
 
@@ -274,7 +274,7 @@ export default function EditProspectInfo(props) {
     const saveBasicInfoCallBack = (res) => {
         console.log("res", res)
         if (res.statusCode === 200) {
-
+            res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
         } else {
             dispatch(emptyLoader_Action(false))
             constant.showMsg(res.message)

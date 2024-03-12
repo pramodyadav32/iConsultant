@@ -22,6 +22,8 @@ import UpdateActionModal from '../../components/UpdateActionModal';
 import FeedBackModal from '../../components/FeedBackModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 import CustumerInfo from './CustumerInfo';
+import moment from 'moment';
+
 const data = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
 
@@ -63,6 +65,7 @@ export default function EditProspectScreen(props) {
     const [actionInfo, setActionInfo] = useState([])
 
     useEffect(() => {
+        console.log("route.params.cardData = ", route.params.cardData)
         fn_GetProspectBasicInfo()
     }, [])
 
@@ -413,17 +416,17 @@ export default function EditProspectScreen(props) {
         return (
             <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
                 <Pressable style={styles.driveListMainView}  >
-                    <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
+                    {/* <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
                         <Text style={styles.text2}>OLM</Text>
                         <AntDesign name='close' style={styles.closeIcon} />
-                    </Pressable>
+                    </Pressable> */}
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, }}>
                             <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                                     <Text style={styles.listName3}>PID : </Text>
-                                    <Text style={[styles.listName3]}>12443</Text>
+                                    <Text style={[styles.listName3]}>{route.params.cardData?.prospectId}</Text>
                                 </View>
                                 <View style={styles.cardHorLine} />
                             </View>
@@ -432,31 +435,31 @@ export default function EditProspectScreen(props) {
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Prospect Name</Text>
-                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>Mr.Amarjeet Singh</Text>
+                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.lastName}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Model</Text>
-                                    <Text style={styles.listName3}>D-MAX</Text>
+                                    <Text style={styles.listName3}>{route.params.cardData?.model}</Text>
                                 </View>
                             </View>
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Mobile No</Text>
-                                    <Text style={styles.listName3}>1234567898</Text>
+                                    <Text style={styles.listName3}>{route.params.cardData?.custMobile}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Closure Date</Text>
-                                    <Text style={styles.listName3}>22-Jan-2024</Text>
+                                    <Text style={styles.listName3}>{moment(route.params.cardData?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                                 </View>
                             </View>
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Rating</Text>
-                                    <Text style={styles.listName3}>HOT</Text>
+                                    <Text style={styles.listName3}>{route.params.cardData?.prospectRating}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Color</Text>
-                                    <Text style={styles.listName3}>Brilliant Silver</Text>
+                                    <Text style={styles.listName3}>{route.params.cardData?.vehColor}</Text>
                                 </View>
                             </View>
                         </View>

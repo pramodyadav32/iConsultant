@@ -129,7 +129,7 @@ export default function VehicleReqInfo(props) {
   const VehicleSaveCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
-
+      res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
     } else {
       dispatch(emptyLoader_Action(false))
       constant.showMsg(res.message)
