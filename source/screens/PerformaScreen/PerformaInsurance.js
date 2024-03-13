@@ -24,7 +24,34 @@ export default function PerformaInsurance(props) {
    const { userData } = useSelector(state => state.AuthReducer)
    const [selectState,setSelectState] = useState(false)
   
-  
+   const fn_SaveInsurance=()=>{
+    let param ={
+       "brandCode": userData?.brandCode,
+       "countryCode": userData?.countryCode,
+       "companyId": userData?.companyId,
+       "docLocation": "string",
+       "docCode": "string",
+       "docFY": "string",
+       "docNo": 0,
+       "insuranceYN": "string",
+       "insuLocation": "string",
+       "insuCompanyCode": "string",
+       "insuBasicPreAmount": 0,
+       "insuGSTAmount": 0,
+       "loginUserId": userData?.userId,
+       "ipAddress": "1::1",
+   }    
+   tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
+  }
+
+  const SaveInsuranceCallBack = (res) => {
+    console.log("savePackage", JSON.stringify(res))
+    if (res.statusCode === 200) {
+
+    } else {
+      constant.showMsg(res.message)
+    }
+  }
  
   
  

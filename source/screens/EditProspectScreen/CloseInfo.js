@@ -18,7 +18,7 @@ import CalenderModal from '../../components/CalenderModal';
 import moment from 'moment';
 
 export default function CloseInfo(props) {
-    const {actionType_Data,modelData ,data } = props
+    const {actionType_Data,modelData ,data,perform_Data } = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionTypeData,setActionTypeData] = useState([])
@@ -144,8 +144,9 @@ export default function CloseInfo(props) {
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed</Text>
+            {console.log("perform_Data",perform_Data)}
            <SelectDropList 
-             list={performData}
+             list={perform_Data}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=> setPerformValue(d)}
@@ -190,6 +191,11 @@ export default function CloseInfo(props) {
             <Text style={[styles.detailText,{marginTop:'3%'}]}>Remarks</Text>
                 <TextInput placeholder='Enter Remarks' onChangeText={(d)=>setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
         </View>
+
+        <Pressable style={styles.tabButton } >
+                                            <Text style={ styles.tabButtonText}>Dissatisfaction Reasons</Text>
+                                           <View style={styles.horixontalLine} />
+                                        </Pressable>
     </View>
     <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
 
@@ -298,5 +304,28 @@ const styles = StyleSheet.create({
             borderWidth: 1,
             borderColor: constant.whiteColor,
         },
+        tabButton:{
+          // flex:1,
+        //  width:constant.resW(20),
+         justifyContent:'center',
+         paddingVertical:constant.moderateScale(4),
+         marginHorizontal:constant.moderateScale(10)
+         },
+         tabButtonText:{
+             fontSize:constant.moderateScale(16),
+             color:constant.red,
+             fontFamily:constant.typeRegular,
+         marginTop:constant.moderateScale(4),
+     
+         },
+       
+         horixontalLine:{
+             height:constant.moderateScale(2),
+             width:constant.moderateScale(70),
+             backgroundColor:'red',
+             position:'absolute',
+             bottom:-constant.moderateScale(0.5),
+             borderRadius:constant.resW(20)
+         },
    
 })

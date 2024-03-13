@@ -37,7 +37,7 @@ const data2 = [
 const data3 = [
    { 'key': 1, "title": 'Basic Info', },
    { 'key': 2, "title": 'Accessories', },
-   { 'key': 3, "title": 'Package', },
+   // { 'key': 3, "title": 'Package', },
    { 'key': 4, "title": 'Insurance', },
    { 'key': 5, "title": 'Registration', },
    { 'key': 6, "title": 'Term', },
@@ -147,7 +147,58 @@ export default function PerformaScreen(props) {
       }
     }
 
+    const fn_GetPackage=()=>{
+      let param ={
+         "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+         "docLocation": "string",
+         "docCode": "string",
+         "docFY": "string",
+         "docNo": 0,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1"
+     }
+     tokenApiCall(GetPackageCallBack, APIName.GetProformaPackages, "POST", param)
 
+    }
+
+    const GetPackageCallBack = (res) => {
+      console.log("search1", JSON.stringify(res))
+      if (res.statusCode === 200) {
+  
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
+
+    const fn_GetTerms=()=>{
+      let param ={
+        "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "userId": userData?.userId,
+         "ipAddress": "1::1",
+         "docLocation": "MADU01",
+         "docCode": "SRP",
+         "docFY": "2023-2024",
+         "docNo": 43
+     }
+     tokenApiCall(GetTermsCallBack, APIName.GetProformaPackages, "POST", param)
+
+    }
+
+    const GetTermsCallBack = (res) => {
+      console.log("searchTerm", JSON.stringify(res))
+      if (res.statusCode === 200) {
+  
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
+  
 
    const renderItem = ({item,index}) => {
       return (
@@ -218,12 +269,18 @@ export default function PerformaScreen(props) {
    }
 
    const fn_TabClick = (type) => {
-      setActive(type)
-      Animated.timing(animatedValue, {
-         toValue: type,
-         duration: 800, // Adjust the duration of the animation
-         useNativeDriver: false,
-      }).start();
+      if(type===0){
+         setActive(type)
+      }else if(type===1){
+         setActive(type)
+      }else if(type===2){
+         fn_GetPackage()
+      }else if(type===3){
+
+      }else if(type===4){
+         fn_GetTerms()
+      }
+      
    }
 
    const actionRenderItem = ({ item, index }) => {

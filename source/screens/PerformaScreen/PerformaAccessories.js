@@ -168,7 +168,7 @@ export default function PerformaAccessories(props) {
           
                   <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
                   <Button title='Add To List' click_Action={() => fn_AddList()} buttonExt={styles.button1} />
-                  <Button title='Add Packages' click_Action={() => fn_AddPackage()} buttonExt={styles.button1} />
+                  {/* <Button title='Add Packages' click_Action={() => fn_AddPackage()} buttonExt={styles.button1} /> */}
 
                   </View>   
          </View>
