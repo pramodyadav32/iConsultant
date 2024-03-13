@@ -61,8 +61,9 @@ export default function EditProspectScreen(props) {
     const [updateModal, setUpdateModal] = useState({ show: false, data: {} })
     const [feedBackModal, setFeedBackModal] = useState({ show: false, data: {} })
     const [actionTypeData, SetActionTypeData] = useState([])
-    const [performData,setPerformData] = useState([])
+    const [performData, setPerformData] = useState([])
     const [actionInfo, setActionInfo] = useState([])
+    const [profileData,setProfileData] = useState({})
 
     useEffect(() => {
         console.log("route.params.cardData = ", route.params.cardData)
@@ -213,7 +214,7 @@ export default function EditProspectScreen(props) {
             "loginUserId": userData?.userId,
             "ipAddress": "1::1",
         }
-        console.log("vehicleReq",param)
+        console.log("vehicleReq", param)
         tokenApiCall(VehicleReqListCallBack, APIName.GetVehiclesRequiredList, "POST", param)
     }
 
@@ -283,7 +284,7 @@ export default function EditProspectScreen(props) {
         if (res.statusCode === 200) {
             fn_GetActionMasterList()
             setActionInfo(res.result?.actionInfoList)
-            
+
         } else {
             constant.showMsg(res.message)
         }
@@ -307,16 +308,16 @@ export default function EditProspectScreen(props) {
         console.log("search11", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-            res.result.map((item)=>{
-                if(item?.listType === 'FUP_TYPE'){
+            res.result.map((item) => {
+                if (item?.listType === 'FUP_TYPE') {
                     SetActionTypeData(item?.actionMasterList)
-                }else {
+                } else {
                     setPerformData(item?.actionMasterList)
                 }
             })
             // SetActionTypeData(res?.result[0]?.actionMasterList)
             fn_GetVehicleActionModel()
-           
+
 
         } else {
             constant.showMsg(res.message)
@@ -375,16 +376,16 @@ export default function EditProspectScreen(props) {
         console.log("search", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-            res.result.map((item)=>{
-                if(item?.listType === 'FUP_TYPE'){
+            res.result.map((item) => {
+                if (item?.listType === 'FUP_TYPE') {
                     SetActionTypeData(item?.actionMasterList)
-                }else {
+                } else {
                     setPerformData(item?.actionMasterList)
                 }
             })
             // SetActionTypeData(res?.result[0]?.actionMasterList)
             fn_GetVehicleActionClose()
-           
+
 
         } else {
             constant.showMsg(res.message)
@@ -425,23 +426,26 @@ export default function EditProspectScreen(props) {
         }
     }
 
-    const fn_GetProfile=()=>{
-        let param ={
-            "brandCode": "ISUZU",
-    "countryCode": "IN",
-    "companyId": "ARAS",
-    "prospectID": 8325,
-    "calledFrom": "PERSONAL",
-    "userId": "DILIP",
-    "ipAddress": "1::1"
+    const fn_GetProfile = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectID": Number(route.params.cardData?.prospectId),
+            "calledFrom": "PERSONAL",
+            "userId": userData?.userId,
+            "ipAddress": "1::1"
         }
-        tokenApiCall(GetProfileCallBack, APIName.GetVehicleMaster, "POST", param)
+        tokenApiCall(GetProfileCallBack, APIName.GetCustomerProfile, "POST", param)
 
     }
 
     const GetProfileCallBack = async (res) => {
         console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
+            setProfileData(res?.result)
             setActive(4)
         } else {
             dispatch(emptyLoader_Action(false))
@@ -519,11 +523,11 @@ export default function EditProspectScreen(props) {
         } else if (type === 2) {
             fn_GetVehicleMasterModel()
         } else if (type === 3) {
-            
+
             fn_GetActionDetail()
         } else if (type === 4) {
             fn_GetProfile()
-           
+
         } else {
             fn_GetActionTypeCloseList()
             // setActive(5)
@@ -627,7 +631,7 @@ export default function EditProspectScreen(props) {
                         <VehicleReqInfo
                             modelData={veh_ModelData}
                             vehicledata={vehicleData}
-                            prospectData = {route.params?.cardData}
+                            prospectData={route.params?.cardData}
                             modelSelect={(d) => fn_GetVehicleModel(d)}
 
                         />
@@ -646,6 +650,7 @@ export default function EditProspectScreen(props) {
                     {active === 4 &&
                         <CustumerInfo
                             data={basicInfo}
+                            profile_Data={profileData}
                             prospectDetail={prospectInfo}
                             prospectMaster={prospectMasterData}
                         />

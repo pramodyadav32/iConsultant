@@ -13,9 +13,11 @@ import { apiCall, APIName } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import CalenderModal from '../../components/CalenderModal';
+import moment from 'moment';
 
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail} = props
+    const { data,prospectMaster, prospectDetail,profile_Data} = props
     const dispatch = useDispatch()
     const [activeIndex,setActiveIndex] = useState(true)
     const [active, setActive] = useState(1)
@@ -37,10 +39,47 @@ export default function CustumerInfo(props) {
     const [prospectTypeData,setProspectData] = useState([])
     const [prospectTypeValue,setProspectTypeValue] = useState({})
     const [gender,setGender] = useState(true)
-    const [materialStaus,setMaterialStatus] = useState(true)
+    const [materialStaus,setMaterialStatus] = useState("N")
+    const [aniversary_Modal, setAniversary_Modal] = useState(false)
+    const [aniversaryDate,setAniversaryDate] = useState("")
+    const [dob_Modal, setDob_Modal] = useState(false)
+    const [dob,setDob] = useState("")
+    const [note,setNote] = useState("")
+    const [companyTypeList,setCompanyTypeList] = useState([])
+    const [companyTypeValue,setCompanyTypeValue] = useState({})
+    const [occupationList,setOccupationList] = useState([])
+    const [occupationValue,setOccupationValue] = useState({})
+    const [ageGroupList,setAgeGroupList] = useState([])
+    const [ageGroupValue,setAgeGroupValue]  = useState({})
+    const [designationList,setDesignationList] = useState([])
+    const [designationValue,setDesignationValue] = useState({})
+    const [turnoverList,setTurnoverList] = useState([])
+    const [turnoverValue,setTurnoverValue] = useState({})
+    const [purchaseTypeList,setPurchaseList] = useState([])
+    const [purchaseTypeValue,setPurchaseTypeValue] = useState({})
+    const [financerList,setFinancerList] = useState([])
+    const [financerValue,setFinancerValue] = useState({})
+    const [usesTypeList,setUsesTypeList] = useState([])
+    const [usesTypeValue,setUsesTypeValue] = useState({})
+    const [customerProfile,setCustomerProfile] = useState({})
 
-   
 
+   useEffect(()=>{
+     setCompanyTypeList(profile_Data?.companyTypeList)
+     setOccupationList(profile_Data?.occupationList)
+     setAgeGroupList(profile_Data?.ageGroupList)
+     setDesignationList(profile_Data?.designationList)
+     setTurnoverList(profile_Data?.turnoverList)
+     setPurchaseList(profile_Data?.purchaseTypeList)
+     setFinancerList(profile_Data?.financerList)
+     setUsesTypeList(profile_Data?.usesTypeList)
+     setCustomerProfile(profile_Data?.individualCustomerProfile)
+     setMaterialStatus(profile_Data?.individualCustomerProfile?.marriedStatus)
+     console.log("dob",profile_Data?.individualCustomerProfile?.dob)
+     setDob(moment(profile_Data?.individualCustomerProfile?.dob).format("DD-MMM-YYYY"))
+   },[profile_Data])
+
+  
 
     const fn_TabClick = (type) => {
         console.log("type")
@@ -68,10 +107,10 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Occupation<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={occupationList}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setOccupationValue(d)}
            />
             </View>
         </View>
@@ -91,27 +130,35 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Age<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={ageGroupList}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setAgeGroupValue(d)}
            />
             </View>
         </View>
 
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Designation</Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={designationList}
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setDesignationValue(d)}
+           />
+            </View>
+                {/* <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput> */}
         </View>
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Annual Family Income</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={turnoverList}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setTurnoverValue(d)}
            />
             </View>
         </View>
@@ -133,12 +180,12 @@ export default function CustumerInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Material Status</Text>
             <View style={styles.mobileSubView}>
-           <Pressable style={styles.radioButton} onPress={()=>setMaterialStatus(true)}>
-            <MaterialCommunityIcons name={materialStaus ? 'radiobox-marked' :'radiobox-blank'} style={[materialStaus ? styles.readioIcon2 : styles.readioIcon]} />
+           <Pressable style={styles.radioButton} onPress={()=>setMaterialStatus("N")}>
+            <MaterialCommunityIcons name={materialStaus=== "N" ? 'radiobox-marked' :'radiobox-blank'} style={[materialStaus==="N" ? styles.readioIcon2 : styles.readioIcon]} />
             <Text style={styles.materialText}  >Single</Text>
            </Pressable>
-           <Pressable style={styles.radioButton} onPress={()=>setMaterialStatus(false)}>
-            <MaterialCommunityIcons name={materialStaus ? 'radiobox-blank' : 'radiobox-marked' } style={materialStaus ? styles.readioIcon : styles.readioIcon2} />
+           <Pressable style={styles.radioButton} onPress={()=>setMaterialStatus("Y")}>
+            <MaterialCommunityIcons name={materialStaus==="N" ? 'radiobox-blank' : 'radiobox-marked' } style={materialStaus==="N" ? styles.readioIcon : styles.readioIcon2} />
             <Text style={styles.materialText}  >Married</Text>
            </Pressable>
             </View>
@@ -147,8 +194,8 @@ export default function CustumerInfo(props) {
 
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Anniversary date</Text>
-            <Pressable style={styles.calenderMainView} onPress={()=>null}>
-       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+            <Pressable style={styles.calenderMainView} onPress={()=>setAniversary_Modal(true)}>
+       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{aniversaryDate}</TextInput>
        <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
     </Pressable>
         </View>
@@ -166,14 +213,14 @@ export default function CustumerInfo(props) {
         </View>
         <View style={styles.detailMainView}>
        <Text style={styles.detailText}>DOB</Text>
-    <Pressable style={styles.calenderMainView} onPress={()=>null}>
-       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}></TextInput>
+    <Pressable style={styles.calenderMainView} onPress={()=>setDob_Modal(true)}>
+       <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{dob}</TextInput>
        <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
     </Pressable>
    </View>
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Notes</Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={[styles.input1,{height:constant.moderateScale(80),textAlignVertical:'top'}]} >{destination}</TextInput>
+                <TextInput onChangeText={(d)=>setNote(d)} style={[styles.input1,{height:constant.moderateScale(80),textAlignVertical:'top'}]} >{note}</TextInput>
         </View>
      
         </View>
@@ -251,10 +298,10 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Bank/Financer Name</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={financerList}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setFinancerValue(d)}
            />
             </View>
         </View> 
@@ -648,6 +695,18 @@ export default function CustumerInfo(props) {
 <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
 
      </ScrollView>
+
+     <CalenderModal
+        isVisible={aniversary_Modal}
+        onRequestClose={() => setAniversary_Modal(false)}
+        onDateClick={(data) => {setAniversaryDate(moment(data.timestamp).format("DD-MMM-yyyy")),setAniversary_Modal(false)}}
+      />
+
+<CalenderModal
+        isVisible={dob_Modal}
+        onRequestClose={() => setDob_Modal(false)}
+        onDateClick={(data) => {setDob(moment(data.timestamp).format("DD-MMM-yyyy")),setDob_Modal(false)}}
+      />
         </View>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import store from '../redux/configureStore';
 import axios from 'react-native-axios'
+import { beginAsyncEvent } from 'react-native/Libraries/Performance/Systrace';
 
 const businessOwnerCode = 'ISUZU'
 const brandCode = 'ISUZU'
@@ -42,6 +43,8 @@ export const APIName = {
   GetProformaVehicleMasters : baseUrl + 'Proforma/GetProformaVehicleMasters',
   SaveProformaBasicInfo : baseUrl + 'Proforma/SaveProformaBasicInfo',
   SaveAccessoriesAndPackages : baseUrl + 'Proforma/SaveAccessoriesAndPackages',
+  SaveCustomerProfile : baseUrl + 'Proforma/SaveCustomerProfile',
+  GetCustomerProfile : baseUrl + 'Proforma/GetCustomerProfile',
 }
 
 export const apiCall = (callback, url, method, param, data) => {

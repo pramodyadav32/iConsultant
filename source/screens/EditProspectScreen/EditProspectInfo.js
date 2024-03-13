@@ -43,7 +43,9 @@ export default function EditProspectInfo(props) {
     const [resAdd2, setRes_Add2] = useState("")
     const [resAdd3, setRes_Add3] = useState("")
     const [res_State, setRes_State] = useState({})
-    const [res_City, setRes_City] = useState({})
+    const [res_City, setRes_City] = useState([])
+    const [res_CityData,setRes_CityData] = useState([])
+    const [res_destictData,setRes_DistictData]= useState([])
     const [res_destict, setRes_Destict] = useState({})
     const [res_Pin, setRes_Pin] = useState("")
     const [res_Phone, setRes_Phone] = useState('')
@@ -53,6 +55,8 @@ export default function EditProspectInfo(props) {
     const [regAdd3, setReg_Add3] = useState("")
     const [reg_State, setReg_State] = useState({})
     const [reg_City, setReg_City] = useState({})
+    const [reg_CityData,setReg_CityData] = useState([])
+    const [reg_destictData,setReg_DistictData]= useState([])
     const [reg_destict, setReg_Destict] = useState({})
     const [reg_Pin, setReg_Pin] = useState("")
     const [reg_Phone, setReg_Phone] = useState('')
@@ -62,6 +66,8 @@ export default function EditProspectInfo(props) {
     const [offAdd3, setOff_Add3] = useState("")
     const [off_State, setOff_State] = useState({})
     const [off_City, setOff_City] = useState({})
+    const [off_CityData,setOff_CityData] = useState([])
+    const [off_destictData,setOff_DistictData]= useState([])
     const [off_destict, setOff_Destict] = useState({})
     const [off_Pin, setOff_Pin] = useState("")
     const [off_Phone, setOff_Phone] = useState('')
@@ -79,9 +85,9 @@ export default function EditProspectInfo(props) {
             } else if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)
                 item.prospectMasterList.map((item) => {
-                    item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? setReg_State(item) : null : null
-                    item?.code === prospectDetail?.resState ? prospectDetail?.resState != '' ? setRes_State(item) : null : null
-                    item?.code === prospectDetail?.offcState ? prospectDetail?.offcState != '' ? setOff_State(item) : null : null
+                    item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
+                    item?.code === prospectDetail?.resState ? prospectDetail?.resState != '' ? fn_GetProspectMaster(item,2) : null : null
+                    item?.code === prospectDetail?.offcState ? prospectDetail?.offcState != '' ? fn_GetProspectMaster(item,3) : null : null
 
                 })
             } else if (item.listType === 'CITY') {
@@ -166,6 +172,74 @@ export default function EditProspectInfo(props) {
         setOff_Pin(res_Pin)
         setOff_Phone(res_Phone)
         setCopyRegToOff(!copyRegToOff)
+    }
+
+    const fn_GetProspectMaster = (item,type) => {
+     type=== 1? setReg_State(item) : type === 2 ? setRes_State(item) : setOff_State(item)
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "branchCode": selectedBranch?.branchCode,
+            "calledBy": "CITY,DISTRICT",
+            "entityCode": "",
+            "title": "",
+            "stateCode": item?.code,
+            "corpDealCategory": "",
+            "dealType": "",
+            "purchaseIntension": "",
+            "prospectType": "",
+            "importance": "",
+            "financer": "",
+            "drivenBy": "",
+            "gender": "",
+            "teams": "",
+            "empId": "",
+            "custType": "",
+            "competitionModelSearch": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+
+        }
+        tokenApiCall(GetProspectMasterCallBack, APIName.GetProspectMaster, "POST", param,type)
+    }
+
+    const GetProspectMasterCallBack = async (res,type) => {
+        console.log("search1111", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            if(type===1){
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setReg_CityData(item?.prospectMasterList)
+                    }else{
+                        setReg_DistictData(item?.prospectMasterList)
+
+                    }
+                })
+            }else if(type===2){
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setRes_CityData(item?.prospectMasterList)
+                    }else{
+                        setRes_DistictData(item?.prospectMasterList)
+
+                    }
+                })
+            }else{
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setOff_CityData(item?.prospectMasterList)
+                    }else{
+                        setOff_DistictData(item?.prospectMasterList)
+
+                    }
+                })
+            }
+        } else {
+
+            constant.showMsg(res.message)
+        }
     }
 
     const fn_Create = () => {
@@ -418,7 +492,7 @@ export default function EditProspectInfo(props) {
                                             title={reg_State?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setReg_State(d)}
+                                            on_Select={(d) => fn_GetProspectMaster(d,1)}
                                         />
                                     </View>
                                 </View>
@@ -427,7 +501,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>City</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={cityData}
+                                            list={reg_CityData}
                                             title={reg_City?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
@@ -441,7 +515,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>District</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={[]}
+                                            list={reg_destictData}
                                             title=' '
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
@@ -505,7 +579,7 @@ export default function EditProspectInfo(props) {
                                             title={res_State?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setRes_State(d)}
+                                            on_Select={(d) => fn_GetProspectMaster(d,2)}
                                         />
                                     </View>
                                 </View>
@@ -514,7 +588,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>City</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={cityData}
+                                            list={res_CityData}
                                             title={res_City?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
@@ -528,7 +602,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>District</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={[]}
+                                            list={res_destictData}
                                             title=' '
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
@@ -584,7 +658,7 @@ export default function EditProspectInfo(props) {
                                             title={off_State?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setOff_State(d)}
+                                            on_Select={(d) => fn_GetProspectMaster(d,3)}
                                         />
                                     </View>
                                 </View>
@@ -593,7 +667,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>City</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={cityData}
+                                            list={off_CityData}
                                             title={off_City?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
@@ -607,7 +681,7 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>District</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={[]}
+                                            list={off_destictData}
                                             title=' '
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
