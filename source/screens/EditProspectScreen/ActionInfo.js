@@ -19,9 +19,10 @@ import moment from 'moment';
 import ProspectActionSlotScreen from '../ProspectScreen/ProspectActionSlotScreen';
 import UpdateActionModal from '../../components/UpdateActionModal';
 import FeedBackModal from '../../components/FeedBackModal';
+import ActionTodayScreen from '../ActionTodayScreen/ActionTodayScreen';
 
 export default function ActionInfo(props) {
-  const { cardClick, updateClick, data, actionType_Data, modelData, feedBackClick } = props
+  const { cardClick, updateClick, data, actionType_Data, modelData,perform_Data } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeValue, setActionTypeValue] = useState({})
@@ -153,6 +154,9 @@ export default function ActionInfo(props) {
     console.log("searchvehi", JSON.stringify(res))
     if (res.statusCode === 200) {
       setActionCal_Modal(false)
+      // if(res?.result?.demoVehicleList.length>0){
+      //   fn_GetActionSlots(res?.result?.demoVehicleList[0],0)
+      // }
       setTimeSlotModal(s => { return { ...s, show: true, vehicleList: res?.result?.demoVehicleList } })
       dispatch(emptyLoader_Action(false))
 
@@ -168,7 +172,7 @@ export default function ActionInfo(props) {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "branchcode": "MADU01",
+      "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
       "chassisNo": item.chassisNo,
@@ -177,6 +181,7 @@ export default function ActionInfo(props) {
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
+    console.log("aabb",param)
     tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
   }
 
@@ -188,7 +193,7 @@ export default function ActionInfo(props) {
         item["Select"] = false
         data.push(item)
       })
-      setTimeSlotModal(s => { return { ...s, slotList: data } })
+      setTimeSlotModal(s => { return { ...s, slotList:[...data] } })
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
@@ -251,6 +256,7 @@ export default function ActionInfo(props) {
           <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
           <SelectDropList
             list={actionType_Data}
+            title={actionTypeValue?.description}
             buttonExt={styles.dropList}
             textExt={styles.dropListText}
             on_Select={(d) => setActionTypeValue(d)}
@@ -261,6 +267,7 @@ export default function ActionInfo(props) {
           <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
           <SelectDropList
             list={modelData}
+            title={actionModelValue?.description}
             buttonExt={styles.dropList}
             textExt={styles.dropListText}
             on_Select={(d) => setActionModelValue(d)}
@@ -443,6 +450,7 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
         data={updateModal.data}
         actionType_Data={actionType_Data}
         modelData={modelData}
+        performData={perform_Data}
         onRequestClose={() => setUpdateModal(s => { return { ...s, show: false } })}
       />
 

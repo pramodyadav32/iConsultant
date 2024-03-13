@@ -37,6 +37,11 @@ export const APIName = {
   GetCampaignsMaster : baseUrl + 'GetCampaignsMaster',
   SaveProspectDetails : baseUrl + 'SaveProspectDetails'
   
+  GetMstAccessories : baseUrl + 'Proforma/GetMstAccessories',
+  GetProformaTaxMasters : baseUrl + 'Proforma/GetProformaTaxMasters',
+  GetProformaVehicleMasters : baseUrl + 'Proforma/GetProformaVehicleMasters',
+  SaveProformaBasicInfo : baseUrl + 'Proforma/SaveProformaBasicInfo',
+  SaveAccessoriesAndPackages : baseUrl + 'Proforma/SaveAccessoriesAndPackages',
 }
 
 export const apiCall = (callback, url, method, param, data) => {

@@ -11,14 +11,13 @@ import CalenderModal from "./CalenderModal"
 import moment from "moment"
 import { APIName, tokenApiCall } from "../utilities/apiCaller"
 const UpdateActionModal = (props) => {
-    const {isVisible,onRequestClose,data,modelData,actionType_Data} = props
+    const {isVisible,onRequestClose,data,modelData,actionType_Data, performData} = props
     console.log("data",actionType_Data)
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionCal_Modal, setActionCal_Modal] = useState(false)
     const [actionDate,setActionDate] = useState('')
     const [actionTypeValue,setActionTypeValue] = useState({})
     const [modelValue,setModelValue] = useState({})
-    const [performData,setPerformData] = useState([])
     const [performValue,setPerformValue] = useState({})
     const [comment,setComment] = useState('')
 
@@ -131,9 +130,10 @@ const UpdateActionModal = (props) => {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed</Text>
            <SelectDropList 
-             list={[]}
+             list={performData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
+             on_Select={(d)=>setPerformValue(d)}
            />
         </View>
 

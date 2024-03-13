@@ -312,7 +312,7 @@ export default function EditProspectInfo(props) {
                             <View style={styles.mobileSubView}>
                                 <SelectDropList
                                     list={title}
-                                    title={titleValue?.description}
+                                    title={titleValue?.description==='' || titleValue?.description=== undefined ? " " : titleValue?.description }
                                     buttonExt={styles.dropNameList}
                                     textExt={styles.dropNameListText}
                                     on_Select={(d) => setTitleValue(d)}
@@ -328,7 +328,7 @@ export default function EditProspectInfo(props) {
                             <View style={styles.mobileSubView}>
                                 <SelectDropList
                                     list={title}
-                                    title={titleSonValue?.description}
+                                    title={titleSonValue?.description==='' ? " " : titleSonValue?.description}
                                     buttonExt={styles.dropNameList}
                                     textExt={styles.dropNameListText}
                                     on_Select={(d) => setTitleSonValue(d)}
