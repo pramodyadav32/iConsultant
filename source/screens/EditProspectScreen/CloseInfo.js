@@ -18,14 +18,14 @@ import CalenderModal from '../../components/CalenderModal';
 import moment from 'moment';
 
 export default function CloseInfo(props) {
-    const {actionType_Data,modelData ,data } = props
+    const {actionType_Data,modelData ,data, perform_Data } = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionTypeData,setActionTypeData] = useState([])
     const [actionTypeValue,setActionTypeValue] = useState({})
     // const [modelData,setModelData] = useState([])
     const [modelValue,setModelValue] = useState({})
-    const [performData,setPerformData] = useState([])
+    const [performData,setPerformData] = useState(perform_Data)
     const [performValue,setPerformValue] = useState({})
     const [performDate,setPerformdate] = useState('')
     const [comment,setcomment] = useState('')
@@ -36,6 +36,38 @@ export default function CloseInfo(props) {
 
     const [actionCal_Modal, setActionCal_Modal] = useState(false)
     const [closureCal_Modal, setclosureCal_Modal] = useState(false)
+
+    useEffect(() => {
+      fn_GetClosureMaster()
+    }, [])
+
+
+    const fn_GetClosureMaster = () => {
+      dispatch(emptyLoader_Action(true))
+      let param = 
+      {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "code": "",
+        "loginUserCompanyId": userData?.companyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+      }
+      tokenApiCall(GetClosureMasterCallBack, APIName.GetClosureMasters, "POST", param)
+    }
+  
+    const GetClosureMasterCallBack = async (res) => {
+      console.log("search232323-", JSON.stringify(res?.result[0]?.prospectMasterList))
+      if (res.statusCode === 200) {
+        setClosureData(res?.result?.closureList)
+        dispatch(emptyLoader_Action(false))
+      } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+      }
+    }
+  
 
       console.log('data',data)
     const fn_ActionDateSelect = (data) => {
@@ -58,46 +90,46 @@ export default function CloseInfo(props) {
         // } else if (Object.keys(companyValue).length === 0) {
         //     constant.showMsg("Please select Company")
         // } else {
-        const param = {
-          "brandCode": userData?.brandCode,
-          "countryCode": userData?.countryCode,
-          "companyId": userData?.companyId,
-          "branchCode":selectedBranch?.branchCode,
-          "prospectNo": Number(data?.prospectID),
-          "loginUserId": userData?.userId,
-          "ipAddress": "1::1",
-          "makeOrder": "string",
-          "make": "string",
-          "model": "string",
-          "subModel": "string",
-          "dealerCode": "string",
-          "comment": "string",
-          "closeType": "string",
-          "ruleSubCategory": "string",
-          "status": "string",
-          "closeDate": closureDate,
-          "ordDate": "string",
-          "prospectDisLikeList": "string",
-          "closureProductList": [
+          const param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "branchCode":selectedBranch?.branchCode,
+            "prospectNo": Number(data?.prospectID),
+            "loginUserId": userData?.userId,
+            
+            "ipAddress": "1:1",
+            "makeOrder": "string",//closer type if A then send "Y" else "N"
+            "make": "string",//base on close type
+            "model": "string",//base on close type
+            "subModel": "string",//base on close type variant
+            "dealerCode": "string",//base on close type if from other dealer
+            "comment": "string",
+            "closeType": "string",
+            "ruleSubCategory": "string",
+            "status": "string",
+            "closeDate": "string",
+            "ordDate": "string",
+            "prospectDisLikeList": "string",
+            "closureProductList": [
               {
-                  "serial": 0,
-                  "model": "string",
-                  "variant": "string",
-                  "exterior": "string",
-                  "interior": "string",
-                  "qty": 0,
-                  "expectedDelvDate": "2024-02-21T09:00:20.321Z",
-                  "proformaLocation": "string",
-                  "proformaDoc": "string",
-                  "proformaFY": "string",
-                  "proformaNo": 0
+                "serial": 0,
+                "model": "string",
+                "variant": "string",
+                "exterior": "string",
+                "interior": "string",
+                "qty": 0,
+                "expectedDelvDate": "2024-03-13T13:33:49.626Z",
+                "proformaLocation": "string",
+                "proformaDoc": "string",
+                "proformaFY": "string",
+                "proformaNo": 0
               }
-          ],
-          "reOpenDay": "string",
-          "reOpenMonth": "string",
-          "reOpenYear": "string"
-      }
-    
+            ],
+            "reOpenDay": "string",
+            "reOpenMonth": "string",
+            "reOpenYear": "string"
+          }
         // }
         console.log("param", param)
         // tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectClosure, "POST", param)

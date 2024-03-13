@@ -126,7 +126,7 @@ export default function ProspectScreen(props) {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "branchCode": "MADU01",
+      "branchCode": selectedBranch?.branchCode,
       "calledBy": "INTERNATIONAL_CALLING_CODE,ENTITY,TITLE,STATE,CITY,REFERENCE,SOURCE,RATING,USAGE,DEALCATEGORY,DEALTYPE,CORPORATE,PURCHASE_INTENTION,PROSPECT_CATEGORY,IMPORTANCE,FINANCER,DRIVEN_BY,GENDER,SALES_CONSULTANT,CUST_TYPE,COMPETITION_MODELS,CORRESPONDENCE_ADDRESS",
       "entityCode": "",
       "title": "",

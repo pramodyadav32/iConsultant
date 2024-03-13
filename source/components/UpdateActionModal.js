@@ -11,7 +11,7 @@ import CalenderModal from "./CalenderModal"
 import moment from "moment"
 import { APIName, tokenApiCall } from "../utilities/apiCaller"
 const UpdateActionModal = (props) => {
-    const {isVisible,onRequestClose,data,modelData,actionType_Data, performData} = props
+    const {isVisible,onRequestClose, onRequestSave,data,modelData,actionType_Data, performData} = props
     console.log("data",actionType_Data)
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionCal_Modal, setActionCal_Modal] = useState(false)
@@ -20,6 +20,7 @@ const UpdateActionModal = (props) => {
     const [modelValue,setModelValue] = useState({})
     const [performValue,setPerformValue] = useState({})
     const [comment,setComment] = useState('')
+    const [savedData, setSavedData] = useState({})
 
   useEffect(()=>{
     actionType_Data.map((item)=>{
@@ -42,60 +43,17 @@ const UpdateActionModal = (props) => {
         } else if (performData==='') {
             constant.showMsg("Please select Performed Date")
         } else {
-        const param = {
-          "brandCode": userData?.brandCode,
-          "countryCode": userData?.countryCode,
-          "companyId": userData?.companyId,
-          // "prospectLocation": selectedBranch.brandCode,
-          "prospectNo": Number(data?.prospectId),   
-          "fy": "2023-2024",
-          "actionPerformed": "Test",
+          const param = {
+          "actionType": actionTypeValue,
+          "actionModel": modelValue,
+          "actionPerformed": performValue,
+          "actionPerformedDate": actionDate,
           "actionComment": comment,
-          "salesperson": "string",
-          "currentAction": "string",
-          "actionDate": "09-Mar-2024",
-          "actionCloseDate":actionDate,
-          "hour1": 1,
-          "minutes1": 30,
-          "hour2": 1,
-          "minutes2": 2,
-          "demoVehModel": "string",
-          "demoVehVariant": "string",
-          "demoVehChassisNo": "string",
-          "projectDate": "09-Mar-2024",
-          "activeRate": "",
-          "loginUserId": userData?.userId,
-          "ipAddress": "1::1",
-          "nextRemark": "Test next Remark",
-          "slotCount": 2,
-          "slotMins": "01:00:00",
-          "testDriveZone": "",
-          "tagCode": "",
-          "serial": 0,
-          "orderFY": "2023-2024",
-          "orderNo": 8371,
-          "nextActionComment": "Test next Action Comment",
-          "purchaseProbability": "",
-          "branchCode": selectedBranch?.branchCode,
-    
         }
-        console.log("param", param)
-        tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectBasicInfo, "POST", param)
-    
-        }
-    
-      }
-    
-      const saveBasicInfoCallBack = (res) => {
-        console.log("res", res)
-        if (res.statusCode === 200) {
-    
-        } else {
-          dispatch(emptyLoader_Action(false))
-          constant.showMsg(res.message)
+        onRequestSave(param)
         }
       }
-
+    
     return (
         <Modal
             transparent={true}

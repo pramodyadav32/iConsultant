@@ -33,13 +33,20 @@ export default function ActionInfo(props) {
   const [actionSlotValue, setActionSlotValue] = useState(' ')
   const [actionSlotValue2, setActionSlotValue2] = useState(' ')
   const [vinData, setVinData] = useState('')
+  const [vehVariant, setVehVariant] = useState('')
   const [regData, setRegData] = useState('')
   const [comment, setComment] = useState('')
   const [updateModal, setUpdateModal] = useState({ show: false, data: {} })
+  const [updateModalData, setUpdateModalData] = useState()
   const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '', vehicleList: [], slotList: [], utcDateFormate: '' })
   const [feedBackModal, setFeedBackModal] = useState({ show: false, data: [],selectItem:{} })
+  const [consultantList, setConsultantList] = useState()
 
- 
+  useEffect(() => {
+    fn_GetConsultantNameProspectMaster()
+}, [])
+
+
 
   const renderItem = (item, index) => {
     return (
@@ -81,7 +88,7 @@ export default function ActionInfo(props) {
             <Text style={styles.listText3}>{item?.remark}</Text>
           </View>
           <View style={styles.driveListDetailSubView2}>
-            <Text style={styles.listText2}>Projected Closure Data</Text>
+            <Text style={styles.listText2}>Projected Closure Date</Text>
             <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
           </View>
         </View>
@@ -203,6 +210,7 @@ export default function ActionInfo(props) {
 
   const fn_SlotDone = (selectVeh, slotData) => {
     setVinData(selectVeh?.chassisNo)
+    setVehVariant(selectVeh?.variant)
     setRegData(selectVeh?.regn)
     console.log("slotdata", slotData)
     const originalTime = slotData[slotData.length - 1].slot;
@@ -235,6 +243,47 @@ export default function ActionInfo(props) {
     const totalmin = moment(duration).format("HH:mm:ss A")
     const minutesRemaining = duration.minutes();
     console.log("tottalhoiur" + hours + "  " + minutesRemaining + "  " + totalmin)
+  }
+
+  const fn_GetConsultantNameProspectMaster = () => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchCode": selectedBranch?.branchCode,
+      "calledBy": "SALES_CONSULTANT",
+      "entityCode": "",
+      "title": "",
+      "stateCode": "",
+      "corpDealCategory": "",
+      "dealType": "",
+      "purchaseIntension": "",
+      "prospectType": "",
+      "importance": "",
+      "financer": "",
+      "drivenBy": "",
+      "gender": "",
+      "teams": "",
+      "empId": "",
+      "custType": "",
+      "competitionModelSearch": "",
+      "loginUserId": userData?.userId,
+      "loginUserCompanyId": "ORBIT",
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetProspectMasterCallBack, APIName.GetProspectMaster, "POST", param)
+  }
+
+  const GetProspectMasterCallBack = async (res) => {
+    console.log("search232323-", JSON.stringify(res?.result[0]?.prospectMasterList))
+    if (res.statusCode === 200) {
+      setConsultantList(res?.result[0]?.prospectMasterList)
+      dispatch(emptyLoader_Action(false))
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
   }
 
   const fn_Footer = () => {
@@ -332,46 +381,46 @@ export default function ActionInfo(props) {
     // } else if (Object.keys(companyValue).length === 0) {
     //     constant.showMsg("Please select Company")
     // } else {
+      console.log("selectVeh, slotData ---", actionSlotValue, actionSlotValue2)
+      console.log("actionModelValue ---", actionModelValue)
+      console.log("updateModalData ---", moment(new Date()).format("hh"))
     const param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      // "prospectLocation": selectedBranch.brandCode,
       "prospectNo": Number(data?.prospectID),
-
-      "fy": "2023-2024",
-      "actionPerformed": "Test",
-      "actionComment": "action Comment",
-      "salesperson": "string",
-      "currentAction": "string",
-      "actionDate": "09-Mar-2024",
-      "actionCloseDate": "25-Mar-2024",
-      "hour1": 1,
+      "fy": "2023-2024",//prospect data se
+      "actionPerformed": updateModalData?.actionPerformed,
+      "actionComment": updateModalData?.actionComment,
+      "salesperson": userData?.empCode,
+      "currentAction": actionTypeValue,//action type
+      "actionDate": moment(actionDate, 'DD-MMM-YYYY').format('DD-MM-YYYY'),//date
+      "actionCloseDate": updateModalData?.actionPerformedDate,//performed date from update
+      "hour1": moment(new Date()).format("hh"),//first slot hour
       "minutes1": 30,
       "hour2": 1,
       "minutes2": 2,
-      "demoVehModel": "string",
-      "demoVehVariant": "string",
-      "demoVehChassisNo": "string",
-      "projectDate": "09-Mar-2024",
-      "activeRate": "",
+      "demoVehModel": actionModelValue?.code,
+      "demoVehVariant": vehVariant,
+      "demoVehChassisNo": vinData,
+      "projectDate": "09-Mar-2024",// project closure date
+      "activeRate": "",// hot etc
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
-      "nextRemark": "Test next Remark",
-      "slotCount": 2,
-      "slotMins": "01:00:00",
+      "nextRemark": "Test next Remark",//cmment
+      "slotCount": 2,// no of slots
+      "slotMins": "01:00:00",//total minutes of all slots in int
       "testDriveZone": "",
       "tagCode": "",
       "serial": 0,
-      "orderFY": "2023-2024",
-      "orderNo": 8371,
-      "nextActionComment": "Test next Action Comment",
+      "orderFY": "",
+      "orderNo": 0,//8371,
+      "nextActionComment": "Test next Action Comment",//cmment
       "purchaseProbability": "",
       "branchCode": selectedBranch?.branchCode,
-
     }
     console.log("param", param)
-    tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectBasicInfo, "POST", param)
+    tokenApiCall(saveBasicInfoCallBack, APIName.SaveNewAndUpdateAction, "POST", param)
 
     // }
 
@@ -452,6 +501,11 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
         modelData={modelData}
         performData={perform_Data}
         onRequestClose={() => setUpdateModal(s => { return { ...s, show: false } })}
+        onRequestSave={(param) => {
+          setUpdateModalData(param)
+          setUpdateModal(s => { return { ...s, show: false } })
+          console.log("param = ", updateModalData)
+        }}
       />
 
       <ProspectActionSlotScreen
@@ -461,14 +515,17 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
         vehicleList={timeSlotModal.vehicleList}
         slotList={timeSlotModal.slotList}
         VehicleClick={(item, index) => { fn_GetActionSlots(item, index) }}
-        done_Click={(selectVeh, slotData) => { fn_SlotDone(selectVeh, slotData) }}
+        done_Click={(selectVeh, slotData) => { 
+          console.log("selectVeh, slotData 1112121 -- ", selectVeh, slotData)
+          fn_SlotDone(selectVeh, slotData) }}
       />
        <FeedBackModal
-                isVisible={feedBackModal.show}
-                QuestionList={feedBackModal?.data}
-                data={feedBackModal.selectItem}
-                onRequestClose={() => setFeedBackModal(s => { return { ...s, show: false } })}
-            />
+          isVisible={feedBackModal.show}
+          QuestionList={feedBackModal?.data}
+          data={feedBackModal.selectItem}
+          consultantList={consultantList}
+          onRequestClose={() => setFeedBackModal(s => { return { ...s, show: false } })}
+      />
     </View>
   );
 }

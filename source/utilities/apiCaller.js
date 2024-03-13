@@ -4,7 +4,7 @@ import axios from 'react-native-axios'
 import { beginAsyncEvent } from 'react-native/Libraries/Performance/Systrace';
 
 const businessOwnerCode = 'ISUZU'
-const brandCode = 'ISUZU'
+export const brandCode = 'ISUZU'
 const baseUrlLogin = 'https://g2.orbitsys.com/OrbitsysIServiceCoreApi/api/'
 
 export const baseUrl = 'https://g2.orbitsys.com/OrbitsysLmsApi/api/'
@@ -31,6 +31,7 @@ export const APIName = {
   SaveProspectBasicInfo : baseUrl +'Prospect/SaveProspectBasicInfo',
   GetTestDriveFeedbackQuestions : baseUrl +'Action/GetTestDriveFeedbackQuestions',
   GetTestDriveFeedbackDetails : baseUrl + 'Action/GetTestDriveFeedbackDetails',
+  SaveNewAndUpdateAction : baseUrl + 'Action/SaveNewAndUpdateAction',
   SaveVehiclesRequired : baseUrl +'VehicleRequired/SaveVehiclesRequired',
   GetProformaGeneralMasters : baseUrl + 'Proforma/GetProformaGeneralMasters',
   GetVehiclesRequiredList : baseUrl + 'VehicleRequired/GetVehiclesRequiredList',
@@ -45,6 +46,7 @@ export const APIName = {
   SaveAccessoriesAndPackages : baseUrl + 'Proforma/SaveAccessoriesAndPackages',
   SaveCustomerProfile : baseUrl + 'Proforma/SaveCustomerProfile',
   GetCustomerProfile : baseUrl + 'Proforma/GetCustomerProfile',
+  GetClosureMasters : baseUrl + "Prospect/GetClosureMasters"
 }
 
 export const apiCall = (callback, url, method, param, data) => {
