@@ -46,7 +46,7 @@ export const APIName = {
   SaveAccessoriesAndPackages : baseUrl + 'Proforma/SaveAccessoriesAndPackages',
   SaveCustomerProfile : baseUrl + 'Proforma/SaveCustomerProfile',
   GetCustomerProfile : baseUrl + 'Proforma/GetCustomerProfile',
-  GetClosureMasters : baseUrl + "Prospect/GetClosureMasters"
+  GetClosureMasters : baseUrl + "Prospect/GetClosureMasters",
   GetProformaPackages : baseUrl + 'Proforma/GetProformaPackages',
   SaveProformaPackages : baseUrl + 'Proforma/SaveProformaPackages',
   SaveProformaInsurance: baseUrl +'Proforma/SaveProformaInsurance',

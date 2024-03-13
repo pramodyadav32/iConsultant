@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
@@ -17,347 +17,721 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalenderModal from '../../components/CalenderModal';
 import moment from 'moment';
 
+let data1=[
+  {"key":1},
+  {"key":2},
+  {"key":3},
+  {"key":4},
+
+]
+
 export default function CloseInfo(props) {
-    const {actionType_Data,modelData ,data, perform_Data } = props
-    const dispatch = useDispatch()
-    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
-    const [actionTypeData,setActionTypeData] = useState([])
-    const [actionTypeValue,setActionTypeValue] = useState({})
-    // const [modelData,setModelData] = useState([])
-    const [modelValue,setModelValue] = useState({})
-    const [performData,setPerformData] = useState(perform_Data)
-    const [performValue,setPerformValue] = useState({})
-    const [performDate,setPerformdate] = useState('')
-    const [comment,setcomment] = useState('')
-    const [closureDate,setClosureDate] = useState('')
-    const [closureData,setClosureData] = useState([])
-    const [closureValue,setClosureValue] = useState({})
-    const [remark,setRemark] = useState('')
+  const { actionType_Data, modelData, data, perform_Data } = props
+  const dispatch = useDispatch()
+  const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
+  const [actionTypeData, setActionTypeData] = useState([])
+  const [actionTypeValue, setActionTypeValue] = useState({})
+  // const [modelData,setModelData] = useState([])
+  const [modelValue, setModelValue] = useState({})
+  const [performData, setPerformData] = useState(perform_Data)
+  const [performValue, setPerformValue] = useState({})
+  const [performDate, setPerformdate] = useState('')
+  const [comment, setcomment] = useState('')
+  const [closureDate, setClosureDate] = useState('')
+  const [closureData, setClosureData] = useState([])
+  const [closureValue, setClosureValue] = useState({})
+  const [remark, setRemark] = useState('')
 
-    const [actionCal_Modal, setActionCal_Modal] = useState(false)
-    const [closureCal_Modal, setclosureCal_Modal] = useState(false)
+  const [actionCal_Modal, setActionCal_Modal] = useState(false)
+  const [closureCal_Modal, setclosureCal_Modal] = useState(false)
+  const [dislikeData,setDislikeData] = useState([])
+  const [otherModel,setOtherModel] = useState({})
+  const [varientData,setVarientData ] = useState([])
+  const [varientValue,setVarientValue ] = useState([])
+  const [brandData,setBrandData] = useState([])
+  const [brandValue,setBrandValue] = useState([])
+  const [showDislike,setShowDisLike] = useState(false)
+  const [showList,setShowList] = useState(false)
+  
 
-    useEffect(() => {
-      fn_GetClosureMaster()
-    }, [])
+  useEffect(() => {
+    fn_GetClosureMaster()
+  }, [])
 
 
-    const fn_GetClosureMaster = () => {
-      dispatch(emptyLoader_Action(true))
-      let param = 
-      {
+  const fn_GetClosureMaster = () => {
+    dispatch(emptyLoader_Action(true))
+    let param =
+    {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "code": "",
+      "loginUserCompanyId": userData?.companyId,
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetClosureMasterCallBack, APIName.GetClosureMasters, "POST", param)
+  }
+
+  const GetClosureMasterCallBack = async (res) => {
+    console.log("search232323-", JSON.stringify(res?.result))
+    if (res.statusCode === 200) {
+      setClosureData(res?.result?.closureList)
+      setDislikeData(res?.result?.dislikeList)
+      dispatch(emptyLoader_Action(false))
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
+  }
+
+
+  const fn_ActionDateSelect = (data) => {
+    setPerformdate(moment(data.timestamp).format("DD-MMM-yyyy"))
+    setActionCal_Modal(false)
+  }
+
+  const fn_ClosureDateSelect = (data) => {
+    setClosureDate(moment(data.timestamp).format("DD-MMM-yyyy"))
+    setclosureCal_Modal(false)
+  }
+
+  const fn_Create = () => {
+    // if (Object.keys(sourceValue).length === 0) {
+    //     constant.showMsg("Please select source")
+    // } else if (Object.keys(dealCategoryValue).length === 0) {
+    //     constant.showMsg("Please select Deal Category")
+    // } else if (Object.keys(dealTypeValue).length === 0) {
+    //     constant.showMsg("Please select Deal Type")
+    // } else if (Object.keys(companyValue).length === 0) {
+    //     constant.showMsg("Please select Company")
+    // } else {
+    const param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchCode": selectedBranch?.branchCode,
+      "prospectNo": Number(data?.prospectID),
+      "loginUserId": userData?.userId,
+
+      "ipAddress": "1:1",
+      "makeOrder": "string",//closer type if A then send "Y" else "N"
+      "make": "string",//base on close type
+      "model": "string",//base on close type
+      "subModel": "string",//base on close type variant
+      "dealerCode": "string",//base on close type if from other dealer
+      "comment": "string",
+      "closeType": "string",
+      "ruleSubCategory": "string",
+      "status": "string",
+      "closeDate": "string",
+      "ordDate": "string",
+      "prospectDisLikeList": "string",
+      "closureProductList": [
+        {
+          "serial": 0,
+          "model": "string",
+          "variant": "string",
+          "exterior": "string",
+          "interior": "string",
+          "qty": 0,
+          "expectedDelvDate": "2024-03-13T13:33:49.626Z",
+          "proformaLocation": "string",
+          "proformaDoc": "string",
+          "proformaFY": "string",
+          "proformaNo": 0
+        }
+      ],
+      "reOpenDay": "string",
+      "reOpenMonth": "string",
+      "reOpenYear": "string"
+    }
+    // }
+    console.log("param", param)
+    // tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectClosure, "POST", param)
+
+    // }
+
+  }
+
+  const saveBasicInfoCallBack = (res) => {
+    console.log("res", res)
+    if (res.statusCode === 200) {
+
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
+  }
+
+const fn_clickCheck=(item,index,data,listIndex)=>{
+   let dislikeArr = data
+   let newArray = dislikeData
+   if(dislikeArr[index].select){
+    dislikeArr[index].select = false
+    newArray[listIndex].dislikeValues = dislikeArr
+    setDislikeData([...newArray])
+   }else{
+    dislikeArr[index]["select"] = true
+    newArray[listIndex].dislikeValues = dislikeArr
+    setDislikeData([...newArray])
+
+   }
+}
+
+const fn_ListHeaderClick=async(data,index)=>{
+   let newObj = data
+   let newArray = []
+   let arr = dislikeData
+   if(newObj.select){
+    newObj["select"] = false
+    await newObj?.dislikeValues.map((item,index)=>{
+       item["select"] = false
+       newArray.push(item)
+      })
+      newObj.dislikeValues = newArray
+      arr.splice(index,1,newObj)
+      setDislikeData([...arr])
+   }else{
+    newObj["select"] = true
+    await newObj?.dislikeValues.map((item,index)=>{
+       item["select"] = true
+       newArray.push(item)
+      })
+      newObj.dislikeValues = newArray
+      arr.splice(index,1,newObj)
+      setDislikeData([...arr])
+   }
+ 
+}
+
+  const subListRender=(item,index,data,listIndex)=>{
+    return(
+      <Pressable style={styles.listButton2}  onPress={()=>{fn_clickCheck(item,index,data,listIndex)}}>
+      <FastImage source={item?.select ? images.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkIconStyle} />
+       <Text style={styles.listText2}>{item?.description}</Text>
+     </Pressable>
+    )
+  }
+
+  const renderItem=(data,listIndex)=>{
+    return(
+      <View style={styles.listMainView}>
+         <Pressable style={styles.listButton} onPress={()=>fn_ListHeaderClick(data,listIndex)} >
+           <FastImage source={data?.select ? images.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkIconStyle} />
+            <Text style={styles.listText}>{data?.groupDesc}</Text>
+          </Pressable>
+          <View style={styles.listSubView}>
+            <FlatList data={data?.dislikeValues}
+             renderItem={({item,index})=>subListRender(item,index,data?.dislikeValues,listIndex)}
+            />
+         
+          </View>
+
+      </View>
+    )
+  }
+
+  const fn_Closure=(d)=>{
+    setClosureValue(d)
+    if(d.code==='000001'){
+        setShowDisLike(true)
+      setShowList(false)
+    }else if(d.code === '000002'){
+      setShowDisLike(true)
+      setShowList(false)
+    }else if(d.code ==='A'){
+      setShowDisLike(false)
+      setShowList(true)
+    }else{
+      setShowDisLike(false)
+      setShowList(true)
+    }
+  }
+
+  const fn_OtherModelSelect=(d)=>{
+    setOtherModel(d)
+    fn_GetVehicleActionClose(d) 
+  }
+
+  const fn_GetVehicleActionClose = (d) => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
         "brandCode": userData?.brandCode,
         "countryCode": userData?.countryCode,
         "companyId": userData?.companyId,
+        "calledBy": "EDITION,ASSEMBLY,MODEL,VARIANT",
+        "edition": "",
+        "assembly": "",
+        "subModel": "",
+        "model": d.code,
         "code": "",
-        "loginUserCompanyId": userData?.companyId,
         "loginUserId": userData?.userId,
         "ipAddress": "1::1"
-      }
-      tokenApiCall(GetClosureMasterCallBack, APIName.GetClosureMasters, "POST", param)
     }
-  
-    const GetClosureMasterCallBack = async (res) => {
-      console.log("search232323-", JSON.stringify(res?.result[0]?.prospectMasterList))
-      if (res.statusCode === 200) {
-        setClosureData(res?.result?.closureList)
+    tokenApiCall(GetVehicleActionCloseCallBack, APIName.GetVehicleMaster, "POST", param)
+}
+
+const GetVehicleActionCloseCallBack = async (res) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+        await res.result.map((item) => {
+            if (item.listType === 'VARIANT') {
+                setVarientData(item.vehicleMaster)
+            }
+        })
         dispatch(emptyLoader_Action(false))
-      } else {
+    } else {
         dispatch(emptyLoader_Action(false))
         constant.showMsg(res.message)
-      }
     }
-  
+}
 
-      console.log('data',data)
-    const fn_ActionDateSelect = (data) => {
-        setPerformdate(moment(data.timestamp).format("DD-MMM-yyyy"))
-           setActionCal_Modal(false)
-      }
-
-     const fn_ClosureDateSelect=(data)=>{
-        setClosureDate(moment(data.timestamp).format("DD-MMM-yyyy"))
-        setclosureCal_Modal(false)
-     } 
-
-     const fn_Create = () => {
-        // if (Object.keys(sourceValue).length === 0) {
-        //     constant.showMsg("Please select source")
-        // } else if (Object.keys(dealCategoryValue).length === 0) {
-        //     constant.showMsg("Please select Deal Category")
-        // } else if (Object.keys(dealTypeValue).length === 0) {
-        //     constant.showMsg("Please select Deal Type")
-        // } else if (Object.keys(companyValue).length === 0) {
-        //     constant.showMsg("Please select Company")
-        // } else {
-          const param = {
-            "brandCode": userData?.brandCode,
-            "countryCode": userData?.countryCode,
-            "companyId": userData?.companyId,
-            "branchCode":selectedBranch?.branchCode,
-            "prospectNo": Number(data?.prospectID),
-            "loginUserId": userData?.userId,
-            
-            "ipAddress": "1:1",
-            "makeOrder": "string",//closer type if A then send "Y" else "N"
-            "make": "string",//base on close type
-            "model": "string",//base on close type
-            "subModel": "string",//base on close type variant
-            "dealerCode": "string",//base on close type if from other dealer
-            "comment": "string",
-            "closeType": "string",
-            "ruleSubCategory": "string",
-            "status": "string",
-            "closeDate": "string",
-            "ordDate": "string",
-            "prospectDisLikeList": "string",
-            "closureProductList": [
-              {
-                "serial": 0,
-                "model": "string",
-                "variant": "string",
-                "exterior": "string",
-                "interior": "string",
-                "qty": 0,
-                "expectedDelvDate": "2024-03-13T13:33:49.626Z",
-                "proformaLocation": "string",
-                "proformaDoc": "string",
-                "proformaFY": "string",
-                "proformaNo": 0
-              }
-            ],
-            "reOpenDay": "string",
-            "reOpenMonth": "string",
-            "reOpenYear": "string"
-          }
-        // }
-        console.log("param", param)
-        // tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectClosure, "POST", param)
-    
-        // }
-    
-      }
-    
-      const saveBasicInfoCallBack = (res) => {
-        console.log("res", res)
-        if (res.statusCode === 200) {
-    
-        } else {
-          dispatch(emptyLoader_Action(false))
-          constant.showMsg(res.message)
-        }
-      }
-
-    return (
-        <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
-           <ScrollView showsVerticalScrollIndicator={false}>
-           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
-
-      <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
-           <SelectDropList 
-             list={actionType_Data}
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-             on_Select={(d)=>setActionTypeValue(d)}
-           />
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
-           <SelectDropList 
-             list={modelData}
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-             on_Select={(d)=>setModelValue(d)}
-
-           />
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Performed</Text>
-            {console.log("perform_Data",perform_Data)}
-           <SelectDropList 
-             list={perform_Data}
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-             on_Select={(d)=> setPerformValue(d)}
-
-           />
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Performed Date<Text style={styles.text2}>*</Text></Text>
-         <Pressable style={styles.calenderMainView} onPress={()=>setActionCal_Modal(true)}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{performDate}</TextInput>
-            <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
-         </Pressable>
-        </View>
-
-        <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
-            <Text style={[styles.detailText,{marginTop:'3%'}]}>Action Comment</Text>
-                <TextInput placeholder='Enter Comment' onChangeText={(d)=>setcomment(d)} style={styles.commentInput} >{comment}</TextInput>
-        </View>
-
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Closure Date</Text>
-         <Pressable style={styles.calenderMainView} onPress={()=>setclosureCal_Modal(true)}>
-            <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{closureDate}</TextInput>
-            <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
-         </Pressable>
-        </View>
-       
-        <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Closure Type</Text>
-           <SelectDropList 
-             list={closureData}
-             title=' '
-             buttonExt={styles.dropList}
-             textExt={styles.dropListText}
-             on_Select={(d)=>setClosureValue(d)}
-
-           />
-        </View>
-
-        <View style={[styles.detailMainView,{alignItems:'flex-start'}]}>
-            <Text style={[styles.detailText,{marginTop:'3%'}]}>Remarks</Text>
-                <TextInput placeholder='Enter Remarks' onChangeText={(d)=>setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
-        </View>
-
-        <Pressable style={styles.tabButton } >
-                                            <Text style={ styles.tabButtonText}>Dissatisfaction Reasons</Text>
-                                           <View style={styles.horixontalLine} />
-                                        </Pressable>
+const fn_ListHeader=()=>{
+  return(
+    <View style={styles.otherListMainView}>
+      <View style={styles.otherListSubView2} >
+       <Text style={styles.otherListText}>Assembly</Text>
+      </View>
+      <View style={styles.otherListSubView3} >
+       <Text style={styles.otherListText}>Model</Text>
+      </View>
+      <View style={styles.otherListSubView3} >
+       <Text style={styles.otherListText}>Exterior Color</Text>
+      </View>
+      <View style={styles.otherListSubView4} >
+       <Text style={styles.otherListText}>Order QTY</Text>
+      </View>
+      <View style={styles.otherListSubView} >
+       <Text style={styles.otherListText}>Tentative Delv Date</Text>
+      </View>
     </View>
-    <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+  )
+}
 
-     </ScrollView>
+const listrenderItem=(item,index)=>{
+  return(
+    <View style={styles.otherListMainView2}>
+      <View style={styles.otherListSubView6} >
+       <Text style={styles.otherListText2}>CKD</Text>
+      </View>
+      <View style={styles.otherListSubView7} >
+       <Text style={styles.otherListText2}>DMAX</Text>
+      </View>
+      <View style={styles.otherListSubView7} >
+       <Text style={styles.otherListText2}>Splash White</Text>
+      </View>
+      <View style={styles.otherListSubView8} >
+      <SelectDropList
+              list={actionType_Data}
+              title=" "
+              buttonExt={styles.dropList2}
+              textExt={styles.dropListText2}
+              on_Select={(d) => null}
+            />
+      </View>
+      <View style={styles.otherListSubView5} >
+      <SelectDropList
+              list={actionType_Data}
+              title=" "
+              buttonExt={styles.dropList3}
+              textExt={styles.dropListText3}
+              on_Select={(d) =>null}
+            />
+      </View>
+    </View>
+  )
+}
 
-     <CalenderModal
+const fn_ListFooter=()=>{
+  return(
+    <View style={{flex:1,backgroundColor:constant.whiteColor,height:constant.moderateScale(15),borderBottomLeftRadius:constant.moderateScale(10),borderBottomRightRadius:constant.moderateScale(10)}} />
+  )
+}
+  return (
+    <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ flex: 1, backgroundColor:constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }}>
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
+            <SelectDropList
+              list={actionType_Data}
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) => setActionTypeValue(d)}
+            />
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
+            <SelectDropList
+              list={modelData}
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) => setModelValue(d)}
+
+            />
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Performed</Text>
+            <SelectDropList
+              list={perform_Data}
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) => setPerformValue(d)}
+
+            />
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Performed Date<Text style={styles.text2}>*</Text></Text>
+            <Pressable style={styles.calenderMainView} onPress={() => setActionCal_Modal(true)}>
+              <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{performDate}</TextInput>
+              <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
+            </Pressable>
+          </View>
+
+          <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
+            <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
+            <TextInput placeholder='Enter Comment' onChangeText={(d) => setcomment(d)} style={styles.commentInput} >{comment}</TextInput>
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Closure Date</Text>
+            <Pressable style={styles.calenderMainView} onPress={() => setclosureCal_Modal(true)}>
+              <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{closureDate}</TextInput>
+              <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
+            </Pressable>
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Closure Type</Text>
+            <SelectDropList
+              list={closureData}
+              title=' '
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) =>fn_Closure(d)}
+
+            />
+          </View>
+
+          <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
+            <Text style={[styles.detailText, { marginTop: '3%' }]}>Remarks</Text>
+            <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
+          </View>
+        {showDislike &&  <View>
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Brand<Text style={styles.text2}>*</Text></Text>
+            <SelectDropList
+              list={closureData}
+              title=' '
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) =>fn_Closure(d)}
+
+            />
+          </View>
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
+            <SelectDropList
+              list={modelData}
+              title=' '
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) =>fn_OtherModelSelect(d)}
+
+            />
+          </View>
+
+          <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Varient<Text style={styles.text2}>*</Text></Text>
+            <SelectDropList
+              list={varientData}
+              title=' '
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) =>setVarientValue(d)}
+
+            />
+          </View>
+          </View>
+        }
+
+        {showDislike &&  <Pressable style={styles.tabButton} >
+            <Text style={styles.tabButtonText}>Dissatisfaction Reasons</Text>
+            <View style={styles.horixontalLine} />
+          </Pressable>
+}
+          {showDislike &&
+          <FlatList 
+           data={dislikeData}
+           renderItem={({item,index})=>renderItem(item,index)}
+          />
+          }
+
+     {showList &&  <View style={{elevation:1,borderRadius:constant.moderateScale(10),marginHorizontal:constant.moderateScale(5),marginTop:constant.moderateScale(15)}}>
+            <FlatList 
+             data={data1}
+             renderItem={({item,index})=>listrenderItem(item,index)}
+             ListHeaderComponent={()=>fn_ListHeader()}
+             ListFooterComponent={()=>fn_ListFooter()}
+            />
+          </View>
+     }
+      
+        </View>
+        <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+
+      </ScrollView>
+
+      <CalenderModal
         isVisible={actionCal_Modal}
         onRequestClose={() => setActionCal_Modal(false)}
         onDateClick={(data) => fn_ActionDateSelect(data)}
       />
 
-<CalenderModal
+      <CalenderModal
         isVisible={closureCal_Modal}
         onRequestClose={() => setclosureCal_Modal(false)}
         onDateClick={(data) => fn_ClosureDateSelect(data)}
       />
-        </View>
-    );
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    detailMainView:{
-        paddingHorizontal:"3%",
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-between',
-        marginTop:constant.moderateScale(5)
+  detailMainView: {
+    paddingHorizontal: "3%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: constant.moderateScale(5)
+  },
+  detailText: {
+    fontSize: constant.moderateScale(14),
+    color: '#424242',
+    width: constant.moderateScale(115),
+    fontFamily: constant.typeLight
+  },
+  text2: {
+    fontSize: constant.moderateScale(14),
+    color: constant.red,
+  },
+  dropList: {
+    borderWidth: 1,
+    height: constant.moderateScale(40),
+    flex: 1,
+    borderRadius: 10,
+    borderColor: '#ABABAB',
+    backgroundColor: constant.whiteColor,
+  },
+  dropListText: {
+    fontSize: constant.moderateScale(15),
+    color: constant.textColor,
+    fontFamily: constant.typeLight,
+  },
+
+
+
+
+  calenderStyle: {
+    height: constant.moderateScale(25),
+    width: constant.moderateScale(25),
+    marginRight: '2%'
+  },
+  calenderMainView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ABABAB',
+    paddingLeft: "3%",
+
+  },
+  calenderInput: {
+    height: constant.moderateScale(40),
+    flex: 1,
+    borderRadius: 10,
+    borderColor: '#ABABAB',
+    backgroundColor: constant.whiteColor,
+    color: constant.blackColor,
+    fontFamily: constant.typeLight,
+    fontSize: constant.moderateScale(14)
+  },
+  commentInput: {
+    borderWidth: 1,
+    height: constant.moderateScale(90),
+    flex: 1,
+    borderRadius: 10,
+    borderColor: '#ABABAB',
+    backgroundColor: constant.whiteColor,
+    color: constant.blackColor,
+    fontFamily: constant.typeLight,
+    paddingHorizontal: "3%",
+    fontSize: constant.moderateScale(14),
+    textAlignVertical: 'top'
+  },
+  performaButton: {
+    marginBottom: constant.moderateScale(30),
+    marginTop: constant.moderateScale(10),
+    marginHorizontal: constant.moderateScale(70),
+    paddingVertical: constant.moderateScale(10),
+    borderWidth: 1,
+    borderColor: constant.whiteColor,
+  },
+  tabButton: {
+    justifyContent: 'center',
+    paddingVertical: constant.moderateScale(4),
+    marginHorizontal: constant.moderateScale(10),
+    marginBottom:constant.moderateScale(8)
+  },
+  tabButtonText: {
+    fontSize: constant.moderateScale(15),
+    color:'#686868',
+    fontFamily: constant.typeRegular,
+    marginTop: constant.moderateScale(4),
+
+  },
+
+  horixontalLine: {
+    height: constant.moderateScale(2),
+    width: constant.moderateScale(70),
+    backgroundColor: 'red',
+    position: 'absolute',
+    bottom: -constant.moderateScale(0.5),
+    borderRadius: constant.resW(20)
+  },
+  listMainView:{
+    borderRadius:constant.moderateScale(10),
+    backgroundColor:'#F0F0F0',
+    marginBottom:constant.moderateScale(10),
+    marginHorizontal:constant.moderateScale(8),
+    elevation:1
+  },
+  listSubView:{
+   backgroundColor:constant.whiteColor,
+   borderBottomLeftRadius:constant.moderateScale(10),
+   borderBottomRightRadius:constant.moderateScale(10)
+  },
+  checkIconStyle:{
+    height: constant.moderateScale(23),
+    width: constant.moderateScale(23),
+  },
+  listButton: {
+    paddingVertical: constant.moderateScale(10),
+    marginHorizontal: constant.moderateScale(15),
+    flexDirection:'row',
+    alignItems:"center",
+
+  },
+  listButton2: {
+    paddingVertical: constant.moderateScale(10),
+    marginHorizontal: constant.moderateScale(15),
+    flexDirection:'row',
+    alignItems:"center",
+
+  },
+  listText: {
+    fontSize: constant.moderateScale(16),
+    color: constant.blackColor,
+    fontFamily: constant.typeRegular,
+    marginLeft:constant.moderateScale(10)
+
+  },
+  listText2: {
+    fontSize: constant.moderateScale(15),
+    color: '#686868',
+    fontFamily: constant.typeThin,
+    marginLeft:constant.moderateScale(10)
+
+  },
+  otherListMainView:{
+  flexDirection:'row', 
+  borderTopLeftRadius:constant.moderateScale(10),
+  borderTopRightRadius:constant.moderateScale(10),
+  backgroundColor:'#F0F0F0',
+  // marginTop:constant.moderateScale(15),
+  // marginHorizontal:constant.moderateScale(5),
+  paddingHorizontal:constant.moderateScale(8)
+  },
+  otherListSubView:{
+  flex:1,
+  paddingVertical:constant.moderateScale(10)
+  },
+  otherListSubView2:{
+    flex:0.7,
+    paddingVertical:constant.moderateScale(10)
+    },
+    otherListSubView3:{
+      flex:0.6,
+      paddingVertical:constant.moderateScale(10)
+      },
+      otherListSubView4:{
+        flex:0.7,
+        paddingVertical:constant.moderateScale(10)
         },
-        detailText:{
-            fontSize:constant.moderateScale(14),
-            color:'#424242',
-            width:constant.moderateScale(115),
-            fontFamily:constant.typeLight
+  otherListText:{
+    fontSize: constant.moderateScale(12),
+    color: constant.blackColor,
+    fontFamily: constant.typeMedium,
+    flexWrap:'wrap'
+  },
+  otherListMainView2:{
+    flexDirection:'row', 
+    backgroundColor:constant.whiteColor,
+    // marginHorizontal:constant.moderateScale(5),
+    paddingHorizontal:constant.moderateScale(8)
+    },
+    otherListSubView5:{
+    flex:1,
+    paddingVertical:constant.moderateScale(10)
+    },
+    otherListSubView6:{
+      flex:0.7,
+      paddingVertical:constant.moderateScale(10)
+      },
+      otherListSubView7:{
+        flex:0.6,
+        paddingVertical:constant.moderateScale(10)
         },
-        text2:{
-            fontSize:constant.moderateScale(14),
-            color:constant.red,  
-        },
-        dropList:{
-          borderWidth:1,
-          height:constant.moderateScale(40),
-          flex:1,
-          borderRadius:10,
-          borderColor:'#ABABAB',
-          backgroundColor:constant.whiteColor,
-        },
-        dropListText:{
-            fontSize:constant.moderateScale(15),
-            color:constant.textColor,
-            fontFamily:constant.typeLight,
-        },
-      
-     
-      
-     
-        calenderStyle:{
-            height:constant.moderateScale(25),
-            width:constant.moderateScale(25),
-            marginRight:'2%'
-        },
-        calenderMainView:{
-        flex:1,
-        flexDirection:'row',
-        alignItems:'center',
-        borderWidth:1,
-        borderRadius:10,
-        borderColor:'#ABABAB',
-        paddingLeft:"3%",
-    
-        },
-        calenderInput:{
-            height:constant.moderateScale(40),
-            flex:1,
-            borderRadius:10,
-            borderColor:'#ABABAB',
-            backgroundColor:constant.whiteColor,
-            color:constant.blackColor,
-            fontFamily:constant.typeLight,
-            fontSize:constant.moderateScale(14)
-        },
-     
-     
-       
-       
-        
-         
-        
-          commentInput:{
-            borderWidth:1,
-            height:constant.moderateScale(90),
-            flex:1,
-            borderRadius:10,
-            borderColor:'#ABABAB',
-            backgroundColor:constant.whiteColor,
-            color:constant.blackColor,
-            fontFamily:constant.typeLight,
-            paddingHorizontal:"3%",
-            fontSize:constant.moderateScale(14),
-            textAlignVertical:'top'
-        },
-        performaButton: {
-            marginBottom: constant.moderateScale(30),
-            marginTop: constant.moderateScale(10),
-            marginHorizontal: constant.moderateScale(70),
-            paddingVertical: constant.moderateScale(10),
-            borderWidth: 1,
-            borderColor: constant.whiteColor,
-        },
-        tabButton:{
-          // flex:1,
-        //  width:constant.resW(20),
-         justifyContent:'center',
-         paddingVertical:constant.moderateScale(4),
-         marginHorizontal:constant.moderateScale(10)
-         },
-         tabButtonText:{
-             fontSize:constant.moderateScale(16),
-             color:constant.red,
-             fontFamily:constant.typeRegular,
-         marginTop:constant.moderateScale(4),
-     
-         },
-       
-         horixontalLine:{
-             height:constant.moderateScale(2),
-             width:constant.moderateScale(70),
-             backgroundColor:'red',
-             position:'absolute',
-             bottom:-constant.moderateScale(0.5),
-             borderRadius:constant.resW(20)
-         },
-   
+        otherListSubView8:{
+          flex:0.7,
+          paddingVertical:constant.moderateScale(10)
+          },
+    otherListText2:{
+      fontSize: constant.moderateScale(11),
+      color: '#3B3B3B',
+      fontFamily: constant.typeRegular,
+      flexWrap:'wrap'
+    },
+    dropList2: {
+      borderWidth: 1,
+      height: constant.moderateScale(30),
+      width:'90%',
+      borderRadius: constant.moderateScale(5),
+      borderColor: '#ABABAB',
+      backgroundColor: constant.whiteColor,
+    },
+    dropListText2: {
+      fontSize: constant.moderateScale(15),
+      color: constant.textColor,
+      fontFamily: constant.typeLight,
+    },
+    dropList3: {
+      borderWidth: 1,
+      height: constant.moderateScale(30),
+      width:'100%',
+      borderRadius: constant.moderateScale(5),
+      borderColor: '#ABABAB',
+      backgroundColor: constant.whiteColor,
+    },
+    dropListText3: {
+      fontSize: constant.moderateScale(15),
+      color: constant.textColor,
+      fontFamily: constant.typeLight,
+    },
 })
