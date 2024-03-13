@@ -14,7 +14,7 @@ import Button from '../../components/Button';
 
 
 export default function PerformaBasicInfo(props) {
-   const { navigation } = props
+   const { navigation, performaPriceDetail } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
@@ -24,7 +24,6 @@ export default function PerformaBasicInfo(props) {
    const [packageModel,setPackageModel] = useState(false)
    const [addListModel,setAddListModel] = useState(false)
 
- 
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
@@ -276,11 +275,11 @@ export default function PerformaBasicInfo(props) {
             <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Ex-Showroom(Pre-Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPreDiscount}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Ex-Showroom(Post Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPostDiscount}</Text>
                      </View>
                   </View>
 

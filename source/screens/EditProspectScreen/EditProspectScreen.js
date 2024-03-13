@@ -59,7 +59,7 @@ export default function EditProspectScreen(props) {
     const [updateModal, setUpdateModal] = useState({ show: false, data: {} })
     const [feedBackModal, setFeedBackModal] = useState({ show: false, data: {} })
     const [actionTypeData, SetActionTypeData] = useState([])
-
+    const [performData,setPerformData] = useState([])
     const [actionInfo, setActionInfo] = useState([])
 
     useEffect(() => {
@@ -292,7 +292,7 @@ export default function EditProspectScreen(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "calledBy": "FUP_TYPE",
+            "calledBy": "FUP_TYPE,ACTION_STATUS",
             "loginUserCompanyId": userData?.userCompanyId,
             "loginUserId": userData?.userId,
             "ipAddress": "1::1"
@@ -301,10 +301,17 @@ export default function EditProspectScreen(props) {
     }
 
     const GetActionMasterListCallBack = (res) => {
-        console.log("search", JSON.stringify(res))
+        console.log("search11", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-            SetActionTypeData(res?.result[0]?.actionMasterList)
+            res.result.map((item)=>{
+                if(item?.listType === 'FUP_TYPE'){
+                    SetActionTypeData(item?.actionMasterList)
+                }else {
+                    setPerformData(item?.actionMasterList)
+                }
+            })
+            // SetActionTypeData(res?.result[0]?.actionMasterList)
             fn_GetVehicleActionModel()
            
 
@@ -353,7 +360,7 @@ export default function EditProspectScreen(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "calledBy": "FUP_TYPE",
+            "calledBy": "FUP_TYPE,ACTION_STATUS",
             "loginUserCompanyId": userData?.userCompanyId,
             "loginUserId": userData?.userId,
             "ipAddress": "1::1"
@@ -365,7 +372,14 @@ export default function EditProspectScreen(props) {
         console.log("search", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-            SetActionTypeData(res?.result[0]?.actionMasterList)
+            res.result.map((item)=>{
+                if(item?.listType === 'FUP_TYPE'){
+                    SetActionTypeData(item?.actionMasterList)
+                }else {
+                    setPerformData(item?.actionMasterList)
+                }
+            })
+            // SetActionTypeData(res?.result[0]?.actionMasterList)
             fn_GetVehicleActionClose()
            
 
@@ -408,6 +422,29 @@ export default function EditProspectScreen(props) {
         }
     }
 
+    const fn_GetProfile=()=>{
+        let param ={
+            "brandCode": "ISUZU",
+    "countryCode": "IN",
+    "companyId": "ARAS",
+    "prospectID": 8325,
+    "calledFrom": "PERSONAL",
+    "userId": "DILIP",
+    "ipAddress": "1::1"
+        }
+        tokenApiCall(GetProfileCallBack, APIName.GetVehicleMaster, "POST", param)
+
+    }
+
+    const GetProfileCallBack = async (res) => {
+        console.log("search", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            setActive(4)
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
 
     const renderItem = () => {
         return (
@@ -482,7 +519,8 @@ export default function EditProspectScreen(props) {
             
             fn_GetActionDetail()
         } else if (type === 4) {
-            setActive(4)
+            fn_GetProfile()
+           
         } else {
             fn_GetActionTypeCloseList()
             // setActive(5)
@@ -600,6 +638,7 @@ export default function EditProspectScreen(props) {
                             actionType_Data={actionTypeData}
                             modelData={veh_ModelData}
                             data={actionInfo}
+                            perform_Data={performData}
                             feedBackClick={(item, index) => { fn_FeedBack(item, index) }}
                         />
 
@@ -616,6 +655,7 @@ export default function EditProspectScreen(props) {
                         <CloseInfo
                             actionType_Data={actionTypeData}
                             modelData={veh_ModelData}
+                            perform_Data={performData}
                             data={basicInfo}
                         />
                     }

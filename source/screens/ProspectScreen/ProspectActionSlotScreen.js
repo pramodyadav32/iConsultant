@@ -40,6 +40,14 @@ const ProspectActionSlotScreen = (props) => {
    setFlagData(flagFilter)
     },[slotList])
 
+    useEffect(()=>{
+       if(vehicleList.length>0){
+        setActive(0)
+     setSelectVeh(vehicleList[0])
+     VehicleClick(vehicleList[0],0)
+       }
+    },[vehicleList])
+
  const fn_Click=(item,index)=>{
      setActive(index)
      setSelectVeh(item)

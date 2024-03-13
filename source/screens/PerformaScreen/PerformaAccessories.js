@@ -10,6 +10,9 @@ import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
 import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
+import AddPartListModel from './AddPartListModel';
+import AddPackageModel from './AddPackageModel';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 const data2 = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -21,7 +24,7 @@ const data2 = [
 export default function PerformaAccessories(props) {
    const { navigation } = props
    const dispatch = useDispatch()
-   const { userData } = useSelector(state => state.AuthReducer)
+   const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
@@ -85,7 +88,69 @@ export default function PerformaAccessories(props) {
        </View>
     )
    }
+
+   const fn_AddList=()=>{
+      // setAddListModel(true)
+      dispatch(emptyLoader_Action(true))
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "docLocation":selectedBranch.brandCode,
+         "docCode": "SRP",
+         "docFY": "2023-2024",
+         "docNo": 43,
+         "calledBy": "PART",
+         "package": "",
+         "searchString": "im",
+         "partCategory": "1",
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1"
+       }
+       tokenApiCall(AddListCallBack, APIName.GetMstAccessories, "POST", param)
+   }
+
+   const AddListCallBack = (res) => {
+      console.log("search", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+  
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
+   const fn_AddPackage=()=>{
+      // setPackageModel(true)
+      dispatch(emptyLoader_Action(true))
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "docLocation":selectedBranch.brandCode,
+         "docCode": "SRP",
+         "docFY": "2023-2024",
+         "docNo": 43,
+         "calledBy": "PACKAGE",
+         "package": "",
+         "searchString": "im",
+         "partCategory": "1",
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1"
+       }
+       tokenApiCall(AddPackageCallBack, APIName.GetMstAccessories, "POST", param)
+   }
  
+   const AddPackageCallBack = (res) => {
+      console.log("search", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+  
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
@@ -102,13 +167,22 @@ export default function PerformaAccessories(props) {
                 </View>
           
                   <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around'}}>
-                  <Button title='Add To List' click_Action={() => setAddListModel(true)} buttonExt={styles.button1} />
-                  <Button title='Add Packages' click_Action={() => setPackageModel(true)} buttonExt={styles.button1} />
+                  <Button title='Add To List' click_Action={() => fn_AddList()} buttonExt={styles.button1} />
+                  <Button title='Add Packages' click_Action={() => fn_AddPackage()} buttonExt={styles.button1} />
 
                   </View>   
          </View>
          <Button title='Next' click_Action={() => null} buttonExt={styles.performaButton} />
      </ScrollView>
+
+     <AddPartListModel
+       isVisible={addListModel}
+       onRequestClose={()=>setAddListModel(false)} 
+      />
+      <AddPackageModel
+       isVisible={packageModel}
+       onRequestClose={()=>setPackageModel(false)} 
+      />
       </View>
    )
 }

@@ -46,22 +46,21 @@ const data3 = [
 ]
 
 export default function PerformaScreen(props) {
-   const { navigation } = props
+   const { navigation,route } = props
    const dispatch = useDispatch()
-   const { userData } = useSelector(state => state.AuthReducer)
+   const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(0)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
    const [packageModel,setPackageModel] = useState(false)
    const [addListModel,setAddListModel] = useState(false)
-   const interpolateX = animatedValue.interpolate({
-      inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
-      outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
-   });
+   const [vehiclePricedetail,setVehiclePriceDetail] = useState({})
 
+   console.log("cardData",route.params.cardData)
    useEffect(()=>{
    //  fn_GetProspectBasicInfo()
+    fn_GetVehiclePriceInfo()
    fn_GetProspectDetail()
    },[])
 
@@ -70,7 +69,7 @@ export default function PerformaScreen(props) {
         "brandCode": userData?.brandCode,
         "countryCode": userData?.countryCode,
         "companyId": userData?.companyId,
-        "prospectNo": 8325,
+        "prospectNo":Number(route.params.cardData?.prospectId),
         "loginUserCompanyId": "ORBIT",
         "loginUserId": userData?.userId,
         "ipAddress": "1::1"
@@ -87,21 +86,60 @@ export default function PerformaScreen(props) {
       }
     }
 
+    const fn_GetVehiclePriceInfo = () => {
+      let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "prospectNo":Number(route.params.cardData?.prospectId),
+        "proformaId": 0,
+        "hsnCode": "87042190",
+        "endUse": "EU",
+        "basicPrice": 836232,
+        "discount": 0,
+        "loginUserCompanyId":userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+      }
+      tokenApiCall(GetVehiclePriceInfoCallBack, APIName.GetProformaTaxMasters, "POST", param)
+    }
+  
+    const GetVehiclePriceInfoCallBack = (res) => {
+      // console.log("search", JSON.stringify(res.result))
+      if (res.statusCode === 200) {
+        setVehiclePriceDetail(res.result[0]?.vehPriceDetail)
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
     const fn_GetProspectDetail= () => {
       let param = {
         "brandCode": userData?.brandCode,
         "countryCode": userData?.countryCode,
         "companyId": userData?.companyId,
-        "prospectNo": 8325,
-        "loginUserCompanyId": "ORBIT",
+        "billingLocation": "string",
+        "prospectNo": 0,
+        "proformaId": 0,
+        "calledBy": "string",
+        "edition": "string",
+        "assembly": "string",
+        "model": "string",
+        "subModel": "string",
+        "style": "string",
+        "my": 0,
+        "vy": 0,
+        "exterior": "string",
+        "interior": "string",
+        "loginUserCompanyId":userData?.userCompanyId,
         "loginUserId": userData?.userId,
         "ipAddress": "1::1"
       }
-      tokenApiCall(GetProspectDetailCallBack, APIName.GetProspectDetails, "POST", param)
+      tokenApiCall(GetProspectDetailCallBack, APIName.GetProformaVehicleMasters, "POST", param)
     }
   
     const GetProspectDetailCallBack = (res) => {
-      console.log("search", JSON.stringify(res))
+      console.log("search1", JSON.stringify(res))
       if (res.statusCode === 200) {
   
       } else {
@@ -111,7 +149,7 @@ export default function PerformaScreen(props) {
 
 
 
-   const renderItem = () => {
+   const renderItem = ({item,index}) => {
       return (
          <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -124,11 +162,11 @@ export default function PerformaScreen(props) {
                      </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>Mr.Amarjeet Singh</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Model</Text>
-                           <Text style={styles.listName3}>D-MAX</Text>
+                           <Text style={styles.listName3}>{item?.model}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>MY/VY</Text>
@@ -239,7 +277,7 @@ export default function PerformaScreen(props) {
          <CommonHeader title='Performa' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
          <View>
             <FlatList
-               data={data}
+               data={[route.params.cardData]}
                renderItem={renderItem}
                showsVerticalScrollIndicator={false}
                ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}
@@ -268,7 +306,10 @@ export default function PerformaScreen(props) {
         
             {
                active === 0 &&
-             <PerformaBasicInfo />
+             <PerformaBasicInfo
+              performaPriceDetail={vehiclePricedetail}
+              
+             />
             }
             {
                active === 1 &&
