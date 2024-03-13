@@ -44,6 +44,8 @@ const SelectDropList = (props) => {
             // if data array is an array of objects then return selectedItem.property to render after item is selected
             if( desName === '1')
             return selectedItem.responseText
+          else if(desName === '2')
+          return selectedItem.dataDesc
           else
             return selectedItem.description
            
@@ -54,6 +56,8 @@ const SelectDropList = (props) => {
             // return item.description
             if( desName === '1')
             return item.responseText
+            else if(desName === '2')
+            return item.dataDesc
            else
             return item.description
          

@@ -17,24 +17,9 @@ import CalenderModal from '../../components/CalenderModal';
 import moment from 'moment';
 
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail,profile_Data} = props
+    const { data,prospectMaster, prospectDetail,profile_Data, modelData} = props
     const dispatch = useDispatch()
-    const [activeIndex,setActiveIndex] = useState(true)
     const [active, setActive] = useState(1)
-    const [stateData, setStateData] = useState([])
-    const [stateValue, setStateValue] = useState({})
-    const [cityData, setCityData] = useState([])
-    const [cityValue, setCityValue] = useState({})
-    const [title, setTitle] = useState([])
-    const [titleValue, setTitleValue] = useState({})
-    const [titleSonValue,setTitleSonValue] = useState({"code" : "","description":" "})
-    const [name,setName] = useState("")
-    const [sonName,setSonName] = useState("")
-    const [mobileno,setMobileno] = useState("")
-    const [email,setEmail] = useState("")
-    const [panData,setPanData] = useState("")
-    const [empName,setEmpName] = useState("")
-    const [empMail,setEmpMail] = useState("")
     const [destination,setDestination] = useState("")
     const [prospectTypeData,setProspectData] = useState([])
     const [prospectTypeValue,setProspectTypeValue] = useState({})
@@ -56,12 +41,76 @@ export default function CustumerInfo(props) {
     const [turnoverList,setTurnoverList] = useState([])
     const [turnoverValue,setTurnoverValue] = useState({})
     const [purchaseTypeList,setPurchaseList] = useState([])
-    const [purchaseTypeValue,setPurchaseTypeValue] = useState({})
     const [financerList,setFinancerList] = useState([])
     const [financerValue,setFinancerValue] = useState({})
     const [usesTypeList,setUsesTypeList] = useState([])
     const [usesTypeValue,setUsesTypeValue] = useState({})
     const [customerProfile,setCustomerProfile] = useState({})
+    const [purchaseTypeData,setPurchaseTypeData] = useState([])
+    const [purchaseTypeValue,setPurchaseTypeValue] = useState({})
+    const [paymenttypeData,setPaymentTypeData] = useState([])
+    const [paymenttypeValue,setPaymentTypeValue] = useState({})
+    const [compModelData,setCompModelData] = useState([])
+    const [compModelValue,setCompModelValue] = useState({})
+    const [downPaymentData,setDownPaymentData] = useState([])
+    const [downPaymentValue,setDownPaymentValue] = useState('')
+    const [interestData,setInterestData] = useState([])
+    const [interestValue,setInterestValue] = useState({})
+    const [loadTenureData,setLoadTenureDate] = useState([])
+    const [loadTenureValue,setTenureValue] = useState({})
+    const [emiRate,setEmiRate ] = useState('')
+    const [purchaseVisible,setPurchaseVisible] = useState(false)
+
+    const [usageFreqData,setUsageFreqData] = useState([])
+    const [usageFreqValue,setUsageFreqValue] = useState({})
+    const [typeTravellingData,setTravelingData] = useState([])
+    const [typeTravellingValue,setTravelingValue] = useState({})
+    const [usagePaymentData,setUsagePaymentData] = useState([])
+    const [usagePaymentValue,setUsagePaymentValue] = useState({})
+    const [typeBodyData,setTypeBodyData] = useState([])
+    const [typeBodyValue,setTypeBodyValue] = useState({})
+
+    const [additionLeafData,setAdditionLeafData] = useState([])
+    const [additionLeafValue,setAdditionLeafValue] = useState({})
+    const [distanceDayData,setDistanceDayData] = useState([])
+    const [distanceDayValue,setDistanceDayValue] = useState({})
+
+    const [averageData,setAverageData] = useState([])
+    const [averageValue,setAverageValue] = useState({})
+    const [loadBodyData,setLoadBodyData] = useState([])
+    const [loadBodyDataValue,setLoadBodyDataValue] = useState({})
+    const [drivenMostlyData,setDrivernMostlyData] = useState([])
+    const [drivenMostyleValue,setDrivenMostlyValue] = useState({})
+    const [reasonChooseData,setReasonChooseData] = useState([])
+    const [reasonChooseValue,setReasonChooseValue] = useState({})
+    const [triggerPurcahseData,setTriggerPurchaseData] = useState([])
+    const [triggerPurchaseValue,setTriggerPurchaseValue] = useState({})
+    const [cabinData,setCabinData] = useState([])
+    const [cabinValue,setCabinValue] = useState({})
+    const [anyModificationData,setAnyModificationData] = useState([])
+    const [anyModificationDataValue,setAnyModificationValue] = useState({})
+    const [reasonPurcahseData,setReasonPurchasedata] = useState([])
+    const [reasonPurchaseValue,setReasonPurcahsevalue] = useState({})
+
+
+    const [v_UsageData,setV_UsageData] = useState([])
+    const [v_UsageValue,setV_UsageValue] = useState({})
+    const [v_BodyTypeData,setV_BodyTypeData] = useState([])
+    const [v_BodyTypeValue,setV_BodyTypeValue] = useState({})
+    const [v_BrandData,setV_BrandData] = useState([])
+    const [v_BrandValue,setV_BrandValue] = useState({})
+    const [v_ModelData,setV_ModelData] = useState([])
+    const [v_ModelValue,setV_ModelValue] = useState({})
+    const [v_VarientData,setV_VarientData] = useState([])
+    const [v_VarientValue,setV_VarientValue] = useState({})
+    const [purchaseYearData,setPurchaseYearData] = useState([])
+    const [purchaseYearValue,setPurchaseYearValue] = useState({})
+    const [qtyData,setQtyData] = useState([])
+    const [qtyValue,setQtyValue] = useState([])
+
+
+
+
 
 
    useEffect(()=>{
@@ -77,6 +126,99 @@ export default function CustumerInfo(props) {
      setMaterialStatus(profile_Data?.individualCustomerProfile?.marriedStatus)
      console.log("dob",profile_Data?.individualCustomerProfile?.dob)
      setDob(moment(profile_Data?.individualCustomerProfile?.dob).format("DD-MMM-YYYY"))
+
+     let purchase_ = []
+     let payment_ =[]
+     let comp_ = []
+     let downPayment_ = []
+     let interestRate_ = []
+     let load_Tenure = []
+        profile_Data?.purchaseTypeList.map((item)=>{
+        if(item?.dataType === "PURCHASE_TYPE"){
+          purchase_.push(item)
+        }else if(item?.dataType === "PAYMENT_TYPE"){
+            payment_.push(item)
+        }else if(item?.dataType === "COMP_MODELS"){
+            comp_.push(item)
+        }else if(item?.dataType === "DOWN_PAYMENT"){
+            downPayment_.push(item)
+        }else if(item?.dataType === "INTEREST_RATE"){
+            interestRate_.push(item)
+        }else if(item?.dataType === "LOAN_TENURE"){
+            load_Tenure.push(item)
+        }
+     })
+
+     setPurchaseTypeData(purchase_)
+     setPaymentTypeData(payment_)
+     setUsagePaymentData(payment_)
+     setCompModelData(comp_)
+     setDownPaymentData(downPayment_)
+     setInterestData(interestRate_)
+     setLoadTenureDate(load_Tenure)
+
+    let usageFreq = []
+    let typeTravel = []
+    let paymentType = []
+    let AvgSpeed = []
+    let loadBody = []
+    let driveMost = []
+    let reasonChoose = []
+    let triggerPurchase = []
+    let Cabin = []
+    let anyModification = []
+    let reasonPurchase = []
+    let bodyBuild = []
+    let distancePerDay = []
+    let loadCapicty = []
+    let leafSpring = []
+    let BodyType = []
+    let reasonIsuz = []
+
+    profile_Data?.usesTypeList.map((item)=>{
+          if(item?.dataType === 'USAGE_FREQUENCY'){
+           usageFreq.push(item)
+          }else if(item?.dataType === 'TRAVEL_TYPE'){
+           typeTravel.push(item)
+          }else if(item?.dataType === 'BODY_BUILT_TYPE'){
+            bodyBuild.push(item)
+           }else if(item?.dataType === 'LOAD_CAPACITY'){
+            loadCapicty.push(item)
+           }else if(item?.dataType === 'ADD_LEAF_SPRING'){
+            leafSpring.push(item)
+           }else if(item?.dataType === 'DIST_PER_DAY'){
+            distancePerDay.push(item)
+           }else if(item?.dataType === 'AVERAGE_SPEED'){
+            AvgSpeed.push(item)
+           }else if(item?.dataType === 'LOAD_BODY'){
+            loadBody.push(item)
+           }else if(item?.dataType === 'MAIN_DRIVER'){
+            driveMost.push(item)
+           }else if(item?.dataType === 'REASON_ISUZU'){
+            reasonIsuz.push(item)
+           }else if(item?.dataType === 'CABIN'){
+            Cabin.push(item)
+           }else if(item?.dataType === 'REASON_CHOOSE'){
+            reasonChoose.push(item)
+           }else if(item?.dataType === 'MODIFICATION'){
+            anyModification.push(item)
+           }else if(item?.dataType === 'REASON_PURCHASE'){
+            reasonPurchase.push(item)
+           }
+    })
+
+  setUsageFreqData(usageFreq)
+  setTravelingData(typeTravel)
+  setTypeBodyData(bodyBuild)
+  setAdditionLeafData(leafSpring)
+  setDistanceDayData(distancePerDay)
+  setAverageData(AvgSpeed)
+  setLoadBodyData(loadBody)
+  setDrivernMostlyData(driveMost)
+  setReasonPurchasedata(reasonPurchase)
+  setCabinData(Cabin)
+  setAnyModificationData(anyModification)
+  setReasonChooseData(reasonIsuz)
    },[profile_Data])
 
   
@@ -88,6 +230,10 @@ export default function CustumerInfo(props) {
       
     }
 
+    const fn_SelectPaymentType=(d)=>{
+        setPaymentTypeValue(d)
+        d.dataCode === 'LOAN' ? setPurchaseVisible(true) : setPurchaseVisible(false)
+    }
 
  
 
@@ -237,10 +383,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Purchase Type<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={purchaseTypeData}
              buttonExt={styles.dropList}
+             desName="2"
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setPurchaseTypeValue(d)}
            />
             </View>
         </View>
@@ -260,41 +407,57 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Payment Type<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={paymenttypeData}
              buttonExt={styles.dropList}
+             desName="2"
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>fn_SelectPaymentType(d)}
            />
             </View>
         </View>
 
-        <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
+       {purchaseVisible && <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Competion Models<Text style={styles.text2}>*</Text></Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+             <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={compModelData}
+             desName="2"
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setCompModelValue(d)}
+           />
+            </View>
+                {/* <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput> */}
         </View>
+}
 
-        <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
+{purchaseVisible &&   <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Down Payment (Rs.)<Text style={styles.text2}>*</Text></Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+           
+                <TextInput onChangeText={(d)=>setDownPaymentValue(d)} style={styles.input1} >{downPaymentValue}</TextInput>
         </View>
+}
         
-        <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
+{purchaseVisible &&  <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>EMI/Interest rate (Rs.)<Text style={styles.text2}>*</Text></Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+                <TextInput onChangeText={(d)=>setEmiRate(d)} style={styles.input1} >{emiRate}</TextInput>
         </View>
-        <View style={styles.detailMainView}>
+}
+{purchaseVisible &&   <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Loan Tenure in months<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={loadTenureData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setTenureValue(d)}
            />
             </View>
         </View>
+}
 
-        <View style={styles.detailMainView}>
+{purchaseVisible &&   <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Bank/Financer Name</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
@@ -305,6 +468,8 @@ export default function CustumerInfo(props) {
            />
             </View>
         </View> 
+}
+
         </View>
 }
 
@@ -319,10 +484,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Usage Frequency</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={usageFreqData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setUsageFreqValue(d)}
            />
             </View>
         </View>
@@ -330,10 +496,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Type of Travelling</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={typeTravellingData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setTravelingValue(d)}
            />
             </View>
         </View>
@@ -342,36 +509,62 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Payment Type<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={usagePaymentData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setUsagePaymentValue(d)}
            />
             </View>
         </View>
 
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Type of Body Built<Text style={styles.text2}>*</Text></Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={typeBodyData}
+             desName="2"
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setTypeBodyValue(d)}
+           />
+            </View>
         </View>
 
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Additional Leaf Spring<Text style={styles.text2}>*</Text></Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={additionLeafData}
+             desName="2"
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setAdditionLeafValue(d)}
+           />
+            </View>
         </View>
         
         <View style={[styles.detailMainView,{marginBottom:constant.moderateScale(10)}]}>
             <Text style={styles.detailText}>Distance Per Day</Text>
-                <TextInput onChangeText={(d)=>setDestination(d)} style={styles.input1} >{destination}</TextInput>
+            <View style={styles.mobileSubView}>
+            <SelectDropList 
+             list={distanceDayData}
+             desName="2"
+             buttonExt={styles.dropList}
+             textExt={styles.dropListText}
+             on_Select={(d)=>setDistanceDayValue(d)}
+           />
+            </View>
         </View>
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Average Speed</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={averageData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setAverageValue(d)}
            />
             </View>
         </View>
@@ -380,10 +573,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Load body<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={loadBodyData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setLoadBodyDataValue(d)}
            />
             </View>
         </View> 
@@ -404,10 +598,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Driven Mostly by</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={drivenMostlyData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setDrivenMostlyValue(d)}
            />
             </View>
         </View> 
@@ -416,10 +611,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Reason to Choose ISUZU<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={reasonChooseData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setReasonChooseValue(d)}
            />
             </View>
         </View> 
@@ -452,10 +648,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Cabin<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={cabinData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setCabinValue(d)}
            />
             </View>
         </View> 
@@ -476,10 +673,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Any Modifications intend to do<Text style={styles.text2}>*</Text></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={anyModificationData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setAnyModificationValue(d)}
            />
             </View>
         </View> 
@@ -493,10 +691,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Reason to Purchase</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={reasonPurcahseData}
+             desName="2"
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setReasonPurcahsevalue(d)}
            />
             </View>
         </View> 

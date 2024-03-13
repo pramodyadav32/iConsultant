@@ -443,9 +443,44 @@ export default function EditProspectScreen(props) {
 
     const GetProfileCallBack = async (res) => {
         console.log("search", JSON.stringify(res))
-        dispatch(emptyLoader_Action(false))
+        // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             setProfileData(res?.result)
+            fn_GetProfileModel()
+          
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetProfileModel = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "EDITION,ASSEMBLY,MODEL",
+            "edition": "",
+            "assembly": "",
+            "subModel": "",
+            "model": "",
+            "code": "",
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetProfileModelCallBack, APIName.GetVehicleMaster, "POST", param)
+    }
+
+    const GetProfileModelCallBack = async (res) => {
+        console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            await res.result.map((item) => {
+                if (item.listType === 'MODEL') {
+                    setVeh_ModelData(item.vehicleMaster)
+                }
+            })
             setActive(4)
         } else {
             dispatch(emptyLoader_Action(false))
@@ -653,6 +688,7 @@ export default function EditProspectScreen(props) {
                             profile_Data={profileData}
                             prospectDetail={prospectInfo}
                             prospectMaster={prospectMasterData}
+                            modelData={veh_ModelData}
                         />
                     }
                     {

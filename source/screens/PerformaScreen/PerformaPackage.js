@@ -28,12 +28,49 @@ export default function PerformaPackage(props) {
    const { navigation } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
-   const tabWidth = constant.resW(49);
    const [active, setActive] = useState(false)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
    const [packageModel,setPackageModel] = useState(false)
    const [addListModel,setAddListModel] = useState(false)
+
+   const fn_SavePackage=()=>{
+      let param ={
+         "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+         "docLocation": "string",
+         "docCode": "string",
+         "docFY": "string",
+         "docNo": 0,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
+         "proformaPackageList": [
+             {
+                 "optionGroupType": "string",
+                 "optionGroup": "string",
+                 "optionGroupDescription": "string",
+                 "optionCode": "string",
+                 "optionDescription": "string",
+                 "optionVersion": 0,
+                 "packagePrice": 0,
+                 "taxPer": 0,
+                 "taxAmount": 0,
+                 "totalPackageAmt": 0
+             }
+         ]
+     }    
+     tokenApiCall(SavePackageCallBack, APIName.SaveProformaPackages, "POST", param)
+    }
+
+    const SavePackageCallBack = (res) => {
+      console.log("savePackage", JSON.stringify(res))
+      if (res.statusCode === 200) {
+  
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
 
    const accessoriesList=({item,index})=>{
     return(
