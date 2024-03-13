@@ -424,15 +424,15 @@ export default function EditProspectScreen(props) {
 
     const fn_GetProfile=()=>{
         let param ={
-            "brandCode": "ISUZU",
-    "countryCode": "IN",
-    "companyId": "ARAS",
-    "prospectID": 8325,
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+    "prospectID":  Number(route.params.cardData?.prospectId),
     "calledFrom": "PERSONAL",
-    "userId": "DILIP",
-    "ipAddress": "1::1"
+    "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
         }
-        tokenApiCall(GetProfileCallBack, APIName.GetVehicleMaster, "POST", param)
+        tokenApiCall(GetProfileCallBack, APIName.GetCustomerProfile, "POST", param)
 
     }
 
