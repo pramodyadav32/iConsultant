@@ -22,7 +22,7 @@ import FeedBackModal from '../../components/FeedBackModal';
 import ActionTodayScreen from '../ActionTodayScreen/ActionTodayScreen';
 
 export default function ActionInfo(props) {
-  const { cardClick, updateClick, data, actionType_Data, modelData,perform_Data } = props
+  const { cardClick, updateClick, data, prospectData, actionType_Data, modelData,perform_Data } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeValue, setActionTypeValue] = useState({})
@@ -41,7 +41,9 @@ export default function ActionInfo(props) {
   const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '', vehicleList: [], slotList: [], utcDateFormate: '' })
   const [feedBackModal, setFeedBackModal] = useState({ show: false, data: [],selectItem:{} })
   const [consultantList, setConsultantList] = useState()
-
+  const [slotCount, setSlotCount] = useState()
+  const [allSlotList, setAllSlotList] = useState()
+  
   useEffect(() => {
     fn_GetConsultantNameProspectMaster()
 }, [])
@@ -212,7 +214,10 @@ export default function ActionInfo(props) {
     setVinData(selectVeh?.chassisNo)
     setVehVariant(selectVeh?.variant)
     setRegData(selectVeh?.regn)
-    console.log("slotdata", slotData)
+    setSlotCount(slotData.length)
+    setAllSlotList(slotData)
+    console.log("slotdata -------", slotData)
+    console.log("selectVeh -------", selectVeh)
     const originalTime = slotData[slotData.length - 1].slot;
     const originalMoment = moment(originalTime, 'hh:mm A');
     const updatedMoment = originalMoment.add(30, 'minutes');
@@ -384,38 +389,42 @@ export default function ActionInfo(props) {
       console.log("selectVeh, slotData ---", actionSlotValue, actionSlotValue2)
       console.log("actionModelValue ---", actionModelValue)
       console.log("updateModalData ---", moment(new Date()).format("hh"))
+      console.log("data ---", data)
+      console.log("prospectData ---", prospectData)
+      const slotTime = moment(allSlotList[slotCount-1]?.slot, 'HH:mm:ss A').format('HH:mm')
+      console.log("actionDate ---", slotTime?.split(":"))
     const param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
-      "prospectNo": Number(data?.prospectID),
-      "fy": "2023-2024",//prospect data se
-      "actionPerformed": updateModalData?.actionPerformed,
+      "prospectNo": Number(prospectData?.prospectId),
+      "fy": prospectData?.prospectFY,//prospect data se
+      "actionPerformed": updateModalData?.actionPerformed?.code,
       "actionComment": updateModalData?.actionComment,
       "salesperson": userData?.empCode,
-      "currentAction": actionTypeValue,//action type
-      "actionDate": moment(actionDate, 'DD-MMM-YYYY').format('DD-MM-YYYY'),//date
+      "currentAction": actionTypeValue?.code,//action type
+      "actionDate": moment(actionDate, 'DD-MM-YYYY').format('DD-MMM-YYYY'),//date
       "actionCloseDate": updateModalData?.actionPerformedDate,//performed date from update
-      "hour1": moment(new Date()).format("hh"),//first slot hour
-      "minutes1": 30,
-      "hour2": 1,
-      "minutes2": 2,
+      "hour1": Number(moment(new Date()).format("hh")),//first slot hour
+      "minutes1": Number(moment(new Date()).format("mm")),
+      "hour2": Number(slotTime?.split(":")[0]),
+      "minutes2": Number(slotTime?.split(":")[1]),
       "demoVehModel": actionModelValue?.code,
       "demoVehVariant": vehVariant,
       "demoVehChassisNo": vinData,
-      "projectDate": "09-Mar-2024",// project closure date
-      "activeRate": "",// hot etc
+      "projectDate": moment(prospectData?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY'),// project closure date
+      "activeRate": prospectData?.prospectRating,// hot etc
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
-      "nextRemark": "Test next Remark",//cmment
-      "slotCount": 2,// no of slots
-      "slotMins": "01:00:00",//total minutes of all slots in int
+      "nextRemark": comment,//"Test next Remark",//cmment
+      "slotCount": slotCount,// no of slots
+      "slotMins": slotTime,//total minutes of all slots in int
       "testDriveZone": "",
       "tagCode": "",
       "serial": 0,
       "orderFY": "",
       "orderNo": 0,//8371,
-      "nextActionComment": "Test next Action Comment",//cmment
+      "nextActionComment": comment,//"Test next Action Comment",//cmment
       "purchaseProbability": "",
       "branchCode": selectedBranch?.branchCode,
     }
@@ -429,7 +438,9 @@ export default function ActionInfo(props) {
   const saveBasicInfoCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
-
+      res?.result?.resultCode === "Y"
+      ? constant.showMsg("Data Saved Successfully.")
+      : constant.showMsg("Error while data saving.");
     } else {
       dispatch(emptyLoader_Action(false))
       constant.showMsg(res.message)

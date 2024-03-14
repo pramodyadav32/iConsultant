@@ -677,6 +677,7 @@ export default function EditProspectScreen(props) {
                             actionType_Data={actionTypeData}
                             modelData={veh_ModelData}
                             data={actionInfo}
+                            prospectData={route.params?.cardData}
                             perform_Data={performData}
                             feedBackClick={(item, index) => { fn_FeedBack(item, index) }}
                         />
