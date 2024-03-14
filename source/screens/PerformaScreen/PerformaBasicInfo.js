@@ -31,7 +31,7 @@ export default function PerformaBasicInfo(props) {
          <View style={mainStyle.cal_SubView2}>
           
                <View style={{ flex: 1,  }}>
-                  <View style={styles.detailMainView}>
+                  {/* <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Source</Text>
               <SelectDropList
                 list={[]}
@@ -39,7 +39,7 @@ export default function PerformaBasicInfo(props) {
                 textExt={styles.dropListText}
                //  on_Select={(d)=>setActionTypeValue(d)}
               />
-            </View>
+            </View> */}
 
                   <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15)}]}>
                      <View style={[styles.driveListDetailSubView, {}]}>

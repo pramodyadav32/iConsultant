@@ -29,14 +29,15 @@ export default function PerformaAccessories(props) {
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
    const [detailModal,setDetailModal] = useState(false)
+   const [accessoriesData,setAccessoriesData] = useState([])
    const [packageModel,setPackageModel] = useState(false)
-   const [addListModel,setAddListModel] = useState(false)
+   const [addListModel,setAddListModel] = useState({show:false,data:[]})
 
    const accessoriesList=({item,index})=>{
     return(
        <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
        <View style={[styles.driveListDetailSubView,{}]}>
-          <Text style={styles.costListText2}> </Text>
+          <Text style={styles.costListText2}>{item?.description}</Text>
        </View>
        <View style={[styles.costListSubView3,{}]}>
        <Text style={styles.costListText3}>00.00</Text>
@@ -96,7 +97,7 @@ export default function PerformaAccessories(props) {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
-         "docLocation":selectedBranch.brandCode,
+         "docLocation":selectedBranch.branchCode,
          "docCode": "SRP",
          "docFY": "2023-2024",
          "docNo": 43,
@@ -114,7 +115,7 @@ export default function PerformaAccessories(props) {
       console.log("search", JSON.stringify(res))
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
-  
+       setAddListModel({show:true,data:res?.result?.proformaMstAccessoriesList?.searchResultList})
       } else {
         constant.showMsg(res.message)
       }
@@ -127,7 +128,7 @@ export default function PerformaAccessories(props) {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
-         "docLocation":selectedBranch.brandCode,
+         "docLocation":selectedBranch.branchCode,
          "docCode": "SRP",
          "docFY": "2023-2024",
          "docNo": 43,
@@ -151,6 +152,11 @@ export default function PerformaAccessories(props) {
       }
     }
 
+  const fn_ListDataSelect=(d)=>{
+     setAccessoriesData([...accessoriesData,...[d]])
+     setAddListModel(s=>{return{...s,show:false}})
+  }
+
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
@@ -158,7 +164,7 @@ export default function PerformaAccessories(props) {
          <View style={styles.cal_SubView2}>
                   <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(0)}}>
                  <FlatList 
-                  data={data2}
+                  data={accessoriesData}
                   style={{height:constant.moderateScale(330)}}
                   ListHeaderComponent={()=>accessoriesHeaderList()}
                   renderItem={accessoriesList}
@@ -176,8 +182,10 @@ export default function PerformaAccessories(props) {
      </ScrollView>
 
      <AddPartListModel
-       isVisible={addListModel}
-       onRequestClose={()=>setAddListModel(false)} 
+       isVisible={addListModel.show}
+       data= {addListModel.data}
+       onRequestClose={()=>setAddListModel(s=>{return{...s,show:false}})} 
+       selectData={(d)=>fn_ListDataSelect(d)}
       />
       <AddPackageModel
        isVisible={packageModel}

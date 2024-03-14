@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View, Modal, StyleSheet, Text, Pressable, TextInput, ScrollView, FlatList } from "react-native"
 import * as constant from '../../utilities/constants'
 import { useSelector } from "react-redux"
@@ -9,17 +9,22 @@ import images from "../../utilities/images"
 import Button from "../../components/Button"
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-let data=[
-    {"key":1,},
-    {"key":2,},
-    {"key":3,},
-    {"key":4,},
+// let data=[
+//     {"key":1,},
+//     {"key":2,},
+//     {"key":3,},
+//     {"key":4,},
 
-]
+// ]
 const AddPartListModel = (props) => {
-    const { isVisible, onRequestClose } = props
+    const { isVisible, onRequestClose,data,selectData } = props
     const [active,setActive] = useState(-1)
-
+    const [activeData,setActiveData] = useState({})
+    const [listData,setListData] = useState([])
+    const [searchText,setSearchText] = useState('')
+    useEffect(()=>{
+     setListData(data)
+    },[data])
 
  const fn_Header=()=>{
     return(
@@ -50,7 +55,7 @@ const AddPartListModel = (props) => {
         <MaterialCommunityIcons name={active=== index ? 'radiobox-marked' : 'radiobox-blank'} style={active=== index ? styles.radioIcon2 :styles.radioIcon} />
         </Pressable>
         <View style={styles.listSubView2}>
-         <Text style={styles.listText2}>5867018090 FLOOR MAT</Text>
+         <Text style={styles.listText2}>{item?.partNo} {item?.description}</Text>
         </View>
         <View style={styles.listSubView3}>
          <Text style={styles.listText2}>NOS</Text>
@@ -59,7 +64,7 @@ const AddPartListModel = (props) => {
          <Text style={styles.listText2}>20</Text>
         </View>
         <View style={styles.listSubView4}>
-         <Text style={styles.listText2}>5500</Text>
+         <Text style={styles.listText2}>{item?.price}</Text>
         </View>
       </View>
       )
@@ -67,11 +72,34 @@ const AddPartListModel = (props) => {
 
     const fn_Select=(item,index)=>{
      setActive(index)
+     setActiveData(item)
     }
 
     const fn_Save=()=>{
-        onRequestClose()
+        if(active=== -1){
+            constant.showMsg("Please select part")
+        }else{
+            selectData(activeData)
+        }
     }
+
+    const fn_Search=(d)=>{
+        setSearchText(d)
+        setActive(-1)
+     if(d.length > 0 ){
+     let text = d.toLowerCase()
+       let filteredName = data.filter((item) => {
+        if (item.partNo.toLowerCase().match(text) || item.description.toLowerCase().match(text)  ) {
+          return item
+        }
+      })
+      setListData([...filteredName])
+     }else{
+      setListData([...data])
+     }
+    }
+
+ 
 
     return (
         <Modal
@@ -87,11 +115,11 @@ const AddPartListModel = (props) => {
                         </View>
                         <ScrollView showsVerticalScrollIndicator={false}>
                             <View style={styles.inputView}>
-                                <TextInput style={styles.input} onChangeText={(d) => null} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} ></TextInput>
+                                <TextInput style={styles.input} onChangeText={(d) => fn_Search(d)} selectionColor={'#3B3B3B'} placeholder='Search...' placeholderTextColor={'#3B3B3B'} >{searchText}</TextInput>
                                 <FastImage source={images.search} resizeMode='contain' style={styles.searchIcon} />
                             </View>
                             <FlatList 
-                             data={data}
+                             data={listData}
                              renderItem={renderItem}
                              ListHeaderComponent={()=>fn_Header()}
                             />
