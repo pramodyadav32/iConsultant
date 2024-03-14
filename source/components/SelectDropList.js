@@ -46,7 +46,15 @@ const SelectDropList = (props) => {
             return selectedItem.responseText
           else if(desName === '2')
           return selectedItem.dataDesc
-          else
+          else if(desName === '3')
+          return selectedItem?.dataDescription    
+          else if(desName==='4')
+            return selectedItem.idvPer
+            else if(desName==='5')
+            return selectedItem.basicPremiumPerc1+selectedItem?.basicPremiumPerc2
+           else if(desName==='6')
+           return selectedItem?.idv2NildepPercentage
+            else
             return selectedItem.description
            
         }}
@@ -58,6 +66,14 @@ const SelectDropList = (props) => {
             return item.responseText
             else if(desName === '2')
             return item.dataDesc
+            else if(desName === '3')
+            return item?.dataDescription
+            else if(desName==='4')
+            return item?.idvPer
+            else if(desName==='5')
+            return item.basicPremiumPerc1+item?.basicPremiumPerc2
+            else if(desName==='6')
+            return item?.idv2NildepPercentage
            else
             return item.description
          

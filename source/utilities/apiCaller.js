@@ -54,6 +54,7 @@ export const APIName = {
   GetProformaTerms : baseUrl + 'Proforma/GetProformaTerms',
   GetProformaRegistrationMaster: baseUrl + 'Proforma/GetProformaRegistrationMaster',
   SaveProformaRegistration : baseUrl + 'Proforma/SaveProformaRegistration',
+  GetProformaInsuMaster : baseUrl + 'Proforma/GetProformaInsuMaster',
 }
 
 export const apiCall = (callback, url, method, param, data) => {

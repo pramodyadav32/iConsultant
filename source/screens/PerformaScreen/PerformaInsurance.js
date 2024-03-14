@@ -18,11 +18,91 @@ const data2 = [
  
  ]
 
+ const otherRateData=[
+  {"key":0,title:0,description:0},
+  {"key":1,title:1,description:1},
+  {"key":2,title:2,description:2},
+  {"key":3,title:3,description:3},
+  {"key":4,title:4,description:4},
+  {"key":5,title:5,description:5},
+  {"key":6,title:6,description:6},
+  {"key":7,title:7,description:7},
+  {"key":8,title:8,description:8},
+  {"key":9,title:9,description:9},
+  {"key":10,title:10,description:10},
+  {"key":11,title:11,description:11},
+  {"key":12,title:12,description:12},
+  {"key":13,title:13,description:13},
+  {"key":14,title:14,description:14},
+  {"key":15,title:15,description:15},
+  {"key":16,title:16,description:16},
+  {"key":17,title:17,description:17},
+  {"key":18,title:18,description:18},
+  {"key":19,title:19,description:19},
+  {"key":20,title:20,description:20},
+
+ ]
+
 export default function PerformaInsurance(props) {
-   const { navigation } = props
+   const { navigation ,insurance_Data,generalMaster_Data,insuranceLoc_Data} = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const [selectState,setSelectState] = useState(false)
+   const [idvListData, setIdvListData] = useState([])
+   const [idvListValue, setIdvListValue] = useState({})
+   const [basicPremiumList, setbasicPremiumList] = useState([])
+   const [idvCalculationList, setidvCalculationList] = useState([])
+   const [insurenceHeadList, setinsurenceHeadList] = useState([])
+   const [insurenceDataList, setinsurenceDataList] = useState([])
+   const [insurenceDetail,setinsurenceDetail] = useState({})
+   const [INSU_COMPANY,setINSU_COMPANY] = useState([])
+   const [companyValue,setCompanyValue] = useState({})
+   const [typeData,setTypeData] = useState([])
+   const [typeValue,setTypevalue] = useState({})
+
+   const [calOnData,setCalOnData] = useState([])
+   const [calOnValue,setCalOnValue] = useState({})
+    const [rateValue,setRateValue] = useState({})
+   const [discountDepvalue,setDiscountDepValue] = useState({})
+   const [discountRuleData,setDiscountRuleData] = useState([])
+   const [discountRuleValue,setDiscountRuleValue] = useState({})
+   const [otherRateValue,setOtherRateValue] = useState({})
+   const [locationValue,setLocationValue] = useState([])
+
+   useEffect(()=>{
+    setIdvListData(insurance_Data?.idvList)
+    setbasicPremiumList(insurance_Data?.basicPremiumList)
+    setidvCalculationList(insurance_Data?.idvCalculationList)
+    setinsurenceDataList(insurance_Data?.insurenceDataList)
+    setinsurenceHeadList(insurance_Data?.insurenceHeadList)
+    setinsurenceDetail(insurance_Data?.insurenceDetail)
+
+    let calData=[]
+    let type = []
+    let rule = []
+    insurance_Data?.insurenceDataList.map((item)=>{
+      if(item?.dataType === 'INSU_CALC_ON')
+      {
+        calData.push(item)
+      }else if(item?.dataType === 'INSU_TYPE')
+      {
+        type.push(item)
+      }
+      else if(item?.dataType === 'INSU_DISCOUNT_CALC_RULE')
+      {
+        rule.push(item)
+      }
+    })
+    setCalOnData(calData)
+    setTypeData(type)
+    setDiscountRuleData(rule)
+    generalMaster_Data?.selectMasterList?.map((item)=>{
+      if(item?.listType==='INSU_COMPANY'){
+        setINSU_COMPANY(item?.basicList)
+      }
+    })
+   
+   },[insurance_Data,generalMaster_Data])
   
    const fn_SaveInsurance=()=>{
     let param ={
@@ -77,60 +157,66 @@ export default function PerformaInsurance(props) {
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Type</Text>
+              {console.log("calon",typeData)}
+
               <SelectDropList
-                list={[]}
+                list={typeData}
+                desName='3'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setTypevalue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Location</Text>
               <SelectDropList
-                list={[]}
+                list={insuranceLoc_Data}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setLocationValue(d)}
               />
             </View>
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Company</Text>
               <SelectDropList
-                list={[]}
+                list={INSU_COMPANY}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setCompanyValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Calc On</Text>
               <SelectDropList
-                list={[]}
+                list={calOnData}
+                desName="3"
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setCalOnValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>IDV%</Text>
               <SelectDropList
-                list={[]}
+                list={idvListData}
+                desName='4'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setIdvListValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Rate</Text>
               <SelectDropList
-                list={[]}
+                list={basicPremiumList}
+                desName='5'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setRateValue(d)}
               />
             </View>
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
@@ -149,10 +235,11 @@ export default function PerformaInsurance(props) {
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Discount on Dep.</Text>
               <SelectDropList
-                list={[]}
+                list={idvCalculationList}
+                desName='6'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setDiscountDepValue(d)}
               />
             </View>
 
@@ -164,30 +251,32 @@ export default function PerformaInsurance(props) {
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>NCB</Text>
               <SelectDropList
-                list={[]}
+                list={discountRuleData}
+                desName='3'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setDiscountRuleValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Discount Rule</Text>
               <SelectDropList
-                list={[]}
+                list={discountRuleData}
+                desName='3'
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setDiscountRuleValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Rate</Text>
               <SelectDropList
-                list={[]}
+                list={otherRateData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setOtherRateValue(d)}
               />
             </View>
 
