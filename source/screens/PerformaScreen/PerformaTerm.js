@@ -25,27 +25,41 @@ const data2 = [
  ]
 
 export default function PerformaTerm(props) {
-   const { navigation } = props
+   const { navigation,term_Data } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
-   const tabWidth = constant.resW(49);
    const [active, setActive] = useState(false)
-   const [animatedValue] = useState(new Animated.Value(1));
-   const [detailModal,setDetailModal] = useState(false)
-   const [packageModel,setPackageModel] = useState(false)
-   const [addListModel,setAddListModel] = useState(false)
+   const [listData,setListData] = useState([])
+
+   useEffect(()=>{
+    setListData(term_Data)
+   },[term_Data])
+ 
+   const fn_SelectTerm=(item,index)=>{
+    let newArr = listData
+    if(item.select){
+        item.select = false
+        newArr.splice(index,1,item)
+        setListData([...newArr])
+    }else{
+        item["select"] = true
+        newArr.splice(index,1,item)
+        setListData([...newArr])
+    }
+   }
+
 
    const accessoriesList=({item,index})=>{
     return(
-       <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+       <Pressable onPress={()=>fn_SelectTerm(item,index)} style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
        <View style={[styles.driveListDetailSubView,{}]}>
-       <FastImage source={active ?images.checkIcon : images.unCheckIcon} style={styles.checkbox} />
+       <FastImage source={item?.select ? images.checkIcon : images.unCheckIcon} style={styles.checkbox} />
        </View>
        <View style={[styles.costListSubView3,{}]}>
-       <Text style={styles.costListText3}>The above Prices are Inclusive of Excise Duty, Local Sales Tax, and are Ex-Showroom Madurai, and are effective 01.04.2014</Text>
+       <Text style={styles.costListText3}>{item?.description}</Text>
        </View>
        
-       </View>
+       </Pressable>
     )
    }
  
@@ -59,7 +73,7 @@ export default function PerformaTerm(props) {
          <View style={styles.cal_SubView2}>
               
                  <FlatList 
-                  data={data2}
+                  data={listData}
                   renderItem={accessoriesList}
                   ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
 
@@ -107,8 +121,8 @@ export default function PerformaTerm(props) {
   },
   costListSubView3:{
     flex:1,
-    alignItems:'center',
-    justifyContent:'flex-end',
+    // alignItems:'center',
+    // justifyContent:'flex-end',
     },
   
      

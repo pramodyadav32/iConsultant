@@ -56,13 +56,44 @@ export default function PerformaScreen(props) {
    const [packageModel,setPackageModel] = useState(false)
    const [addListModel,setAddListModel] = useState(false)
    const [vehiclePricedetail,setVehiclePriceDetail] = useState({})
+   const [termData,settermData] = useState([])
 
    console.log("cardData",route.params.cardData)
    useEffect(()=>{
    //  fn_GetProspectBasicInfo()
-    fn_GetVehiclePriceInfo()
-   fn_GetProspectDetail()
+   //  fn_GetVehiclePriceInfo()
+   // fn_GetProspectDetail()
+   fn_GetProformaTaxMasters()
    },[])
+
+   const fn_GetProformaTaxMasters=()=>{
+      let param = {
+       "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo":Number(route.params.cardData?.prospectId),
+         "proformaId": 0,
+         "hsnCode": "87042190",
+         "endUse": "EU",
+         "basicPrice": 836232,
+         "discount": 0,
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1"
+       }
+       tokenApiCall(GetProformaTaxMastersCallBack, APIName.GetProformaTaxMasters, "POST", param)
+   }
+
+   const GetProformaTaxMastersCallBack = (res) => {
+      console.log("search", JSON.stringify(res))
+      if (res.statusCode === 200) {
+         setVehiclePriceDetail(res.result[0]?.vehPriceDetail)
+
+      } else {
+        constant.showMsg(res.message)
+      }
+    }
+
 
    const fn_GetProspectBasicInfo = () => {
       let param = {
@@ -86,32 +117,7 @@ export default function PerformaScreen(props) {
       }
     }
 
-    const fn_GetVehiclePriceInfo = () => {
-      let param = {
-        "brandCode": userData?.brandCode,
-        "countryCode": userData?.countryCode,
-        "companyId": userData?.companyId,
-        "prospectNo":Number(route.params.cardData?.prospectId),
-        "proformaId": 0,
-        "hsnCode": "87042190",
-        "endUse": "EU",
-        "basicPrice": 836232,
-        "discount": 0,
-        "loginUserCompanyId":userData?.userCompanyId,
-        "loginUserId": userData?.userId,
-        "ipAddress": "1::1"
-      }
-      tokenApiCall(GetVehiclePriceInfoCallBack, APIName.GetProformaTaxMasters, "POST", param)
-    }
   
-    const GetVehiclePriceInfoCallBack = (res) => {
-      // console.log("search", JSON.stringify(res.result))
-      if (res.statusCode === 200) {
-        setVehiclePriceDetail(res.result[0]?.vehPriceDetail)
-      } else {
-        constant.showMsg(res.message)
-      }
-    }
 
     const fn_GetProspectDetail= () => {
       let param = {
@@ -185,14 +191,15 @@ export default function PerformaScreen(props) {
          "docFY": "2023-2024",
          "docNo": 43
      }
-     tokenApiCall(GetTermsCallBack, APIName.GetProformaPackages, "POST", param)
+     tokenApiCall(GetTermsCallBack, APIName.GetProformaTerms, "POST", param)
 
     }
 
     const GetTermsCallBack = (res) => {
       console.log("searchTerm", JSON.stringify(res))
       if (res.statusCode === 200) {
-  
+         settermData(res?.result?.termsDetailList)
+         setActive(4)
       } else {
         constant.showMsg(res.message)
       }
@@ -375,17 +382,19 @@ export default function PerformaScreen(props) {
             {active === 2 &&
               <PerformaPackage />
             }
-            {
+            {/* {
                active ===3 &&
                <PerformaInsurance />
-            }
+            } */}
             {
-               active === 4 &&
+               active === 3 &&
                <PerformaRegistration />
             }
             {
-               active===5 && 
-               <PerformaTerm />
+               active===4 && 
+               <PerformaTerm 
+                term_Data = {termData}
+               />
             }
            
          </View>
