@@ -35,6 +35,7 @@ import PerformaTerm from "./PerformaTerm";
 import PerformaInsurance from "./PerformaInsurance";
 import PerformaRegistration from "./PerformaRegistration";
 import moment from 'moment';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 const data = [
   {
@@ -76,28 +77,33 @@ const data3 = [
 ];
 
 export default function PerformaScreen(props) {
-  const { navigation, route } = props;
-  const dispatch = useDispatch();
-  const { userData, selectedBranch } = useSelector(
-    (state) => state.AuthReducer
-  );
-  const tabWidth = constant.resW(49);
-  const [active, setActive] = useState(0);
-  const [animatedValue] = useState(new Animated.Value(1));
-  const [detailModal, setDetailModal] = useState(false);
-  const [packageModel, setPackageModel] = useState(false);
-  const [addListModel, setAddListModel] = useState(false);
-  const [vehiclePricedetail, setVehiclePriceDetail] = useState({});
-  const [termData, settermData] = useState([]);
-  const [performaTaxMaster, setPerformaTaxMaster] = useState();
+   const { navigation,route } = props
+   const dispatch = useDispatch()
+   const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
+   const tabWidth = constant.resW(49);
+   const [active, setActive] = useState(0)
+   const [animatedValue] = useState(new Animated.Value(1));
+   const [detailModal,setDetailModal] = useState(false)
+   const [packageModel,setPackageModel] = useState(false)
+   const [addListModel,setAddListModel] = useState(false)
+   const [vehiclePricedetail,setVehiclePriceDetail] = useState({})
+   const [termData,settermData] = useState([])
+   const [registrationTypeList,setRegistrationTypeList] = useState([])
+   const [selectMasterList,setSelectMasterList] = useState([])
+   const [priceDetails,setPriceDetails]=useState({})
+   const [performaTaxMaster, setPerformaTaxMaster] = useState();
   const [performaBasicDataHeader, setPerformaBasicDataHeader] = useState();
   const [proformaGeneralMasters, setProformaGeneralMasters] = useState();
 
-  console.log("route.params.cardData ====", route.params.cardData);
-  useEffect(() => {
-     fn_GetProspectBasicInfo()
-    // fn_GetProspectDetail()
-  }, []);
+
+
+   console.log("cardData",route.params.cardData)
+   useEffect(()=>{
+   //  fn_GetProspectBasicInfo()
+   //  fn_GetVehiclePriceInfo()
+   // fn_GetProspectDetail()
+   fn_GetProformaTaxMasters()
+   },[])
 
   const fn_GetProformaGeneralMasters = () => {
    let param = {
@@ -298,116 +304,91 @@ export default function PerformaScreen(props) {
     } else {
       constant.showMsg(res.message);
     }
-  };
+   }
+  
 
-  const renderItem = ({ item, index }) => {
-    return (
-      <ImageBackground
-        source={images.performaCard}
-        resizeMode="stretch"
-        imageStyle={{ borderRadius: 10 }}
-        style={styles.listBgStyle}
-      >
-        <Pressable style={styles.driveListMainView}>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <View style={{ flex: 1.8, marginTop: constant.moderateScale(7) }}>
-              <View
-                style={[
-                  styles.driveListDetailView,
-                  { marginTop: constant.moderateScale(2) },
-                ]}
-              >
-                <View style={styles.driveListDetailSubView}>
-                  <FastImage
-                    source={require("../../assets/dummy/car.png")}
-                    resizeMode="contain"
-                    style={styles.carImage}
-                  />
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Prospect Name</Text>
-                  <Text
-                    numberOfLines={2}
-                    style={[styles.listName3, { width: "90%" }]}
-                  >
-                    {item?.title} {item?.firstName} {item?.lastName}
-                  </Text>
-                </View>
-                <View style={styles.driveListDetailSubView2}>
-                  <Text style={styles.listText2}>Model</Text>
-                  <Text style={styles.listName3}>{item?.model}</Text>
-                </View>
-                <View style={styles.driveListDetailSubView2}>
-                  <Text style={styles.listText2}>MY/VY</Text>
-                  <Text style={styles.listName3}>2024/2024</Text>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.driveListDetailView,
-                  { marginTop: constant.moderateScale(8) },
-                ]}
-              >
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Vehicle Cost</Text>
-                  <Text style={styles.listName3}>907,300.00</Text>
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Temp Regn</Text>
-                  <Text style={styles.listName3}>NIL</Text>
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Hypo Charges</Text>
-                  <Text style={styles.listName3}>22-Jan-2024</Text>
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Service Charges</Text>
-                  <Text style={styles.listName3}>22-Jan-2024</Text>
-                </View>
-              </View>
-              <View
-                style={[
-                  styles.driveListDetailView,
-                  { marginTop: constant.moderateScale(8) },
-                ]}
-              >
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Extd Warr Pack</Text>
-                  <Text style={styles.listName3}>NIL</Text>
-                </View>
+   const renderItem = ({item,index}) => {
+      return (
+         <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+            <Pressable style={styles.driveListMainView}  >
+               <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1.8,marginTop:constant.moderateScale(7) }}>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
+                     <View style={styles.driveListDetailSubView}>
+                     <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
 
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Accessories (Performa)</Text>
-                  <Text style={styles.listName3}>3500.00</Text>
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  {/* <Text style={styles.listText2}>Accessories (Performa)</Text> */}
-                  {/* <Text style={styles.listName3}>3500.00</Text> */}
-                </View>
-                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Total</Text>
-                  <Text style={styles.listName3}>910950.00</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Pressable>
-      </ImageBackground>
-    );
-  };
+                     </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Prospect Name</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Model</Text>
+                           <Text style={styles.listName3}>{item?.model}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>MY/VY</Text>
+                           <Text style={styles.listName3}>2024/2024</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                     <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Vehicle Cost</Text>
+                           <Text style={styles.listName3}>907,300.00</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Temp Regn</Text>
+                           <Text style={styles.listName3}>NIL</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Hypo Charges</Text>
+                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Service Charges</Text>
+                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Extd Warr Pack</Text>
+                           <Text style={styles.listName3}>NIL</Text>
+                        </View>
+                       
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Accessories (Performa)</Text>
+                           <Text style={styles.listName3}>3500.00</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           {/* <Text style={styles.listText2}>Accessories (Performa)</Text> */}
+                           {/* <Text style={styles.listName3}>3500.00</Text> */}
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Total</Text>
+                           <Text style={styles.listName3}>910950.00</Text>
+                        </View>
+                     </View>
+                  </View>
+               </View>
+            </Pressable>
+         </ImageBackground>
+      )
+   }
 
-  const fn_TabClick = (type) => {
-    if (type === 0) {
-      setActive(type);
-    } else if (type === 1) {
-      setActive(type);
-    } else if (type === 2) {
-      fn_GetPackage();
-    } else if (type === 3) {
-    } else if (type === 4) {
-      fn_GetTerms();
-    }
-  };
+   const fn_TabClick = (type) => {
+      if(type===0){
+         setActive(type)
+      }else if(type===1){
+         setActive(type)
+      }else if(type===2){
+         fn_GetPackage()
+      }else if(type===3){
+
+      }else if(type===4){
+         fn_GetTerms()
+      }
+      
+   }
 
   const actionRenderItem = ({ item, index }) => {
     return (

@@ -52,6 +52,7 @@ export const APIName = {
   SaveProformaInsurance: baseUrl +'Proforma/SaveProformaInsurance',
   GetProformaRegistrationMaster : baseUrl + 'Proforma/GetProformaRegistrationMaster',
   GetProformaTerms : baseUrl + 'Proforma/GetProformaTerms',
+  GetProformaRegistrationMaster: baseUrl + 'Proforma/GetProformaRegistrationMaster',
   SaveProformaRegistration : baseUrl + 'Proforma/SaveProformaRegistration',
 }
 
