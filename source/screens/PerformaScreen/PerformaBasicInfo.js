@@ -14,7 +14,8 @@ import Button from '../../components/Button';
 
 
 export default function PerformaBasicInfo(props) {
-   const { navigation, performaPriceDetail } = props
+   const { navigation, performaPriceDetail,  performaBasicInfo, 
+   performaGeneralMasterData } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);

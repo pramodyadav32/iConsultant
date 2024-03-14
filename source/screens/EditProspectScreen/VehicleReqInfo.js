@@ -14,6 +14,7 @@ import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import moment from "moment"
 
 export default function VehicleReqInfo(props) {
   const { cardClick, modelData, modelSelect, vehicledata,prospectData } = props
@@ -37,6 +38,7 @@ export default function VehicleReqInfo(props) {
   const [my_DataValue, setMyDataValue] = useState({})
   const [vy_Data, setVyData] = useState([])
   const [vy_DataValue, setVyDataValue] = useState({})
+  const [priceAvailable, setPriceAvailable] = useState()
 
   useEffect(() => {
     vehicledata.map((item) => {
@@ -59,6 +61,11 @@ export default function VehicleReqInfo(props) {
       }
     })
   }, [vehicledata])
+
+  useEffect(() => {
+    priceStatus()
+  }, [])
+  
 
   const fn_ModelSelect = (d) => {
     setModelValue(d)
@@ -153,7 +160,7 @@ export default function VehicleReqInfo(props) {
       "exterior": exteriorValue.code,
       "interior": interiorValue.code,
       "calledBy": "VEH_PRICE",
-      "priceListApplicable": "23-APR-2024",
+      "priceListApplicable": moment(new Date()).format('DD-MMM-YYYY'),//"23-APR-2024",
       "billingLocation": selectedBranch?.branchCode,
       "usage": "",
       "saleGroup": "",
@@ -174,10 +181,10 @@ export default function VehicleReqInfo(props) {
   const priceStatusCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
-
+      setPriceAvailable("")
     } else {
       dispatch(emptyLoader_Action(false))
-      constant.showMsg(res.message)
+      // constant.showMsg(res.message)
     }
   }
 
@@ -305,7 +312,7 @@ export default function VehicleReqInfo(props) {
 
             <View style={styles.detailMainView2}>
               <Text style={styles.detailText}>Reference</Text>
-              <TextInput style={styles.refInput} >Available</TextInput>
+              <TextInput style={styles.refInput} editable={false} >Available</TextInput>
 
             </View>
             <View style={styles.detailMainView2}>

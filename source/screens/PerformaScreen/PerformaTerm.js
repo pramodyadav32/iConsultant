@@ -11,19 +11,6 @@ import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 
-const data2 = [
-    { 'key': 1, "title": 'Your Profile',  },
-    { 'key': 2, "title": 'Your Profile', },
-    { 'key': 3, "title": 'Your Profile', },
-    { 'key': 4, "title": 'Your Profile', },
-    { 'key': 5, "title": 'Your Profile', },
-    { 'key': 3, "title": 'Your Profile', },
-    { 'key': 3, "title": 'Your Profile', },
-    { 'key': 3, "title": 'Your Profile', },
-
- 
- ]
-
 export default function PerformaTerm(props) {
    const { navigation,term_Data } = props
    const dispatch = useDispatch()

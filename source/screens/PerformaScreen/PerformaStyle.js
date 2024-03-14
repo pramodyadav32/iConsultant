@@ -286,7 +286,11 @@ const styles = StyleSheet.create({
                   paddingHorizontal:"3%",
                   fontSize:constant.moderateScale(15)
               },
-
+              advisorBottomView1:{
+                flex:0.4,
+                justifyContent:'center',
+                alignItems:'center'
+               },
   
 })
 

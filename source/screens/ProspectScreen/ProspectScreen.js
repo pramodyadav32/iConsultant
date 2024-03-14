@@ -49,7 +49,8 @@ export default function ProspectScreen(props) {
   const [usageValue, setUsageValue] = useState({})
   const [entityData, setEntityData] = useState([])
   const [entityValue, setEntityValue] = useState({})
-  const [mobileno, setMobileNo] = useState('7339506778')
+  // const [mobileno, setMobileNo] = useState('7339506778')
+  const [mobileno, setMobileNo] = useState('')
   const [pinCode, setPinCode] = useState('')
   const [generlCloserdata, setGeneralClosureData] = useState('')
   const [name, setName] = useState("")
@@ -90,10 +91,12 @@ export default function ProspectScreen(props) {
   const [regData, setRegData] = useState('')
   const [comment, setComment] = useState('')
   const [actionSlotLength,setActionSlotLength] = useState([])
+  const [priceAvailable, setPriceAvailable] = useState()
 
   useEffect(() => {
     console.log("selectBranchh",selectedBranch)
     fn_GetProspectMaster()
+    // priceStatus()
     // fn_GetVehicleMasterModel()
   }, [])
 
@@ -243,7 +246,7 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please enter valid mobile number")
     } else if (Object.keys(entityValue).length === 0) {
       constant.showMsg("Please Select Entity")
-    }else if( contactPerson===''){
+    }else if(entityValue?.code === "B" && contactPerson===''){
         constant.showMsg("Please enter contact Person name")    
     }else if (Object.keys(titleValue).length === 0) {
       constant.showMsg("Please select name title")
@@ -615,6 +618,52 @@ export default function ProspectScreen(props) {
    
   }
 
+  const priceStatus = () => {
+    
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "prospectNo": 0,
+      "proformaId": 0,
+      "assembly": assemblyValue.code,
+      "edition": editionValue.code,
+      "model": modelValue.code,
+      "subModel": varientValue?.code,
+      "style": styleValue.code,
+      "my": Number(my_DataValue.code),
+      "vy": Number(vy_DataValue.code),
+      "exterior": exteriorValue.code,
+      "interior": interiorValue.code,
+      "calledBy": "VEH_PRICE",
+      "priceListApplicable": moment(new Date()).format('DD-MMM-YYYY'),//"23-APR-2024",
+      "billingLocation": selectedBranch?.branchCode,
+      "usage": "",
+      "saleGroup": "",
+      "endUse": "",
+      "vehiclePrice": 0,
+      "itemGroup": "",
+      "regnLocation": "",
+      "rtoCode": "",
+      "insuLocation": "",
+      "insuCode": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1",
+    }
+    tokenApiCall(priceStatusCallBack, APIName.GetProformaGeneralMasters, "POST", param)
+
+  }
+
+  const priceStatusCallBack = (res) => {
+    console.log("res", res)
+    if (res.statusCode === 200) {
+      setPriceAvailable(res?.result?.priceAvailableTag)
+    } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+    }
+  }
+
   const fn_State = (d) => {
     setStateValue(d)
     dispatch(emptyLoader_Action(true))
@@ -702,12 +751,12 @@ export default function ProspectScreen(props) {
               {/* <TextInput style={styles.input1} keyboardType='numeric'>+91 8470068493</TextInput> */}
             </View>
            
-             <View style={styles.detailMainView}>
+            {entityValue?.code === "B" ? <View style={styles.detailMainView}>
              <Text style={styles.detailText}>Contact Person<Text style={styles.text2}>*</Text></Text>
             
              <TextInput style={styles.input1} onChangeText={(d)=>setContactPerson(d)}>{contactPerson}</TextInput>
            </View>
-          
+           : null}
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Name<Text style={styles.text2}>*</Text></Text>
               <View style={styles.mobileSubView}>
@@ -906,7 +955,10 @@ export default function ProspectScreen(props) {
                 list={assemblyData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setAssemblyValue(d)}
+                on_Select={(d) => {
+                  priceStatus()
+                  setAssemblyValue(d)}
+                }
               />
             </View>
 
@@ -923,7 +975,7 @@ export default function ProspectScreen(props) {
 
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Reference</Text>
-                <TextInput style={styles.refInput} >Available</TextInput>
+                <TextInput style={styles.refInput} editable={false} >Available</TextInput>
 
               </View>
               <View style={styles.detailMainView2}>
