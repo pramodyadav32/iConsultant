@@ -21,6 +21,7 @@ import PerformaAccessories from './PerformaAccessories';
 import PerformaTerm from './PerformaTerm';
 import PerformaInsurance from './PerformaInsurance';
 import PerformaRegistration from './PerformaRegistration';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -57,6 +58,9 @@ export default function PerformaScreen(props) {
    const [addListModel,setAddListModel] = useState(false)
    const [vehiclePricedetail,setVehiclePriceDetail] = useState({})
    const [termData,settermData] = useState([])
+   const [registrationTypeList,setRegistrationTypeList] = useState([])
+   const [selectMasterList,setSelectMasterList] = useState([])
+   const [priceDetails,setPriceDetails]=useState({})
 
    console.log("cardData",route.params.cardData)
    useEffect(()=>{
@@ -275,6 +279,37 @@ export default function PerformaScreen(props) {
       )
    }
 
+ const  fn_Registration=()=>{
+   dispatch(emptyLoader_Action(true))
+   let param ={
+       "brandCode": userData?.brandCode,
+       "countryCode": userData?.countryCode,
+       "companyId": userData?.companyId,
+    "docLocation": "MADU01",
+    "docCode": "SRP",
+    "docFY": "2023-2024",
+    "docNo": 49,
+    "regnSource": "",
+    "rtoCalcOn": "2024-02-01",
+    "loginUserId": userData?.userId,
+    "ipAddress": "1::1"
+   }
+   tokenApiCall(RegistrationCallBack, APIName.GetProformaRegistrationMaster, "POST", param)
+ }
+
+ const RegistrationCallBack = (res) => {
+   console.log("searchTerm", JSON.stringify(res))
+   dispatch(emptyLoader_Action(false))
+   if (res.statusCode === 200) {
+      setRegistrationTypeList(res?.result?.proformaRegistrationMaster?.registrationTypeList)
+      setSelectMasterList(res?.result?.proformaRegistrationMaster?.selectMasterList)
+      setPriceDetails(res?.result?.proformaRegistrationMaster?.priceDetails)
+      setActive(3)
+   } else {
+     constant.showMsg(res.message)
+   }
+ }
+
    const fn_TabClick = (type) => {
       if(type===0){
          setActive(type)
@@ -283,7 +318,7 @@ export default function PerformaScreen(props) {
       }else if(type===2){
          fn_GetPackage()
       }else if(type===3){
-
+         fn_Registration()
       }else if(type===4){
          fn_GetTerms()
       }
