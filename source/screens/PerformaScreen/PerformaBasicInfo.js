@@ -145,18 +145,18 @@ export default function PerformaBasicInfo(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.basicPricePostDiscount}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Discount</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPostDiscount}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.basicPricePostDiscount}</Text>
                      </View>
                   </View>
                   </View>

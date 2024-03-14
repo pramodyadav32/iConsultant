@@ -97,7 +97,6 @@ export default function PerformaScreen(props) {
   useEffect(() => {
      fn_GetProspectBasicInfo()
     // fn_GetProspectDetail()
-    fn_GetProformaTaxMasters()
   }, []);
 
   const fn_GetProformaGeneralMasters = () => {
@@ -144,6 +143,7 @@ export default function PerformaScreen(props) {
    console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
    if (res.statusCode === 200) {
      setProformaGeneralMasters(res.result);
+    fn_GetProformaTaxMasters()
    } else {
      constant.showMsg(res.message);
    }
@@ -158,7 +158,7 @@ export default function PerformaScreen(props) {
       proformaId: 0,
       hsnCode: "87042190",
       endUse: "EU",
-      basicPrice: 836232,
+      basicPrice: 0,
       discount: 0,
       loginUserCompanyId: userData?.userCompanyId,
       loginUserId: userData?.userId,
