@@ -159,18 +159,30 @@ export default function PerformaScreen(props) {
 
    const fn_GetProformaTaxMasters = () => {
       let param = {
+         // brandCode: userData?.brandCode,
+         // countryCode: userData?.countryCode,
+         // companyId: userData?.companyId,
+         // prospectNo: Number(route.params.cardData?.prospectId),
+         // proformaId: 0,
+         // hsnCode: "87042190",
+         // endUse: "EU",
+         // basicPrice: 0,
+         // discount: 0,
+         // loginUserCompanyId: userData?.userCompanyId,
+         // loginUserId: userData?.userId,
+         // ipAddress: "1::1",
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
-         prospectNo: Number(route.params.cardData?.prospectId),
-         proformaId: 0,
-         hsnCode: "87042190",
-         endUse: "EU",
-         basicPrice: 0,
-         discount: 0,
-         loginUserCompanyId: userData?.userCompanyId,
-         loginUserId: userData?.userId,
-         ipAddress: "1::1",
+    "prospectNo": 8325,
+    "proformaId": 0,
+    "hsnCode": "87042190",
+    "endUse": "EU",
+    "basicPrice": 836232,
+    "discount": 0,
+    "loginUserCompanyId": "ORBIT",
+    "loginUserId": "VINOD",
+    "ipAddress": "1::1"
       };
       tokenApiCall(
          GetProformaTaxMastersCallBack,
@@ -666,6 +678,7 @@ export default function PerformaScreen(props) {
                   performaPriceDetail={vehiclePricedetail}
                   performaBasicInfo={performaBasicDataHeader}
                   performaGeneralMasterData={proformaGeneralMasters}
+                  cardData = {route.params.cardData}
                />
             )}
             {active === 1 && <
