@@ -3,7 +3,7 @@ import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
+import { userData_Action, emptyLoader_Action, home_Refresh_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 // import styles from './EditProspectStyle'
@@ -60,6 +60,9 @@ export default function CloseInfo(props) {
   const [compVehModelSelected, setCompVehModelSelected] = useState()
   const [compVehVarientSelected, setCompVehVarientSelected] = useState()
 
+  const [dealerData,setDealerData] = useState([])
+  const [dealerValue,setDealerValue] = useState({})
+
   useEffect(() => {
     fn_GetClosureMaster()
     fn_GetCompitionVehicleInfo("", "", "BRAND")
@@ -86,6 +89,7 @@ export default function CloseInfo(props) {
     if (res.statusCode === 200) {
       setClosureData(res?.result?.closureList)
       setDislikeData(res?.result?.dislikeList)
+      setDealerData(res?.result?.dealerList)
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
@@ -104,7 +108,7 @@ export default function CloseInfo(props) {
     setclosureCal_Modal(false)
   }
 
-  const fn_Create = () => {
+  const fn_Create = async() => {
     // if (Object.keys(sourceValue).length === 0) {
     //     constant.showMsg("Please select source")
     // } else if (Object.keys(dealCategoryValue).length === 0) {
@@ -114,6 +118,15 @@ export default function CloseInfo(props) {
     // } else if (Object.keys(companyValue).length === 0) {
     //     constant.showMsg("Please select Company")
     // } else {
+      console.log("dislikenDa",JSON.stringify(dislikeData))
+      let newArray = []
+      await dislikeData.map((data)=>{
+        data?.dislikeValues.map((item)=>{
+          item.select ? newArray.push(item?.description) : null
+        })
+       })
+
+       console.log(newArray.join(","))
     const param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
@@ -122,18 +135,18 @@ export default function CloseInfo(props) {
       "prospectNo": Number(data?.prospectID),
       "loginUserId": userData?.userId,
       "ipAddress": "1:1",
-      "makeOrder": "string",//closer type if A then send "Y" else "N"
-      "make": "string",//base on close type
-      "model": "string",//base on close type
-      "subModel": "string",//base on close type variant
-      "dealerCode": "string",//base on close type if from other dealer
-      "comment": "string",
-      "closeType": "string",
+      "makeOrder": closureValue.code==='A' ? "Y" : "N",//closer type if A then send "Y" else "N"
+      "make": showDislikeAndBrand ? compVehBrandSelected?.code : "",//base on close type
+      "model": showDislikeAndBrand ? compVehModelSelected?.code : "",//base on close type
+      "subModel": showDislikeAndBrand ? compVehVarientSelected?.code : "",//base on close type variant
+      "dealerCode": closureValue?.code ==="C" ? dealerValue?.code : '',//base on close type if from other dealer
+      "comment": comment,
+      "closeType": closureValue?.code,
       "ruleSubCategory": "string",
       "status": "string",
-      "closeDate": "string",
-      "ordDate": "string",
-      "prospectDisLikeList": "string",
+      "closeDate": closureDate,
+      "ordDate": moment(new Date()).format("DD-MMM-YYYY"),
+      "prospectDisLikeList":showDislike ? newArray.join(",").toString() : '' ,
       "closureProductList": [
         {
           "serial": 0,
@@ -164,6 +177,7 @@ export default function CloseInfo(props) {
   const saveBasicInfoCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
+      dispatch(home_Refresh_Action(true))
 
     } else {
       dispatch(emptyLoader_Action(false))
@@ -312,7 +326,7 @@ const fn_ListHeaderClick=async(data,index)=>{
     }else{
       setShowDisLike(false)
       setShowDisLikeAndBrand(false)
-      setShowList(true)
+      setShowList(false)
     }
   }
 
@@ -488,6 +502,17 @@ const fn_ListFooter=()=>{
             <Text style={[styles.detailText, { marginTop: '3%' }]}>Remarks</Text>
             <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
           </View>
+       {closureValue?.code==='C' &&   <View style={styles.detailMainView}>
+            <Text style={styles.detailText}>Dealer</Text>
+            <SelectDropList
+              list={dealerData}
+              title=' '
+              buttonExt={styles.dropList}
+              textExt={styles.dropListText}
+              on_Select={(d) =>{setDealerValue(d)}}
+            />
+          </View>
+       }
           {showDislikeAndBrand &&  <View>
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Brand<Text style={styles.text2}>*</Text></Text>

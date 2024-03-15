@@ -3,7 +3,7 @@ import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
+import { userData_Action, emptyLoader_Action, home_Refresh_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 // import styles from './EditProspectStyle'
@@ -438,6 +438,8 @@ export default function ActionInfo(props) {
   const saveBasicInfoCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
+      dispatch(home_Refresh_Action(true))
+
       res?.result?.resultCode === "Y"
       ? constant.showMsg("Data Saved Successfully.")
       : constant.showMsg("Error while data saving.");

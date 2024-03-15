@@ -500,13 +500,13 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>MY/VY</Text>
-                           <Text style={styles.listName3}>2024/2024</Text>
+                           <Text style={styles.listName3}>{performaBasicDataHeader?.proformaList[0]?.docFy}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>907,300.00</Text>
+                           <Text style={styles.listName3}>{vehiclePricedetail?.basicPricePostDiscount}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>

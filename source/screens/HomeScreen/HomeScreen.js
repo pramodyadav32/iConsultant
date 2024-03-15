@@ -14,7 +14,9 @@ import DeviceInfo from 'react-native-device-info';
 import * as Progress from 'react-native-progress';
 import TestDriveList from './TestDriveList';
 import ActiveProspectList from './ActiveProspectList';
-import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import { emptyLoader_Action, home_Refresh_Action } from '../../redux/actions/AuthAction';
+import { useFocusEffect, } from '@react-navigation/native';
+
 const data = [
   { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
   { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
@@ -25,7 +27,7 @@ const data = [
 export default function HomeScreen(props) {
   const { navigation } = props
   const dispatch = useDispatch()
-  const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
+  const { userData, selectedBranch,homeRefresh } = useSelector(state => state.AuthReducer)
   const [prospectData, setProspectData] = useState([])
   const [loader, setLoader] = useState(false)
   const [Action_Today, setActionToday] = useState([])
@@ -48,6 +50,20 @@ export default function HomeScreen(props) {
     //  getProfiles()
   }, [])
 
+  useFocusEffect(
+    React.useCallback(() => {
+      // Screen is in focus
+      homeRefresh ? getProspectData() : null
+      console.log('Screen in focus');
+      return () => {
+        // Screen is out of focus
+        console.log('Screen out of focus');
+        // goLive("end",live_Id,broadCastName,broadCasttoken)
+        // Call your function or perform actions here
+      };
+    }, [])
+  );
+
   const getProspectData = () => {
     let param = {
       "brandCode": userData?.brandCode,
@@ -68,6 +84,7 @@ export default function HomeScreen(props) {
     console.log("prospect", JSON.stringify(res))
      setrefresh(false)
      dispatch(emptyLoader_Action(false))
+     dispatch(home_Refresh_Action(false))
     if (res.statusCode === 200) {
       setProspectData(res?.result)
       const initialValue = 0;

@@ -282,8 +282,8 @@ export default function PerformaAccessories(props) {
    accessoriesData?.map((item) => {
       let obj = {
          "packageCode": "",
-         "itemCategory": "",
-         "itemGroup": "",
+         "itemCategory": item?.itemCategory,
+         "itemGroup": item?.itemGroup,
          "partNo": item?.partNo,
          "qty": item?.quantity,
          "unit": "",

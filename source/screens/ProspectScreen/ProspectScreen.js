@@ -13,7 +13,7 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import CalenderModal from '../../components/CalenderModal';
 import ProspectActionSlotScreen from './ProspectActionSlotScreen';
-import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import { emptyLoader_Action, home_Refresh_Action } from '../../redux/actions/AuthAction';
 import moment from 'moment';
 import CustumerSearch from '../../components/CustumerSearch';
 
@@ -369,6 +369,7 @@ export default function ProspectScreen(props) {
     dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
          if(res.result?.resultCode==="Y"){
+          dispatch(home_Refresh_Action(true))
           navigation.goBack()
          }else{
           constant.showMsg("Opps. Somethings wents wrong.")
