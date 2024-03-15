@@ -88,9 +88,6 @@ export default function PerformaScreen(props) {
    const [addListModel, setAddListModel] = useState(false)
    const [vehiclePricedetail, setVehiclePriceDetail] = useState({})
    const [termData, settermData] = useState([])
-   const [registrationTypeList, setRegistrationTypeList] = useState([])
-   const [selectMasterList, setSelectMasterList] = useState([])
-   const [priceDetails, setPriceDetails] = useState({})
    const [performaTaxMaster, setPerformaTaxMaster] = useState();
    const [performaBasicDataHeader, setPerformaBasicDataHeader] = useState();
    const [proformaGeneralMasters, setProformaGeneralMasters] = useState();
@@ -100,10 +97,11 @@ export default function PerformaScreen(props) {
    const [insuranceData, setInsuranceData] = useState({})
    const [generalMasterData,setGeneralMasterData] = useState({})
    const [ins_Location,setins_Location] = useState([])
+   const [reg_Data,setReg_Data] = useState({})
 
    console.log("cardData", route.params.cardData)
    useEffect(() => {
-      //  fn_GetProspectBasicInfo()
+       fn_GetProspectBasicInfo()
       //  fn_GetVehiclePriceInfo()
       // fn_GetProspectDetail()
       fn_GetProformaTaxMasters()
@@ -196,7 +194,9 @@ export default function PerformaScreen(props) {
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
-         prospectNo: Number(route.params.cardData?.prospectId),
+         // prospectNo: Number(route.params.cardData?.prospectId),
+         prospectNo:8325,
+
          loginUserCompanyId: "ORBIT",
          loginUserId: userData?.userId,
          ipAddress: "1::1",
@@ -456,9 +456,7 @@ export default function PerformaScreen(props) {
       console.log("searchTerm", JSON.stringify(res))
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
-         setRegistrationTypeList(res?.result?.proformaRegistrationMaster?.registrationTypeList)
-         setSelectMasterList(res?.result?.proformaRegistrationMaster?.selectMasterList)
-         setPriceDetails(res?.result?.proformaRegistrationMaster?.priceDetails)
+         setReg_Data(res?.result?.proformaRegistrationMaster)
          setActive(3)
       } else {
          constant.showMsg(res.message)
@@ -684,7 +682,11 @@ export default function PerformaScreen(props) {
 
                />
             }
-            {active === 3 && <PerformaRegistration />}
+            {active === 3 && <PerformaRegistration 
+             regData= {reg_Data}
+             performaGeneralMasterData={proformaGeneralMasters}
+             performaBasicInfo={performaBasicDataHeader}
+            />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
          </View>
          {/* <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}
