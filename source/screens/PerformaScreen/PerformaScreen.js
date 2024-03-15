@@ -771,6 +771,7 @@ export default function PerformaScreen(props) {
              regData= {reg_Data}
              performaGeneralMasterData={proformaGeneralMasters}
              performaBasicInfo={performaBasicDataHeader}
+             performaPriceDetail={vehiclePricedetail}
             />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
          </View>
