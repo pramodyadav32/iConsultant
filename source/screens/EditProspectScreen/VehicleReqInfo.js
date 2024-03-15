@@ -311,8 +311,8 @@ export default function VehicleReqInfo(props) {
         </View> */}
 
             <View style={styles.detailMainView2}>
-              <Text style={styles.detailText}>Reference</Text>
-              <TextInput style={styles.refInput} editable={false} >Available</TextInput>
+              <Text style={styles.detailText}>Price</Text>
+              <TextInput style={styles.refInput} editable={false}>Available</TextInput>
 
             </View>
             <View style={styles.detailMainView2}>
