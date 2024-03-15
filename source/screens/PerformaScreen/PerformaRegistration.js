@@ -10,6 +10,7 @@ import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
 import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
+import moment from 'moment';
 
 const data2 = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -19,15 +20,67 @@ const data2 = [
  ]
 
 export default function PerformaRegistration(props) {
-   const { navigation } = props
+   const { navigation, regData,performaGeneralMasterData,performaBasicInfo } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const [selectState,setSelectState] = useState(false)
+   const [registrationTypeList, setRegistrationTypeList] = useState([])
+   const [selectMasterList, setSelectMasterList] = useState([])
+   const [priceDetails, setPriceDetails] = useState({})
+   const [locationData,setLoactionData] = useState([])
+   const [locationValue,setLoactionValue] = useState({})
+   const [sourceData,setSourceData] = useState([])
+   const [sourceValue,setSourceValue] = useState({})
+   const [codeData,setcodeData] = useState([])
+   const [codeValue,setcodeValue] = useState([])
+   const [billingLocationData,setBillingLocationData] = useState([])
+   const [billingLocationValue,setBillingLocationValue] = useState([])
+   const [custumerReg,setCustumerReg] = useState(false)
+   const [performaListData,setPerformListData] = useState([])
+
   
+ useEffect(()=>{
+  setRegistrationTypeList(regData?.registrationTypeList)
+  setSelectMasterList(regData?.selectMasterList)
+  setPriceDetails(regData?.priceDetails)
+  setPerformListData(performaBasicInfo?.proformaList)
+  let location=[]
+  let source = []
+  regData?.selectMasterList.map((item)=>{
+    if(item?.group === 'REGN_LOCATION')
+    {
+      location.push(item)
+    }else if(item?.group === 'SOURCE')
+    {
+      source.push(item)
+    }
   
- 
+  })
+  setSourceData(source)
+  setLoactionData(location)
+
+  performaGeneralMasterData?.selectMasterList.map((item)=>{
+   if(item?.listType ==='BILLING_LOCATION'){
+    setBillingLocationData(item.basicList)
+   }
+  })
+
+
+ },[regData])
   
- 
+ const fn_selectReg=(item,index)=>{
+  let newArr = registrationTypeList
+    if(item.select){
+      item.select = false
+      newArr.splice(index,1,item)
+      setRegistrationTypeList([...newArr])
+    }else{
+      item["select"] = true
+      newArr.splice(index,1,item)
+      setRegistrationTypeList([...newArr])
+    }
+ }
+
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
@@ -41,12 +94,12 @@ export default function PerformaRegistration(props) {
               <Text style={styles.text6}>-</Text>
             </View> 
             <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>Zone</Text>
-              <Text style={styles.text6}>-</Text>
+            <Text style={styles.text5}>Chatges Applicable On</Text>
+              <Text style={styles.text6}>{moment(new Date).format("DD-MMM-YYYY")}</Text>
             </View> 
             </View>
 
-            <View style={{flex:1,flexDirection:'row'}}>
+            {/* <View style={{flex:1,flexDirection:'row'}}>
             <View style={[styles. bottomMainView2,{}]}>
             <Text style={styles.text5}>SubZone</Text>
               <Text style={styles.text6}>-</Text>
@@ -55,15 +108,15 @@ export default function PerformaRegistration(props) {
             <Text style={styles.text5}>Chatges Applicable On</Text>
               <Text style={styles.text6}>Current Date</Text>
             </View> 
-            </View>
+            </View> */}
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Regn Location</Text>
               <SelectDropList
-                list={[]}
+                list={locationData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setLoactionValue(d)}
               />
             </View>
 
@@ -71,51 +124,51 @@ export default function PerformaRegistration(props) {
               <Text style={styles.detailText}>Regn Code</Text>
               <SelectDropList
                 list={[]}
+                disable={true}
+                title={locationValue.code==='' ? ' ' : locationValue?.code }
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                //  on_Select={(d)=>setActionTypeValue(d)}
               />
             </View>
 
-            <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>Style</Text>
-              <Text style={styles.text6}>STANDARD</Text>
-            </View> 
-            <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>MV/VY</Text>
-              <Text style={styles.text6}>2024/2024</Text>
-            </View> 
-            </View>
-
-            <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>Style</Text>
-              <Text style={styles.text6}>STANDARD</Text>
-            </View> 
-            <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>MV/VY</Text>
-              <Text style={styles.text6}>2024/2024</Text>
-            </View> 
-            </View>
+            <FlatList 
+             data={performaListData}
+             renderItem={({item,index})=>{
+              return(
+              index===0 &&  <View style={{flex:1,flexDirection:'row'}}>
+                <View style={[styles. bottomMainView2,{}]}>
+                <Text style={styles.text5}>Style</Text>
+                  <Text style={styles.text6}>{item?.vehExteriorColor}</Text>
+                </View> 
+                <View style={[styles. bottomMainView2,{}]}>
+                <Text style={styles.text5}>MV/VY</Text>
+                  <Text style={styles.text6}>{item?.docFy}</Text>
+                </View> 
+                </View>
+              
+              )
+             }}
+            
+            />
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Source</Text>
               <SelectDropList
-                list={[]}
+                list={sourceData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setSourceValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Billing Location</Text>
               <SelectDropList
-                list={[]}
+                list={billingLocationData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setBillingLocationValue(d)}
               />
             </View>
 
@@ -138,14 +191,52 @@ export default function PerformaRegistration(props) {
           </View >
 
           <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
+            <Pressable style={[styles. bottomMainView,{}]} onPress={()=>setCustumerReg(!custumerReg)}>
+                <FastImage source={custumerReg ? images?.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
               <Text style={styles.text4}>Registration to be done by Custumer</Text>
-            </View> 
+            </Pressable> 
             
             </View>
 
-            <View style={{flex:1,flexDirection:'row'}}>
+           <FlatList 
+            data={registrationTypeList}
+            renderItem={({item,index})=>{
+            return(
+              <View>
+                 <View style={{flex:1,flexDirection:'row'}}>
+            <Pressable style={[styles. bottomMainView,{}]} onPress={()=>fn_selectReg(item,index)}>
+                <FastImage source={ item?.select ? images?.checkIcon :images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
+              <Text style={styles.text4}>{item?.description}</Text>
+            </Pressable> 
+            
+            </View>
+
+            <View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5)}]}>
+           <View style={styles.callHeaderSubView}>
+           <SelectDropList
+                list={[]}
+                disable={item?.select ? false : true}
+                buttonExt={styles.dropList2}
+                textExt={styles.dropListText2}
+               //  on_Select={(d)=>setActionTypeValue(d)}
+              />
+           </View>
+           <View style={styles.callHeaderSubView2}>
+            <Text style={styles.text8}>-</Text>
+           </View>
+           <View style={styles.callHeaderSubView3}>
+            <TextInput editable={item?.select ? true : false} style={styles.dropList3} ></TextInput>        
+           </View>
+           <View style={styles.callHeaderSubView2}>
+            <Text style={styles.text8}>-</Text>
+           </View>
+          </View >
+                </View>
+            )
+            }}
+            
+           />
+            {/* <View style={{flex:1,flexDirection:'row'}}>
             <View style={[styles. bottomMainView,{}]}>
                 <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
               <Text style={styles.text4}>Permanent Regn./Road Tax</Text>
@@ -267,7 +358,7 @@ export default function PerformaRegistration(props) {
            <View style={styles.callHeaderSubView2}>
             <Text style={styles.text8}>0</Text>
            </View>
-          </View >
+          </View > */}
 
            </View>
       
