@@ -974,7 +974,7 @@ export default function ProspectScreen(props) {
               </View> */}
 
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>Reference</Text>
+                <Text style={styles.detailText}>Price</Text>
                 <TextInput style={styles.refInput} editable={false} >Available</TextInput>
 
               </View>

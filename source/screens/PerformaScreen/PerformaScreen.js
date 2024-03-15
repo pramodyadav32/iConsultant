@@ -383,7 +383,7 @@ export default function PerformaScreen(props) {
          "CompetitionModelCode": "SAFARI",
          "CompetitionVariantCode": ""
       };
-      tokenApiCall(GetProformaGeneralMastCallBack, APIName.GetProformaGeneralMast, "POST", param);
+      tokenApiCall(GetProformaGeneralMastCallBack, APIName.GetProformaGeneralMasters, "POST", param);
    };
 
    const GetProformaGeneralMastCallBack = (res) => {
