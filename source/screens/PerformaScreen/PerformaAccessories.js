@@ -63,7 +63,7 @@ export default function PerformaAccessories(props) {
   const [addListModel, setAddListModel] = useState({ show: false, data: [] });
   const [totalAmount, setTotalAmount] = useState();
   const [totalQty, setTotalQty] = useState();
-  const [partList, setPartList] = useState();
+  const [partList, setPartList] = useState([]);
   
 
   const accessoriesList = ({ item, index }) => {
@@ -78,27 +78,31 @@ export default function PerformaAccessories(props) {
           <Text style={styles.costListText2}>{item?.description}</Text>
         </View>
 
-        <View style={styles.advisorBottomView1}>
+        <View style={styles.costListSubView3}>
           <TextInput
             keyboardType="numeric"
             style={styles.curr_IssueInput}
             onChangeText={(d) => fn_AddNegociatedPrice(item, index, d)}
-          >
-            {item?.negociatedPrice}
-          </TextInput>
+          >{item?.negociatedPrice}</TextInput>
         </View>
-        <View style={styles.advisorBottomView1}>
+        <View style={styles.costListSubView3}>
           <TextInput
             keyboardType="numeric"
             style={styles.curr_IssueInput}
             onChangeText={(d) => fn_AddQty(item, index, d)}
-          >
-            {item?.quantity}
+          >{item?.quantity}
           </TextInput>
         </View>
 
         <View style={[styles.costListSubView3, {}]}>
-          <Text style={styles.costListText3}>{item?.price}</Text>
+          {/* <Text style={styles.costListText2}>{item?.price}</Text> */}
+          <TextInput
+            keyboardType="numeric"
+            editable={false}
+            style={styles.curr_IssueInput1}
+            onChangeText={(d) => fn_AddQty(item, index, d)}
+          >{item?.totalAmount}
+          </TextInput>
         </View>
       </View>
     );
@@ -106,16 +110,18 @@ export default function PerformaAccessories(props) {
 
   const fn_AddNegociatedPrice = (item, index, d) => {
     let newArr = accessoriesData;
-    item.discountPer = d;
+    item.negociatedPrice = d;
+   item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.quantity)
     newArr.splice(index, 1, item);
-    setPartList([...newArr]);
+    setAccessoriesData([...newArr]);
   };
 
   const fn_AddQty = (item, index, d) => {
     let newArr = accessoriesData;
     item.quantity = d;
+    item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.negociatedPrice)
     newArr.splice(index, 1, item);
-    setPartList([...newArr]);
+    setAccessoriesData([...newArr]);
   };
 
   const accessoriesHeaderList = () => {
@@ -193,7 +199,11 @@ export default function PerformaAccessories(props) {
     console.log("search", JSON.stringify(res));
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
-      updatePartList(res?.result?.proformaMstAccessoriesList?.searchResultList)
+      setAddListModel({
+        show: true,
+        data: res?.result?.proformaMstAccessoriesList?.searchResultList,
+      });
+      // updatePartList(res?.result?.proformaMstAccessoriesList?.searchResultList)
       
     } else {
       constant.showMsg(res.message);
@@ -201,7 +211,7 @@ export default function PerformaAccessories(props) {
   };
 
   const updatePartList = (partList) => {
-   updatedPartList = partList.map((list, index) => {
+ let updatedPartList = partList.map((list, index) => {
       return { ...list, negociatedPrice: list?.price };
     });
     setAddListModel({
@@ -242,6 +252,8 @@ export default function PerformaAccessories(props) {
 
   const fn_ListDataSelect = (d) => {
     console.log("part item gggggg = ", d);
+    d["totalAmount"] = 0
+    d["negociatedPrice"] = d?.price
     setAccessoriesData([...accessoriesData, ...[d]]);
     setAddListModel((s) => {
       return { ...s, show: false };
@@ -259,7 +271,7 @@ export default function PerformaAccessories(props) {
   const fn_calculateQtyTotal = () => {
    let totalQty = 0;
    accessoriesData?.map((item) => {
-     totalQty = totalQty + item?.quantity;
+     totalQty =  totalQty + (item?.quantity.length===0 ? 0 :  parseInt(item?.quantity));
    });
    return totalQty
  };
@@ -388,10 +400,12 @@ const styles = StyleSheet.create({
   },
   driveListDetailSubView: {
     flex: 1,
+    // backgroundColor:'red'
   },
   costListSubView: {
-    flex: 1,
+    flex: 0.8,
     height: constant.moderateScale(30),
+   
   },
   costListText2: {
     fontSize: constant.moderateScale(13),
@@ -406,7 +420,8 @@ const styles = StyleSheet.create({
   costListSubView3: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-end",
+    // justifyContent: "flex-end",
+    // backgroundColor:"green"
   },
   button1: {
     marginBottom: constant.moderateScale(10),
@@ -437,4 +452,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: constant.whiteColor,
   },
+  curr_IssueInput:{
+    borderWidth:1,
+    height:constant.moderateScale(35),
+    fontSize:constant.moderateScale(14),
+    width:'90%',
+    textAlign:'center',
+    borderRadius:5,
+    borderColor:'#ABABAB',
+    fontFamily:constant.typeRegular,
+  },
+  curr_IssueInput1:{
+    // borderWidth:1,
+    height:constant.moderateScale(35),
+    fontSize:constant.moderateScale(14),
+    width:'90%',
+    textAlign:'center',
+    borderRadius:5,
+    borderColor:'#ABABAB',
+    fontFamily:constant.typeRegular,
+    color:constant.blackColor
+  }
 });
