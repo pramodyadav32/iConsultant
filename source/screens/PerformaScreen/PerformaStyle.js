@@ -51,7 +51,18 @@ const styles = StyleSheet.create({
                 width:constant.moderateScale(20),
                 marginRight:constant.moderateScale(10),
             },
-             
+            carImage2:{
+              height:constant.moderateScale(110),
+              width:constant.moderateScale(130),
+            },
+            cardHorLine:{
+              height:constant.moderateScale(2),
+              width:constant.moderateScale(30),
+              backgroundColor:constant.red,
+              borderRadius:constant.moderateScale(100),
+              marginTop:constant.moderateScale(3),
+              marginRight:constant.moderateScale(20)
+          },
             ModelText3:{
               fontSize:constant.moderateScale(12),
               color:'#434343',
@@ -185,6 +196,11 @@ const styles = StyleSheet.create({
                   color:'#434343',
                   fontFamily:constant.typeMedium,
               },
+              listText4:{
+                fontSize:constant.moderateScale(10),
+                color:'#434343',
+                fontFamily:constant.typeRegular,
+            },
             
 
                  //BasicInfor

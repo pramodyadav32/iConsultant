@@ -67,6 +67,11 @@ export default function PerformaRegistration(props) {
 
 
  },[regData])
+
+
+ const reg_Save=()=>{
+  
+ }
   
  const fn_selectReg=(item,index)=>{
   let newArr = registrationTypeList
