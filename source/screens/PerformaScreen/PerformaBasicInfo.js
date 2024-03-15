@@ -142,6 +142,7 @@ export default function PerformaBasicInfo(props) {
          let newValue = item?.taxCode+"0000"+item?.perc+item?.surcharge
          newParam.push(newValue)
        })
+       console.log("aaa   ",newParam.join(""))
       let param = {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
@@ -181,7 +182,7 @@ export default function PerformaBasicInfo(props) {
          "trxnBasic": trnsBasicValue?.code,
          "userId": userData?.userId,
          "createIP": "1::1",
-         "gstList": newParam,    //textcodeeeee
+         "gstList": newParam.join(""),    //textcodeeeee
          "calledBy": "PROSPECT",
          "endUse": endUseData?.code,
          "insuCode": "",
