@@ -142,12 +142,12 @@ export default function PerformaBasicInfo(props) {
          let newValue = item?.taxCode+"0000"+item?.perc+item?.surcharge
          newParam.push(newValue)
        })
-       console.log("aaa   ",newParam.join(""))
+       console.log("aaa   ",usageValue)
       let param = {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
-         "prospectNo":cardData?.prospectId,
+         "prospectNo":Number(cardData?.prospectId),
          "coNo": 0,
          "piLocation": cardData?.prospectLocation, //prospect location
          "piDoc": "SRP",
@@ -166,14 +166,14 @@ export default function PerformaBasicInfo(props) {
          "piVY": 0,
          "priceSerial": 0,
          "basicPrice": performaPriceDetail?.basicPricePostDiscount,
-         "discount": discountValue,
+         "discount": Number(discountValue),
          "itemDiscount": 0,
-         "totalTax": totalAmount,
+         "totalTax": parseInt(totalAmount),
          "totalLevy": 0,
          "exShowroomPostDisc": performaPriceDetail?.exShowroomPostDiscount,
          "exShowroomPreDisc": performaPriceDetail?.exShowroomPreDiscount,
          "bookingAmount": 0,
-         "piUsage": usageData?.code,
+         "piUsage": usageValue?.code,
          "piBillingLocation": billingLoactionValue?.code,
          "corporateAmt": 0,
          "tcsAppicable": tcsStatus ? "Y" : "N",
@@ -182,7 +182,7 @@ export default function PerformaBasicInfo(props) {
          "trxnBasic": trnsBasicValue?.code,
          "userId": userData?.userId,
          "createIP": "1::1",
-         "gstList": newParam.join(""),    //textcodeeeee
+         "gstList": (newParam.join(",")).toString(),    //textcodeeeee
          "calledBy": "PROSPECT",
          "endUse": endUseData?.code,
          "insuCode": "",
@@ -194,7 +194,7 @@ export default function PerformaBasicInfo(props) {
          "rtoCode": "",
          "saleGroup": salesGroupValue.code,
          "subModel": cardData?.variant,
-         "vehiclePrice": performaPriceDetail?.basicPricePostDiscount
+         "vehiclePrice": 0,
        }
        tokenApiCall(SaveProformaBasicInfoCallBack, APIName.SaveProformaBasicInfo, "POST", param)
 
