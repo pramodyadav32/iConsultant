@@ -50,6 +50,7 @@ export default function CloseInfo(props) {
   const [varientValue,setVarientValue ] = useState([])
   const [brandData,setBrandData] = useState([])
   const [brandValue,setBrandValue] = useState([])
+  const [showDislikeAndBrand,setShowDisLikeAndBrand] = useState(false)
   const [showDislike,setShowDisLike] = useState(false)
   const [showList,setShowList] = useState(false)
   const [compVehBrandData, setCompVehBrandData] = useState([])
@@ -189,7 +190,7 @@ export default function CloseInfo(props) {
         "vy": 0,
         "exterior": "",
         "interior": "",
-        "calledBy": "COMPETITION_BRAND,COMPETITION_MODEL,COMPETITION_VARIANT",
+        "calledBy": brandCode === "" ? "COMPETITION_BRAND,COMPETITION_MODEL,COMPETITION_VARIANT" : modelCode === "" ? "COMPETITION_MODEL,COMPETITION_VARIANT" :"COMPETITION_VARIANT",
         "priceListApplicable": "",
         "billingLocation": "",
         "usage": "",
@@ -217,9 +218,9 @@ const GetCompitionVehicleInfoCallBack = async (res, calledBy) => {
         if(calledBy === "BRAND"){
             setCompVehBrandData(res?.result?.selectMasterList[0]?.basicList)
         }else if(calledBy === "MODEL"){
-            setCompVehModelData(res?.result?.selectMasterList)
+            setCompVehModelData(res?.result?.selectMasterList[0]?.basicList)
         }else{
-            setCompVehVarientData([])
+            setCompVehVarientData(res?.result?.selectMasterList[0]?.basicList)
         }
     } else {
         constant.showMsg(res.message)
@@ -299,15 +300,19 @@ const fn_ListHeaderClick=async(data,index)=>{
     setClosureValue(d)
     if(d.code==='000001'){
         setShowDisLike(true)
+        setShowDisLikeAndBrand(true)
       setShowList(false)
     }else if(d.code === '000002'){
       setShowDisLike(true)
+      setShowDisLikeAndBrand(false)
       setShowList(false)
     }else if(d.code ==='A'){
       setShowDisLike(false)
+      setShowDisLikeAndBrand(false)
       setShowList(true)
     }else{
       setShowDisLike(false)
+      setShowDisLikeAndBrand(false)
       setShowList(true)
     }
   }
@@ -484,7 +489,7 @@ const fn_ListFooter=()=>{
             <Text style={[styles.detailText, { marginTop: '3%' }]}>Remarks</Text>
             <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
           </View>
-          {showDislike &&  <View>
+          {showDislikeAndBrand &&  <View>
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Brand<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
