@@ -52,10 +52,18 @@ export default function CloseInfo(props) {
   const [brandValue,setBrandValue] = useState([])
   const [showDislike,setShowDisLike] = useState(false)
   const [showList,setShowList] = useState(false)
+  const [compVehBrandData, setCompVehBrandData] = useState([])
+  const [compVehModelData, setCompVehModelData] = useState([])
+  const [compVehVarientData, setCompVehVarientData] = useState([])
+  const [compVehBrandSelected, setCompVehBrandSelected] = useState()
+  const [compVehModelSelected, setCompVehModelSelected] = useState()
+  const [compVehVarientSelected, setCompVehVarientSelected] = useState()
   
 
   useEffect(() => {
+    console.log("aaaaaaaaaaaaaaaaaa")
     fn_GetClosureMaster()
+    fn_GetCompitionVehicleInfo("", "", "BRAND")
   }, [])
 
 
@@ -165,6 +173,61 @@ export default function CloseInfo(props) {
     }
   }
 
+  const fn_GetCompitionVehicleInfo = (brandCode, modelCode, calledBy) => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "prospectNo": Number(data?.prospectID),
+        "proformaId": 0,
+        "assembly": "",
+        "edition": "",
+        "model": "",
+        "subModel": "",
+        "style": "",
+        "my": 0,
+        "vy": 0,
+        "exterior": "",
+        "interior": "",
+        "calledBy": "COMPETITION_BRAND,COMPETITION_MODEL,COMPETITION_VARIANT",
+        "priceListApplicable": "",
+        "billingLocation": "",
+        "usage": "",
+        "saleGroup": "",
+        "endUse": "",
+        "vehiclePrice": 0,
+        "itemGroup": "",
+        "regnLocation": "",
+        "rtoCode": "",
+        "insuLocation": "",
+        "insuCode": "",
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1",
+        "CompetitionBrandCode": brandCode,
+        "CompetitionModelCode": modelCode,
+        "CompetitionVariantCode": ""
+        }
+    tokenApiCall(GetCompitionVehicleInfoCallBack, APIName.GetProformaGeneralMasters, "POST", param, calledBy)
+}
+
+const GetCompitionVehicleInfoCallBack = async (res, calledBy) => {
+    console.log("GetCompitionVehicleInfoCallBack", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
+    if (res.statusCode === 200) {
+        if(calledBy === "BRAND"){
+            setCompVehBrandData([])
+        }else if(calledBy === "MODEL"){
+            setCompVehModelData([])
+        }else{
+            setCompVehVarientData([])
+        }
+    } else {
+        constant.showMsg(res.message)
+    }
+}
+
 const fn_clickCheck=(item,index,data,listIndex)=>{
    let dislikeArr = data
    let newArray = dislikeData
@@ -252,41 +315,41 @@ const fn_ListHeaderClick=async(data,index)=>{
 
   const fn_OtherModelSelect=(d)=>{
     setOtherModel(d)
-    fn_GetVehicleActionClose(d) 
+    // fn_GetVehicleActionClose(d) 
   }
 
-  const fn_GetVehicleActionClose = (d) => {
-    dispatch(emptyLoader_Action(true))
-    let param = {
-        "brandCode": userData?.brandCode,
-        "countryCode": userData?.countryCode,
-        "companyId": userData?.companyId,
-        "calledBy": "EDITION,ASSEMBLY,MODEL,VARIANT",
-        "edition": "",
-        "assembly": "",
-        "subModel": "",
-        "model": d.code,
-        "code": "",
-        "loginUserId": userData?.userId,
-        "ipAddress": "1::1"
-    }
-    tokenApiCall(GetVehicleActionCloseCallBack, APIName.GetVehicleMaster, "POST", param)
-}
+//   const fn_GetVehicleActionClose = (d) => {
+//     dispatch(emptyLoader_Action(true))
+//     let param = {
+//         "brandCode": userData?.brandCode,
+//         "countryCode": userData?.countryCode,
+//         "companyId": userData?.companyId,
+//         "calledBy": "EDITION,ASSEMBLY,MODEL,VARIANT",
+//         "edition": "",
+//         "assembly": "",
+//         "subModel": "",
+//         "model": d.code,
+//         "code": "",
+//         "loginUserId": userData?.userId,
+//         "ipAddress": "1::1"
+//     }
+//     tokenApiCall(GetVehicleActionCloseCallBack, APIName.GetVehicleMaster, "POST", param)
+// }
 
-const GetVehicleActionCloseCallBack = async (res) => {
-    console.log("search", JSON.stringify(res))
-    if (res.statusCode === 200) {
-        await res.result.map((item) => {
-            if (item.listType === 'VARIANT') {
-                setVarientData(item.vehicleMaster)
-            }
-        })
-        dispatch(emptyLoader_Action(false))
-    } else {
-        dispatch(emptyLoader_Action(false))
-        constant.showMsg(res.message)
-    }
-}
+// const GetVehicleActionCloseCallBack = async (res) => {
+//     console.log("search", JSON.stringify(res))
+//     if (res.statusCode === 200) {
+//         await res.result.map((item) => {
+//             if (item.listType === 'VARIANT') {
+//                 setVarientData(item.vehicleMaster)
+//             }
+//         })
+//         dispatch(emptyLoader_Action(false))
+//     } else {
+//         dispatch(emptyLoader_Action(false))
+//         constant.showMsg(res.message)
+//     }
+// }
 
 const fn_ListHeader=()=>{
   return(
@@ -426,22 +489,28 @@ const fn_ListFooter=()=>{
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Brand<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
-              list={closureData}
+              list={compVehBrandData}
               title=' '
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) =>fn_Closure(d)}
+              on_Select={(d) =>{
+                setCompVehBrandSelected(d)
+                fn_GetCompitionVehicleInfo(d?.code, "", "MODEL")
+              }}
 
             />
           </View>
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
-              list={modelData}
+              list={compVehModelData}
               title=' '
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) =>fn_OtherModelSelect(d)}
+              on_Select={(d) =>{
+                setCompVehModelSelected(d)
+                fn_GetCompitionVehicleInfo(d?.code, "", "VARIENT")
+              }}
 
             />
           </View>
@@ -449,11 +518,11 @@ const fn_ListFooter=()=>{
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Varient<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
-              list={varientData}
+              list={compVehVarientData}
               title=' '
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) =>setVarientValue(d)}
+              on_Select={(d) =>setCompVehVarientSelected(d)}
 
             />
           </View>
