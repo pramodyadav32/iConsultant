@@ -20,7 +20,7 @@ const data2 = [
  ]
 
 export default function PerformaRegistration(props) {
-   const { navigation, regData,performaGeneralMasterData,performaBasicInfo } = props
+   const { navigation, regData,performaGeneralMasterData,performaBasicInfo,performaPriceDetail } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const [selectState,setSelectState] = useState(false)
@@ -40,10 +40,21 @@ export default function PerformaRegistration(props) {
 
   
  useEffect(()=>{
-  setRegistrationTypeList(regData?.registrationTypeList)
+  // setRegistrationTypeList(regData?.registrationTypeList)
   setSelectMasterList(regData?.selectMasterList)
   setPriceDetails(regData?.priceDetails)
   setPerformListData(performaBasicInfo?.proformaList)
+
+  let newData = []
+  regData?.registrationTypeList.map((item)=>{
+    let total = (performaPriceDetail?.basicPricePostDiscount * Number(item?.dataCalculation?.perVal))/100
+    item["total"] = parseInt(total)
+    item["subTotal"] = parseInt(total)
+    item["addAmount"] = ''
+    newData.push(item)
+  })
+  setRegistrationTypeList([...newData])
+
   let location=[]
   let source = []
   regData?.selectMasterList.map((item)=>{
@@ -67,6 +78,56 @@ export default function PerformaRegistration(props) {
 
 
  },[regData])
+
+
+ const reg_Save=()=>{
+   let newList = []
+   registrationTypeList.map((item,index)=>{
+     let newObj ={
+      "regnVersionSr": index,
+     "costHeadCode": item?.code,
+     "basicAmount": performaPriceDetail?.basicPricePostDiscount,
+     "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
+     "totalAmount": parseInt(item.total)
+     }
+     newList.push(newObj)
+   })
+  
+
+   let param = {
+    brandCode: userData?.brandCode,
+    countryCode: userData?.countryCode,
+    companyId: userData?.companyId,
+     "docLocation": "MADU01",
+     "docCode": "SRP",
+     "docFY": "2023-2024",
+     "docNo": 51,
+     "regnVersionNo": 0,
+     "regnNotReq": "string",
+     "regnSource": sourceValue?.code,
+     "regnType": "string",
+     "regnLocation": locationValue.code,
+     "regnRtoCode": "string",
+     "rtoCalcType": "string",
+     "rtoCalcOn": "string",
+     "rtoCalcMethod": "string",
+     "loginUserId":userData?.userId,
+     "ipAddress": "1::1",
+     "proformaRtoList": newList
+    }
+    tokenApiCall(reg_SaveCallBack, APIName.SaveProformaRegistration, "POST", param);
+
+ }
+
+
+ const reg_SaveCallBack = (res) => {
+  console.log("registration", JSON.stringify(res));
+  if (res.statusCode === 200) {
+    
+  } else {
+     constant.showMsg(res.message);
+  }
+}
   
  const fn_selectReg=(item,index)=>{
   let newArr = registrationTypeList
@@ -79,6 +140,20 @@ export default function PerformaRegistration(props) {
       newArr.splice(index,1,item)
       setRegistrationTypeList([...newArr])
     }
+ }
+
+ const fn_AddAmount=(d,selectInx)=>{
+   let newArray = []
+   registrationTypeList.map((item,index)=>{
+    if(index=== selectInx){
+      item.total = Number(item?.subTotal)+Number(d)
+      newArray.push(item)
+    }else{
+      newArray.push(item)
+    }
+   
+   })
+   setRegistrationTypeList([...newArray])
  }
 
    return (
@@ -215,20 +290,21 @@ export default function PerformaRegistration(props) {
            <View style={styles.callHeaderSubView}>
            <SelectDropList
                 list={[]}
-                disable={item?.select ? false : true}
+                title={item?.dataCalculation?.perVal+"%"}
+                disable={true}
                 buttonExt={styles.dropList2}
                 textExt={styles.dropListText2}
                //  on_Select={(d)=>setActionTypeValue(d)}
               />
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
+            <Text style={styles.text8}>{item?.subTotal}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
-            <TextInput editable={item?.select ? true : false} style={styles.dropList3} ></TextInput>        
+            <TextInput onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
+            <Text style={styles.text8}>{item?.total}</Text>
            </View>
           </View >
                 </View>
@@ -236,129 +312,7 @@ export default function PerformaRegistration(props) {
             }}
             
            />
-            {/* <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>Permanent Regn./Road Tax</Text>
-            </View> 
-            
-            </View>
-
-            <View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5)}]}>
-           <View style={styles.callHeaderSubView}>
-           <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList2}
-                textExt={styles.dropListText2}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-           <View style={styles.callHeaderSubView3}>
-            <TextInput style={styles.dropList3} ></TextInput>        
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-          </View >
-
-          <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>Temporary Registration</Text>
-            </View>           
-            </View>
-
-            <View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5)}]}>
-           <View style={styles.callHeaderSubView}>
-           <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList2}
-                textExt={styles.dropListText2}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-           <View style={styles.callHeaderSubView3}>
-            <TextInput style={styles.dropList3} ></TextInput>        
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-          </View >
-
-            <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>Life-Time Tax</Text>
-            </View>           
-            </View>
-
-            <View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5)}]}>
-           <View style={styles.callHeaderSubView}>
-           <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList2}
-                textExt={styles.dropListText2}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-           <View style={styles.callHeaderSubView3}>
-            <TextInput style={styles.dropList3} ></TextInput>        
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-          </View >
-
-            <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>Hypothecation Charges</Text>
-            </View>           
-            </View>
-
-            <View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5)}]}>
-           <View style={styles.callHeaderSubView}>
-           <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList2}
-                textExt={styles.dropListText2}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-           <View style={styles.callHeaderSubView3}>
-            <TextInput style={styles.dropList3} ></TextInput>        
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>-</Text>
-           </View>
-          </View >
-
-          <View style={[styles.callHeaderMainView2]}>
-           <View style={[styles.callHeaderSubView,{alignItems:'flex-end'}]}>
-            <Text style={[styles.text8,{paddingRight:constant.moderateScale(20)}]}>Total</Text>
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>0</Text>
-           </View>
-           <View style={styles.callHeaderSubView3}>
-            <Text style={styles.text8}></Text>
-           </View>
-           <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>0</Text>
-           </View>
-          </View > */}
+         
 
            </View>
       
@@ -366,7 +320,7 @@ export default function PerformaRegistration(props) {
             
                     
          </View>
-         <Button title='Next' click_Action={() => null} buttonExt={styles.performaButton} />
+         <Button title='Next' click_Action={() => reg_Save()} buttonExt={styles.performaButton} />
      </ScrollView>
       </View>
    )
@@ -511,24 +465,24 @@ export default function PerformaRegistration(props) {
     
                     },
                 callHeaderSubView:{
-                flex:1,
+                flex:0.7,
                 justifyContent:'center',
                 },
                 callHeaderSubView2:{
-                    flex:0.3,
+                    flex:0.5,
                     alignItems:'flex-end',
                         justifyContent:'center',
                     paddingRight:constant.moderateScale(10)
                     },
                     callHeaderSubView3:{
-                        flex:0.6,
+                        flex:0.7,
                         alignItems:'center',
                         justifyContent:'center',
                         },
                         dropList2:{
                             borderWidth:1,
                             height:constant.moderateScale(40),
-                            width:'90%',
+                            width:'80%',
                             borderRadius:10,
                             borderColor:'#ABABAB',
                             backgroundColor:constant.whiteColor,

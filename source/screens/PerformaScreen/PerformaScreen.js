@@ -116,14 +116,14 @@ export default function PerformaScreen(props) {
          "proformaId": 0,
          "assembly": "",
          "edition": "",
-         "model": "",
-         "subModel": "",
+         "model": route.params.cardData?.model,
+         "subModel": route.params.cardData?.variant,
          "style": "",
          "my": 0,
          "vy": 0,
          "exterior": "",
          "interior": "",
-         "calledBy": "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,VEH_PRICE",
+         "calledBy": "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,REGN_TYPE,VEH_PRICE",
          "priceListApplicable": moment(new Date()).format('DD-MMM-YYYY'),//"23-APR-2024",
          "billingLocation": "",
          "usage": "",
@@ -195,7 +195,8 @@ export default function PerformaScreen(props) {
    const GetProformaTaxMastersCallBack = (res) => {
       console.log("GetProformaTaxMastersCallBack = ", JSON.stringify(res));
       if (res.statusCode === 200) {
-         setVehiclePriceDetail(res.result[0]?.vehPriceDetail);
+         setPerformaTaxMaster(res?.result)
+         setVehiclePriceDetail(res.result?.vehPriceDetail);
       } else {
          constant.showMsg(res.message);
       }
@@ -316,7 +317,7 @@ export default function PerformaScreen(props) {
       console.log("searchTerm", JSON.stringify(res));
       if (res.statusCode === 200) {
          settermData(res?.result?.termsDetailList);
-         setActive(5);
+         setActive(4);
       } else {
          constant.showMsg(res.message);
       }
@@ -615,6 +616,63 @@ export default function PerformaScreen(props) {
       );
    };
 
+   const renderItem1 = () => {
+      return (
+          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+              <Pressable style={styles.driveListMainView}  >
+                  {/* <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
+                      <Text style={styles.text2}>OLM</Text>
+                      <AntDesign name='close' style={styles.closeIcon} />
+                  </Pressable> */}
+                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                      <View style={{ flex: 1, }}>
+                          <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage2} />
+                          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                              <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
+                                  <Text style={styles.listName3}>PID : </Text>
+                                  <Text style={[styles.listName3]}>{route.params.cardData?.prospectId}</Text>
+                              </View>
+                              <View style={styles.cardHorLine} />
+                          </View>
+                      </View>
+                      <View style={{ flex: 1.8 }}>
+                          <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
+                              <View style={styles.driveListDetailSubView}>
+                                  <Text style={styles.listText4}>Prospect Name</Text>
+                                  <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.lastName}</Text>
+                              </View>
+                              <View style={styles.driveListDetailSubView2}>
+                                  <Text style={styles.listText4}>Model</Text>
+                                  <Text style={styles.listName3}>{route.params.cardData?.model}</Text>
+                              </View>
+                          </View>
+                          <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                              <View style={styles.driveListDetailSubView}>
+                                  <Text style={styles.listText4}>Mobile No</Text>
+                                  <Text style={styles.listName3}>{route.params.cardData?.custMobile}</Text>
+                              </View>
+                              <View style={styles.driveListDetailSubView2}>
+                                  <Text style={styles.listText4}>Closure Date</Text>
+                                  <Text style={styles.listName3}>{moment(route.params.cardData?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
+                              </View>
+                          </View>
+                          <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                              <View style={styles.driveListDetailSubView}>
+                                  <Text style={styles.listText4}>Rating</Text>
+                                  <Text style={styles.listName3}>{route.params.cardData?.prospectRating}</Text>
+                              </View>
+                              <View style={styles.driveListDetailSubView2}>
+                                  <Text style={styles.listText4}>Color</Text>
+                                  <Text style={styles.listName3}>{route.params.cardData?.vehColor}</Text>
+                              </View>
+                          </View>
+                      </View>
+                  </View>
+              </Pressable>
+          </ImageBackground>
+      )
+  }
+
    return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -623,6 +681,18 @@ export default function PerformaScreen(props) {
             mainExt={styles.drawerStyle}
             onBack={() => navigation.goBack()}
          />
+         {active ===0 ?
+         <View>
+         <FlatList
+             data={data}
+             renderItem={renderItem1}
+             showsVerticalScrollIndicator={false}
+             ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}
+             ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(7))}
+             ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+         />
+     </View>
+     :
          <View>
             <FlatList
                data={[route.params.cardData]}
@@ -639,6 +709,7 @@ export default function PerformaScreen(props) {
                }
             />
          </View>
+}
 
          <View style={styles.cal_SubView}>
             <View style={styles.tabSubView}>
@@ -679,7 +750,8 @@ export default function PerformaScreen(props) {
                   performaBasicInfo={performaBasicDataHeader}
                   performaGeneralMasterData={proformaGeneralMasters}
                   cardData = {route.params.cardData}
-               />
+                  texMasterData ={performaTaxMaster}
+                />
             )}
             {active === 1 && <
                PerformaAccessories 
@@ -699,6 +771,7 @@ export default function PerformaScreen(props) {
              regData= {reg_Data}
              performaGeneralMasterData={proformaGeneralMasters}
              performaBasicInfo={performaBasicDataHeader}
+             performaPriceDetail={vehiclePricedetail}
             />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
          </View>

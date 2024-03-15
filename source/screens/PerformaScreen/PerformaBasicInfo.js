@@ -12,16 +12,21 @@ import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import moment from 'moment';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 const transData=[
    {"code":'PAN_CARD','description':'Pan Card available'},
    {"code":'FORM_60','description':'Pan Card not available'},
 
 ]
+
+const priceList=[
+   {"code":'CURRENT_DATE','description':"Applicable on Current Date"}
+]
 export default function PerformaBasicInfo(props) {
-   const { navigation, performaPriceDetail,performaBasicInfo,cardData,performaGeneralMasterData } = props
+   const { navigation, performaPriceDetail,performaBasicInfo,texMasterData,cardData,performaGeneralMasterData } = props
    const dispatch = useDispatch()
-   const { userData } = useSelector(state => state.AuthReducer)
+   const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
    const [billingLoactionData,setBillingLocationData] =useState([])
    const [billingLoactionValue,setBillingLocationValue] =useState({})
    const [usageData,setUsageData] = useState([])
@@ -31,13 +36,15 @@ export default function PerformaBasicInfo(props) {
    const [endUseData,setEndUseData] = useState([])
    const [endUseValue,setEndUseValue] = useState([])
    const [tcsStatus,setTcsStatus] = useState(false)
-   const [discountValue,setDiscountValue] = useState('')
+   const [discountValue,setDiscountValue] = useState("0")
    const [loyalAmt,setLoayalAmt] = useState('')
    const [trnsBasicValue,setTrnsBasicValue] = useState({})
+   const [texMaster,setTexMaster] = useState([])
+   const [texTotal,setTexTotal] = useState(0)
+   const [surchargeData,setSurchargeData] = useState(0)
+   const [totalAmount,setTotalAmount] = useState(0)
+   const [priceListValue,setPriceListValue] = useState({"code":'CURRENT_DATE','description':"Applicable on Current Date"})
 
-  
-
- 
    useEffect(()=>{
       performaGeneralMasterData?.selectMasterList.map((item)=>{
          if(item?.listType ==='BILLING_LOCATION'){
@@ -47,12 +54,236 @@ export default function PerformaBasicInfo(props) {
            }else if(item?.listType ==='SALE_GROUP'){
             setSalesGroupData(item.basicList)      
            }
-           else if(item?.listType ==='END_USE'){
-            setEndUseData(item.basicList)      
-           }
-          
+         //   else if(item?.listType ==='END_USE'){
+         //    setEndUseData(item.basicList)      
+         //   }         
         })
-   },[])
+   let newArray = []
+   let newTaxTotal = 0
+   let newSubCharge = 0
+   let newTotal = 0
+    texMasterData?.selectedProformaValueCodes.map((item)=>{
+       newTaxTotal= newTaxTotal+Number(item.perc)
+       newSubCharge = newSubCharge + Number(item.surcharge)
+      let newObj = ((performaPriceDetail?.basicPricePostDiscount - Number(discountValue))* Number(item?.perc))/100
+       newTotal = newTotal + Number(newObj)
+      item["total"] = newObj
+      newArray.push(item)
+    })
+
+    setTexMaster([...newArray])
+    setTexTotal(newTaxTotal)
+    setSurchargeData(newSubCharge)
+    setTotalAmount(newTotal)
+
+   },[texMasterData])
+
+
+   const fn_GetProformaGeneralMasters = (d) => {
+      setSalesGroupValue(d)
+     dispatch(emptyLoader_Action(true))
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo": Number(cardData?.prospectId),
+         "proformaId": 0,
+         "assembly": "",
+         "edition": "",
+         "model": cardData?.model,
+         "subModel": cardData?.variant,
+         "style": "",
+         "my": 0,
+         "vy": 0,
+         "exterior": "",
+         "interior": "",
+         "calledBy": "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,REGN_TYPE,VEH_PRICE",
+         "priceListApplicable": moment(new Date()).format('DD-MMM-YYYY'),//"23-APR-2024",
+         "billingLocation": "",
+         "usage": "",
+         "saleGroup": d.code,
+         "endUse": "",
+         "vehiclePrice": 0,
+         "itemGroup": "",
+         "regnLocation": "",
+         "rtoCode": "",
+         "insuLocation": "",
+         "insuCode": "",
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1",
+      };
+      tokenApiCall(
+         GetProformaGeneralMastersCallBack,
+         APIName.GetProformaGeneralMast
+         ,
+         "POST",
+         param
+      );
+   };
+
+   const GetProformaGeneralMastersCallBack = (res) => {
+      console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         res.result?.selectMasterList.map((item)=>{
+            if(item?.listType ==='END_USE'){
+               setEndUseData(item.basicList)      
+              } 
+         })     
+      } else {
+         constant.showMsg(res.message);
+      }
+   };
+
+   const fn_Create=()=>{
+
+      let newParam = []
+       texMasterData?.selectedProformaValueCodes.map((item)=>{
+         let newValue = item?.taxCode+"0000"+item?.perc+item?.surcharge
+         newParam.push(newValue)
+       })
+       console.log("aaa   ",usageValue)
+      let param = {
+         "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectNo":Number(cardData?.prospectId),
+         "coNo": 0,
+         "piLocation": cardData?.prospectLocation, //prospect location
+         "piDoc": "SRP",
+         "piFY": '',  //current date fy
+         "piNo": 0,
+         "priceListApplicable": "CURRENT_DATE",
+         "make": userData?.brandCode,
+         "assembly":cardData?.vehAssemblyType,
+         "edition": cardData?.vehEditionType,
+         "model": cardData?.model,
+         "variant": cardData?.variant,
+         "exterior": cardData?.colorCode,
+         "interior": cardData?.upholsteryCode,
+         "piStyle": cardData?.vehVariantStyle,
+         "piMY": 0,
+         "piVY": 0,
+         "priceSerial": 0,
+         "basicPrice": performaPriceDetail?.basicPricePostDiscount,
+         "discount": Number(discountValue),
+         "itemDiscount": 0,
+         "totalTax": parseInt(totalAmount),
+         "totalLevy": 0,
+         "exShowroomPostDisc": performaPriceDetail?.exShowroomPostDiscount,
+         "exShowroomPreDisc": performaPriceDetail?.exShowroomPreDiscount,
+         "bookingAmount": 0,
+         "piUsage": usageValue?.code,
+         "piBillingLocation": billingLoactionValue?.code,
+         "corporateAmt": 0,
+         "tcsAppicable": tcsStatus ? "Y" : "N",
+         "tcsRate": 0,
+         "tcsAmt": 0,
+         "trxnBasic": trnsBasicValue?.code,
+         "userId": userData?.userId,
+         "createIP": "1::1",
+         "gstList": (newParam.join(",")).toString(),    //textcodeeeee
+         "calledBy": "PROSPECT",
+         "endUse": endUseData?.code,
+         "insuCode": "",
+         "insuLocation": "",
+         "itemGroup": "",
+         "loginUserId": userData?.userId,
+         "proformaId": 0,
+         "regnLocation": "",
+         "rtoCode": "",
+         "saleGroup": salesGroupValue.code,
+         "subModel": cardData?.variant,
+         "vehiclePrice": 0,
+       }
+       tokenApiCall(SaveProformaBasicInfoCallBack, APIName.SaveProformaBasicInfo, "POST", param)
+
+   }
+
+
+   const SaveProformaBasicInfoCallBack = (res) => {
+      console.log("GetSave = ", JSON.stringify(res));
+      if (res.statusCode === 200) {
+       
+      } else {
+         constant.showMsg(res.message);
+      }
+   };
+
+   const fn_HeaderList=()=>{
+      return(
+         <View style={[styles.costListMainView,{}]}>
+         <View style={[styles.driveListDetailSubView,{}]}>
+            <Text style={styles.costListText2}>HEAD</Text>
+         </View>
+         <View style={styles.costListSubView3}>
+            <Text style={styles.costListText2}>Tax%</Text>
+         </View>
+         <View style={styles.costListSubView3}>
+            <Text style={styles.costListText2}>surcharge%</Text>
+         </View>
+         <View style={styles.costListSubView3}>
+            <Text style={styles.costListText2}>Total</Text>
+         </View>
+        </View>
+      )
+   }
+
+   const texListRender=({item,index})=>{
+      return(
+         <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
+         <View style={[styles.driveListDetailSubView,{}]}>
+            <Text style={styles.costListText2}>{item?.taxType}</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{(item?.perc).toFixed(2)}%</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{(item?.surcharge).toFixed(2)}%</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{item.total}</Text>
+         </View>
+         </View>
+      )
+   }
+
+
+  
+
+  const fn_FooterList=()=>{
+      return(
+         <View style={[styles. costListMainView,{backgroundColor:'#F0F0F0',borderBottomRightRadius:10,borderBottomLeftRadius:10,paddingVertical:constant.moderateScale(7),paddingHorizontal:10,marginHorizontal:0}]}>
+         <View style={[styles.driveListDetailSubView,{}]}>
+            <Text style={styles.costListText2}>Total</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{(texTotal).toFixed(2)}</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{(surchargeData).toFixed(2)}</Text>
+         </View>
+         <View style={[styles.costListSubView3,{}]}>
+         <Text style={styles.costListText3}>{(totalAmount).toFixed(2)}</Text>
+         </View>
+         </View>
+      )
+   }
+
+   const fn_GetDiscount=(d)=>{
+      setDiscountValue(d)
+      let newArray = []
+      let newTotal = 0
+      texMasterData.selectedProformaValueCodes.map((item)=>{
+        let newObj = ((performaPriceDetail?.basicPricePostDiscount - Number(d))* Number(item?.perc))/100
+         item["total"] = newObj
+         newTotal = newTotal + Number(newObj)
+        newArray.push(item)
+      })
+  
+      setTexMaster([...newArray])
+      setTotalAmount(newTotal)
+   }
 
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
@@ -107,10 +338,11 @@ export default function PerformaBasicInfo(props) {
                   <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Price List</Text>
               <SelectDropList
-                list={[]}
+                list={priceList}
+                title={priceListValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setPriceListValue(d)}
               />
             </View>
 
@@ -127,7 +359,7 @@ export default function PerformaBasicInfo(props) {
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Discount</Text>
-              <TextInput style={styles.input1} onChangeText={(d)=>setDiscountValue(d)} >{discountValue}</TextInput>
+              <TextInput style={styles.input1} keyboardType='numeric' onChangeText={(d)=>fn_GetDiscount(d)} >{discountValue}</TextInput>
 
             </View>
 
@@ -147,7 +379,7 @@ export default function PerformaBasicInfo(props) {
                 list={salesGroupData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d)=>setSalesGroupValue(d)}
+                on_Select={(d)=> fn_GetProformaGeneralMasters(d)}
               />
             </View>
 
@@ -190,96 +422,13 @@ export default function PerformaBasicInfo(props) {
                   </View>
                   </View>
                   <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(0)}}>
-            <View style={[styles.costListMainView,{}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>HEAD</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>CGST</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>SGST</Text>
-             </View>
-             <View style={styles.costListSubView3}>
-                <Text style={styles.costListText2}>Total</Text>
-             </View>
+            <FlatList 
+             data={texMaster}
+             ListHeaderComponent={()=>fn_HeaderList()}
+             renderItem={texListRender}
+             ListFooterComponent={()=>fn_FooterList()}
+            />
             </View>
-
-            <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Tex%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>14.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>14.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}></Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Tax Amount</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Surcharge%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0.00%</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}></Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{marginTop:constant.moderateScale(10)}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Surcharge Amt</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-
-             <View style={[styles. costListMainView,{backgroundColor:'#F0F0F0',borderBottomRightRadius:10,borderBottomLeftRadius:10,paddingVertical:constant.moderateScale(7),paddingHorizontal:10,marginHorizontal:0}]}>
-             <View style={[styles.driveListDetailSubView,{}]}>
-                <Text style={styles.costListText2}>Total</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             <View style={[styles.costListSubView3,{}]}>
-             <Text style={styles.costListText3}>0</Text>
-             </View>
-             </View>
-             
-             </View>
              <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(20)}}>
 
              <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
