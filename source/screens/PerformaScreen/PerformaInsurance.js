@@ -70,11 +70,16 @@ export default function PerformaInsurance(props) {
    const [locationValue,setLocationValue] = useState([])
 
    useEffect(()=>{
+
+    insuranceHeadListTemp = insurance_Data?.insurenceHeadList.map((list, index) => {
+      return { ...list, isChecked: false, id: index  };
+    });
+
     setIdvListData(insurance_Data?.idvList)
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
     setinsurenceDataList(insurance_Data?.insurenceDataList)
-    setinsurenceHeadList(insurance_Data?.insurenceHeadList)
+    setinsurenceHeadList(insuranceHeadListTemp);
     setinsurenceDetail(insurance_Data?.insurenceDetail)
 
     let calData=[]
@@ -133,7 +138,14 @@ export default function PerformaInsurance(props) {
     }
   }
  
-  
+  const updateInsuranceCheckedList = (selectedData) => {
+    let newArr = insurenceHeadList?.forEach((item) => {
+      if (item.id === selectedData.id) {
+        return (item.isChecked = !item.isChecked);
+      }
+    });
+    setinsurenceHeadList([...insurenceHeadList])
+  }; 
  
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
@@ -280,28 +292,25 @@ export default function PerformaInsurance(props) {
               />
             </View>
 
-             <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10)}}>
-           <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>THIRD PARTY</Text>
-            </View> 
-            <View style={[styles. bottomMainView,{}]}>
-            <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>OWNER/DRIVER</Text>
-            </View> 
-            </View>
-            <View style={{flex:1,flexDirection:'row'}}>
-            <View style={[styles. bottomMainView,{}]}>
-                <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>PAID DRIVER</Text>
-            </View> 
-            <View style={[styles. bottomMainView,{}]}>
-            <FastImage source={images.unCheckIcon} style={styles.checkboxStyle} />
-              <Text style={styles.text4}>1-PASSANGER</Text>
-            </View> 
-            </View>
-            </View>
+              
+            <FlatList
+              numColumns={2}
+              data={insurenceHeadList}
+              renderItem={({ item, index }) => {
+                return (
+                  <View style={{ flex: 1, flexDirection: "row" }}>
+                    <Pressable style={styles.bottomMainView} onPress={() => { updateInsuranceCheckedList(item) }}>
+                      <FastImage
+                        source={item?.isChecked ? images.checkIcon : images.unCheckIcon}
+                        style={styles.checkboxStyle}
+                      />
+                      <Text style={styles.text4}>{item?.headDescription}</Text>
+                    </Pressable>
+                  </View>
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+            />
 
             <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
             <View style={{flex:1,flexDirection:'row'}}>

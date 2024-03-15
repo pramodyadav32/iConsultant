@@ -63,6 +63,8 @@ export default function PerformaAccessories(props) {
   const [addListModel, setAddListModel] = useState({ show: false, data: [] });
   const [totalAmount, setTotalAmount] = useState();
   const [totalQty, setTotalQty] = useState();
+  const [partList, setPartList] = useState();
+  
 
   const accessoriesList = ({ item, index }) => {
     return (
@@ -267,12 +269,12 @@ export default function PerformaAccessories(props) {
    let tempArr = []
    accessoriesData?.map((item) => {
       let obj = {
-         "packageCode": "string",
-         "itemCategory": "string",
-         "itemGroup": "string",
+         "packageCode": "",
+         "itemCategory": "",
+         "itemGroup": "",
          "partNo": item?.partNo,
          "qty": item?.quantity,
-         "unit": "string",
+         "unit": "",
          "discountPer": item?.negociatedPrice,
          "mrp": item?.price
        }
@@ -282,13 +284,13 @@ export default function PerformaAccessories(props) {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
-      "docLocation": "string",
-      "docCode": "string",
-      "docFY": "string",
-      "docNo": 0,
+      "docLocation": "MADU01",
+      "docCode": "SRP",
+      "docFY": "2023-2024",
+      "docNo": 53,
       "action": "A",
-      "packageCode": "string",
-      "partNo": "string",
+      "packageCode": "",
+      "partNo": "",
       "loginUserId": userData?.userId,
       "ipAddress": "1:1",
       "proformaItemList": tempArr
