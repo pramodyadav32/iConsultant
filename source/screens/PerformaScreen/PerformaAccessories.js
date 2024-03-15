@@ -49,7 +49,7 @@ const data2 = [
 ];
 
 export default function PerformaAccessories(props) {
-  const { navigation } = props;
+  const { navigation,performaBasicInfo } = props;
   const dispatch = useDispatch();
   const { userData, selectedBranch } = useSelector(
     (state) => state.AuthReducer
@@ -111,7 +111,7 @@ export default function PerformaAccessories(props) {
   const fn_AddNegociatedPrice = (item, index, d) => {
     let newArr = accessoriesData;
     item.negociatedPrice = d;
-   item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.quantity)
+    item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.quantity)
     newArr.splice(index, 1, item);
     setAccessoriesData([...newArr]);
   };
@@ -277,7 +277,7 @@ export default function PerformaAccessories(props) {
  };
 
  const saveAccessoriesAndPackages = () => {
-   dispatch(emptyLoader_Action(true));
+  //  dispatch(emptyLoader_Action(true));
    let tempArr = []
    accessoriesData?.map((item) => {
       let obj = {
@@ -296,10 +296,10 @@ export default function PerformaAccessories(props) {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
-      "docLocation": "MADU01",
-      "docCode": "SRP",
-      "docFY": "2023-2024",
-      "docNo": 53,
+      "docLocation": performaBasicInfo?.proformaList[0]?.docLocation,
+      "docCode": performaBasicInfo?.proformaList[0]?.docCode,
+      "docFY": performaBasicInfo?.proformaList[0]?.docFy,
+      "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "action": "A",
       "packageCode": "",
       "partNo": "",

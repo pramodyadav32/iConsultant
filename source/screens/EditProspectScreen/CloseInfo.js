@@ -120,7 +120,6 @@ export default function CloseInfo(props) {
       "branchCode": selectedBranch?.branchCode,
       "prospectNo": Number(data?.prospectID),
       "loginUserId": userData?.userId,
-
       "ipAddress": "1:1",
       "makeOrder": "string",//closer type if A then send "Y" else "N"
       "make": "string",//base on close type

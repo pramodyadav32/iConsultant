@@ -114,10 +114,10 @@ export default function PerformaInsurance(props) {
        "brandCode": userData?.brandCode,
        "countryCode": userData?.countryCode,
        "companyId": userData?.companyId,
-       "docLocation": "string",
-       "docCode": "string",
-       "docFY": "string",
-       "docNo": 0,
+       "docLocation": performaBasicInfo?.proformaList[0]?.docLocation,
+    "docCode": performaBasicInfo?.proformaList[0]?.docCode,
+    "docFY": performaBasicInfo?.proformaList[0]?.docFy,
+    "docNo": performaBasicInfo?.proformaList[0]?.docNo,
        "insuranceYN": "string",
        "insuLocation": "string",
        "insuCompanyCode": "string",
@@ -398,7 +398,7 @@ export default function PerformaInsurance(props) {
             </View> */}
                     
          </View>
-         <Button title='Next' click_Action={() => null} buttonExt={styles.performaButton} />
+         <Button title='Next' click_Action={() => fn_SaveInsurance()} buttonExt={styles.performaButton} />
      </ScrollView>
       </View>
    )

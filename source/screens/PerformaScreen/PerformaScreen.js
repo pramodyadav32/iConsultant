@@ -91,7 +91,7 @@ export default function PerformaScreen(props) {
    const [performaTaxMaster, setPerformaTaxMaster] = useState();
    const [performaBasicDataHeader, setPerformaBasicDataHeader] = useState();
    const [proformaGeneralMasters, setProformaGeneralMasters] = useState();
-
+   const [performaNo,setPerformaNo] = useState(0)
 
 
    const [insuranceData, setInsuranceData] = useState({})
@@ -207,9 +207,7 @@ export default function PerformaScreen(props) {
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
-         // prospectNo: Number(route.params.cardData?.prospectId),
-         prospectNo:8325,
-
+         prospectNo: Number(route.params.cardData?.prospectId),
          loginUserCompanyId: "ORBIT",
          loginUserId: userData?.userId,
          ipAddress: "1::1",
@@ -223,9 +221,14 @@ export default function PerformaScreen(props) {
    };
 
    const GetProspectBasicInfoCallBack = (res) => {
-      console.log("GetProspectBasicInfoCallBack = ", JSON.stringify(res));
+      console.log("GetProspectBasicInfoCallBack = ", JSON.stringify(res.result?.proformaList));
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
+         if(res?.result?.proformaList=== null || res?.result?.proformaList=== undefined){
+            setPerformaNo(0)
+         }else{
+            res?.result?.proformaList.length > 0 ?  setPerformaNo(res?.result?.proformaList[0]?.docNo) : setPerformaNo(0)
+         }
          fn_GetProformaGeneralMasters()
       } else {
          constant.showMsg(res.message);
@@ -673,6 +676,37 @@ export default function PerformaScreen(props) {
       )
   }
 
+  const fn_SaveBasicInfo=()=>{
+   let param = {
+      brandCode: userData?.brandCode,
+      countryCode: userData?.countryCode,
+      companyId: userData?.companyId,
+      prospectNo: Number(route.params.cardData?.prospectId),
+      // prospectNo:8325,
+      loginUserCompanyId: "ORBIT",
+      loginUserId: userData?.userId,
+      ipAddress: "1::1",
+   };
+   tokenApiCall(
+      SaveBasicInfoCallBack,
+      APIName.GetProspectBasicInfo,
+      "POST",
+      param
+   );
+  }
+
+  const SaveBasicInfoCallBack = (res) => {
+   console.log("SaveBasicInfoCal = ", JSON.stringify(res));
+     dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         setPerformaBasicDataHeader(res?.result)
+         setActive(1)
+         constant.showMsg("Basic Info save successfully")
+      } else {
+         constant.showMsg(res.message);
+      }
+};
+
    return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -751,11 +785,13 @@ export default function PerformaScreen(props) {
                   performaGeneralMasterData={proformaGeneralMasters}
                   cardData = {route.params.cardData}
                   texMasterData ={performaTaxMaster}
+                  SaveInfo = {()=>{fn_SaveBasicInfo()}}
+                  prospect_No = {performaNo}
                 />
             )}
             {active === 1 && <
                PerformaAccessories 
-               
+               performaBasicInfo={performaBasicDataHeader}
                />}
             {/* {active === 2 && <PerformaPackage />} */}
             {
@@ -764,6 +800,7 @@ export default function PerformaScreen(props) {
                insurance_Data = {insuranceData}
                generalMaster_Data = {generalMasterData}
                insuranceLoc_Data = {ins_Location}
+               performaBasicInfo={performaBasicDataHeader}
 
                />
             }
@@ -775,6 +812,7 @@ export default function PerformaScreen(props) {
             />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
          </View>
+
          {/* <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}
 
          <AddPartListModel

@@ -24,7 +24,7 @@ const priceList=[
    {"code":'CURRENT_DATE','description':"Applicable on Current Date"}
 ]
 export default function PerformaBasicInfo(props) {
-   const { navigation, performaPriceDetail,performaBasicInfo,texMasterData,cardData,performaGeneralMasterData } = props
+   const { navigation, performaPriceDetail,performaBasicInfo,texMasterData,cardData,performaGeneralMasterData,SaveInfo,prospect_No} = props
    const dispatch = useDispatch()
    const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
    const [billingLoactionData,setBillingLocationData] =useState([])
@@ -136,7 +136,7 @@ export default function PerformaBasicInfo(props) {
    };
 
    const fn_Create=()=>{
-
+     dispatch(emptyLoader_Action(true))
       let newParam = []
        texMasterData?.selectedProformaValueCodes.map((item)=>{
          let newValue = item?.taxCode+"0000"+item?.perc+item?.surcharge
@@ -152,7 +152,7 @@ export default function PerformaBasicInfo(props) {
          "piLocation": cardData?.prospectLocation, //prospect location
          "piDoc": "SRP",
          "piFY": '',  //current date fy
-         "piNo": 0,
+         "piNo": Number(prospect_No),
          "priceListApplicable": "CURRENT_DATE",
          "make": userData?.brandCode,
          "assembly":cardData?.vehAssemblyType,
@@ -204,6 +204,11 @@ export default function PerformaBasicInfo(props) {
    const SaveProformaBasicInfoCallBack = (res) => {
       console.log("GetSave = ", JSON.stringify(res));
       if (res.statusCode === 200) {
+        if(res?.result?.resultCode==='Y'){
+         SaveInfo()
+        }else{
+         constant.showMsg("Somethings wents wrong")
+        }
        
       } else {
          constant.showMsg(res.message);

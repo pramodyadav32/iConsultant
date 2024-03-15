@@ -40,6 +40,7 @@ export default function HomeScreen(props) {
   const scaleValue = new Animated.Value(1);
 
   const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
+ 
   useEffect(() => {
     dispatch(emptyLoader_Action(true))
     getProspectData()
