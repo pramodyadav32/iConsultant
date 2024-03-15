@@ -11,19 +11,48 @@ import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
 import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
+import moment from 'moment';
 
+const transData=[
+   {"code":'PAN_CARD','description':'Pan Card available'},
+   {"code":'FORM_60','description':'Pan Card not available'},
 
+]
 export default function PerformaBasicInfo(props) {
-   const { navigation, performaPriceDetail,  performaBasicInfo, 
-   performaGeneralMasterData } = props
+   const { navigation, performaPriceDetail,performaBasicInfo,cardData,performaGeneralMasterData } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
-   const tabWidth = constant.resW(49);
-   const [active, setActive] = useState(1)
-   const [animatedValue] = useState(new Animated.Value(1));
-   const [detailModal,setDetailModal] = useState(false)
-   const [packageModel,setPackageModel] = useState(false)
-   const [addListModel,setAddListModel] = useState(false)
+   const [billingLoactionData,setBillingLocationData] =useState([])
+   const [billingLoactionValue,setBillingLocationValue] =useState({})
+   const [usageData,setUsageData] = useState([])
+   const [usageValue,setUsageValue] = useState({})
+   const [salesGroupData,setSalesGroupData] = useState([])
+   const [salesGroupValue,setSalesGroupValue] = useState({})
+   const [endUseData,setEndUseData] = useState([])
+   const [endUseValue,setEndUseValue] = useState([])
+   const [tcsStatus,setTcsStatus] = useState(false)
+   const [discountValue,setDiscountValue] = useState('')
+   const [loyalAmt,setLoayalAmt] = useState('')
+   const [trnsBasicValue,setTrnsBasicValue] = useState({})
+
+  
+
+ 
+   useEffect(()=>{
+      performaGeneralMasterData?.selectMasterList.map((item)=>{
+         if(item?.listType ==='BILLING_LOCATION'){
+          setBillingLocationData(item.basicList)
+         }else if(item?.listType ==='USAGE'){
+            setUsageData(item.basicList)
+           }else if(item?.listType ==='SALE_GROUP'){
+            setSalesGroupData(item.basicList)      
+           }
+           else if(item?.listType ==='END_USE'){
+            setEndUseData(item.basicList)      
+           }
+          
+        })
+   },[])
 
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
@@ -49,18 +78,18 @@ export default function PerformaBasicInfo(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Dated</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{moment(new Date).format("DD-MMM-YYYY")}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Model</Text>
-                        <Text style={styles.listText3}>SCRAB</Text>
+                        <Text style={styles.listText3}>{cardData?.model}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Varient</Text>
-                        <Text style={styles.listText3}>DMAX FlatDesk </Text>
+                        <Text style={styles.listText3}>{cardData?.variant}</Text>
                      </View>
                   </View>
 
@@ -71,7 +100,7 @@ export default function PerformaBasicInfo(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>MY/VY</Text>
-                        <Text style={styles.listText3}>2024/2024</Text>
+                        <Text style={styles.listText3}>{cardData?.prospectFY}</Text>
                      </View>
                   </View>
 
@@ -88,53 +117,53 @@ export default function PerformaBasicInfo(props) {
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Billing Location</Text>
               <SelectDropList
-                list={[]}
+                list={billingLoactionData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setBillingLocationValue(d)}
               />
             </View>
             <View style={{backgroundColor:'#F9F9F9',borderRadius:10,paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingBottom:constant.moderateScale(10)}}>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Discount</Text>
-              <TextInput style={styles.input1} ></TextInput>
+              <TextInput style={styles.input1} onChangeText={(d)=>setDiscountValue(d)} >{discountValue}</TextInput>
 
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Usage</Text>
               <SelectDropList
-                list={[]}
+                list={usageData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setUsageValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Sale Group</Text>
               <SelectDropList
-                list={[]}
+                list={salesGroupData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setSalesGroupValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>End Use</Text>
               <SelectDropList
-                list={[]}
+                list={endUseData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setEndUseValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Loyalty Disc Amt</Text>
-              <TextInput style={styles.input1} ></TextInput>
+              <TextInput style={styles.input1} onChangeText={(d)=>setLoayalAmt(d)} >{loyalAmt}</TextInput>
 
             </View>
 
@@ -256,21 +285,19 @@ export default function PerformaBasicInfo(props) {
              <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Trnx Basic</Text>
               <SelectDropList
-                list={[]}
+                list={transData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setTrnsBasicValue(d)}
               />
             </View>
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>TCS</Text>
-              <SelectDropList
-                list={[]}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
-              />
+             <Pressable style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>setTcsStatus(!tcsStatus)}>
+               <FastImage source={tcsStatus ? images?.checkIcon : images?.unCheckIcon} resizeMode='contain' style={mainStyle.tcsCheckBox} />
+              <Text style={mainStyle.tcsText}>0</Text>
+             </Pressable>
             </View>
 
             <View style={styles.driveListDetailView}>
@@ -316,4 +343,14 @@ const mainStyle= StyleSheet.create({
        borderBottomLeftRadius:10,
        borderBottomRightRadius:10
       },
+      tcsCheckBox:{
+         height:constant.moderateScale(26),
+         width:constant.moderateScale(26)
+      },
+      tcsText:{
+         fontFamily:constant.typeMedium,
+         fontSize:constant.moderateScale(16),
+         marginLeft:constant.moderateScale(8),
+         color:constant.blackColor,
+      }
  })
