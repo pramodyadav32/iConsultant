@@ -442,7 +442,7 @@ export default function EditProspectScreen(props) {
     }
 
     const GetProfileCallBack = async (res) => {
-        console.log("search", JSON.stringify(res))
+        console.log("profile", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             setProfileData(res?.result)

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
-import { apiCall, APIName } from '../../utilities/apiCaller'
+import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -19,6 +19,7 @@ import moment from 'moment';
 export default function CustumerInfo(props) {
     const { data,prospectMaster, prospectDetail,profile_Data, modelData} = props
     const dispatch = useDispatch()
+    const { userData, selectedBranch } = useSelector((state) => state.AuthReducer);
     const [active, setActive] = useState(1)
     const [destination,setDestination] = useState("")
     const [prospectTypeData,setProspectData] = useState([])
@@ -93,25 +94,7 @@ export default function CustumerInfo(props) {
     const [reasonPurchaseValue,setReasonPurcahsevalue] = useState({})
 
 
-    const [v_UsageData,setV_UsageData] = useState([])
-    const [v_UsageValue,setV_UsageValue] = useState({})
-    const [v_BodyTypeData,setV_BodyTypeData] = useState([])
-    const [v_BodyTypeValue,setV_BodyTypeValue] = useState({})
-    const [v_BrandData,setV_BrandData] = useState([])
-    const [v_BrandValue,setV_BrandValue] = useState({})
-    const [v_ModelData,setV_ModelData] = useState([])
-    const [v_ModelValue,setV_ModelValue] = useState({})
-    const [v_VarientData,setV_VarientData] = useState([])
-    const [v_VarientValue,setV_VarientValue] = useState({})
-    const [purchaseYearData,setPurchaseYearData] = useState([])
-    const [purchaseYearValue,setPurchaseYearValue] = useState({})
-    const [qtyData,setQtyData] = useState([])
-    const [qtyValue,setQtyValue] = useState([])
-
-
-
-
-
+console.log("dta",data)
 
    useEffect(()=>{
      setCompanyTypeList(profile_Data?.companyTypeList)
@@ -233,6 +216,65 @@ export default function CustumerInfo(props) {
     const fn_SelectPaymentType=(d)=>{
         setPaymentTypeValue(d)
         d.dataCode === 'LOAN' ? setPurchaseVisible(true) : setPurchaseVisible(false)
+    }
+
+    const fn_Create=()=>{
+        let param = {
+            "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+            "userId": userData?.userId,
+            "ipAddress": "1::1",
+            "prospectId": Number(data?.prospectID),
+            "occupation": occupationValue?.code,
+            "productSerial": 0,
+            "productText": "string",
+            "roleSerial": 0,
+            "education": "string",
+            "sex": "string",
+            "ageGroup": "string",
+            "incomeGroup": "string",
+            "designation": "string",
+            "birthDate": "string",
+            "birthDayMonth": 0,
+            "birthYear": 0,
+            "marriedStatus": "string",
+            "mariageDate": "string",
+            "mariDayMonth": 0,
+            "mariYear": 0,
+            "financerCode": "string",
+            "custFamilySize": 0,
+            "custProfileNotes": "string",
+            "turnOver": "string",
+            "custCompanyType": "string",
+            "custCompanyNotes": "string",
+            "purchaseType": "string",
+            "downPayment": 0,
+            "interestRate": 0,
+            "loanTenure": 0,
+            "paymentType": "string",
+            "custProfileList": [
+              {
+                "dataType": "string",
+                "dataCode": "string",
+                "dataSubCode": "string"
+              }
+            ]
+        }
+
+        tokenApiCall(saveProfileCallBack, APIName.SaveCustomerProfile, "POST", param)
+
+    }
+
+    const saveProfileCallBack = async (res) => {
+        console.log("savecustumer", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+          
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
     }
 
  
