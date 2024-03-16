@@ -486,7 +486,7 @@ export default function ProspectDataSheetScreen(props) {
          <View style={styles.cal_SubView}>
             <View style={styles.tabMainView}>
                <View style={styles.tabSubView}>
-                  <ScrollView horizontal>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <Pressable style={active === 1 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(1)} >
                      <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Data Sheet</Text>
                       {active===1 && <View style={[styles.horixontalLine]} />}
@@ -501,7 +501,7 @@ export default function ProspectDataSheetScreen(props) {
                      {active===3 && <View style={[styles.horixontalLine]} />}
                  
                   </Pressable>
-                  <Pressable style={active === 4 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(4)} >
+                  <Pressable style={active === 4 ? [styles.tabButton, { width: constant.resW(20)}] : [styles.tabButton2, { width: constant.resW(20)}]} onPress={() => fn_TabClick(4)} >
                      <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Actions</Text>
                      {active===4 && <View style={[styles.horixontalLine]} />}
                   
