@@ -152,6 +152,7 @@ const ProspectActionSlotScreen = (props) => {
            <Pressable style={styles.listImageMainView} onPress={()=>fn_Click(item,index)}>
             <FastImage style={styles.listSubImage} resizeMode='contain' source={{uri:item?.modelUrl}} />
             <Text numberOfLines={1} style={styles.listText}>{item?.modelName}</Text>
+            <Text numberOfLines={1} style={styles.listText}>{item?.regn}</Text>
             </Pressable>
            </ImageBackground>
         )

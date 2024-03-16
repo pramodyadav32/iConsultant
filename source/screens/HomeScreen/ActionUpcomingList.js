@@ -13,6 +13,7 @@ import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
+import moment from "moment";
 
 
 export default function ActionUpcomingList(props) {
@@ -25,7 +26,7 @@ export default function ActionUpcomingList(props) {
             <View>
                 <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
                  <Pressable onPress={()=>setActiveIndex(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                 <Text style={styles.up_ListText}>{item}</Text>
+                 <Text style={styles.up_ListText}>{moment(item, "DD-mm-YYYY").format("DD-MMM-YYYY")}</Text>
                  <FastImage source={ activeIndex === index ? images.downArrow : images.rightArrow} style={ activeIndex === index ? styles.upRightArrow : styles.upRightArrow2} />
                  </Pressable>
                  </ImageBackground>

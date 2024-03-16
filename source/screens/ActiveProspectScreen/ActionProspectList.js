@@ -13,12 +13,14 @@ import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
+import moment from "moment";
 
 export default function ActionProspectList(props) {
    const {data,onClick} = props
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
+      console.log("bbbbbbbb = ", item)
         return(
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
                    <Pressable style={styles.driveListMainView} onPress={()=>onClick(item,index)}>
@@ -31,7 +33,7 @@ export default function ActionProspectList(props) {
                 </View>
                 <View style={{flex:1,flexDirection:'row'}}>
                     <View style={{flex:1,}}>
-                    <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                    <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
                     <View style={[{flexDirection:'row',justifyContent:'space-between',flex:1,paddingRight:constant.moderateScale(18)}]}>
                     <Text style={styles.ModelText3}>{item?.model}</Text>
                     <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>
@@ -65,7 +67,7 @@ export default function ActionProspectList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+                    <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
                  </View>
                 </View>
                     </View>

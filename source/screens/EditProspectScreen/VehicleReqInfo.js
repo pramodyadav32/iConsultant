@@ -78,7 +78,7 @@ export default function VehicleReqInfo(props) {
     } else if (Object.keys(editionValue).length === 0) {
       constant.showMsg("Please Select edition")
     } else if (Object.keys(varientValue).length === 0) {
-      constant.showMsg("Please Select Varient")
+      constant.showMsg("Please Select Variant")
     } else if (Object.keys(exteriorValue).length === 0) {
       constant.showMsg("Please Select exterior ")
     } else if (Object.keys(styleValue).length === 0) {
@@ -217,7 +217,7 @@ export default function VehicleReqInfo(props) {
           </View>
 
           <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Varient</Text>
+            <Text style={styles.detailText}>Variant</Text>
             <SelectDropList
               list={varientData}
               title={varientValue?.description}
@@ -319,16 +319,16 @@ export default function VehicleReqInfo(props) {
             <View style={styles.detailMainView2}>
               <Text style={styles.detailText}>Count</Text>
               <View style={styles.coutMainView}>
-                <Pressable style={styles.coutButton}>
+                {/* <Pressable style={styles.coutButton}>
                   <FastImage source={images.minussign} tintColor={constant.red} resizeMode='contain' style={styles.minusStyle} />
-                </Pressable>
+                </Pressable> */}
                 <View style={styles.countInput}>
                   <Text style={styles.countInputText}>{count}</Text>
                 </View>
 
-                <Pressable style={styles.coutButton}>
+                {/* <Pressable style={styles.coutButton}>
                   <FastImage source={images.add} tintColor={constant.red} resizeMode='contain' style={styles.minusStyle} />
-                </Pressable>
+                </Pressable> */}
               </View>
             </View>
 

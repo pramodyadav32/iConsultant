@@ -13,6 +13,7 @@ import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
+import moment from "moment";
 
 export default function ActionList(props) {
     const {onClick,data} = props
@@ -66,7 +67,7 @@ export default function ActionList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+                    <Text style={styles.listText3}>{moment(data?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
                  </View>
                 </View>
                     </View>

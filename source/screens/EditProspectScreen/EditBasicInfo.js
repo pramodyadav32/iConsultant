@@ -86,7 +86,7 @@ export default function EditBasicInfo(props) {
       sourceCode: "07",
       refCode: "07",
       campaign: "",
-      prospectOpenedOn: "13-Mar-2024",
+      prospectOpenedOn: moment(data?.prospectOpenedOn, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY"),
       loginUserId: userData?.userId,
       ipAddress: "1::1",
     };
@@ -169,11 +169,11 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
   const fn_Create = () => {
     if (Object.keys(sourceValue).length === 0) {
       constant.showMsg("Please select source");
-    } else if (Object.keys(dealCategoryValue).length === 0) {
+    } else if (corporateCase === "Y" && Object.keys(dealCategoryValue).length === 0) {
       constant.showMsg("Please select Deal Category");
-    } else if (Object.keys(dealTypeValue).length === 0) {
+    } else if (corporateCase === "Y" && Object.keys(dealTypeValue).length === 0) {
       constant.showMsg("Please select Deal Type");
-    } else if (Object.keys(companyValue).length === 0) {
+    } else if (corporateCase === "Y" && Object.keys(companyValue).length === 0) {
       constant.showMsg("Please select Company");
     } else {
       const param = {
@@ -199,12 +199,12 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
         usage: data?.usageCode,
         source: sourceValue?.code,
         refFrom: data?.referenceId,
-        corporateFlag: data?.corpApprovedFlag,
-        corporateComment: data?.corporateComment,
-        comment: data?.comment === null ? "" : data?.comment,
-        approveFlag: "",
-        dealType: dealTypeValue?.code,
-        dealerCompanyDocket: 0,
+        corporateFlag: corporateCase,
+        corporateComment: corporateCase === "Y" ? corporateComment : "",
+        comment: generalComment === null ? "" : generalComment,
+        approveFlag: corporateCase === "Y" ? dealCategoryValue?.code : "",
+        dealType: corporateCase === "Y" ? dealTypeValue?.code : "",
+        dealerCompanyDocket:corporateCase === "Y" ? companyValue?.code : 0,
         agencyLeadId: 0,
         agencyId: 0,
         refCustomer: 0, //data?.custReference,

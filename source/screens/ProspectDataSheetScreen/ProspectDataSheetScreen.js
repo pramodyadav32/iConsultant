@@ -522,11 +522,11 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Reference</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.referenceId}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.enquirySource}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
-                           <Text style={styles.listText2}>Compaings</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.campaignCode}</Text>
+                           <Text style={styles.listText2}>Campaign</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.campaignCode === "0" ? "-" : prospectBasicInfo?.campaignCode}</Text>
                         </View>
                      </View>
 
@@ -586,14 +586,14 @@ export default function ProspectDataSheetScreen(props) {
                            <Text style={styles.listText3}>{prospectBasicInfo?.priceQuote==='N'? "No" : "Yes"}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
-                           <Text style={styles.listText2}>source</Text>
+                           <Text style={styles.listText2}>Source</Text>
                            <Text style={styles.listText3}>{prospectBasicInfo?.sourceDescription}</Text>
                         </View>
                      </View>
 
                      <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Customer Refrence</Text>
+                           <Text style={styles.listText2}>Customer Reference</Text>
                            <Text style={styles.listText3}>{prospectBasicInfo?.custReference}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>

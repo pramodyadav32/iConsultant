@@ -324,7 +324,7 @@ export default function PerformaBasicInfo(props) {
                         <Text style={styles.listText3}>{cardData?.model}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
-                        <Text style={styles.listText2}>Varient</Text>
+                        <Text style={styles.listText2}>Variant</Text>
                         <Text style={styles.listText3}>{cardData?.variant}</Text>
                      </View>
                   </View>

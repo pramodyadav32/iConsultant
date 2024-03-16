@@ -86,8 +86,8 @@ export default function ProspectScreen(props) {
   const [usageValue, setUsageValue] = useState({});
   const [entityData, setEntityData] = useState([]);
   const [entityValue, setEntityValue] = useState({});
-  // const [mobileno, setMobileNo] = useState('7339506778')
-  const [mobileno, setMobileNo] = useState("");
+  const [mobileno, setMobileNo] = useState('7339506778')
+  // const [mobileno, setMobileNo] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [generlCloserdata, setGeneralClosureData] = useState("");
   const [name, setName] = useState("");
@@ -132,13 +132,45 @@ export default function ProspectScreen(props) {
   const [comment, setComment] = useState("");
   const [actionSlotLength, setActionSlotLength] = useState([]);
   const [priceAvailable, setPriceAvailable] = useState();
+  const [eventSourceData, setEventSourceData] = useState();
+  const [eventSourceList, setEventSourceList] = useState([]);
 
   useEffect(() => {
     console.log("selectBranchh", selectedBranch);
     fn_GetProspectMaster();
     // priceStatus()
     // fn_GetVehicleMasterModel()
+    fn_GetEventSource()
   }, []);
+
+  const fn_GetEventSource = () => {
+    const param = {
+      brandCode: userData?.brandCode,
+      countryCode: userData?.countryCode,
+      companyId: userData?.companyId,
+      sourceCode: "07",
+      refCode: "07",
+      campaign: "",
+      prospectOpenedOn:  moment(new Date()).format("DD-MMM-YYYY"),
+      loginUserId: userData?.userId,
+      ipAddress: "1::1",
+    };
+    tokenApiCall(
+      getEventSourceCallBack,
+      APIName.GetCampaignsMaster,
+      "POST",
+      param
+    );
+  };
+
+  const getEventSourceCallBack = (res) => {
+    console.log("res GetCampaignsMaster =", res);
+    if (res.statusCode === 200) {
+      setEventSourceList(res?.result?.campaignsMaster);
+    } else {
+      constant.showMsg(res.message);
+    }
+  };
 
   const fn_GetProspectTagList = () => {
     let param = {
@@ -191,7 +223,7 @@ export default function ProspectScreen(props) {
       custType: "",
       competitionModelSearch: "",
       loginUserId: userData?.userId,
-      loginUserCompanyId: "ORBIT",
+      loginUserCompanyId: userData?.companyId,
       ipAddress: "1::1",
     };
     tokenApiCall(
@@ -238,7 +270,7 @@ export default function ProspectScreen(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       calledBy: "FUP_TYPE",
-      loginUserCompanyId: "ORBIT",
+      loginUserCompanyId: userData?.companyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
     };
@@ -303,7 +335,7 @@ export default function ProspectScreen(props) {
   const fn_General_Validation = () => {
     if (mobileno === "") {
       constant.showMsg("Please enter mobile number");
-    } else if (mobileno.length != 10) {
+    } else if (mobileno?.trim().length != 10) {
       constant.showMsg("Please enter valid mobile number");
     } else if (Object.keys(entityValue).length === 0) {
       constant.showMsg("Please Select Entity");
@@ -315,7 +347,7 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please enter name");
     } else if (email === "") {
       constant.showMsg("Please enter email");
-    } else if (!common_fn.validEmail(email)) {
+    } else if (!common_fn.validEmail(email?.trim())) {
       constant.showMsg("Please enter valid email");
     } else if (Object.keys(stateValue).length === 0) {
       constant.showMsg("Please select State");
@@ -323,7 +355,7 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please select City");
     } else if (pinCode === "") {
       constant.showMsg("Please enter pin code");
-    }else if (pinCode.length != 6) {
+    }else if (pinCode?.trim().length != 6) {
         constant.showMsg("Please enter valid pin code");
     } else if (Object.keys(sourceValue).length === 0) {
       constant.showMsg("Please select Source");
@@ -343,10 +375,10 @@ export default function ProspectScreen(props) {
         middleName: "",
         lastName: "",
         suffix: "",
-        pincode: pinCode,
-        email: email,
+        pincode: pinCode?.trim(),
+        email: email?.trim(),
         contactName: contactPerson,
-        mobile: mobileno,
+        mobile: mobileno?.trim(),
         source: sourceValue.code,
         usage: usageValue.code,
         activeRate: ratingValue.code,
@@ -399,7 +431,7 @@ export default function ProspectScreen(props) {
         firstAction: actionTypeValue.code,
         actionDate: actionDate,
         actionComment: comment,
-        campaign: 0,
+        campaign: eventSourceData === undefined ? "" : eventSourceData?.serial,
         dealerCompanyDocket: "",
         corporateFlag: "N",
         dealType: "",
@@ -498,7 +530,7 @@ export default function ProspectScreen(props) {
     } else if (Object.keys(editionValue).length === 0) {
       constant.showMsg("Please Select Edition");
     } else if (Object.keys(varientValue).length === 0) {
-      constant.showMsg("Please Select Varient");
+      constant.showMsg("Please Select Variant");
     } else if (Object.keys(styleValue).length === 0) {
       constant.showMsg("Please Select Style");
     } else if (Object.keys(exteriorValue).length === 0) {
@@ -740,14 +772,14 @@ export default function ProspectScreen(props) {
     };
     tokenApiCall(
       priceStatusCallBack,
-      APIName.GetProformaGeneralMasters,
+      APIName.GetProformaGeneralMast,
       "POST",
       param
     );
   };
 
   const priceStatusCallBack = (res) => {
-    console.log("res", res);
+    console.log("res123123123", res);
     if (res.statusCode === 200) {
       setPriceAvailable(res?.result?.priceAvailableTag);
     } else {
@@ -781,7 +813,7 @@ export default function ProspectScreen(props) {
       custType: "",
       competitionModelSearch: "",
       loginUserId: userData?.userId,
-      loginUserCompanyId: "ORBIT",
+      loginUserCompanyId: userData?.companyId,
       ipAddress: "1::1",
     };
     tokenApiCall(
@@ -956,7 +988,10 @@ export default function ProspectScreen(props) {
                 list={stateData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => fn_State(d)}
+                on_Select={(d) => {
+                  fn_State(d)
+                  setCityValue()
+                }}
               />
             </View>
 
@@ -966,6 +1001,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={cityData}
+                title={""}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setCityValue(d)}
@@ -985,18 +1021,33 @@ export default function ProspectScreen(props) {
 
             <View style={styles.bottomMainView}>
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>Source</Text>
+                <Text style={styles.detailText}>Inquiry Type</Text>
                 <SelectDropList
                   list={sourceData}
                   title="Please Select"
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
-                  on_Select={(d) => setSourceValue(d)}
+                  on_Select={(d) => {
+                    if(sourceValue?.code !== "07")  setEventSourceData(undefined)
+                    setSourceValue(d)
+                  }}
                 />
               </View>
+              {sourceValue?.code === "07" ? (
+              <View style={styles.detailMainView2}>
+                <Text style={styles.detailText}></Text>
+                <SelectDropList
+                  list={eventSourceList}
+                  title="Select Campaign"
+                  buttonExt={styles.dropList}
+                  textExt={styles.dropListText}
+                  on_Select={(d) => setEventSourceData(d)}
+                />
+              </View>
+              ) : null}
 
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>Reference</Text>
+                <Text style={styles.detailText}>Source</Text>
                 <SelectDropList
                   list={referenceData}
                   title="Please Select"
@@ -1017,7 +1068,7 @@ export default function ProspectScreen(props) {
                 />
               </View>
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>Closure Date</Text>
+                <Text style={styles.detailText}>Proj. Closure Date</Text>
                 <Pressable
                   style={styles.calenderMainView}
                   onPress={() => setCalenderModalShow(true)}
@@ -1038,7 +1089,7 @@ export default function ProspectScreen(props) {
               </View>
 
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>rating</Text>
+                <Text style={styles.detailText}>Rating</Text>
                 <SelectDropList
                   list={ratingData}
                   title="Please Select"
@@ -1086,7 +1137,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Varient</Text>
+              <Text style={styles.detailText}>Variant</Text>
               <SelectDropList
                 list={varientData}
                 buttonExt={styles.dropList}
@@ -1177,15 +1228,15 @@ export default function ProspectScreen(props) {
               </View> */}
 
               <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}>Reference</Text>
+                <Text style={styles.detailText}>Price</Text>
                 <TextInput style={styles.refInput} editable={false}>
-                  Available
+                  {priceAvailable}
                 </TextInput>
               </View>
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Count</Text>
                 <View style={styles.coutMainView}>
-                  <Pressable
+                  {/* <Pressable
                     style={styles.coutButton}
                     onPress={() => (count <= 1 ? null : setCount(count - 1))}
                   >
@@ -1195,22 +1246,22 @@ export default function ProspectScreen(props) {
                       resizeMode="contain"
                       style={styles.minusStyle}
                     />
-                  </Pressable>
+                  </Pressable> */}
                   <View style={styles.countInput}>
                     <Text style={styles.countInputText}>{count}</Text>
                   </View>
 
-                  <Pressable
+                  {/* <Pressable
                     style={styles.coutButton}
                     onPress={() => setCount(count + 1)}
-                  >
-                    <FastImage
+                  > */}
+                    {/* <FastImage
                       source={images.add}
                       tintColor={constant.red}
                       resizeMode="contain"
                       style={styles.minusStyle}
                     />
-                  </Pressable>
+                  </Pressable> */}
                 </View>
               </View>
             </View>
@@ -1239,7 +1290,7 @@ export default function ProspectScreen(props) {
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-                Model<Text style={styles.text2}>*</Text>
+              Demo vehicle<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={modelData}

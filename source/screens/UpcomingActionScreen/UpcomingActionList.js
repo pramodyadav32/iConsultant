@@ -13,7 +13,7 @@ import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
-
+import moment from "moment";
 
 
 export default function ActionUpcomingList(props) {
@@ -22,11 +22,12 @@ export default function ActionUpcomingList(props) {
     const [activeIndex,setActiveIndex] = useState(-1)
 
     const renderItem=({item,index})=>{
+      console.log("aaaaaaa", item)
         return(
          <View>
          <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
           <Pressable onPress={()=>setActiveIndex(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-          <Text style={styles.up_ListText}>{item}</Text>
+          <Text style={styles.up_ListText}>{moment(item, "DD-mm-YYYY").format("DD-MMM-YYYY")}</Text>
           <FastImage source={ activeIndex === index ? images.downArrow : images.rightArrow} style={ activeIndex === index ? styles.upRightArrow : styles.upRightArrow2} />
           </Pressable>
           </ImageBackground>
@@ -44,7 +45,7 @@ export default function ActionUpcomingList(props) {
            </View>
            <View style={{flex:1,flexDirection:'row'}}>
                <View style={{flex:1,}}>
-               <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+               <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
                <View style={[{flexDirection:'row',justifyContent:'space-between',flex:1,paddingRight:constant.moderateScale(18)}]}>
                <Text style={styles.ModelText3}>{item?.model}</Text>
                <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>
