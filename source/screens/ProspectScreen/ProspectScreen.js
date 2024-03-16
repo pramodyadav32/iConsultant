@@ -323,6 +323,8 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please select City");
     } else if (pinCode === "") {
       constant.showMsg("Please enter pin code");
+    }else if (pinCode.length != 6) {
+        constant.showMsg("Please enter valid pin code");
     } else if (Object.keys(sourceValue).length === 0) {
       constant.showMsg("Please select Source");
     } else if (Object.keys(referenceValue).length === 0) {
@@ -491,23 +493,7 @@ export default function ProspectScreen(props) {
   };
 
   const fn_VehicleValidation = () => {
-    if (mobile === "") {
-      constant.showMsg("Please enter mobile no");
-    } else if (mobile.length != 10) {
-      constant.showMsg("Please enter valid mobile no");
-    } else if (!/\D/.test(mobile) === false) {
-      constant.showMsg("Please enter valid mobile no");
-    } else if (email === "") {
-      constant.showMsg("Please enter email");
-    } else if (!common_fn.validEmail(email)) {
-      constant.showMsg("Please enter valid email");
-    } else if (pinCode === "") {
-      constant.showMsg("Please enter pincode");
-    } else if (pinCode.length != 6) {
-      constant.showMsg("Please enter valid pincode");
-    } else if (!/\D/.test(pinCode) === false) {
-      constant.showMsg("Please enter valid pincode");
-    } else if (Object.keys(modelValue).length === 0) {
+    if (Object.keys(modelValue).length === 0) {
       constant.showMsg("Please Select Model");
     } else if (Object.keys(editionValue).length === 0) {
       constant.showMsg("Please Select Edition");
