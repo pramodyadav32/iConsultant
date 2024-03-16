@@ -57,7 +57,7 @@ export const APIName = {
   GetProformaInsuMaster : baseUrl + 'Proforma/GetProformaInsuMaster',
   GetExistingVehicleMasters : baseUrl + 'ExistingVehicle/GetExistingVehicleMasters',
   GetExistingVehicleList : baseUrl + 'Proforma/GetExistingVehicleList',
-  SaveExistingVehicle : baseUrl + 'Proforma/SaveExistingVehicle',
+  SaveExistingVehicle : baseUrl + 'ExistingVehicle/SaveExistingVehicle',
 
 }
 

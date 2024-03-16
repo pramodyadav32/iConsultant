@@ -26,7 +26,7 @@ let data1 =[
 ]
 
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle} = props
+    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle,custumerSave} = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector((state) => state.AuthReducer);
     const [active, setActive] = useState(1) 
@@ -47,7 +47,7 @@ export default function CustumerInfo(props) {
     const [qtyData,setQtyData] = useState([])
     const [qtyValue,setQtyValue] = useState({})
     const [productSerialData,setProductSerialData] = useState([])
-    const [productSerialValue,setProductSerialValue] = useState()
+    const [productSerialValue,setProductSerialValue] = useState({})
 
 
 
@@ -169,6 +169,9 @@ export default function CustumerInfo(props) {
         console.log("savecustumer", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
+            if(res.result?.resultCode==="Y"){
+                custumerSave()
+            }
           
         } else {
             dispatch(emptyLoader_Action(false))

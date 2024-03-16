@@ -6,15 +6,13 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import * as common from '../utilities/common_fn'
 
 const CustumerSearch = (props) => {
-    const {isVisible,onRequestClose,data} = props
+    const {isVisible,onRequestClose,data,mobile_Data} = props
 
     const renderItem=({item,index})=>{
-        {console.log("item",item)}
         return(
-        <Pressable onPress={()=>null}>
-          <Text style={styles.listName}>PID : OLM Information for this Mobile No</Text>
-              <View style={styles.cardHorLine} />
-              <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
+        <Pressable style={{backgroundColor:constant.whiteColor,elevation:1,marginBottom:constant.moderateScale(10),paddingLeft:constant.moderateScale(10),borderRadius:constant.moderateScale(10),paddingBottom:constant.moderateScale(15)}} onPress={()=>null}>
+              {/* <View style={styles.cardHorLine} /> */}
+              {/* <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Source</Text>
                            <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>0</Text>
@@ -23,7 +21,7 @@ const CustumerSearch = (props) => {
                            <Text style={styles.listText2}>Opened</Text>
                            <Text style={styles.listName3}>-</Text>
                         </View>
-                     </View>
+                     </View> */}
 
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
                         <View style={styles.driveListDetailSubView}>
@@ -38,12 +36,12 @@ const CustumerSearch = (props) => {
 
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Status</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>-</Text>
+                           <Text style={styles.listText2}>Prospect ID</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.prospectId}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
-                           <Text style={styles.listText2}>Closure Log</Text>
-                           <Text style={styles.listName3}>-</Text>
+                           <Text style={styles.listText2}>Custumer Type</Text>
+                           <Text style={styles.listName3}>{item?.customerType==="B" ? "Business":"Individual"}</Text>
                         </View>
                      </View>
         </Pressable>
@@ -60,8 +58,12 @@ const CustumerSearch = (props) => {
               <View style={styles.modalSubView}>
               <AntDesign name='close' style={styles.closeIcon} onPress={()=>onRequestClose()} />
               <View style={styles.innerView}>
+              <Text style={styles.listName}>{"Prospect for this mobile number ( "+mobile_Data+" ) are below"}</Text>
+
                <FlatList 
                 data={data}
+                style={{maxHeight:constant.moderateScale(500)}}
+                showsVerticalScrollIndicator={false}
                 renderItem={renderItem}
                />
               </View>
@@ -105,9 +107,9 @@ const styles = StyleSheet.create({
      width:constant.resW(96)
       },
       innerView:{
-      backgroundColor:constant.whiteColor,
+      backgroundColor:'#F9F9F9',
       paddingVertical:constant.moderateScale(13),
-      paddingHorizontal:constant.moderateScale(15),
+      paddingHorizontal:constant.moderateScale(10),
       borderRadius:15,
       },
       cardHorLine:{
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
             fontSize:constant.moderateScale(14),
             color:'#424242',
             fontFamily:constant.typeMedium,
+            marginBottom:constant.moderateScale(10)
         },
         driveListDetailView:{
             // flex:1,

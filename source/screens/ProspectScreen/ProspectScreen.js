@@ -91,7 +91,11 @@ export default function ProspectScreen(props) {
   const [regData, setRegData] = useState('')
   const [comment, setComment] = useState('')
   const [actionSlotLength,setActionSlotLength] = useState([])
-  const [priceAvailable, setPriceAvailable] = useState()
+  const [priceAvailable, setPriceAvailable] = useState("")
+
+  // const [generlActive,setGeneralActive] =useState(false)
+  const [vehicleActive,setVehicleActive] = useState(false)
+  const [actionActive,setActionActive] = useState(false)
 
   useEffect(() => {
     console.log("selectBranchh",selectedBranch)
@@ -293,6 +297,7 @@ export default function ProspectScreen(props) {
         "refFrom": referenceValue.code,
       }
       setSaveDataObj(newObj)
+      setVehicleActive(true)
       fn_GetVehicleMasterModel()
     }
   }
@@ -414,6 +419,14 @@ export default function ProspectScreen(props) {
   }
 
   const fn_TabClick = (type) => {
+    if(type===1){
+      setActive(type)
+    }else if(type === 2) {
+      vehicleActive ? setActive(type) : null
+    }else if(type===3){
+      actionActive ? setActive(type) : null
+
+    }
     // setActive(type)
     // fn_GetActionMasterList()
   }
@@ -453,6 +466,7 @@ export default function ProspectScreen(props) {
         "subModel": varientValue?.code,
       }
       setSaveDataObj(Object.assign({}, SaveDataObj, newObj))
+      setActionActive(true)
       fn_GetActionMasterList()
     }
   }
@@ -519,7 +533,7 @@ export default function ProspectScreen(props) {
       "actionCode": "",
       "chassisNo": item.chassisNo,
       "empCode": "",
-      "date": "2024-02-21T09:10:47.522Z",
+      "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
@@ -667,6 +681,7 @@ export default function ProspectScreen(props) {
 
   const fn_State = (d) => {
     setStateValue(d)
+    setCityValue({})
     dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
@@ -734,7 +749,7 @@ export default function ProspectScreen(props) {
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Mobile No.<Text style={styles.text2}>*</Text></Text>
               <View style={styles.mobileSubView}>
-                <TextInput style={styles.input1} onChangeText={(d) => setMobileNo(d)} keyboardType='numeric'>{mobileno}</TextInput>
+                <TextInput style={styles.input1} maxLength={10} onChangeText={(d) => setMobileNo(d)} keyboardType='numeric'>{mobileno}</TextInput>
                 <Pressable style={styles.searchButtonStyle} onPress={() => fn_GetSearchCust()}>
                   <FastImage source={images.search} resizeMode='contain' style={styles.searchStyle} />
                 </Pressable>
@@ -745,6 +760,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Entity<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={entityData}
+                title={entityValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setEntityValue(d)}
@@ -763,7 +779,7 @@ export default function ProspectScreen(props) {
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={title}
-                  title=' '
+                  title={titleValue?.description}
                   buttonExt={styles.dropNameList2}
                   textExt={styles.dropNameListText}
                   on_Select={(d) => setTitleValue(d)}
@@ -782,6 +798,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>State<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={stateData}
+                title={stateValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => fn_State(d)}
@@ -792,6 +809,8 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>City<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={cityData}
+                title={cityValue?.description}
+                refType={Object.keys(cityValue).length===0 ?true : false}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setCityValue(d)}
@@ -808,7 +827,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Source</Text>
                 <SelectDropList
                   list={sourceData}
-                  title='Please Select'
+                  title= {sourceValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setSourceValue(d)}
@@ -819,7 +838,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Reference</Text>
                 <SelectDropList
                   list={referenceData}
-                  title='Please Select'
+                  title={referenceValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setReferenceValue(d)}
@@ -830,7 +849,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Usage</Text>
                 <SelectDropList
                   list={usageData}
-                  title='Please Select'
+                  title={usageValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setUsageValue(d)}
@@ -848,7 +867,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>rating</Text>
                 <SelectDropList
                   list={ratingData}
-                  title='Please Select'
+                  title={ratingValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setRatingValue(d)}
@@ -871,6 +890,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={modelData}
+                title={modelValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => fn_ModelSelect(d)}
@@ -880,6 +900,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Edition<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={editionData}
+                title={editionValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setEditionValue(d)}
@@ -890,6 +911,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Varient</Text>
               <SelectDropList
                 list={varientData}
+                title={varientValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setVarientValue(d)}
@@ -901,6 +923,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Style<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={styleData}
+                title={styleValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setStyleValue(d)}
@@ -911,6 +934,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Exterior<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={exteriorData}
+                title={exteriorValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setExteriorValue(d)}
@@ -921,6 +945,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Internal</Text>
               <SelectDropList
                 list={inteiorData}
+                title={interiorValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setInteriorValue(d)}
@@ -933,7 +958,7 @@ export default function ProspectScreen(props) {
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={my_Data}
-                  title=' '
+                  title={my_DataValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setMyDataValue(d)}
@@ -941,7 +966,7 @@ export default function ProspectScreen(props) {
                 <Text> </Text>
                 <SelectDropList
                   list={vy_Data}
-                  title=' '
+                  title={vy_DataValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setVyDataValue(d)}
@@ -954,6 +979,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Assembly Type</Text>
               <SelectDropList
                 list={assemblyData}
+                title={assemblyValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
@@ -1012,6 +1038,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={actionTypeData}
+                title={actionTypeValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setActionTypeValue(d)}
@@ -1022,6 +1049,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={modelData}
+                title={actionModelValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setActionModelValue(d)}
@@ -1110,6 +1138,7 @@ export default function ProspectScreen(props) {
         isVisible={calenderModalShow.show}
         onRequestClose={() => setCalenderModalShow(s => { return { ...s, show: false } })}
         data={calenderModalShow.data}
+        mobile_Data={mobileno}
       />
     </SafeAreaView>
   )
