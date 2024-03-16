@@ -22,6 +22,7 @@ const SelectDropList = (props) => {
         ref={dropdownRef}
         defaultButtonText={title}
         disabled={disable}
+        disableAutoScroll={true}
         defaultValueByIndex={dropdownIndexValue}
         onSelect={(selectedItem, index) => {
              on_Select(selectedItem)

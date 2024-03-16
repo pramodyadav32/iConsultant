@@ -57,6 +57,8 @@ export const APIName = {
   GetProformaInsuMaster : baseUrl + 'Proforma/GetProformaInsuMaster',
   GetExistingVehicleMasters : baseUrl + 'ExistingVehicle/GetExistingVehicleMasters',
   GetExistingVehicleList : baseUrl + 'Proforma/GetExistingVehicleList',
+  SaveExistingVehicle : baseUrl + 'Proforma/SaveExistingVehicle',
+
 }
 
 export const apiCall = (callback, url, method, param, data) => {
