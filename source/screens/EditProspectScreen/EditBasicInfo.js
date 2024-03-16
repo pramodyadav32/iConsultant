@@ -54,6 +54,7 @@ export default function EditBasicInfo(props) {
   const [eventSourceList, setEventSourceList] = useState([]);
 
   useEffect(() => {
+    console.log("prospectMaster =====", JSON.stringify(prospectMaster))
     prospectMaster.map((item) => {
       if (item.listType === "SOURCE") {
         setSourceData(item.prospectMasterList);
@@ -105,6 +106,65 @@ export default function EditBasicInfo(props) {
       constant.showMsg(res.message);
     }
   };
+
+
+  const fn_GetProspectMaster = (dealCategory, dealType, calledByDropdown) => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "calledBy": "INTERNATIONAL_CALLING_CODE,ENTITY,TITLE,STATE,CITY,REFERENCE,SOURCE,RATING,USAGE,DEALCATEGORY,DEALTYPE,CORPORATE,PURCHASE_INTENTION,PROSPECT_CATEGORY,IMPORTANCE,FINANCER,DRIVEN_BY,GENDER,SALES_CONSULTANT,CUST_TYPE,COMPETITION_MODELS,CORRESPONDENCE_ADDRESS",
+        "entityCode": "",
+        "title": "",
+        "stateCode": "",
+        "corpDealCategory": dealCategory,
+        "dealType": dealType,
+        "purchaseIntension": "",
+        "prospectType": "",
+        "importance": "",
+        "financer": "",
+        "drivenBy": "",
+        "gender": "",
+        "teams": "",
+        "empId": "",
+        "custType": "",
+        "competitionModelSearch": "",
+        "loginUserCompanyId": userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1",
+
+    }
+    tokenApiCall(GetProspectMasterCallBack, APIName.GetProspectMaster, "POST", param, calledByDropdown)
+}
+
+const GetProspectMasterCallBack = async (res, calledByDropdown) => {
+    console.log("search1111", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
+    if (res.statusCode === 200) {
+        if(calledByDropdown === "DEAL_TYPE"){
+          res?.result.map((item) => {
+          if (item.listType === "DEALTYPE") {
+            setDealTypeData(item.prospectMasterList);
+          }
+        });
+        }else{
+          res?.result.map((item) => {
+          if (item.listType === "CORPORATE") {
+            item.prospectMasterList.map((item) => {
+              item?.code === data?.dealCompany ? setCompanyValue(item) : null;
+            });
+            setCompanyData(item.prospectMasterList);
+          }
+        });
+        }
+    } else {
+
+        constant.showMsg(res.message)
+    }
+}
+
 
   const fn_Create = () => {
     if (Object.keys(sourceValue).length === 0) {
@@ -300,7 +360,11 @@ export default function EditBasicInfo(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 disable={corporateCase === "Y" ? false : true}
-                on_Select={(d) => setDealCategoryValue(d)}
+                on_Select={(d) => {
+                  setDealCategoryValue(d)
+                  fn_GetProspectMaster(d?.code, "", "DEAL_TYPE")
+                }
+                }
               />
             </View>
           </View>
@@ -321,7 +385,13 @@ export default function EditBasicInfo(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 disable={corporateCase === "Y" ? false : true}
-                on_Select={(d) => setDealTypeValue(d)}
+                on_Select={(d) => {
+                  console.log("aaaaaa = ", dealCategoryValue)
+                  console.log("aaaaaa = ", d)
+                  setDealTypeValue(d)
+                  fn_GetProspectMaster(dealCategoryValue?.code, d?.code, "CORPORATE")
+                }
+                }
               />
             </View>
           </View>

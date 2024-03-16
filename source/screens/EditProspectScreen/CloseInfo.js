@@ -125,8 +125,14 @@ export default function CloseInfo(props) {
           item.select ? newArray.push(item?.description) : null
         })
        })
-
        console.log(newArray.join(","))
+
+       console.log("row data",JSON.stringify(data1))
+      let newArrayTable = []
+      await data1?.map((item)=>{
+          item.select ? newArrayTable.push(item) : null
+       })
+       console.log("newArrayTable = ", newArrayTable)
     const param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,

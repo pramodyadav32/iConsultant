@@ -109,11 +109,15 @@ export default function PerformaAccessories(props) {
   };
 
   const fn_AddNegociatedPrice = (item, index, d) => {
-    let newArr = accessoriesData;
-    item.negociatedPrice = d;
-    item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.quantity)
-    newArr.splice(index, 1, item);
-    setAccessoriesData([...newArr]);
+   if(item?.mrp - d < 0){
+      constant.showMsg("Negociated price can not be more than MRP.");
+   }else{
+      let newArr = accessoriesData;
+      item.negociatedPrice = d;
+      item.totalAmount =  d.length===0 ? 0 : Number(d) * Number(item.quantity)
+      newArr.splice(index, 1, item);
+      setAccessoriesData([...newArr]);
+   }
   };
 
   const fn_AddQty = (item, index, d) => {
@@ -181,13 +185,13 @@ export default function PerformaAccessories(props) {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
-      docLocation: selectedBranch.branchCode,
-      docCode: "SRP",
-      docFY: "2023-2024",
-      docNo: 43,
+      docLocation: performaBasicInfo?.proformaList[0]?.docLocation,
+      docCode: performaBasicInfo?.proformaList[0]?.docCode,
+      docFY: performaBasicInfo?.proformaList[0]?.docFy,
+      docNo: performaBasicInfo?.proformaList[0]?.docNo,
       calledBy: "PART",
       package: "",
-      searchString: "im",
+      searchString: "",
       partCategory: "1",
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -221,19 +225,20 @@ export default function PerformaAccessories(props) {
  };
 
   const fn_AddPackage = () => {
+   console.log("performaBasicInfo?.proformaList = ", performaBasicInfo?.proformaList[0])
     // setPackageModel(true)
     dispatch(emptyLoader_Action(true));
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
-      docLocation: selectedBranch.branchCode,
-      docCode: "SRP",
-      docFY: "2023-2024",
-      docNo: 43,
+      docLocation: performaBasicInfo?.proformaList[0]?.docLocation,
+      docCode: performaBasicInfo?.proformaList[0]?.docCode,
+      docFY: performaBasicInfo?.proformaList[0]?.docFy,
+      docNo: performaBasicInfo?.proformaList[0]?.docNo,
       calledBy: "PACKAGE",
       package: "",
-      searchString: "im",
+      searchString: "",
       partCategory: "1",
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -276,38 +281,52 @@ export default function PerformaAccessories(props) {
    return totalQty
  };
 
+ const fn_calculateDiscount = (item) => {
+   console.log("aaaaaaaa=", item?.price,  item?.negociatedPrice)
+   return ((Number(item?.price) - Number(item?.negociatedPrice)) * 100)/Number(item?.price)
+ };
+
  const saveAccessoriesAndPackages = () => {
   //  dispatch(emptyLoader_Action(true));
+  console.log("performaBasicInfo?.proformaList = ", performaBasicInfo?.proformaList[0])
+   let isQuantityZero = false
    let tempArr = []
    accessoriesData?.map((item) => {
+      if(Number(item?.quantity) <= 0){
+         isQuantityZero = true
+      }
       let obj = {
          "packageCode": "",
          "itemCategory": item?.itemCategory,
          "itemGroup": item?.itemGroup,
          "partNo": item?.partNo,
-         "qty": item?.quantity,
-         "unit": "",
-         "discountPer": item?.negociatedPrice,
-         "mrp": item?.price
+         "qty": Number(item?.quantity),
+         "unit": item?.unit,
+         "discountPer": fn_calculateDiscount(item),
+         "mrp": item?.negociatedPrice
        }
        tempArr.push(obj)
     });
+    if(isQuantityZero){
+      constant.showMsg("Quantity can not be zero.");
+    }else{
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
-      "docLocation": performaBasicInfo?.proformaList[0]?.docLocation,
-      "docCode": performaBasicInfo?.proformaList[0]?.docCode,
-      "docFY": performaBasicInfo?.proformaList[0]?.docFy,
-      "docNo": performaBasicInfo?.proformaList[0]?.docNo,
-      "action": "A",
-      "packageCode": "",
-      "partNo": "",
-      "loginUserId": userData?.userId,
-      "ipAddress": "1:1",
-      "proformaItemList": tempArr
+      docLocation: performaBasicInfo?.proformaList[0]?.docLocation,
+      docCode: performaBasicInfo?.proformaList[0]?.docCode,
+      docFY: performaBasicInfo?.proformaList[0]?.docFy,
+      docNo: performaBasicInfo?.proformaList[0]?.docNo,
+      action: "A",
+      packageCode: "",
+      partNo: "",
+      loginUserId: userData?.userId,
+      ipAddress: "1:1",
+      proformaItemList: tempArr
     }
     tokenApiCall(AddPartCallBack, APIName.SaveAccessoriesAndPackages, "POST", param);
+   }
   };
 
   const AddPartCallBack = (res) => {

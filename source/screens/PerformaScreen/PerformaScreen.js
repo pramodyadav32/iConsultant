@@ -760,7 +760,15 @@ export default function PerformaScreen(props) {
                            style={
                               index === active ? styles.tabButton : styles.tabButton2
                            }
-                           onPress={() => fn_TabClick(index, item)}
+                           onPress={() => {
+                              if(index === 0){
+                                 fn_TabClick(index, item)
+                              }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
+                                 fn_TabClick(index, item)
+                              }else{
+                                 constant.showMsg("No performa found for this prospect, please create performa first");
+                              }
+                           }}
                         >
                            <Text
                               style={

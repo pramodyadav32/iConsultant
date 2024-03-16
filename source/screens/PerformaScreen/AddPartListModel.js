@@ -58,10 +58,10 @@ const AddPartListModel = (props) => {
          <Text style={styles.listText2}>{item?.partNo} {item?.description}</Text>
         </View>
         <View style={styles.listSubView3}>
-         <Text style={styles.listText2}>NOS</Text>
+         <Text style={styles.listText2}>{item?.unit}</Text>
         </View>
         <View style={styles.listSubView3}>
-         <Text style={styles.listText2}>20</Text>
+         <Text style={styles.listText2}>{item?.stock}</Text>
         </View>
         <View style={styles.listSubView4}>
          <Text style={styles.listText2}>{item?.price}</Text>
