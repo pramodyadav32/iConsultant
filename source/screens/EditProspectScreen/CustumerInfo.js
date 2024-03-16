@@ -2,237 +2,174 @@ import React, { useEffect, useState } from 'react';
 import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar, TextInput, Pressable, FlatList, StyleSheet } from 'react-native';
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector } from 'react-redux'
 import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import Button from '../../components/Button';
 import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
-import { apiCall, APIName } from '../../utilities/apiCaller'
+import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import CalenderModal from '../../components/CalenderModal';
 import moment from 'moment';
 
+let data1 =[
+    {"code":1,'description':1},
+    {"code":2,'description':2},
+    {"code":3,'description':3},
+    {"code":4,'description':4},
+    {"code":5,'description':5},
+
+]
+
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail,profile_Data, modelData} = props
+    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle} = props
     const dispatch = useDispatch()
-    const [active, setActive] = useState(1)
-    const [destination,setDestination] = useState("")
-    const [prospectTypeData,setProspectData] = useState([])
-    const [prospectTypeValue,setProspectTypeValue] = useState({})
-    const [gender,setGender] = useState(true)
-    const [materialStaus,setMaterialStatus] = useState("N")
-    const [aniversary_Modal, setAniversary_Modal] = useState(false)
-    const [aniversaryDate,setAniversaryDate] = useState("")
-    const [dob_Modal, setDob_Modal] = useState(false)
-    const [dob,setDob] = useState("")
-    const [note,setNote] = useState("")
-    const [companyTypeList,setCompanyTypeList] = useState([])
-    const [companyTypeValue,setCompanyTypeValue] = useState({})
+    const { userData, selectedBranch } = useSelector((state) => state.AuthReducer);
+    const [active, setActive] = useState(1) 
     const [occupationList,setOccupationList] = useState([])
     const [occupationValue,setOccupationValue] = useState({})
-    const [ageGroupList,setAgeGroupList] = useState([])
-    const [ageGroupValue,setAgeGroupValue]  = useState({})
-    const [designationList,setDesignationList] = useState([])
-    const [designationValue,setDesignationValue] = useState({})
-    const [turnoverList,setTurnoverList] = useState([])
-    const [turnoverValue,setTurnoverValue] = useState({})
-    const [purchaseTypeList,setPurchaseList] = useState([])
-    const [financerList,setFinancerList] = useState([])
-    const [financerValue,setFinancerValue] = useState({})
-    const [usesTypeList,setUsesTypeList] = useState([])
-    const [usesTypeValue,setUsesTypeValue] = useState({})
-    const [customerProfile,setCustomerProfile] = useState({})
-    const [purchaseTypeData,setPurchaseTypeData] = useState([])
-    const [purchaseTypeValue,setPurchaseTypeValue] = useState({})
-    const [paymenttypeData,setPaymentTypeData] = useState([])
-    const [paymenttypeValue,setPaymentTypeValue] = useState({})
-    const [compModelData,setCompModelData] = useState([])
-    const [compModelValue,setCompModelValue] = useState({})
-    const [downPaymentData,setDownPaymentData] = useState([])
-    const [downPaymentValue,setDownPaymentValue] = useState('')
-    const [interestData,setInterestData] = useState([])
-    const [interestValue,setInterestValue] = useState({})
-    const [loadTenureData,setLoadTenureDate] = useState([])
-    const [loadTenureValue,setTenureValue] = useState({})
-    const [emiRate,setEmiRate ] = useState('')
-    const [purchaseVisible,setPurchaseVisible] = useState(false)
-
-    const [usageFreqData,setUsageFreqData] = useState([])
-    const [usageFreqValue,setUsageFreqValue] = useState({})
-    const [typeTravellingData,setTravelingData] = useState([])
-    const [typeTravellingValue,setTravelingValue] = useState({})
-    const [usagePaymentData,setUsagePaymentData] = useState([])
-    const [usagePaymentValue,setUsagePaymentValue] = useState({})
-    const [typeBodyData,setTypeBodyData] = useState([])
-    const [typeBodyValue,setTypeBodyValue] = useState({})
-
-    const [additionLeafData,setAdditionLeafData] = useState([])
-    const [additionLeafValue,setAdditionLeafValue] = useState({})
-    const [distanceDayData,setDistanceDayData] = useState([])
-    const [distanceDayValue,setDistanceDayValue] = useState({})
-
-    const [averageData,setAverageData] = useState([])
-    const [averageValue,setAverageValue] = useState({})
-    const [loadBodyData,setLoadBodyData] = useState([])
-    const [loadBodyDataValue,setLoadBodyDataValue] = useState({})
-    const [drivenMostlyData,setDrivernMostlyData] = useState([])
-    const [drivenMostyleValue,setDrivenMostlyValue] = useState({})
-    const [reasonChooseData,setReasonChooseData] = useState([])
-    const [reasonChooseValue,setReasonChooseValue] = useState({})
-    const [triggerPurcahseData,setTriggerPurchaseData] = useState([])
-    const [triggerPurchaseValue,setTriggerPurchaseValue] = useState({})
-    const [cabinData,setCabinData] = useState([])
-    const [cabinValue,setCabinValue] = useState({})
-    const [anyModificationData,setAnyModificationData] = useState([])
-    const [anyModificationDataValue,setAnyModificationValue] = useState({})
-    const [reasonPurcahseData,setReasonPurchasedata] = useState([])
-    const [reasonPurchaseValue,setReasonPurcahsevalue] = useState({})
-
-
-    const [v_UsageData,setV_UsageData] = useState([])
-    const [v_UsageValue,setV_UsageValue] = useState({})
-    const [v_BodyTypeData,setV_BodyTypeData] = useState([])
-    const [v_BodyTypeValue,setV_BodyTypeValue] = useState({})
-    const [v_BrandData,setV_BrandData] = useState([])
-    const [v_BrandValue,setV_BrandValue] = useState({})
-    const [v_ModelData,setV_ModelData] = useState([])
-    const [v_ModelValue,setV_ModelValue] = useState({})
-    const [v_VarientData,setV_VarientData] = useState([])
-    const [v_VarientValue,setV_VarientValue] = useState({})
-    const [purchaseYearData,setPurchaseYearData] = useState([])
-    const [purchaseYearValue,setPurchaseYearValue] = useState({})
+    const [usageData,setUsageData] = useState([])
+    const [usageValue,setUsageValue] = useState({})
+    const [bodyTypeData,setBodyTypeData] = useState([])
+    const [bodyTypeValue,setBodyTypeValue] = useState({})
+    const [brandData,setBrandData] = useState([])
+    const [brandValue,setBrandValue] = useState({})
+    const [modelData,setModelData] = useState([])
+    const [modelValue,setModelValue] = useState({})
+    const [varientData,setVarientData] = useState([])
+    const [varientValue,setVarientValue] = useState({})
+    const [yearPurchaseData,setYearPurchaseData]= useState([])
+    const [yearPurchaseValue,setYearPurchaseValue]= useState({})
     const [qtyData,setQtyData] = useState([])
-    const [qtyValue,setQtyValue] = useState([])
-
-
-
-
-
+    const [qtyValue,setQtyValue] = useState({})
 
    useEffect(()=>{
-     setCompanyTypeList(profile_Data?.companyTypeList)
-     setOccupationList(profile_Data?.occupationList)
-     setAgeGroupList(profile_Data?.ageGroupList)
-     setDesignationList(profile_Data?.designationList)
-     setTurnoverList(profile_Data?.turnoverList)
-     setPurchaseList(profile_Data?.purchaseTypeList)
-     setFinancerList(profile_Data?.financerList)
-     setUsesTypeList(profile_Data?.usesTypeList)
-     setCustomerProfile(profile_Data?.individualCustomerProfile)
-     setMaterialStatus(profile_Data?.individualCustomerProfile?.marriedStatus)
-     console.log("dob",profile_Data?.individualCustomerProfile?.dob)
-     setDob(moment(profile_Data?.individualCustomerProfile?.dob).format("DD-MMM-YYYY"))
 
-     let purchase_ = []
-     let payment_ =[]
-     let comp_ = []
-     let downPayment_ = []
-     let interestRate_ = []
-     let load_Tenure = []
-        profile_Data?.purchaseTypeList.map((item)=>{
-        if(item?.dataType === "PURCHASE_TYPE"){
-          purchase_.push(item)
-        }else if(item?.dataType === "PAYMENT_TYPE"){
-            payment_.push(item)
-        }else if(item?.dataType === "COMP_MODELS"){
-            comp_.push(item)
-        }else if(item?.dataType === "DOWN_PAYMENT"){
-            downPayment_.push(item)
-        }else if(item?.dataType === "INTEREST_RATE"){
-            interestRate_.push(item)
-        }else if(item?.dataType === "LOAN_TENURE"){
-            load_Tenure.push(item)
+    profile_Data.map((item)=>{
+        if(item?.listType === "USAGE"){
+          setUsageData(item?.existingVehicleMasterList)
+          item?.existingVehicleMasterList.map((item)=>{
+            if(item?.code === existing_Vehicle[0]?.usageCode){
+                setUsageValue(item)
+            }
+          })
+        }else if(item?.listType === "OCCUPATION"){
+            setOccupationList(item?.existingVehicleMasterList)
+            item?.existingVehicleMasterList.map((item)=>{
+                if(item?.code === existing_Vehicle[0]?.ownerShip){
+                    setOccupationValue(item)
+                }
+              })
+          }else if(item?.listType === "BRAND"){
+            item?.existingVehicleMasterList.map((item)=>{
+                if(item?.code === existing_Vehicle[0]?.make){
+                    setBodyTypeValue(item)
+                }
+              })
+            setBrandData(item?.existingVehicleMasterList)
+          }else if(item?.listType === "BODY_TYPE"){
+            setBodyTypeData(item?.existingVehicleMasterList)
+          }else if(item?.listType === "MODEL"){
+            setModelData(item?.existingVehicleMasterList)
+            item?.existingVehicleMasterList.map((item)=>{
+                if(item?.code === existing_Vehicle[0]?.modelCode){
+                    setModelValue(item)
+                }
+              })
+          }else if(item?.listType === "VARIANT"){
+            setVarientData(item?.existingVehicleMasterList)
+            item?.existingVehicleMasterList.map((item)=>{
+                if(item?.code === existing_Vehicle[0]?.variantCode){
+                    setVarientValue(item)
+                }
+              })
+          }else if(item?.listType === "YEAR_OF_PURCHASE"){
+            setYearPurchaseData(item?.existingVehicleMasterList)
+            item?.existingVehicleMasterList.map((item)=>{
+                if(Number(item?.code) === existing_Vehicle[0]?.yearOfPurchase){
+                    setYearPurchaseValue(item)
+                }
+              })
+          }
+     })
+     setQtyData(data)
+     data1.map((item)=>{
+        if(item.code === existing_Vehicle[0]?.quantity){
+            setQtyValue(item)
         }
      })
 
-     setPurchaseTypeData(purchase_)
-     setPaymentTypeData(payment_)
-     setUsagePaymentData(payment_)
-     setCompModelData(comp_)
-     setDownPaymentData(downPayment_)
-     setInterestData(interestRate_)
-     setLoadTenureDate(load_Tenure)
+   },[profile_Data,existing_Vehicle])
 
-    let usageFreq = []
-    let typeTravel = []
-    let paymentType = []
-    let AvgSpeed = []
-    let loadBody = []
-    let driveMost = []
-    let reasonChoose = []
-    let triggerPurchase = []
-    let Cabin = []
-    let anyModification = []
-    let reasonPurchase = []
-    let bodyBuild = []
-    let distancePerDay = []
-    let loadCapicty = []
-    let leafSpring = []
-    let BodyType = []
-    let reasonIsuz = []
+   const validation=()=>{
+    if (Object.keys(occupationValue).length === 0) {
+        constant.showMsg("Please Select Occupation")
+      } else if (Object.keys(usageValue).length === 0) {
+        constant.showMsg("Please Select Usage")
+      } else if (Object.keys(bodyTypeValue).length === 0) {
+        constant.showMsg("Please Select Body Type")
+      } else if (Object.keys(brandValue).length === 0) {
+        constant.showMsg("Please Select Brand")
+      } else if (Object.keys(modelValue).length === 0) {
+        constant.showMsg("Please Select Model")
+      } else if (Object.keys(varientValue).length === 0) {
+        constant.showMsg("Please Select Varient")
+      } else if (Object.keys(yearPurchaseValue).length === 0) {
+        constant.showMsg("Please Select Year of Purchase")
+      } else if (Object.keys(qtyValue).length === 0) {
+        constant.showMsg("Please Select QTY")
+      }  else {
+        fn_Create()
+      }
+   }
 
-    profile_Data?.usesTypeList.map((item)=>{
-          if(item?.dataType === 'USAGE_FREQUENCY'){
-           usageFreq.push(item)
-          }else if(item?.dataType === 'TRAVEL_TYPE'){
-           typeTravel.push(item)
-          }else if(item?.dataType === 'BODY_BUILT_TYPE'){
-            bodyBuild.push(item)
-           }else if(item?.dataType === 'LOAD_CAPACITY'){
-            loadCapicty.push(item)
-           }else if(item?.dataType === 'ADD_LEAF_SPRING'){
-            leafSpring.push(item)
-           }else if(item?.dataType === 'DIST_PER_DAY'){
-            distancePerDay.push(item)
-           }else if(item?.dataType === 'AVERAGE_SPEED'){
-            AvgSpeed.push(item)
-           }else if(item?.dataType === 'LOAD_BODY'){
-            loadBody.push(item)
-           }else if(item?.dataType === 'MAIN_DRIVER'){
-            driveMost.push(item)
-           }else if(item?.dataType === 'REASON_ISUZU'){
-            reasonIsuz.push(item)
-           }else if(item?.dataType === 'CABIN'){
-            Cabin.push(item)
-           }else if(item?.dataType === 'REASON_CHOOSE'){
-            reasonChoose.push(item)
-           }else if(item?.dataType === 'MODIFICATION'){
-            anyModification.push(item)
-           }else if(item?.dataType === 'REASON_PURCHASE'){
-            reasonPurchase.push(item)
-           }
-    })
+    const fn_Create=()=>{
+        let param = {        
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectNo": Number(data?.prospectID),
+            "branchCode": selectedBranch?.branchCode,
+            "competitorBrand": "",
+            "fy": data?.prospectFY,
+            "prospectLocation":data?.prospectLocation,
+            "make": "",
+            "model": modelValue?.code,
+            "subModel": varientValue?.code,
+            "owner": "",
+            "financer": "",
+            "yearofPurchase": yearPurchaseValue?.code,
+            "qty": Number(qtyValue?.code),
+            "comment": "string",
+            "usage": usageValue?.code,
+            "brandType": brandValue?.code,
+            "serial": 0,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+            "actionType": "",
+            "deleteFlag": "",
+            "occupation": occupationValue?.code,
+            "productSerial": 0
+           
+        }
 
-  setUsageFreqData(usageFreq)
-  setTravelingData(typeTravel)
-  setTypeBodyData(bodyBuild)
-  setAdditionLeafData(leafSpring)
-  setDistanceDayData(distancePerDay)
-  setAverageData(AvgSpeed)
-  setLoadBodyData(loadBody)
-  setDrivernMostlyData(driveMost)
-  setReasonPurchasedata(reasonPurchase)
-  setCabinData(Cabin)
-  setAnyModificationData(anyModification)
-  setReasonChooseData(reasonIsuz)
-   },[profile_Data])
+        tokenApiCall(saveProfileCallBack, APIName.SaveCustomerProfile, "POST", param)
 
-  
-
-    const fn_TabClick = (type) => {
-        console.log("type")
-        type === active ? setActive(0) : setActive(type)
-        // setActive(type)
-      
     }
 
-    const fn_SelectPaymentType=(d)=>{
-        setPaymentTypeValue(d)
-        d.dataCode === 'LOAN' ? setPurchaseVisible(true) : setPurchaseVisible(false)
+    const saveProfileCallBack = async (res) => {
+        console.log("savecustumer", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+          
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
     }
 
  
@@ -267,13 +204,14 @@ export default function CustumerInfo(props) {
             </View>
         </View>
         <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Usage<Text style={styles.text2}>*</Text></Text>
+            <Text style={styles.detailText}>Usage</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={usageData}
+             title={usageValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setUsageValue(d)}
            />
             </View>
         </View>
@@ -281,10 +219,10 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Body Type</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={bodyTypeData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setBodyTypeValue(d)}
            />
             </View>
         </View>
@@ -293,10 +231,10 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Brand</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={brandData}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setBrandValue(d)}
            />
             </View>
         </View>
@@ -306,10 +244,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Model</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={modelData}
+             title={modelValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setModelValue(d)}
            />
             </View>
         </View>
@@ -318,10 +257,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Variant</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={varientData}
+             title={varientValue?.code}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setVarientValue(d)}
            />
             </View>
         </View> 
@@ -330,10 +270,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Year of Purchase</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={yearPurchaseData}
+             title={yearPurchaseValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setYearPurchaseValue(d)}
            />
             </View>
         </View> 
@@ -342,10 +283,11 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}>Qty</Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={qtyData}
+             title={qtyValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setQtyValue(d)}
            />
             </View>
         </View> 
@@ -355,21 +297,11 @@ export default function CustumerInfo(props) {
 
 
 </View>
-<Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+<Button title='Save' click_Action={() => validation()} buttonExt={styles.performaButton} />
 
      </ScrollView>
 
-     <CalenderModal
-        isVisible={aniversary_Modal}
-        onRequestClose={() => setAniversary_Modal(false)}
-        onDateClick={(data) => {setAniversaryDate(moment(data.timestamp).format("DD-MMM-yyyy")),setAniversary_Modal(false)}}
-      />
-
-<CalenderModal
-        isVisible={dob_Modal}
-        onRequestClose={() => setDob_Modal(false)}
-        onDateClick={(data) => {setDob(moment(data.timestamp).format("DD-MMM-yyyy")),setDob_Modal(false)}}
-      />
+   
         </View>
     );
 }

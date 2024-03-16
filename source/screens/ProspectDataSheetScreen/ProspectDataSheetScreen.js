@@ -222,8 +222,10 @@ export default function ProspectDataSheetScreen(props) {
          }).start();
       } else if (type === 3) {
          fn_GetProspectDetail()
-      }else{
+      }else if(type===4){
          fn_GetActionDetail()
+      }else{
+         setActive(type)
       }
    }
 
@@ -484,25 +486,40 @@ export default function ProspectDataSheetScreen(props) {
          <View style={styles.cal_SubView}>
             <View style={styles.tabMainView}>
                <View style={styles.tabSubView}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <Pressable style={active === 1 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(1)} >
                      <Text style={active === 1 ? styles.tabButtonText : styles.tabButtonText2}>Data Sheet</Text>
+                      {active===1 && <View style={[styles.horixontalLine]} />}
                   </Pressable>
                   <Pressable style={active === 2 ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(2)} >
                      <Text style={active === 2 ? styles.tabButtonText : styles.tabButtonText2}>Basic Info</Text>
+                     {active===2 && <View style={[styles.horixontalLine]} />}
+                 
                   </Pressable>
                   <Pressable style={active === 3 ? [styles.tabButton, { width: constant.resW(30), }] : [styles.tabButton2, { width: constant.resW(30) }]} onPress={() => fn_TabClick(3)} >
                      <Text style={active === 3 ? styles.tabButtonText : styles.tabButtonText2}>Prospect Info</Text>
+                     {active===3 && <View style={[styles.horixontalLine]} />}
+                 
                   </Pressable>
-                  <Pressable style={active === 4 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(4)} >
+                  <Pressable style={active === 4 ? [styles.tabButton, { width: constant.resW(20)}] : [styles.tabButton2, { width: constant.resW(20)}]} onPress={() => fn_TabClick(4)} >
                      <Text style={active === 4 ? styles.tabButtonText : styles.tabButtonText2}>Actions</Text>
+                     {active===4 && <View style={[styles.horixontalLine]} />}
+                  
                   </Pressable>
+                  <Pressable style={active === 5 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(5)} >
+                     <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Performa</Text>
+                     {active===5 && <View style={[styles.horixontalLine]} />}
+                  
+                  </Pressable>
+                  </ScrollView>
                </View>
-               <Animated.View
+               
+               {/* <Animated.View
                   style={[styles.horixontalLine, {
                      transform: [{ translateX: interpolateX }],
                   }]}
                >
-               </Animated.View>
+               </Animated.View> */}
             </View>
             {
                active === 1 &&
@@ -675,8 +692,31 @@ export default function ProspectDataSheetScreen(props) {
                   />
                </View>
             }
+            {
+               active === 5 &&
+               <View style={{ flex: 1, paddingHorizontal: '1%' }}>
+               <ScrollView showsVerticalScrollIndicator={false}>
+                
+            
+               </ScrollView>
+            </View>
+            }
          </View>
-         <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+       {active != 5 ?
+         <Button title='Create Proforma' click_Action={() => null} buttonExt={styles.performaButton} />
+       
+       :
+
+         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
+         <Button title='Cancel Proforma' click_Action={() => null} buttonExt={styles.cancelPerformaButton} />
+         <Pressable style={styles.printerPerformaButton}>
+            <FastImage source={images.notify} style={styles.printerImage} />
+         </Pressable>
+         <Pressable style={styles.sharePerformaButton}>
+            <FastImage source={images.notify} style={styles.printerImage} />
+         </Pressable>
+         </View>
+}
 
          <DataSheetModal
             isVisible={detailModal}

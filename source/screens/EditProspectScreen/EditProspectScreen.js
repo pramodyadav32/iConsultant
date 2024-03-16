@@ -63,7 +63,8 @@ export default function EditProspectScreen(props) {
     const [actionTypeData, SetActionTypeData] = useState([])
     const [performData, setPerformData] = useState([])
     const [actionInfo, setActionInfo] = useState([])
-    const [profileData,setProfileData] = useState({})
+    const [profileData, setProfileData] = useState({})
+    const [existingVehicle,setExistingVehicle] = useState([])
 
     useEffect(() => {
         console.log("route.params.cardData = ", route.params.cardData)
@@ -429,25 +430,35 @@ export default function EditProspectScreen(props) {
     const fn_GetProfile = () => {
         dispatch(emptyLoader_Action(true))
         let param = {
-            "brandCode": userData?.brandCode,
+         "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "prospectID": Number(route.params.cardData?.prospectId),
-            "calledFrom": "PERSONAL",
-            "userId": userData?.userId,
+            "prospectID":Number(route.params.cardData?.prospectId),
+            "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+            "brandType": "",
+            "usage": "",
+            "competitorBrand": "",
+            "model": "",
+            "subModel": "",
+            "ownerShip": "",
+            "financer": "",
+            "purchaseYear": 0,
+            "occupationCode": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
             "ipAddress": "1::1"
         }
-        tokenApiCall(GetProfileCallBack, APIName.GetCustomerProfile, "POST", param)
+        tokenApiCall(GetProfileCallBack, APIName.GetExistingVehicleMasters, "POST", param)
 
     }
 
     const GetProfileCallBack = async (res) => {
-        console.log("search", JSON.stringify(res))
+        console.log("profile", JSON.stringify(res))
         // dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             setProfileData(res?.result)
             fn_GetProfileModel()
-          
+
         } else {
             dispatch(emptyLoader_Action(false))
             constant.showMsg(res.message)
@@ -460,27 +471,20 @@ export default function EditProspectScreen(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "calledBy": "EDITION,ASSEMBLY,MODEL",
-            "edition": "",
-            "assembly": "",
-            "subModel": "",
-            "model": "",
-            "code": "",
-            "loginUserId": userData?.userId,
-            "ipAddress": "1::1"
+            "userId": userData?.userId,
+            "ipAddress": "1::1",
+            "userCompanyId": userData?.userCompanyId,
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "dataType": "EXISTING_PRODUCT"
         }
-        tokenApiCall(GetProfileModelCallBack, APIName.GetVehicleMaster, "POST", param)
+        tokenApiCall(GetProfileModelCallBack, APIName.GetExistingVehicleList, "POST", param)
     }
 
     const GetProfileModelCallBack = async (res) => {
-        console.log("search", JSON.stringify(res))
+        console.log("exitstingdata", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-            await res.result.map((item) => {
-                if (item.listType === 'MODEL') {
-                    setVeh_ModelData(item.vehicleMaster)
-                }
-            })
+            setExistingVehicle(res?.result?.existingVehicleList)
             setActive(4)
         } else {
             dispatch(emptyLoader_Action(false))
@@ -689,7 +693,8 @@ export default function EditProspectScreen(props) {
                             profile_Data={profileData}
                             prospectDetail={prospectInfo}
                             prospectMaster={prospectMasterData}
-                            modelData={veh_ModelData}
+                            existing_Vehicle = {existingVehicle}
+
                         />
                     }
                     {
