@@ -185,7 +185,7 @@ export default function ActionInfo(props) {
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
       "chassisNo": item.chassisNo,
-      "empCode": "",
+      "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"

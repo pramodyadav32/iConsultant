@@ -62,7 +62,7 @@ export default function HomeScreen(props) {
         // Call your function or perform actions here
       };
     }, [homeRefresh])
-  );
+  ) ;
 
   const getProspectData = () => {
     let param = {
