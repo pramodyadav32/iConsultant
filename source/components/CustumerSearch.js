@@ -40,8 +40,8 @@ const CustumerSearch = (props) => {
                            <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.prospectId}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
-                           <Text style={styles.listText2}>Custumer Type</Text>
-                           <Text style={styles.listName3}>{item?.customerType==="B" ? "Business":"Individual"}</Text>
+                           <Text style={styles.listText2}>Status</Text>
+                           <Text style={styles.listName3}>{item?.prospectStatus}</Text>
                         </View>
                      </View>
         </Pressable>

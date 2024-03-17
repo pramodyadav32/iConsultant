@@ -111,6 +111,7 @@ export default function HomeScreen(props) {
  let groupdate = Object.keys(groupedData)
   setFilterUpcomingAction(groupedData)
   setUpComingAction(groupdate)
+  console.log("groupedata",groupdate)
     } else {
       constant.showMsg(res.message)
     }

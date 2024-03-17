@@ -33,7 +33,6 @@ export default function UpcomingActionScreen(props) {
   useEffect(()=>{
   fn_GetData()
   },[])
-  
 
   const fn_GetData=async()=>{
     const groupedData = {};
