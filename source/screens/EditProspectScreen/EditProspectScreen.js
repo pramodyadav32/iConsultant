@@ -86,6 +86,7 @@ export default function EditProspectScreen(props) {
     }
 
     const GetProspectBasicInfoCallBack = (res) => {
+        console.log("basic",res?.result)
         if (res.statusCode === 200) {
             setBasicInfo(res.result?.prospectBasicInfo)
             fn_GetProspectMaster()

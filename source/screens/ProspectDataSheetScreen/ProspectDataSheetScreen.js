@@ -637,14 +637,14 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Deal Category</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.dealCategoryDesc}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.corpApprovedFlag==="Y" ? "Approved" : "UnApproved"}</Text>
                         </View>
                      </View>
 
                      <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Deal Type</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.dealType}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.dealCategoryDesc}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Company</Text>

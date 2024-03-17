@@ -41,11 +41,11 @@ const ProspectActionSlotScreen = (props) => {
     },[slotList])
 
     useEffect(()=>{
-       if(vehicleList.length>0){
+    //    if(vehicleList.length>0){
         setActive(0)
-     setSelectVeh(vehicleList[0])
+        vehicleList.length>0 ?  setSelectVeh(vehicleList[0]) : setSelectVeh({})
      VehicleClick(vehicleList[0],0)
-       }
+    //    }
     },[vehicleList])
 
  const fn_Click=(item,index)=>{
@@ -131,9 +131,9 @@ const ProspectActionSlotScreen = (props) => {
  }
 
  const fn_Done=()=>{
-    if(Object.keys(selectVeh).length === 0){
-        constant.showMsg("Please select vehicle")
-    }else{
+    // if(Object.keys(selectVeh).length === 0){
+    //     constant.showMsg("Please select vehicle")
+    // }else{
         let data = slotListData.filter((item)=>item.Select===true)
         if(data.length > 0 ){
             done_Click(selectVeh,data)
@@ -142,7 +142,7 @@ const ProspectActionSlotScreen = (props) => {
             constant.showMsg("Please select time slot")
         }
       
-    }
+    // }
 
  }
 
@@ -208,7 +208,7 @@ const ProspectActionSlotScreen = (props) => {
                     ListFooterComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
                 />
                 </View>
-                {Object.keys(selectVeh).length > 0 &&
+                {/* {Object.keys(selectVeh).length > 0 && */}
                 <View style={styles.slotMainView}>
                 <FlatList
                      data={slotListData}
@@ -220,7 +220,7 @@ const ProspectActionSlotScreen = (props) => {
                 
                     />
                 </View>
-}
+{/* } */}
               {(slotList.length > 0 &&flagData.length >0) &&   <View style={styles.eventListMainView}>
                     <FlatList
                      data={slotList}
