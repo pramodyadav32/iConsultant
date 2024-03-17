@@ -26,7 +26,7 @@ let data1 =[
 ]
 
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle,custumerSave} = props
+    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle,custumerSave,fn_Next} = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector((state) => state.AuthReducer);
     const [active, setActive] = useState(1) 

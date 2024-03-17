@@ -22,7 +22,7 @@ import FeedBackModal from '../../components/FeedBackModal';
 import ActionTodayScreen from '../ActionTodayScreen/ActionTodayScreen';
 
 export default function ActionInfo(props) {
-  const { cardClick, updateClick, data, prospectData, actionType_Data, modelData,perform_Data } = props
+  const { cardClick, updateClick, data, prospectData, actionType_Data, modelData,perform_Data, fn_Next } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeValue, setActionTypeValue] = useState({})
@@ -138,6 +138,7 @@ export default function ActionInfo(props) {
       const originalDate = moment(data.timestamp);
       const utcDate = originalDate.utc();
       const zoneData = utcDate.toISOString()
+      console.log("zoneData",zoneData)
       setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
       setTimeSlotModal(s => { return { ...s, date: data, utcDateFormate: zoneData } })
       fn_GetDemoVehicleList()
@@ -163,9 +164,11 @@ export default function ActionInfo(props) {
     console.log("searchvehi", JSON.stringify(res))
     if (res.statusCode === 200) {
       setActionCal_Modal(false)
-      // if(res?.result?.demoVehicleList.length>0){
-      //   fn_GetActionSlots(res?.result?.demoVehicleList[0],0)
-      // }
+      if(res?.result?.demoVehicleList.length>0){
+        fn_GetActionSlots(res?.result?.demoVehicleList[0],0)
+      }else{
+        fn_GetActionSlots({},0)
+      }
       setTimeSlotModal(s => { return { ...s, show: true, vehicleList: res?.result?.demoVehicleList } })
       dispatch(emptyLoader_Action(false))
 
@@ -176,6 +179,7 @@ export default function ActionInfo(props) {
   }
 
   const fn_GetActionSlots = (item, index) => {
+    console.log("utc",timeSlotModal?.utcDateFormate)
     dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
@@ -202,7 +206,8 @@ export default function ActionInfo(props) {
         item["Select"] = false
         data.push(item)
       })
-      setTimeSlotModal(s => { return { ...s, slotList:[...data] } })
+      console.log("data1112",JSON.stringify(data))
+      // setTimeSlotModal(s => { return { ...s, slotList:[...data] } })
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
@@ -440,9 +445,12 @@ export default function ActionInfo(props) {
     if (res.statusCode === 200) {
       dispatch(home_Refresh_Action(true))
 
-      res?.result?.resultCode === "Y"
-      ? constant.showMsg("Data Saved Successfully.")
-      : constant.showMsg("Error while data saving.");
+      if(res?.result?.resultCode === "Y"){
+        fn_Next()
+        constant.showMsg("Data Saved Successfully.")
+      }else{
+        constant.showMsg("Error while data saving.");
+      }
     } else {
       dispatch(emptyLoader_Action(false))
       constant.showMsg(res.message)

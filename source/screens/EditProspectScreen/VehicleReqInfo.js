@@ -17,7 +17,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import moment from "moment"
 
 export default function VehicleReqInfo(props) {
-  const { cardClick, modelData, modelSelect, vehicledata,prospectData,allVehicleData,vehicleReqListData } = props
+  const { cardClick, modelData, modelSelect, vehicledata,prospectData,allVehicleData,vehicleReqListData, fn_Next } = props
   const [count, setCount] = useState(1)
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
@@ -473,7 +473,12 @@ const fn_GetVehicleVarientCallBack = async (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
       dispatch(home_Refresh_Action(true))
-      res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
+      if(res?.result?.resultCode === "Y"){
+        fn_Next()
+        constant.showMsg("Data Saved Successfully.")
+      }else{
+        constant.showMsg("Error while data saving.");
+      }
     } else {
       dispatch(emptyLoader_Action(false))
       constant.showMsg(res.message)

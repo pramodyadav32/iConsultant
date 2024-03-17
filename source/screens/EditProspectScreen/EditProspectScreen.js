@@ -665,6 +665,7 @@ export default function EditProspectScreen(props) {
                         <EditBasicInfo
                             data={basicInfo}
                             prospectMaster={prospectMasterData}
+                            fn_Next={()=>fn_GetProspectDetail()}
                         />
                     }
                     {
@@ -673,6 +674,7 @@ export default function EditProspectScreen(props) {
                             data={basicInfo}
                             prospectDetail={prospectInfo}
                             prospectMaster={prospectMasterData}
+                            fn_Next={()=>fn_GetVehicleMasterModel()}
                         />
                     }
                     {active === 2 &&
@@ -683,6 +685,7 @@ export default function EditProspectScreen(props) {
                             modelSelect={(d) => fn_GetVehicleModel(d)}
                             allVehicleData={allVehicleData}
                             vehicleReqListData={vehicleReqListData}
+                            fn_Next={()=>fn_GetActionDetail()}
 
                         />
                     }
@@ -695,6 +698,7 @@ export default function EditProspectScreen(props) {
                             prospectData={route.params?.cardData}
                             perform_Data={performData}
                             feedBackClick={(item, index) => { fn_FeedBack(item, index) }}
+                            fn_Next={()=>fn_GetProfile()}
                         />
 
                     }
@@ -706,6 +710,7 @@ export default function EditProspectScreen(props) {
                             prospectMaster={prospectMasterData}
                             existing_Vehicle = {existingVehicle}
                             custumerSave = {()=>fn_CustumerSave()}
+                            fn_Next={()=> fn_GetActionTypeCloseList()}
 
                         />
                     }
