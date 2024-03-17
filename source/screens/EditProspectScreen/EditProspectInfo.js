@@ -76,13 +76,9 @@ export default function EditProspectInfo(props) {
     const [copyToOff, setCopyToOff] = useState(false)
     const [copyRegToOff, setCopyRegToOff] = useState(false)
     useEffect(() => {
+        console.log("data1111",prospectDetail)
         prospectMaster.map((item) => {
-            if (item.listType === 'TITLE') {
-                setTitle(item.prospectMasterList)
-                item.prospectMasterList.map((item) => {
-                    item?.code === prospectDetail?.title ? setTitleValue(item) : null
-                })
-            } else if (item.listType === 'STATE') {
+          if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)
                 item.prospectMasterList.map((item) => {
                     item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
@@ -100,11 +96,17 @@ export default function EditProspectInfo(props) {
                 setCityData(item.prospectMasterList)
             } else if (item.listType === 'ENTITY') {
                 setProspectData(item.prospectMasterList)
+                console.log("entity",item)
                 item.prospectMasterList.map((item)=>{
-                    item?.code === data?.custType ? setProspectTypeValue(item) : null
+                    if(item?.code === prospectDetail?.custType){
+                        fn_EntityClick(item)
+                        setProspectTypeValue(item)
+                    } 
                 })
             }
         })
+        setName(prospectDetail?.firstName)
+        setSonName(prospectDetail?.sonOf)
         setMobileno(prospectDetail?.mobile)
         setEmail(prospectDetail?.email)
         setPanData(prospectDetail?.pan)
@@ -398,7 +400,13 @@ export default function EditProspectInfo(props) {
         if (res.statusCode === 200) {
           await res.result.map((item) => {
              if (item.listType === "TITLE") {
-              setTitle(item.prospectMasterList);
+                if (item.listType === 'TITLE') {
+                    setTitle(item.prospectMasterList)
+                    item.prospectMasterList.map((item) => {
+                        item?.code === prospectDetail?.title ? setTitleValue(item) : null
+                    })
+                } 
+              
             }
           });
           dispatch(emptyLoader_Action(false));
@@ -425,6 +433,8 @@ export default function EditProspectInfo(props) {
                             <View style={styles.mobileSubView}>
                                 <SelectDropList
                                     list={prospectTypeData}
+                                    title={prospectTypeValue?.description}
+                                    refType={Object.keys(prospectTypeValue).length===0 ?false : true}
                                     buttonExt={styles.dropList}
                                     textExt={styles.dropListText}
                                     on_Select={(d) => {fn_EntityClick(d)}}

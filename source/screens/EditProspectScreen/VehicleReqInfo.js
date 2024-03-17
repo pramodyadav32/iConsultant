@@ -17,11 +17,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import moment from "moment"
 
 export default function VehicleReqInfo(props) {
-  const { cardClick, modelData, modelSelect, vehicledata,prospectData } = props
+  const { cardClick, modelData, modelSelect, vehicledata,prospectData,allVehicleData,vehicleReqListData } = props
   const [count, setCount] = useState(1)
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [modelValue, setModelValue] = useState({})
+  
   const [editionData, setEditionData] = useState([])
   const [editionValue, setEditionValue] = useState({})
   const [assemblyData, setAssemblyData] = useState([])
@@ -41,29 +42,115 @@ export default function VehicleReqInfo(props) {
   const [priceAvailable, setPriceAvailable] = useState()
 
   useEffect(() => {
-    vehicledata.map((item) => {
-      if (item.listType === 'EDITION') {
+    console.log("aalll",allVehicleData)
+    allVehicleData.map((item) => {
+      if (item.listType === 'MODEL') {
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
+      })
+      }
+      else if (item.listType === 'EDITION') {
         setEditionData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+      })
       } else if (item.listType === 'ASSEMBLY') {
         setAssemblyData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+      })
       } else if (item.listType === 'VARIANT') {
+        item.vehicleMaster.map((item)=>{
+          {console.log("vehicleitem",item)}
+          item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
+      })
         setvarientData(item.vehicleMaster)
       } else if (item.listType === 'STYLE') {
-        setStyleData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
+      })
+        // setStyleData(item.vehicleMaster)
       } else if (item.listType === 'EXT_COLOR') {
-        setExteriorData(item.vehicleMaster)
+        // setExteriorData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
+      })
       } else if (item.listType === 'INT_COLOR') {
-        setInteriorData(item.vehicleMaster)
+        // setInteriorData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
+      })
       } else if (item.listType === 'VY') {
-        setVyData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
+      })
+        // setVyData(item.vehicleMaster)
       } else if (item.listType === 'MY') {
-        setMyData(item.vehicleMaster)
+        console.log("itemlaytype",item?.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
+      })
+        // setMyData(item.vehicleMaster)
       }
     })
-  }, [vehicledata])
+  }, [allVehicleData])
 
   useEffect(() => {
-    priceStatus()
+    console.log("aalll",allVehicleData)
+    allVehicleData.map((item) => {
+      if (item.listType === 'MODEL') {
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
+      })
+      }
+      else if (item.listType === 'EDITION') {
+        setEditionData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+      })
+      } else if (item.listType === 'ASSEMBLY') {
+        setAssemblyData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+      })
+      } else if (item.listType === 'VARIANT') {
+        item.vehicleMaster.map((item)=>{
+          {console.log("vehicleitem",item)}
+          item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
+      })
+        setvarientData(item.vehicleMaster)
+      } else if (item.listType === 'STYLE') {
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
+      })
+        // setStyleData(item.vehicleMaster)
+      } else if (item.listType === 'EXT_COLOR') {
+        // setExteriorData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
+      })
+      } else if (item.listType === 'INT_COLOR') {
+        // setInteriorData(item.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
+      })
+      } else if (item.listType === 'VY') {
+        item.vehicleMaster.map((item)=>{
+          item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
+      })
+        // setVyData(item.vehicleMaster)
+      } else if (item.listType === 'MY') {
+        console.log("itemlaytype",item?.vehicleMaster)
+        item.vehicleMaster.map((item)=>{
+          item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
+      })
+        // setMyData(item.vehicleMaster)
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    // priceStatus()
   }, [])
   
 
@@ -196,6 +283,7 @@ export default function VehicleReqInfo(props) {
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
+            {console.log("model",modelValue)}
             <SelectDropList
               list={modelData}
               buttonExt={styles.dropList}
