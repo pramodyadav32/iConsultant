@@ -450,6 +450,7 @@ export default function ProspectScreen(props) {
         ipAddress: "1::1",
         slotMins: totalTimeSlot,
         slotCount: actionSlotLength.length,
+       
       };
 
       let newObj = Object.assign({}, SaveDataObj, param);
@@ -656,7 +657,7 @@ export default function ProspectScreen(props) {
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
       "chassisNo": item.chassisNo,
-      "empCode": "",
+      "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
@@ -1046,7 +1047,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Email ID</Text>
+              <Text style={styles.detailText}>Email ID<Text style={styles.text2}>*</Text></Text>
               <TextInput
                 onChangeText={(d) => setEmail(d)}
                 style={styles.input1}
@@ -1086,7 +1087,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>PIN</Text>
+              <Text style={styles.detailText}>PIN<Text style={styles.text2}>*</Text></Text>
               <TextInput
                 style={styles.input1}
                 maxLength={6}
@@ -1220,7 +1221,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Variant</Text>
+              <Text style={styles.detailText}>Variant<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={varientData}
                 title={varientValue?.description}
@@ -1261,7 +1262,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Internal</Text>
+              <Text style={styles.detailText}>Internal<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={inteiorData}
                 title={interiorValue?.description}
@@ -1274,7 +1275,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>MY/VY</Text>
+              <Text style={styles.detailText}>MY/VY<Text style={styles.text2}>*</Text></Text>
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={my_Data}
@@ -1297,7 +1298,7 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Assembly Type</Text>
+              <Text style={styles.detailText}>Assembly Type<Text style={styles.text2}>*</Text></Text>
               <SelectDropList
                 list={assemblyData}
                 title={assemblyValue?.description}

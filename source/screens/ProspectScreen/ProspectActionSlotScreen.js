@@ -148,7 +148,7 @@ const ProspectActionSlotScreen = (props) => {
 
     const renderItem = ({item,index}) => {
         return (
-           <ImageBackground source={images.listImage2} imageStyle={{borderRadius:10}} resizeMode='contain' style={[styles.listImage,{}]} >
+           <ImageBackground source={images.listImage2} imageStyle={{borderRadius:10,borderColor:active===index ? 'red': 'black',borderWidth: active===index ? 1 : 0}} resizeMode='contain' style={[styles.listImage,{marginTop:constant.moderateScale(10)}]} >
            <Pressable style={styles.listImageMainView} onPress={()=>fn_Click(item,index)}>
             <FastImage style={styles.listSubImage} resizeMode='contain' source={{uri:item?.modelUrl}} />
             <Text numberOfLines={1} style={styles.listText}>{item?.modelName}</Text>

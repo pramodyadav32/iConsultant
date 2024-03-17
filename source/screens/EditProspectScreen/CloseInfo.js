@@ -161,7 +161,7 @@ export default function CloseInfo(props) {
        console.log("newArrayTable = ", newArrayTable)
 
        let closureList = []
-       showList ? 
+       showList.show ? 
        showList?.data.map((item)=>{
         if(item.dateValue != undefined){
           let newObj ={
@@ -172,11 +172,12 @@ export default function CloseInfo(props) {
             "interior": item?.interiorCode,
             "qty": item?.quantity,
             "expectedDelvDate": item?.zoneDate,
-            "proformaLocation": "string",
-            "proformaDoc": "string",
-            "proformaFY": "string",
+            "proformaLocation": "",
+            "proformaDoc": "",
+            "proformaFY": "",
             "proformaNo": 0
           }
+          closureList.push(newObj)
         }
        })
        : null
@@ -197,33 +198,19 @@ export default function CloseInfo(props) {
       "dealerCode": closureValue?.code ==="C" ? dealerValue?.code : '',//base on close type if from other dealer
       "comment": comment,
       "closeType": closureValue?.code,
-      "ruleSubCategory": "string",
-      "status": "string",
+      "ruleSubCategory": "",
+      "status": "",
       "closeDate": closureDate,
       "ordDate": moment(new Date()).format("DD-MMM-YYYY"),
       "prospectDisLikeList":showDislike ? newArray.join(",").toString() : '' ,
-      "closureProductList": [
-        {
-          "serial": 0,
-          "model": "string",
-          "variant": "string",
-          "exterior": "string",
-          "interior": "string",
-          "qty": 0,
-          "expectedDelvDate": "2024-03-13T13:33:49.626Z",
-          "proformaLocation": "string",
-          "proformaDoc": "string",
-          "proformaFY": "string",
-          "proformaNo": 0
-        }
-      ],
-      "reOpenDay": "string",
-      "reOpenMonth": "string",
-      "reOpenYear": "string"
+      "closureProductList": showList.show ? closureList : "",
+      "reOpenDay": "",
+      "reOpenMonth": "",
+      "reOpenYear": ""
     }
     // }
     console.log("param", param)
-    // tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectClosure, "POST", param)
+    tokenApiCall(saveBasicInfoCallBack, APIName.SaveProspectClosure, "POST", param)
 
     // }
 
