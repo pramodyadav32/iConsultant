@@ -195,7 +195,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
         financeLocation:
           data?.financerLocation === null ? "" : data?.financerLocation,
         financer: "",
-        activeRate: "",
+        activeRate: data?.rating === null ? "" : data?.rating,
         usage: data?.usageCode,
         source: sourceValue?.code,
         refFrom: data?.referenceId,
@@ -204,7 +204,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
         comment: generalComment === null ? "" : generalComment,
         approveFlag: corporateCase === "Y" ? dealCategoryValue?.code : "",
         dealType: corporateCase === "Y" ? dealTypeValue?.code : "",
-        dealerCompanyDocket:corporateCase === "Y" ? companyValue?.code : 0,
+        dealerCompanyDocket:corporateCase === "Y" ? Number(companyValue?.code) : 0,
         agencyLeadId: 0,
         agencyId: 0,
         refCustomer: 0, //data?.custReference,

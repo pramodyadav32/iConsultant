@@ -434,7 +434,7 @@ export default function ProspectScreen(props) {
         firstAction: actionTypeValue.code,
         actionDate: actionDate,
         actionComment: comment,
-        campaign: eventSourceData === undefined ? "" : eventSourceData?.serial,
+        campaign: eventSourceData === undefined ? 0 : Number(eventSourceData?.serial),
         dealerCompanyDocket: "",
         corporateFlag: "N",
         dealType: "",
@@ -1195,7 +1195,7 @@ export default function ProspectScreen(props) {
           >
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-                Model<Text style={styles.text2}>*</Text>
+              Demo Vehicle<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={modelData}

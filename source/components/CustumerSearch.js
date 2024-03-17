@@ -58,7 +58,7 @@ const CustumerSearch = (props) => {
               <View style={styles.modalSubView}>
               <AntDesign name='close' style={styles.closeIcon} onPress={()=>onRequestClose()} />
               <View style={styles.innerView}>
-              <Text style={styles.listName}>{"Prospect for this mobile number ( "+mobile_Data+" ) are below"}</Text>
+              <Text style={styles.listName}>{"Prospect Info for this Mobile Number ("+mobile_Data+") are below: "}</Text>
 
                <FlatList 
                 data={data}

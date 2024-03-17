@@ -67,7 +67,6 @@ export default function TestDriveList(props) {
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
                     <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
-                    <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
                  </View>
                 </View>
                     </View>
