@@ -160,7 +160,6 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
         });
         }
     } else {
-
         constant.showMsg(res.message)
     }
 }
@@ -389,6 +388,8 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
                   console.log("aaaaaa = ", dealCategoryValue)
                   console.log("aaaaaa = ", d)
                   setDealTypeValue(d)
+                  setCompanyValue({})
+                  setCompanyData([])
                   fn_GetProspectMaster(dealCategoryValue?.code, d?.code, "CORPORATE")
                 }
                 }
@@ -408,7 +409,8 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
             <View style={styles.basicDetailSubView2}>
               <SelectDropList
                 list={companyData}
-                title=" "
+                refType={Object.keys(companyValue).length===0 ?false : true}
+                title={companyValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 disable={corporateCase === "Y" ? false : true}

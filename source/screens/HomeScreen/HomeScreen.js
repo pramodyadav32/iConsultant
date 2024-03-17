@@ -61,7 +61,7 @@ export default function HomeScreen(props) {
         // goLive("end",live_Id,broadCastName,broadCasttoken)
         // Call your function or perform actions here
       };
-    }, [])
+    }, [homeRefresh])
   );
 
   const getProspectData = () => {
