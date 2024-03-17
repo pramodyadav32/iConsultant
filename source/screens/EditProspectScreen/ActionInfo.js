@@ -184,7 +184,7 @@ export default function ActionInfo(props) {
       "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
-      "chassisNo": item.chassisNo,
+      "chassisNo": item?.chassisNo,
       "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
