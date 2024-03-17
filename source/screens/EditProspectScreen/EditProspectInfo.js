@@ -256,7 +256,7 @@ export default function EditProspectInfo(props) {
                 "brandCode": userData?.brandCode,
                 "countryCode": userData?.countryCode,
                 "companyId": userData?.companyId,
-                "prospectLocation": selectedBranch.brandCode,
+                "prospectLocation": selectedBranch?.branchCode,
                 "prospectNo": Number(data?.prospectID),
                 "custType": "I",
                 "title": titleValue.code,

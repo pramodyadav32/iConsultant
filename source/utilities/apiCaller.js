@@ -37,7 +37,7 @@ export const APIName = {
   GetVehiclesRequiredList : baseUrl + 'VehicleRequired/GetVehiclesRequiredList',
   SaveProspectClosure : baseUrl + 'Prospect/SaveProspectClosure',
   GetCampaignsMaster : baseUrl + 'Prospect/GetCampaignsMaster',
-  SaveProspectDetails : baseUrl + 'SaveProspectDetails',
+  SaveProspectDetails : baseUrl + 'Prospect/SaveProspectDetails',
   
   GetMstAccessories : baseUrl + 'Proforma/GetMstAccessories',
   GetProformaTaxMasters : baseUrl + 'Proforma/GetProformaTaxMasters',
