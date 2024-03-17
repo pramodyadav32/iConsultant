@@ -65,7 +65,8 @@ export default function EditProspectScreen(props) {
     const [actionInfo, setActionInfo] = useState([])
     const [profileData, setProfileData] = useState({})
     const [existingVehicle,setExistingVehicle] = useState([])
-
+    const [allVehicleData,setAllVehicleData] = useState([])
+    const [vehicleReqListData,setVehicleReqListData] = useState([])
     useEffect(() => {
         console.log("route.params.cardData = ", route.params.cardData)
         fn_GetProspectBasicInfo()
@@ -177,7 +178,7 @@ export default function EditProspectScreen(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "calledBy": "EDITION,ASSEMBLY,MODEL",
+            "calledBy": "EDITION,ASSEMBLY,MODEL,EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
             "edition": "",
             "assembly": "",
             "subModel": "",
@@ -192,6 +193,7 @@ export default function EditProspectScreen(props) {
     const GetVehicleMasterModelCallBack = async (res) => {
         console.log("search", JSON.stringify(res))
         if (res.statusCode === 200) {
+            setAllVehicleData(res?.result)
             await res.result.map((item) => {
                 if (item.listType === 'MODEL') {
                     setVeh_ModelData(item.vehicleMaster)
@@ -221,9 +223,10 @@ export default function EditProspectScreen(props) {
     }
 
     const VehicleReqListCallBack = async (res) => {
-        console.log("search", JSON.stringify(res))
+        console.log("vehicleRequest", JSON.stringify(res))
         if (res.statusCode === 200) {
-
+            setVehicleReqListData(res?.result?.vehicleRequiredList[0])
+            // fn_GetVehicleModel({},1)
             setActive(2)
             dispatch(emptyLoader_Action(false))
         } else {
@@ -232,7 +235,7 @@ export default function EditProspectScreen(props) {
         }
     }
 
-    const fn_GetVehicleModel = (d) => {
+    const fn_GetVehicleModel = (d,type) => {
         dispatch(emptyLoader_Action(true))
         let param = {
             "brandCode": userData?.brandCode,
@@ -242,18 +245,18 @@ export default function EditProspectScreen(props) {
             "edition": "",
             "assembly": "",
             "subModel": "",
-            "model": d.code,
+            "model":type === 1 ? "" : d.code ,
             "code": "",
             "loginUserId": userData?.userId,
             "ipAddress": "1::1"
         }
-        tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param)
+        tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param,type)
     }
 
-    const GetVehicleMasterCallBack = async (res) => {
+    const GetVehicleMasterCallBack = async (res,type) => {
         console.log("search", JSON.stringify(res))
         if (res.statusCode === 200) {
-            setVehicleData(res?.result)
+           setVehicleData(res?.result)
             dispatch(emptyLoader_Action(false))
         } else {
             dispatch(emptyLoader_Action(false))
@@ -678,6 +681,8 @@ export default function EditProspectScreen(props) {
                             vehicledata={vehicleData}
                             prospectData={route.params?.cardData}
                             modelSelect={(d) => fn_GetVehicleModel(d)}
+                            allVehicleData={allVehicleData}
+                            vehicleReqListData={vehicleReqListData}
 
                         />
                     }
