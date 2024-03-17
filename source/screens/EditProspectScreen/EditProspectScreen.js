@@ -178,7 +178,7 @@ export default function EditProspectScreen(props) {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
-            "calledBy": "EDITION,ASSEMBLY,MODEL,EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+            "calledBy": "EDITION,ASSEMBLY,MODEL",
             "edition": "",
             "assembly": "",
             "subModel": "",
@@ -245,7 +245,7 @@ export default function EditProspectScreen(props) {
             "edition": "",
             "assembly": "",
             "subModel": "",
-            "model":type === 1 ? "" : d.code ,
+            "model": d.code ,
             "code": "",
             "loginUserId": userData?.userId,
             "ipAddress": "1::1"
