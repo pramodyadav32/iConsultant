@@ -34,7 +34,7 @@ const data2 = [
     { 'key': 2, "title": 'Prospect Info', },
     { 'key': 3, "title": 'Vehicle Required' },
     { 'key': 4, "title": 'Actions' },
-    { 'key': 5, "title": 'Custumer Profile' },
+    { 'key': 5, "title": 'Customer Profile' },
     { 'key': 6, "title": 'Close' },
 
 

@@ -340,7 +340,7 @@ const FeedBackModal = (props) => {
                 style={[styles.detailMainView, { alignItems: "flex-start" }]}
               >
                 <Text style={[styles.detailText, { marginTop: "3%" }]}>
-                  Custumer Remarks (if any)
+                  Customer Remarks (if any)
                 </Text>
                 <TextInput
                   placeholder="Enter Remark"

@@ -149,7 +149,7 @@ export default function CloseInfo(props) {
       let newArray = []
       await dislikeData.map((data)=>{
         data?.dislikeValues.map((item)=>{
-          item.select ? newArray.push(item?.description) : null
+          item.select ? newArray.push(data?.group+""+item?.code) : null
         })
        })
 
@@ -203,7 +203,7 @@ export default function CloseInfo(props) {
       "closeDate": closureDate,
       "ordDate": moment(new Date()).format("DD-MMM-YYYY"),
       "prospectDisLikeList":showDislike ? newArray.join(",").toString() : '' ,
-      "closureProductList": showList.show ? closureList : "",
+      "closureProductList": showList.show ? closureList : [],
       "reOpenDay": "",
       "reOpenMonth": "",
       "reOpenYear": ""

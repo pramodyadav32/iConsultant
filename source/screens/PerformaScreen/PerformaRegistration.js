@@ -268,7 +268,7 @@ export default function PerformaRegistration(props) {
           <View style={{flex:1,flexDirection:'row'}}>
             <Pressable style={[styles. bottomMainView,{}]} onPress={()=>setCustumerReg(!custumerReg)}>
                 <FastImage source={custumerReg ? images?.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
-              <Text style={styles.text4}>Registration to be done by Custumer</Text>
+              <Text style={styles.text4}>Registration to be done by Customer</Text>
             </Pressable> 
             
             </View>

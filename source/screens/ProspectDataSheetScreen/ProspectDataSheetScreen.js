@@ -507,7 +507,7 @@ export default function ProspectDataSheetScreen(props) {
                   
                   </Pressable>
                   <Pressable style={active === 5 ? [styles.tabButton, {}] : [styles.tabButton2, {}]} onPress={() => fn_TabClick(5)} >
-                     <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Performa</Text>
+                     <Text style={active === 5 ? styles.tabButtonText : styles.tabButtonText2}>Proforma</Text>
                      {active===5 && <View style={[styles.horixontalLine]} />}
                   
                   </Pressable>

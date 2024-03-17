@@ -39,7 +39,7 @@ export default function CallCustScreen(props) {
              </View>
              <View style={styles.driveListDetailSubView2}>
                 <Text style={styles.listText2}>Next Action</Text>
-                <Text style={styles.listText3}>Call to Custumer</Text>
+                <Text style={styles.listText3}>Call to Customer</Text>
              </View>
             </View>
 
