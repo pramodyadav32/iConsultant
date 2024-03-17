@@ -98,7 +98,7 @@ export default function EditProspectInfo(props) {
 
                 })
                 setCityData(item.prospectMasterList)
-            } else if (item.listType === 'PROSPECT_CATEGORY') {
+            } else if (item.listType === 'ENTITY') {
                 setProspectData(item.prospectMasterList)
                 // item.prospectMasterList.map((item)=>{
                 //     item?.code === data?.prospectType ? setProspectTypeValue(item) : null
@@ -282,7 +282,7 @@ export default function EditProspectInfo(props) {
                 "regnFax": "",
                 "regnZone": "",
                 "regnSubZone": "",
-                "regnDistrict": res_destict,
+                "regnDistrict": res_destict?.code,
                 "resAdd1": resAdd1,
                 "resAdd2": resAdd2,
                 "resAdd3": resAdd3,
@@ -293,7 +293,7 @@ export default function EditProspectInfo(props) {
                 "resFax": "",
                 "resZone": "",
                 "resSubZone": "",
-                "resDistrict": reg_destict,
+                "resDistrict": reg_destict?.code,
                 "offAdd1": offAdd1,
                 "offAdd2": offAdd2,
                 "offAdd3": offAdd3,
@@ -355,7 +355,58 @@ export default function EditProspectInfo(props) {
             constant.showMsg(res.message)
         }
     }
-
+    const fn_EntityClick=(d)=>{
+        setProspectTypeValue(d)
+        dispatch(emptyLoader_Action(true));
+        let param = {
+          brandCode: userData?.brandCode,
+          countryCode: userData?.countryCode,
+          companyId: userData?.companyId,
+          branchCode: selectedBranch?.branchCode,
+          calledBy:
+            "INTERNATIONAL_CALLING_CODE,ENTITY,TITLE,STATE,CITY,REFERENCE,SOURCE,RATING,USAGE,DEALCATEGORY,DEALTYPE,CORPORATE,PURCHASE_INTENTION,PROSPECT_CATEGORY,IMPORTANCE,FINANCER,DRIVEN_BY,GENDER,SALES_CONSULTANT,CUST_TYPE,COMPETITION_MODELS,CORRESPONDENCE_ADDRESS",
+          entityCode:d.code,
+          title: "",
+          stateCode: "",
+          corpDealCategory: "",
+          dealType: "",
+          purchaseIntension: "",
+          prospectType: "",
+          importance: "",
+          financer: "",
+          drivenBy: "",
+          gender: "",
+          teams: "",
+          empId: "",
+          custType: "",
+          competitionModelSearch: "",
+          loginUserId: userData?.userId,
+          loginUserCompanyId: userData?.companyId,
+          ipAddress: "1::1",
+        };
+        tokenApiCall(
+          EntityClickCallBack,
+          APIName.GetProspectMaster,
+          "POST",
+          param
+        );
+      }
+    
+    
+      const EntityClickCallBack = async (res) => {
+        console.log("search", JSON.stringify(res));
+        if (res.statusCode === 200) {
+          await res.result.map((item) => {
+             if (item.listType === "TITLE") {
+              setTitle(item.prospectMasterList);
+            }
+          });
+          dispatch(emptyLoader_Action(false));
+        } else {
+          dispatch(emptyLoader_Action(false));
+          constant.showMsg(res.message);
+        }
+      };
 
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
@@ -376,7 +427,7 @@ export default function EditProspectInfo(props) {
                                     list={prospectTypeData}
                                     buttonExt={styles.dropList}
                                     textExt={styles.dropListText}
-                                    on_Select={(d) => setProspectTypeValue(d)}
+                                    on_Select={(d) => {fn_EntityClick(d)}}
                                 />
                             </View>
                         </View>
@@ -528,7 +579,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setReg_Pin(d) }} style={styles.input1} >{reg_Pin}</TextInput>
+                                        <TextInput maxLength={6} onChangeText={(d) => { setReg_Pin(d) }} style={styles.input1} >{reg_Pin}</TextInput>
 
                                     </View>
                                 </View>
@@ -536,7 +587,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setReg_Phone(d) }} style={styles.input1} >{reg_Phone}</TextInput>
+                                        <TextInput maxLength={10} onChangeText={(d) => { setReg_Phone(d) }} style={styles.input1} >{reg_Phone}</TextInput>
 
                                     </View>
                                 </View>
@@ -615,7 +666,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setRes_Pin(d) }} style={styles.input1} >{res_Pin}</TextInput>
+                                        <TextInput maxLength={6} onChangeText={(d) => { setRes_Pin(d) }} style={styles.input1} >{res_Pin}</TextInput>
 
                                     </View>
                                 </View>
@@ -623,7 +674,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setRes_Phone(d) }} style={styles.input1} >{res_Phone}</TextInput>
+                                        <TextInput maxLength={10} onChangeText={(d) => { setRes_Phone(d) }} style={styles.input1} >{res_Phone}</TextInput>
 
                                     </View>
                                 </View>
@@ -694,7 +745,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setOff_Pin(d) }} style={styles.input1} >{off_Pin}</TextInput>
+                                        <TextInput  maxLength={6} onChangeText={(d) => { setOff_Pin(d) }} style={styles.input1} >{off_Pin}</TextInput>
 
                                     </View>
                                 </View>
@@ -702,7 +753,7 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput onChangeText={(d) => { setOff_Phone(d) }} style={styles.input1} >{off_Phone}</TextInput>
+                                        <TextInput maxLength={10} onChangeText={(d) => { setOff_Phone(d) }} style={styles.input1} >{off_Phone}</TextInput>
 
                                     </View>
                                 </View>
