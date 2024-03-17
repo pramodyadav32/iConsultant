@@ -86,8 +86,8 @@ export default function ProspectScreen(props) {
   const [usageValue, setUsageValue] = useState({});
   const [entityData, setEntityData] = useState([]);
   const [entityValue, setEntityValue] = useState({});
-  const [mobileno, setMobileNo] = useState('7339506778')
-  // const [mobileno, setMobileNo] = useState("");
+  // const [mobileno, setMobileNo] = useState('7339506778')
+  const [mobileno, setMobileNo] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [generlCloserdata, setGeneralClosureData] = useState("");
   const [name, setName] = useState("");
@@ -1260,7 +1260,7 @@ export default function ProspectScreen(props) {
           >
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-              Demo Vehicle<Text style={styles.text2}>*</Text>
+              Model<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={modelData}

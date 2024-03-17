@@ -106,7 +106,7 @@ export default function CustumerInfo(props) {
               })
           }
      })
-     setQtyData(data)
+     setQtyData(data1)
      data1.map((item)=>{
         if(item.code === existing_Vehicle[0]?.quantity){
             setQtyValue(item)
@@ -158,7 +158,8 @@ export default function CustumerInfo(props) {
             "deleteFlag": "N",
             "occupation": occupationValue?.code,
             "productSerial":Number(productSerialValue?.code),
-            "bodyType":bodyTypeValue?.code
+            "bodyType":bodyTypeValue?.code,
+            "actionType":existing_Vehicle?.length > 0 ? "E" : "A"
         }
 
         tokenApiCall(saveProfileCallBack, APIName.SaveExistingVehicle, "POST", param)
@@ -170,7 +171,10 @@ export default function CustumerInfo(props) {
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             if(res.result?.resultCode==="Y"){
-                custumerSave()
+              custumerSave()
+              constant.showMsg("Data Saved Successfully.")
+            }else{
+              constant.showMsg("Error while data saving.");
             }
           
         } else {
