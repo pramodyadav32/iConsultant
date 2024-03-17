@@ -100,9 +100,9 @@ export default function EditProspectInfo(props) {
                 setCityData(item.prospectMasterList)
             } else if (item.listType === 'ENTITY') {
                 setProspectData(item.prospectMasterList)
-                // item.prospectMasterList.map((item)=>{
-                //     item?.code === data?.prospectType ? setProspectTypeValue(item) : null
-                // })
+                item.prospectMasterList.map((item)=>{
+                    item?.code === data?.custType ? setProspectTypeValue(item) : null
+                })
             }
         })
         setMobileno(prospectDetail?.mobile)

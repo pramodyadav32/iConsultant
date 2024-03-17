@@ -34,6 +34,8 @@ const ProspectActionSlotScreen = (props) => {
     const [slotListData,setSlotListData] = useState([])
     const [flagData,setFlagData] = useState([])
 
+
+    
     useEffect(()=>{
      setSlotListData([...slotList])
    let flagFilter =  slotList.filter((item)=>item?.slotAvailabilityFlag==="N")
