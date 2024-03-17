@@ -14,7 +14,6 @@ import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
 import * as common_fn from '../../utilities/common_fn'
 import moment from "moment";
-import moment from 'moment';
 
 export default function TestDriveList(props) {
    const {cardClick,data} = props
