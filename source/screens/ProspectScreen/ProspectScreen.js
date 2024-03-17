@@ -631,7 +631,7 @@ export default function ProspectScreen(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       calledBy: "VEHICLE",
-      model: actionModelValue.code!= undefined ? actionModelValue.code : "",
+      model: actionTypeValue.code === "06"  ? actionModelValue.code : "",
       loginUserCompanyId: userData?.companyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -738,7 +738,9 @@ export default function ProspectScreen(props) {
           setEditionData(item.vehicleMaster);
         }  else if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
-        } 
+        } else if (item.listType === "ASSEMBLY") {
+          setAssemblyData(item.vehicleMaster);
+        }
       });
       dispatch(emptyLoader_Action(false));
     } else {
@@ -1443,7 +1445,10 @@ export default function ProspectScreen(props) {
                 title={actionTypeValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setActionTypeValue(d)}
+                on_Select={(d) => {
+                  setTimeSlotModal(s=>{return{...s,vehicleList:[]}})
+                  setActionTypeValue(d)
+                }}
               />
             </View>
 
