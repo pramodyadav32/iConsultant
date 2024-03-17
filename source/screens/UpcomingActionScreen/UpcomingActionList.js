@@ -20,14 +20,21 @@ export default function ActionUpcomingList(props) {
     const {data,filterData,onClick} = props
     const dispatch = useDispatch()
     const [activeIndex,setActiveIndex] = useState(-1)
+  
+    const tabClick=(index)=>{
+      if(index=== activeIndex){
+         setActiveIndex(-1)
+      }else{
+      setActiveIndex(index)
+      }
+    }
 
     const renderItem=({item,index})=>{
-      console.log("aaaaaaa", item)
         return(
          <View>
          <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
-          <Pressable onPress={()=>setActiveIndex(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-          <Text style={styles.up_ListText}>{moment(item, "DD-mm-YYYY").format("DD-MMM-YYYY")}</Text>
+          <Pressable onPress={()=>tabClick(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+          <Text style={styles.up_ListText}>{moment(item, "MM-DD-YYYY").format("DD-MMM-YYYY")}</Text>
           <FastImage source={ activeIndex === index ? images.downArrow : images.rightArrow} style={ activeIndex === index ? styles.upRightArrow : styles.upRightArrow2} />
           </Pressable>
           </ImageBackground>
@@ -79,7 +86,7 @@ export default function ActionUpcomingList(props) {
             </View>
             <View style={styles.driveListDetailSubView}>
                <Text style={styles.listText2}>Closure</Text>
-               <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+               <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
             </View>
            </View>
                </View>
