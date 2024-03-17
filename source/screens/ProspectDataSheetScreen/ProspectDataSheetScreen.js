@@ -590,7 +590,7 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
                         <View style={[styles.driveListDetailSubView, {}]}>
                            <Text style={styles.listText2}>Opened on</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.prospectOpenedOn}</Text>
+                           <Text style={styles.listText3}>{moment(prospectBasicInfo?.prospectOpenedOn, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>OLM Lead</Text>
@@ -604,7 +604,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Source</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.sourceDescription}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.enquirySource}</Text>
                         </View>
                      </View>
 

@@ -76,6 +76,7 @@ export default function EditProspectInfo(props) {
     const [copyToOff, setCopyToOff] = useState(false)
     const [copyRegToOff, setCopyRegToOff] = useState(false)
     useEffect(() => {
+        // console.log("prospectMaster ======== ", JSON.stringify(prospectMaster))
         prospectMaster.map((item) => {
           if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)
@@ -109,7 +110,7 @@ export default function EditProspectInfo(props) {
         setMobileno(prospectDetail?.mobile)
         setEmail(prospectDetail?.email)
         setPanData(prospectDetail?.pan)
-        setEmpName(prospectDetail?.employerNam)
+        setEmpName(prospectDetail?.employerName)
         setEmpMail(prospectDetail?.employerEmailId)
         setDestination(prospectDetail?.designation)
 
@@ -152,15 +153,15 @@ export default function EditProspectInfo(props) {
     }
 
     const fn_copyAddress2 = () => {
-        setOff_Add1(regAdd1)
-        setOff_Add2(regAdd2)
-        setOff_Add3(regAdd3)
-        setOff_State(reg_State)
-        setOff_City(reg_City)
-        setOff_Destict(reg_destict)
-        setOff_Pin(reg_Pin)
-        setOff_Phone(reg_Phone)
-        setCopyToOff(!copyToOff)
+        setReg_Add1(regAdd1)
+        setReg_Add2(regAdd2)
+        setReg_Add3(regAdd3)
+        setReg_State(reg_State)
+        setReg_City(reg_City)
+        setReg_Destict(reg_destict)
+        setReg_Pin(reg_Pin)
+        setReg_Phone(reg_Phone)
+        setCopyToReg(!copyToOff)
     }
 
     const fn_copyAddress3 = () => {
@@ -224,7 +225,12 @@ export default function EditProspectInfo(props) {
                         setRes_CityData(item?.prospectMasterList)
                     }else{
                         setRes_DistictData(item?.prospectMasterList)
+                        item?.prospectMasterList?.map((item) => {
+                            item?.code === prospectDetail?.resDistrict ? prospectDetail?.resDistrict != '' ? setRes_Destict(item) : null : null
+                            item?.code === prospectDetail?.regnDistrict ? prospectDetail?.resDistrict != '' ? setReg_Destict(item) : null : null
+                            item?.code === prospectDetail?.offcDistrict ? prospectDetail?.resDistrict != '' ? setOff_Destict(item) : null : null
 
+                        })
                     }
                 })
             }else{
@@ -461,13 +467,13 @@ export default function EditProspectInfo(props) {
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Son of</Text>
                             <View style={styles.mobileSubView}>
-                                <SelectDropList
+                                {/* <SelectDropList
                                     list={title}
                                     title={titleSonValue?.description==='' ? " " : titleSonValue?.description}
                                     buttonExt={styles.dropNameList}
                                     textExt={styles.dropNameListText}
                                     on_Select={(d) => setTitleSonValue(d)}
-                                />
+                                /> */}
                                 <TextInput onChangeText={(d) => setSonName(d)} style={[styles.input1, { marginLeft: '2%' }]} >{sonName}</TextInput>
 
                             </View>
@@ -577,7 +583,7 @@ export default function EditProspectInfo(props) {
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
                                             list={reg_destictData}
-                                            title=' '
+                                            title={reg_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
                                             on_Select={(d) => setReg_Destict(d)}
@@ -664,7 +670,7 @@ export default function EditProspectInfo(props) {
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
                                             list={res_destictData}
-                                            title=' '
+                                            title={res_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
                                             on_Select={(d) => setRes_Destict(d)}
@@ -743,7 +749,7 @@ export default function EditProspectInfo(props) {
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
                                             list={off_destictData}
-                                            title=' '
+                                            title={off_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
                                             on_Select={(d) => setOff_Destict(d)}
