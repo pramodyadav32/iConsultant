@@ -76,7 +76,6 @@ export default function EditProspectInfo(props) {
     const [copyToOff, setCopyToOff] = useState(false)
     const [copyRegToOff, setCopyRegToOff] = useState(false)
     useEffect(() => {
-        console.log("data1111",prospectDetail)
         prospectMaster.map((item) => {
           if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)

@@ -39,115 +39,251 @@ export default function VehicleReqInfo(props) {
   const [my_DataValue, setMyDataValue] = useState({})
   const [vy_Data, setVyData] = useState([])
   const [vy_DataValue, setVyDataValue] = useState({})
-  const [priceAvailable, setPriceAvailable] = useState()
+  const [priceAvailable, setPriceAvailable] = useState("")
 
-  useEffect(() => {
-    console.log("aalll",allVehicleData)
-    allVehicleData.map((item) => {
-      if (item.listType === 'MODEL') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
-      })
-      }
-      else if (item.listType === 'EDITION') {
-        setEditionData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
-      })
-      } else if (item.listType === 'ASSEMBLY') {
-        setAssemblyData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
-      })
-      } else if (item.listType === 'VARIANT') {
-        item.vehicleMaster.map((item)=>{
-          {console.log("vehicleitem",item)}
-          item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
-      })
-        setvarientData(item.vehicleMaster)
-      } else if (item.listType === 'STYLE') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
-      })
-        // setStyleData(item.vehicleMaster)
-      } else if (item.listType === 'EXT_COLOR') {
-        // setExteriorData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
-      })
-      } else if (item.listType === 'INT_COLOR') {
-        // setInteriorData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
-      })
-      } else if (item.listType === 'VY') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
-      })
-        // setVyData(item.vehicleMaster)
-      } else if (item.listType === 'MY') {
-        console.log("itemlaytype",item?.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
-      })
-        // setMyData(item.vehicleMaster)
-      }
-    })
-  }, [allVehicleData])
+  // useEffect(() => {
+  //   console.log("aalll", modelData)
+  //   allVehicleData.map((item) => {
+  //     if (item.listType === 'MODEL') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
+  //     })
+  //     }
+  //     else if (item.listType === 'EDITION') {
+  //       setEditionData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+  //     })
+  //     } else if (item.listType === 'ASSEMBLY') {
+  //       setAssemblyData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+  //     })
+  //     } else if (item.listType === 'VARIANT') {
+  //       item.vehicleMaster.map((item)=>{
+  //         {console.log("vehicleitem",item)}
+  //         item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
+  //     })
+  //       setvarientData(item.vehicleMaster)
+  //     } else if (item.listType === 'STYLE') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
+  //     })
+  //       // setStyleData(item.vehicleMaster)
+  //     } else if (item.listType === 'EXT_COLOR') {
+  //       // setExteriorData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
+  //     })
+  //     } else if (item.listType === 'INT_COLOR') {
+  //       // setInteriorData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
+  //     })
+  //     } else if (item.listType === 'VY') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
+  //     })
+  //       // setVyData(item.vehicleMaster)
+  //     } else if (item.listType === 'MY') {
+  //       console.log("itemlaytype",item?.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
+  //     })
+  //       // setMyData(item.vehicleMaster)
+  //     }
+  //   })
+  // }, [allVehicleData])
 
-  useEffect(() => {
-    console.log("aalll",allVehicleData)
-    allVehicleData.map((item) => {
-      if (item.listType === 'MODEL') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
+  // useEffect(() => {
+  //   console.log("aalll",allVehicleData)
+  //   allVehicleData.map((item) => {
+  //     if (item.listType === 'MODEL') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.modelCode ? setModelValue(item) : null
+  //     })
+  //     }
+  //     else if (item.listType === 'EDITION') {
+  //       setEditionData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+  //     })
+  //     } else if (item.listType === 'ASSEMBLY') {
+  //       setAssemblyData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+  //     })
+  //     } else if (item.listType === 'VARIANT') {
+  //       item.vehicleMaster.map((item)=>{
+  //         {console.log("vehicleitem",item)}
+  //         item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
+  //     })
+  //       setvarientData(item.vehicleMaster)
+  //     } else if (item.listType === 'STYLE') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
+  //     })
+  //       // setStyleData(item.vehicleMaster)
+  //     } else if (item.listType === 'EXT_COLOR') {
+  //       // setExteriorData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
+  //     })
+  //     } else if (item.listType === 'INT_COLOR') {
+  //       // setInteriorData(item.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
+  //     })
+  //     } else if (item.listType === 'VY') {
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
+  //     })
+  //       // setVyData(item.vehicleMaster)
+  //     } else if (item.listType === 'MY') {
+  //       console.log("itemlaytype",item?.vehicleMaster)
+  //       item.vehicleMaster.map((item)=>{
+  //         item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
+  //     })
+  //       // setMyData(item.vehicleMaster)
+  //     }
+  //   })
+  // }, [])
+
+ useEffect(()=>{
+  console.log("modelData",JSON.stringify(modelData))
+  modelData.map((item) => {  
+            if(item?.code === vehicleReqListData?.modelCode){
+              fn_GetVehicleModel(item,1)
+              setModelValue(item)
+            } 
       })
-      }
-      else if (item.listType === 'EDITION') {
-        setEditionData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+ },[])
+
+ const fn_GetVehicleModel = (d,type) => {
+  dispatch(emptyLoader_Action(true))
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "edition": "",
+      "assembly": "",
+      "subModel": "",
+      "model": d.code ,
+      "code": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+  }
+  tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param,d)
+}
+
+const GetVehicleMasterCallBack = async (res,d) => {
+  console.log("search", JSON.stringify(res))
+  if (res.statusCode === 200) {
+      dispatch(emptyLoader_Action(false))
+      res?.result.map((item) => {
+         if (item.listType === 'EDITION') {
+              setEditionData(item.vehicleMaster)
+              item.vehicleMaster.map((item)=>{
+                item?.code === vehicleReqListData?.editionCode ? setEditionValue(item) : null
+            })
+            } else if (item.listType === 'ASSEMBLY') {
+              setAssemblyData(item.vehicleMaster)
+              item.vehicleMaster.map((item)=>{
+                item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+            })
+            } else if (item.listType === 'VARIANT') {
+              item.vehicleMaster.map((item)=>{
+                if(item?.code === vehicleReqListData?.variantCode){
+                  setVarientValue(item)
+                  fn_GetVehicleVarient(item,d)
+                }
+               
+            })
+          }
       })
-      } else if (item.listType === 'ASSEMBLY') {
-        setAssemblyData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.assemblyCode ? setAssemblyValue(item) : null
+    // }else{
+    //    setEditionValue({})
+    //    setAssemblyValue({})
+    //    setVarientValue({})
+    //   res?.result.map((item) => {
+    //     if (item.listType === 'EDITION') {
+    //          setEditionData(item.vehicleMaster)
+            
+    //        } else if (item.listType === 'ASSEMBLY') {
+    //          setAssemblyData(item.vehicleMaster)
+             
+    //        } else if (item.listType === 'VARIANT') {
+    //         setvarientData(item.vehicleMaster)
+            
+    //      }
+    //  })
+    // }
+  } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+  }
+}
+
+const fn_GetVehicleVarient = (d,data) => {
+  dispatch(emptyLoader_Action(true))
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "edition": "",
+      "assembly": "",
+      "subModel":d.code,
+      "model": data.code ,
+      "code": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+  }
+  tokenApiCall(fn_GetVehicleVarientCallBack, APIName.GetVehicleMaster, "POST", param)
+}
+
+const fn_GetVehicleVarientCallBack = async (res) => {
+  console.log("search", JSON.stringify(res))
+  if (res.statusCode === 200) {
+      dispatch(emptyLoader_Action(false))
+
+     await res?.result.map((item) => {
+        if (item.listType === 'STYLE') {
+                item.vehicleMaster.map((item)=>{
+                  item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
+              })
+                setStyleData(item.vehicleMaster)
+              } else if (item.listType === 'EXT_COLOR') {
+                setExteriorData(item.vehicleMaster)
+                item.vehicleMaster.map((item)=>{
+                  item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
+              })
+              } else if (item.listType === 'INT_COLOR') {
+                setInteriorData(item.vehicleMaster)
+                item.vehicleMaster.map((item)=>{
+                  item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
+              })
+              } else if (item.listType === 'VY') {
+                item.vehicleMaster.map((item)=>{
+                  item?.code === (vehicleReqListData?.vinYear).toString() ? setVyDataValue(item) : null
+              })
+                setVyData(item.vehicleMaster)
+              } else if (item.listType === 'MY') {
+                item.vehicleMaster.map((item)=>{
+                  item?.code === (vehicleReqListData?.modelYear).toString() ? setMyDataValue(item) : null
+              })
+                setMyData(item.vehicleMaster)
+              }
       })
-      } else if (item.listType === 'VARIANT') {
-        item.vehicleMaster.map((item)=>{
-          {console.log("vehicleitem",item)}
-          item?.code === vehicleReqListData?.variantCode? setVarientValue(item) : null
-      })
-        setvarientData(item.vehicleMaster)
-      } else if (item.listType === 'STYLE') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.styleCode? setStyleValue(item) : null
-      })
-        // setStyleData(item.vehicleMaster)
-      } else if (item.listType === 'EXT_COLOR') {
-        // setExteriorData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.exteriorCode? setExteriorValue(item) : null
-      })
-      } else if (item.listType === 'INT_COLOR') {
-        // setInteriorData(item.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.interiorCode ? setInteriorValue(item) : null
-      })
-      } else if (item.listType === 'VY') {
-        item.vehicleMaster.map((item)=>{
-          item?.code === vehicleReqListData?.vinYear? setVyDataValue(item) : null
-      })
-        // setVyData(item.vehicleMaster)
-      } else if (item.listType === 'MY') {
-        console.log("itemlaytype",item?.vehicleMaster)
-        item.vehicleMaster.map((item)=>{
-          item?.code === (vehicleReqListData?.modelYear).toString() ? setModelValue(item) : null
-      })
-        // setMyData(item.vehicleMaster)
-      }
-    })
-  }, [])
+      priceStatus()
+  } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+  }
+}
+
+
 
   useEffect(() => {
     // priceStatus()
@@ -156,8 +292,121 @@ export default function VehicleReqInfo(props) {
 
   const fn_ModelSelect = (d) => {
     setModelValue(d)
-    modelSelect(d)
+    setEditionValue({})
+    setAssemblyValue({})
+    setVarientValue({})
+    setStyleValue({})
+    setExteriorValue({})
+    setInteriorValue({})
+    setMyDataValue({})
+    setVyDataValue({})
+    setAssemblyData({})
+    setEditionData([])
+    setvarientData([])
+    setStyleData([])
+    setExteriorData([])
+    setInteriorData([])
+    setMyData([])
+    setVyData([])
+    setAssemblyData([])
+    dispatch(emptyLoader_Action(true))
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "edition": "",
+      "assembly": "",
+      "subModel": "",
+      "model": d.code ,
+      "code": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
   }
+  tokenApiCall(ModelSelectCallBack, APIName.GetVehicleMaster, "POST", param,d)
+  }
+  const ModelSelectCallBack = async (res,d) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+        dispatch(emptyLoader_Action(false))
+       
+        res?.result.map((item) => {
+          if (item.listType === 'EDITION') {
+               setEditionData(item.vehicleMaster)
+              
+             } else if (item.listType === 'ASSEMBLY') {
+               setAssemblyData(item.vehicleMaster)
+               
+             } else if (item.listType === 'VARIANT') {
+              setvarientData(item.vehicleMaster)
+              
+           }
+       })
+      
+    } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+    }
+  }
+
+  const fn_VarientSelect=(d)=>{
+    setVarientValue(d)
+    setStyleValue({})
+    setExteriorValue({})
+    setInteriorValue({})
+    setMyDataValue({})
+    setVyDataValue({})
+    setStyleData([])
+    setExteriorData([])
+    setInteriorData([])
+    setMyData([])
+    setVyData([])
+    dispatch(emptyLoader_Action(true))
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      "edition": "",
+      "assembly": "",
+      "subModel":d.code,
+      "model": modelValue.code ,
+      "code": "",
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+  }
+  tokenApiCall(VarientSelectCallBack, APIName.GetVehicleMaster, "POST", param)
+  }
+
+  const VarientSelectCallBack = async (res) => {
+    console.log("search", JSON.stringify(res))
+    if (res.statusCode === 200) {
+        dispatch(emptyLoader_Action(false))
+  
+        res?.result.map((item) => {
+          if (item.listType === 'STYLE') {
+              
+                  setStyleData(item.vehicleMaster)
+                } else if (item.listType === 'EXT_COLOR') {
+                  setExteriorData(item.vehicleMaster)
+                
+                } else if (item.listType === 'INT_COLOR') {
+                  setInteriorData(item.vehicleMaster)
+                
+                } else if (item.listType === 'VY') {
+                
+                  setVyData(item.vehicleMaster)
+                } else if (item.listType === 'MY') {
+                
+                  setMyData(item.vehicleMaster)
+                }
+        })
+    } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+    }
+  }
+
 
   const fn_Create = () => {
     if (Object.keys(modelValue).length === 0) {
@@ -262,14 +511,14 @@ export default function VehicleReqInfo(props) {
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
     }
-    tokenApiCall(priceStatusCallBack, APIName.GetProformaGeneralMasters, "POST", param)
+    tokenApiCall(priceStatusCallBack, APIName.GetProformaGeneralMast, "POST", param)
 
   }
 
   const priceStatusCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
-      setPriceAvailable("")
+      setPriceAvailable(res?.result?.priceAvailableTag)
     } else {
       dispatch(emptyLoader_Action(false))
       // constant.showMsg(res.message)
@@ -297,6 +546,7 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={editionData}
               title={editionValue?.description}
+              refType={Object.keys(editionValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setEditionValue(d)}
@@ -309,9 +559,10 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={varientData}
               title={varientValue?.description}
+              refType={Object.keys(varientValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setVarientValue(d)}
+              on_Select={(d) => fn_VarientSelect(d)}
 
             />
           </View>
@@ -321,6 +572,7 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={styleData}
               title={styleValue?.description}
+              refType={Object.keys(styleValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setStyleValue(d)}
@@ -333,6 +585,7 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={exteriorData}
               title={exteriorValue?.description}
+              refType={Object.keys(exteriorValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setExteriorValue(d)}
@@ -345,6 +598,7 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={inteiorData}
               title={interiorValue?.description}
+              refType={Object.keys(interiorValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setInteriorValue(d)}
@@ -358,6 +612,7 @@ export default function VehicleReqInfo(props) {
               <SelectDropList
                 list={my_Data}
                 title={my_DataValue?.description}
+                refType={Object.keys(my_DataValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setMyDataValue(d)}
@@ -367,6 +622,7 @@ export default function VehicleReqInfo(props) {
               <SelectDropList
                 list={vy_Data}
                 title={vy_DataValue?.description}
+                refType={Object.keys(vy_DataValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setVyDataValue(d)}
@@ -381,9 +637,13 @@ export default function VehicleReqInfo(props) {
             <SelectDropList
               list={assemblyData}
               title={assemblyValue?.description}
+              refType={Object.keys(assemblyValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setAssemblyValue(d)}
+              on_Select={(d) => {
+                priceStatus()
+                setAssemblyValue(d)
+              }}
 
             />
           </View>
@@ -401,7 +661,7 @@ export default function VehicleReqInfo(props) {
 
             <View style={styles.detailMainView2}>
               <Text style={styles.detailText}>Reference</Text>
-              <TextInput style={styles.refInput} editable={false} >Available</TextInput>
+              <TextInput style={styles.refInput} editable={false} >{priceAvailable}</TextInput>
 
             </View>
             <View style={styles.detailMainView2}>
