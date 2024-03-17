@@ -26,7 +26,7 @@ let data1 =[
 ]
 
 export default function CustumerInfo(props) {
-    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle} = props
+    const { data,prospectMaster, prospectDetail,profile_Data, existing_Vehicle,custumerSave} = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector((state) => state.AuthReducer);
     const [active, setActive] = useState(1) 
@@ -46,9 +46,13 @@ export default function CustumerInfo(props) {
     const [yearPurchaseValue,setYearPurchaseValue]= useState({})
     const [qtyData,setQtyData] = useState([])
     const [qtyValue,setQtyValue] = useState({})
+    const [productSerialData,setProductSerialData] = useState([])
+    const [productSerialValue,setProductSerialValue] = useState({})
+
+
 
    useEffect(()=>{
-
+   console.log("existing",existing_Vehicle)
     profile_Data.map((item)=>{
         if(item?.listType === "USAGE"){
           setUsageData(item?.existingVehicleMasterList)
@@ -60,19 +64,25 @@ export default function CustumerInfo(props) {
         }else if(item?.listType === "OCCUPATION"){
             setOccupationList(item?.existingVehicleMasterList)
             item?.existingVehicleMasterList.map((item)=>{
-                if(item?.code === existing_Vehicle[0]?.ownerShip){
+                if(item?.code === existing_Vehicle[0]?.occupation){
                     setOccupationValue(item)
+                    fn_GetProfile(item,1)
                 }
               })
           }else if(item?.listType === "BRAND"){
             item?.existingVehicleMasterList.map((item)=>{
                 if(item?.code === existing_Vehicle[0]?.make){
-                    setBodyTypeValue(item)
+                    setBrandValue(item)
                 }
               })
             setBrandData(item?.existingVehicleMasterList)
           }else if(item?.listType === "BODY_TYPE"){
             setBodyTypeData(item?.existingVehicleMasterList)
+            item?.existingVehicleMasterList.map((item)=>{
+                if(item?.code === existing_Vehicle[0]?.bodyType){
+                    setBodyTypeValue(item)
+                }
+              })
           }else if(item?.listType === "MODEL"){
             setModelData(item?.existingVehicleMasterList)
             item?.existingVehicleMasterList.map((item)=>{
@@ -108,7 +118,9 @@ export default function CustumerInfo(props) {
    const validation=()=>{
     if (Object.keys(occupationValue).length === 0) {
         constant.showMsg("Please Select Occupation")
-      } else if (Object.keys(usageValue).length === 0) {
+      }else if (Object.keys(productSerialValue).length === 0) {
+        constant.showMsg("Please Select product Serial")
+      }  else if (Object.keys(usageValue).length === 0) {
         constant.showMsg("Please Select Usage")
       } else if (Object.keys(bodyTypeValue).length === 0) {
         constant.showMsg("Please Select Body Type")
@@ -133,31 +145,23 @@ export default function CustumerInfo(props) {
             "countryCode": userData?.countryCode,
             "companyId": userData?.companyId,
             "prospectNo": Number(data?.prospectID),
-            "branchCode": selectedBranch?.branchCode,
-            "competitorBrand": "",
-            "fy": data?.prospectFY,
-            "prospectLocation":data?.prospectLocation,
-            "make": "",
+            "make": brandValue?.code,
             "model": modelValue?.code,
-            "subModel": varientValue?.code,
+            "subModel": varientValue?.code,//VARIANT
             "owner": "",
-            "financer": "",
             "yearofPurchase": yearPurchaseValue?.code,
             "qty": Number(qtyValue?.code),
-            "comment": "string",
             "usage": usageValue?.code,
-            "brandType": brandValue?.code,
-            "serial": 0,
+            "serial": existing_Vehicle.length > 0 ? Number(existing_Vehicle[0]?.vehicleSerial) : 0 ,
             "loginUserId": userData?.userId,
             "ipAddress": "1::1",
-            "actionType": "",
-            "deleteFlag": "",
+            "deleteFlag": "N",
             "occupation": occupationValue?.code,
-            "productSerial": 0
-           
+            "productSerial":Number(productSerialValue?.code),
+            "bodyType":bodyTypeValue?.code
         }
 
-        tokenApiCall(saveProfileCallBack, APIName.SaveCustomerProfile, "POST", param)
+        tokenApiCall(saveProfileCallBack, APIName.SaveExistingVehicle, "POST", param)
 
     }
 
@@ -165,6 +169,9 @@ export default function CustumerInfo(props) {
         console.log("savecustumer", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
+            if(res.result?.resultCode==="Y"){
+                custumerSave()
+            }
           
         } else {
             dispatch(emptyLoader_Action(false))
@@ -172,6 +179,59 @@ export default function CustumerInfo(props) {
         }
     }
 
+    const fn_Occuption=(d)=>{
+        setOccupationValue(d)
+        setProductSerialValue({})
+        fn_GetProfile(d,2)
+    }
+    const fn_GetProfile = (d,type) => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+         "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectID":Number(data?.prospectID),
+            "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+            "brandType": "",
+            "usage": "",
+            "competitorBrand": "",
+            "model": "",
+            "subModel": "",
+            "ownerShip": "",
+            "financer": "",
+            "purchaseYear": 0,
+            "occupationCode":d?.code,
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetProfileCallBack, APIName.GetExistingVehicleMasters, "POST", param,type)
+
+    }
+
+    const GetProfileCallBack = async (res,type) => {
+        console.log("profile", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+           res?.result.map((item)=>{
+                if(item?.listType === "OCCUPATION_PRODUCT"){
+                  setProductSerialData([...item?.existingVehicleMasterList])
+                 if(type===1){
+                    item?.existingVehicleMasterList.map((item)=>{
+                        if(item?.code === existing_Vehicle[0]?.productSerial){
+                            setProductSerialValue(item)
+                        }
+                      })
+                 }
+                 
+                }
+             })
+
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
  
 
     return (
@@ -185,9 +245,10 @@ export default function CustumerInfo(props) {
             <View style={styles.mobileSubView}>
             <SelectDropList 
              list={occupationList}
+             title={occupationValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-             on_Select={(d)=>setOccupationValue(d)}
+             on_Select={(d)=>fn_Occuption(d)}
            />
             </View>
         </View>
@@ -196,10 +257,12 @@ export default function CustumerInfo(props) {
             <Text style={styles.detailText}></Text>
             <View style={styles.mobileSubView}>
             <SelectDropList 
-             list={[]}
+             list={productSerialData}
+             refType={Object.keys(productSerialValue).length===0 ? true : false}
+             title={productSerialValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-            //  on_Select={(d)=>setProspectTypeValue(d)}
+             on_Select={(d)=>setProductSerialValue(d)}
            />
             </View>
         </View>
@@ -220,6 +283,7 @@ export default function CustumerInfo(props) {
             <View style={styles.mobileSubView}>
             <SelectDropList 
              list={bodyTypeData}
+             title={bodyTypeValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setBodyTypeValue(d)}
@@ -232,6 +296,7 @@ export default function CustumerInfo(props) {
             <View style={styles.mobileSubView}>
             <SelectDropList 
              list={brandData}
+             title={brandValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setBrandValue(d)}
@@ -258,7 +323,7 @@ export default function CustumerInfo(props) {
             <View style={styles.mobileSubView}>
             <SelectDropList 
              list={varientData}
-             title={varientValue?.code}
+             title={varientValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setVarientValue(d)}

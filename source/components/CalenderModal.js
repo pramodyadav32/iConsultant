@@ -9,7 +9,7 @@ import images from "../utilities/images"
 import moment from "moment"
 
 const CalenderModal = (props) => {
-    const { isVisible, onRequestClose,onDateClick } = props
+    const { isVisible, onRequestClose,onDateClick,type } = props
     const [selectDate, setSelectDate] = useState('')
     const tabWidth = constant.resW(38);
     const [monthChange, setMonthChange] = useState(moment(new Date).format("MMMM - YYYY"))
@@ -31,15 +31,47 @@ const CalenderModal = (props) => {
                 </ImageBackground>
                 :
                 <ImageBackground source={images.dateIcon} tintColor={constant.whiteColor} style={styles.calenderDateImage} >
-                   
+                  {
+                    type===1 ?
                      <TouchableOpacity
-            onPress={() => {  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? null :fn_Cal_dateSelect(date, state, marking) }}
-            style={styles.cal_DayButton}>
-            <Text style={[styles.cal_DayText, { color:  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? moment(date.dateString).day() === 0 ? '#FE0F1750' : '#00000040' : moment(date.dateString).day() === 0 ? 'red' : 'black' }]} >
-              {date.day}
-            </Text>
-            <View />
-          </TouchableOpacity>
+                     onPress={() => {  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? null :fn_Cal_dateSelect(date, state, marking) }}
+                     style={styles.cal_DayButton}>
+                     <Text style={[styles.cal_DayText, { color:  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? moment(date.dateString).day() === 0 ? '#FE0F1750' : '#00000040' : moment(date.dateString).day() === 0 ? 'red' : 'black' }]} >
+                       {date.day}
+                     </Text>
+                     <View />
+                   </TouchableOpacity>
+                   :
+                   moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD"))  ?
+                   <TouchableOpacity
+                   onPress={() => { null }}
+                   style={styles.cal_DayButton}>
+                   <Text style={[styles.cal_DayText, { color:  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? moment(date.dateString).day() === 0 ? '#FE0F1750' : '#00000040' : moment(date.dateString).day() === 0 ? 'red' : 'black' }]} >
+                     {date.day}
+                   </Text>
+                   <View />
+                 </TouchableOpacity>
+                 : 
+                 moment(date.dateString).isAfter(moment(new Date()).add(61, 'd').format("YYYY-MM-DD")) ?
+                 <TouchableOpacity
+                 onPress={() => { null }}
+                 style={styles.cal_DayButton}>
+                 <Text style={[styles.cal_DayText, { color:  moment(date.dateString).day() === 0 ? '#FE0F1750' : '#00000040'  }]} >
+                   {date.day}
+                 </Text>
+                 <View />
+               </TouchableOpacity>
+               :
+               <TouchableOpacity
+               onPress={() => { fn_Cal_dateSelect(date, state, marking) }}
+               style={styles.cal_DayButton}>
+               <Text style={[styles.cal_DayText, { color:  moment(date.dateString).isBefore(moment(new Date()).format("YYYY-MM-DD")) ? moment(date.dateString).day() === 0 ? '#FE0F1750' : '#00000040' : moment(date.dateString).day() === 0 ? 'red' : 'black' }]} >
+                 {date.day}
+               </Text>
+               <View />
+             </TouchableOpacity>
+                  } 
+                   
                 </ImageBackground>
         )
     };
@@ -61,8 +93,8 @@ const CalenderModal = (props) => {
                     <AntDesign name='close' style={styles.closeIcon} onPress={() => onRequestClose()} />
                     <View style={styles.innerView}>
                         <Calendar
-                            minDate={new Date()}
-                            // maxDate={'2012-05-30'}
+                            minDate={moment(new Date()).format("YYYY-MM-D")}
+                            // maxDate={moment(new Date()).add(61, 'd').format("YYYY-MM-DD")}
                             onDayPress={day => {
                                 console.log('selected day', day);
                             }}
@@ -121,6 +153,7 @@ const CalenderModal = (props) => {
 CalenderModal.defaultProps = {
     onRequestClose: function () { },
     isVisible: false,
+    type:1,
 }
 
 export default CalenderModal

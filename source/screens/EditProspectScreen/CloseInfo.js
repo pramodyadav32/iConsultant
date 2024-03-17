@@ -52,7 +52,7 @@ export default function CloseInfo(props) {
   const [brandValue,setBrandValue] = useState([])
   const [showDislikeAndBrand,setShowDisLikeAndBrand] = useState(false)
   const [showDislike,setShowDisLike] = useState(false)
-  const [showList,setShowList] = useState(false)
+  const [showList,setShowList] = useState({show:false,data:[]})
   const [compVehBrandData, setCompVehBrandData] = useState([])
   const [compVehModelData, setCompVehModelData] = useState([])
   const [compVehVarientData, setCompVehVarientData] = useState([])
@@ -62,7 +62,9 @@ export default function CloseInfo(props) {
 
   const [dealerData,setDealerData] = useState([])
   const [dealerValue,setDealerValue] = useState({})
+  const [tentativeDateModel,setTentativeDateModel] = useState({show:false,index:-1,obj:{}})
 
+  console.log("data",data)
   useEffect(() => {
     fn_GetClosureMaster()
     fn_GetCompitionVehicleInfo("", "", "BRAND")
@@ -107,6 +109,31 @@ export default function CloseInfo(props) {
     setClosureDate(moment(data.timestamp).format("DD-MMM-yyyy"))
     setclosureCal_Modal(false)
   }
+  const fn_TentativeDateSelect = (data) => {
+
+    const originalDate = moment(data.timestamp);
+    const utcDate = originalDate.utc();
+    const zoneData = utcDate.toISOString()
+
+    let newArr = showList?.data
+     let newObj = tentativeDateModel?.obj
+     if(newObj.dateValue != ''){
+      let newDate = moment(data.timestamp).format("DD-MMM-yyyy")
+      newObj.dateValue = newDate
+      newObj.zoneDate = zoneData
+      newArr.splice(tentativeDateModel?.index,1,newObj)
+      setShowList(s=>{return{...s,data:newArr}})
+     }else{
+        let newDate = moment(data.timestamp).format("DD-MMM-yyyy")
+        newObj["dateValue"] = newDate
+        newObj["zoneDate"] = zoneData
+        newArr.splice(tentativeDateModel?.index,1,newObj)
+        setShowList(s=>{return{...s,data:newArr}})
+     }
+    setTentativeDateModel(s=>{return{...s,show:false}})
+  }
+
+  
 
   const fn_Create = async() => {
     // if (Object.keys(sourceValue).length === 0) {
@@ -125,7 +152,6 @@ export default function CloseInfo(props) {
           item.select ? newArray.push(item?.description) : null
         })
        })
-       console.log(newArray.join(","))
 
        console.log("row data",JSON.stringify(data1))
       let newArrayTable = []
@@ -133,6 +159,29 @@ export default function CloseInfo(props) {
           item.select ? newArrayTable.push(item) : null
        })
        console.log("newArrayTable = ", newArrayTable)
+
+       let closureList = []
+       showList ? 
+       showList?.data.map((item)=>{
+        if(item.dateValue != undefined){
+          let newObj ={
+            "serial": item?.vehicleSerial,
+            "model": item?.modelCode,
+            "variant": item?.variantCode,
+            "exterior": item?.exteriorCode,
+            "interior": item?.interiorCode,
+            "qty": item?.quantity,
+            "expectedDelvDate": item?.zoneDate,
+            "proformaLocation": "string",
+            "proformaDoc": "string",
+            "proformaFY": "string",
+            "proformaNo": 0
+          }
+        }
+       })
+       : null
+
+
     const param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
@@ -315,24 +364,51 @@ const fn_ListHeaderClick=async(data,index)=>{
     )
   }
 
+  const fn_GetVehicleList=()=>{
+    // dispatch(emptyLoader_Action(true))
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "prospectNo": Number(data?.prospectID),
+        "loginUserCompanyId": userData?.companyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+       
+        }
+    tokenApiCall(GetVehicleListCallBack, APIName.GetVehiclesRequiredList, "POST", param)
+
+  }
+
+  const GetVehicleListCallBack = async (res) => {
+    console.log("GetCompitionVehicleInfoCallBack", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
+    if (res.statusCode === 200) {
+      setShowList({show:true,data:res?.result?.vehicleRequiredList})
+    } else {
+        constant.showMsg(res.message)
+    }
+}
+
   const fn_Closure=(d)=>{
     setClosureValue(d)
     if(d.code==='000001'){
         setShowDisLike(true)
         setShowDisLikeAndBrand(true)
-      setShowList(false)
+      setShowList(s=>{return{...s,show:false}})
     }else if(d.code === '000002'){
       setShowDisLike(true)
       setShowDisLikeAndBrand(false)
-      setShowList(false)
+      setShowList(s=>{return{...s,show:false}})
     }else if(d.code ==='A'){
       setShowDisLike(false)
       setShowDisLikeAndBrand(false)
-      setShowList(true)
+      fn_GetVehicleList()
     }else{
       setShowDisLike(false)
       setShowDisLikeAndBrand(false)
-      setShowList(false)
+      setShowList(s=>{return{...s,show:false}})
     }
   }
 
@@ -400,32 +476,35 @@ const listrenderItem=(item,index)=>{
   return(
     <View style={styles.otherListMainView2}>
       <View style={styles.otherListSubView6} >
-       <Text style={styles.otherListText2}>CKD</Text>
+       <Text style={styles.otherListText2}>{item?.assemblyDescription}</Text>
       </View>
       <View style={styles.otherListSubView7} >
-       <Text style={styles.otherListText2}>DMAX</Text>
+       <Text style={styles.otherListText2}>{item?.modelDescription}</Text>
       </View>
       <View style={styles.otherListSubView7} >
-       <Text style={styles.otherListText2}>Splash White</Text>
+       <Text style={styles.otherListText2}>{item?.exteriorDescription}</Text>
       </View>
       <View style={styles.otherListSubView8} >
       <SelectDropList
               list={actionType_Data}
-              title=" "
+              title={item?.quantity}
+              disable={true}
               buttonExt={styles.dropList2}
               textExt={styles.dropListText2}
               on_Select={(d) => null}
             />
       </View>
-      <View style={styles.otherListSubView5} >
+      {console.log("neww",moment(new Date()).add(61, 'd').format("YYYY-MM-DD"))}
+      <Pressable style={styles.otherListSubView5} onPress={()=>setTentativeDateModel({show:true,index:index,obj:item})} >
       <SelectDropList
               list={actionType_Data}
-              title=" "
+              title={item.dateValue != undefined ? item.dateValue : " "}
+              disable={true}
               buttonExt={styles.dropList3}
               textExt={styles.dropListText3}
               on_Select={(d) =>null}
             />
-      </View>
+      </Pressable>
     </View>
   )
 }
@@ -575,9 +654,9 @@ const fn_ListFooter=()=>{
           />
           }
 
-     {showList &&  <View style={{elevation:1,borderRadius:constant.moderateScale(10),marginHorizontal:constant.moderateScale(5),marginTop:constant.moderateScale(15)}}>
+     {showList?.show &&  <View style={{elevation:1,borderRadius:constant.moderateScale(10),marginHorizontal:constant.moderateScale(5),marginTop:constant.moderateScale(15)}}>
             <FlatList 
-             data={data1}
+             data={showList?.data}
              renderItem={({item,index})=>listrenderItem(item,index)}
              ListHeaderComponent={()=>fn_ListHeader()}
              ListFooterComponent={()=>fn_ListFooter()}
@@ -600,6 +679,12 @@ const fn_ListFooter=()=>{
         isVisible={closureCal_Modal}
         onRequestClose={() => setclosureCal_Modal(false)}
         onDateClick={(data) => fn_ClosureDateSelect(data)}
+      />
+       <CalenderModal
+        isVisible={tentativeDateModel?.show}
+        onRequestClose={() => setTentativeDateModel(s=>{return{...s,show:false}})}
+        onDateClick={(data) => fn_TentativeDateSelect(data)}
+        type={2}
       />
     </View>
   );
@@ -820,9 +905,9 @@ const styles = StyleSheet.create({
       backgroundColor: constant.whiteColor,
     },
     dropListText2: {
-      fontSize: constant.moderateScale(15),
+      fontSize: constant.moderateScale(11),
       color: constant.textColor,
-      fontFamily: constant.typeLight,
+      fontFamily: constant.typeRegular,
     },
     dropList3: {
       borderWidth: 1,
@@ -831,10 +916,11 @@ const styles = StyleSheet.create({
       borderRadius: constant.moderateScale(5),
       borderColor: '#ABABAB',
       backgroundColor: constant.whiteColor,
+      paddingHorizontal:0,
     },
     dropListText3: {
-      fontSize: constant.moderateScale(15),
+      fontSize: constant.moderateScale(11),
       color: constant.textColor,
-      fontFamily: constant.typeLight,
+      fontFamily: constant.typeRegular,
     },
 })

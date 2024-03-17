@@ -36,6 +36,7 @@ import PerformaInsurance from "./PerformaInsurance";
 import PerformaRegistration from "./PerformaRegistration";
 import moment from 'moment';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import DownloadPerforma from "./DownloadPerforma";
 
 const data = [
    {
@@ -74,6 +75,8 @@ const data3 = [
    { key: 4, title: "Insurance" },
    { key: 5, title: "Registration" },
    { key: 6, title: "Term" },
+   { key: 7, title: "Performa" },
+
 ];
 
 export default function PerformaScreen(props) {
@@ -561,6 +564,8 @@ export default function PerformaScreen(props) {
          fn_Registration()
       } else if (type === 4) {
          fn_GetTerms()
+      }else if(type===5){
+         setActive(5)
       }
 
    }
@@ -819,6 +824,8 @@ export default function PerformaScreen(props) {
              performaPriceDetail={vehiclePricedetail}
             />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
+
+            {active === 5 && <DownloadPerforma/>}
          </View>
 
          {/* <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}

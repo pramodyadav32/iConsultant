@@ -612,6 +612,11 @@ export default function EditProspectScreen(props) {
         props.navigation.navigate("CreatePerforma")
     }
 
+    const fn_CustumerSave=()=>{
+        constant.showMsg("Profile Save Successfully")
+        fn_GetActionTypeCloseList()
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
             <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -694,6 +699,7 @@ export default function EditProspectScreen(props) {
                             prospectDetail={prospectInfo}
                             prospectMaster={prospectMasterData}
                             existing_Vehicle = {existingVehicle}
+                            custumerSave = {()=>fn_CustumerSave()}
 
                         />
                     }
@@ -708,7 +714,6 @@ export default function EditProspectScreen(props) {
                     }
                 </View>
             </ScrollView>
-            {/* <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}
 
             <DataSheetModal
                 isVisible={detailModal}

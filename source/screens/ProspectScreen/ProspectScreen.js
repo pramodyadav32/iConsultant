@@ -120,20 +120,24 @@ export default function ProspectScreen(props) {
   });
   const [SaveDataObj, setSaveDataObj] = useState({});
 
-  const [actionTypeData, SetActionTypeData] = useState([]);
-  const [actionTypeValue, setActionTypeValue] = useState({});
-  const [actionModelData, setActionModelData] = useState([]);
-  const [actionModelValue, setActionModelValue] = useState({});
-  const [actionDate, setActionDate] = useState("");
-  const [actionSlotValue, setActionSlotValue] = useState(" ");
-  const [actionSlotValue2, setActionSlotValue2] = useState(" ");
-  const [vinData, setVinData] = useState("");
-  const [regData, setRegData] = useState("");
-  const [comment, setComment] = useState("");
-  const [actionSlotLength, setActionSlotLength] = useState([]);
-  const [priceAvailable, setPriceAvailable] = useState();
+  const [actionTypeData, SetActionTypeData] = useState([])
+  const [actionTypeValue, setActionTypeValue] = useState({})
+  const [actionModelData, setActionModelData] = useState([])
+  const [actionModelValue, setActionModelValue] = useState({})
+  const [actionDate, setActionDate] = useState('')
+  const [actionSlotValue, setActionSlotValue] = useState(' ')
+  const [actionSlotValue2, setActionSlotValue2] = useState(' ')
+  const [vinData, setVinData] = useState('')
+  const [regData, setRegData] = useState('')
+  const [comment, setComment] = useState('')
+  const [actionSlotLength,setActionSlotLength] = useState([])
+  const [priceAvailable, setPriceAvailable] = useState("")
   const [eventSourceData, setEventSourceData] = useState();
   const [eventSourceList, setEventSourceList] = useState([]);
+
+  // const [generlActive,setGeneralActive] =useState(false)
+  const [vehicleActive,setVehicleActive] = useState(false)
+  const [actionActive,setActionActive] = useState(false)
 
   useEffect(() => {
     console.log("selectBranchh", selectedBranch);
@@ -369,26 +373,27 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please select Rating");
     } else {
       let newObj = {
-        title: titleValue.code,
-        entity: entityValue.code,
-        firstName: name,
-        middleName: "",
-        lastName: "",
-        suffix: "",
-        pincode: pinCode?.trim(),
-        email: email?.trim(),
-        contactName: contactPerson,
-        mobile: mobileno?.trim(),
-        source: sourceValue.code,
-        usage: usageValue.code,
-        activeRate: ratingValue.code,
-        regnState: stateValue.code,
-        regnCity: cityValue.code,
-        projectedClosureDate: generlCloserdata,
-        refFrom: referenceValue.code,
-      };
-      setSaveDataObj(newObj);
-      fn_GetVehicleMasterModel();
+        "title": titleValue.code,
+        "entity": entityValue.code,
+        "firstName": name,
+        "middleName": "",
+        "lastName": "",
+        "suffix":"",
+        "pincode": pinCode,
+        "email": email,
+       "contactName" : contactPerson,
+        "mobile": mobileno,
+        "source": sourceValue.code,
+        "usage": usageValue.code,
+        "activeRate": ratingValue.code,
+        "regnState": stateValue.code,
+        "regnCity": cityValue.code,
+        "projectedClosureDate": generlCloserdata,
+        "refFrom": referenceValue.code,
+      }
+      setSaveDataObj(newObj)
+      setVehicleActive(true)
+      fn_GetVehicleMasterModel()
     }
   };
 
@@ -520,6 +525,14 @@ export default function ProspectScreen(props) {
   };
 
   const fn_TabClick = (type) => {
+    if(type===1){
+      setActive(type)
+    }else if(type === 2) {
+      vehicleActive ? setActive(type) : null
+    }else if(type===3){
+      actionActive ? setActive(type) : null
+
+    }
     // setActive(type)
     // fn_GetActionMasterList()
   };
@@ -547,19 +560,20 @@ export default function ProspectScreen(props) {
       constant.showMsg("Count must be greater than 0");
     } else {
       let newObj = {
-        my: Number(my_DataValue.code),
-        vy: Number(vy_DataValue.code),
-        model: modelValue.code,
-        qty: count,
-        color: exteriorValue.code,
-        interiorColor: interiorValue.code,
-        style: styleValue.code,
-        assembly: assemblyValue.code,
-        edition: editionValue.code,
-        subModel: varientValue?.code,
-      };
-      setSaveDataObj(Object.assign({}, SaveDataObj, newObj));
-      fn_GetActionMasterList();
+        "my": Number(my_DataValue.code),
+        "vy": Number(vy_DataValue.code),
+        "model": modelValue.code,
+        "qty": count,
+        "color": exteriorValue.code,
+        "interiorColor": interiorValue.code,
+        "style": styleValue.code,
+        "assembly": assemblyValue.code,
+        "edition": editionValue.code,
+        "subModel": varientValue?.code,
+      }
+      setSaveDataObj(Object.assign({}, SaveDataObj, newObj))
+      setActionActive(true)
+      fn_GetActionMasterList()
     }
   };
 
@@ -624,20 +638,20 @@ export default function ProspectScreen(props) {
   const fn_GetActionSlots = (item, index) => {
     dispatch(emptyLoader_Action(true));
     let param = {
-      brandCode: userData?.brandCode,
-      countryCode: userData?.countryCode,
-      companyId: userData?.companyId,
-      branchcode: selectedBranch?.branchCode,
-      calledBy: "TIME_SLOTS",
-      actionCode: "",
-      chassisNo: item.chassisNo,
-      empCode: "",
-      date: "2024-02-21T09:10:47.522Z",
-      loginUserId: userData?.userId,
-      ipAddress: "1::1",
-    };
-    tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param);
-  };
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchcode": selectedBranch?.branchCode,
+      "calledBy": "TIME_SLOTS",
+      "actionCode": "",
+      "chassisNo": item.chassisNo,
+      "empCode": "",
+      "date": timeSlotModal?.utcDateFormate,
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1"
+    }
+    tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
+  }
 
   const GetActionSlotsCallBack = async (res) => {
     console.log("searchvehi", JSON.stringify(res));
@@ -789,8 +803,9 @@ export default function ProspectScreen(props) {
   };
 
   const fn_State = (d) => {
-    setStateValue(d);
-    dispatch(emptyLoader_Action(true));
+    setStateValue(d)
+    setCityValue({})
+    dispatch(emptyLoader_Action(true))
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -902,22 +917,9 @@ export default function ProspectScreen(props) {
                 Mobile No.<Text style={styles.text2}>*</Text>
               </Text>
               <View style={styles.mobileSubView}>
-                <TextInput
-                  style={styles.input1}
-                  onChangeText={(d) => setMobileNo(d)}
-                  keyboardType="numeric"
-                >
-                  {mobileno}
-                </TextInput>
-                <Pressable
-                  style={styles.searchButtonStyle}
-                  onPress={() => fn_GetSearchCust()}
-                >
-                  <FastImage
-                    source={images.search}
-                    resizeMode="contain"
-                    style={styles.searchStyle}
-                  />
+                <TextInput style={styles.input1} maxLength={10} onChangeText={(d) => setMobileNo(d)} keyboardType='numeric'>{mobileno}</TextInput>
+                <Pressable style={styles.searchButtonStyle} onPress={() => fn_GetSearchCust()}>
+                  <FastImage source={images.search} resizeMode='contain' style={styles.searchStyle} />
                 </Pressable>
               </View>
             </View>
@@ -928,6 +930,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={entityData}
+                title={entityValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setEntityValue(d)}
@@ -956,7 +959,7 @@ export default function ProspectScreen(props) {
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={title}
-                  title=" "
+                  title={titleValue?.description}
                   buttonExt={styles.dropNameList2}
                   textExt={styles.dropNameListText}
                   on_Select={(d) => setTitleValue(d)}
@@ -986,6 +989,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={stateData}
+                title={stateValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
@@ -1001,7 +1005,8 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={cityData}
-                title={""}
+                title={cityValue?.description}
+                refType={Object.keys(cityValue).length===0 ?true : false}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setCityValue(d)}
@@ -1024,7 +1029,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Inquiry Type</Text>
                 <SelectDropList
                   list={sourceData}
-                  title="Please Select"
+                  title= {sourceValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
@@ -1050,7 +1055,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Source</Text>
                 <SelectDropList
                   list={referenceData}
-                  title="Please Select"
+                  title={referenceValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setReferenceValue(d)}
@@ -1061,7 +1066,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Usage</Text>
                 <SelectDropList
                   list={usageData}
-                  title="Please Select"
+                  title={usageValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setUsageValue(d)}
@@ -1092,7 +1097,7 @@ export default function ProspectScreen(props) {
                 <Text style={styles.detailText}>Rating</Text>
                 <SelectDropList
                   list={ratingData}
-                  title="Please Select"
+                  title={ratingValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setRatingValue(d)}
@@ -1119,6 +1124,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={modelData}
+                title={modelValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => fn_ModelSelect(d)}
@@ -1130,6 +1136,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={editionData}
+                title={editionValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setEditionValue(d)}
@@ -1140,6 +1147,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Variant</Text>
               <SelectDropList
                 list={varientData}
+                title={varientValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setVarientValue(d)}
@@ -1153,6 +1161,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={styleData}
+                title={styleValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setStyleValue(d)}
@@ -1165,6 +1174,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={exteriorData}
+                title={exteriorValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setExteriorValue(d)}
@@ -1175,6 +1185,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Internal</Text>
               <SelectDropList
                 list={inteiorData}
+                title={interiorValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setInteriorValue(d)}
@@ -1187,7 +1198,7 @@ export default function ProspectScreen(props) {
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={my_Data}
-                  title=" "
+                  title={my_DataValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setMyDataValue(d)}
@@ -1195,7 +1206,7 @@ export default function ProspectScreen(props) {
                 <Text> </Text>
                 <SelectDropList
                   list={vy_Data}
-                  title=" "
+                  title={vy_DataValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setVyDataValue(d)}
@@ -1207,6 +1218,7 @@ export default function ProspectScreen(props) {
               <Text style={styles.detailText}>Assembly Type</Text>
               <SelectDropList
                 list={assemblyData}
+                title={assemblyValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
@@ -1282,6 +1294,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={actionTypeData}
+                title={actionTypeValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setActionTypeValue(d)}
@@ -1294,6 +1307,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={modelData}
+                title={actionModelValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setActionModelValue(d)}
@@ -1428,6 +1442,7 @@ export default function ProspectScreen(props) {
           })
         }
         data={calenderModalShow.data}
+        mobile_Data={mobileno}
       />
     </SafeAreaView>
   );
