@@ -599,6 +599,7 @@ export default function ProspectScreen(props) {
   };
 
   const fn_ActionDateSelect = (data) => {
+    if(actionTypeValue==="06"){
     if (Object.keys(actionModelValue).length === 0) {
       constant.showMsg("Please select Model");
     } else {
@@ -611,6 +612,16 @@ export default function ProspectScreen(props) {
       });
       fn_GetDemoVehicleList();
     }
+  }else{
+    const originalDate = moment(data.timestamp);
+    const utcDate = originalDate.utc();
+    const zoneData = utcDate.toISOString();
+    setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"));
+    setTimeSlotModal((s) => {
+      return { ...s, date: data, utcDateFormate: zoneData };
+    });
+    fn_GetDemoVehicleList();
+  }
   };
 
   const fn_GetDemoVehicleList = () => {
@@ -620,7 +631,7 @@ export default function ProspectScreen(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       calledBy: "VEHICLE",
-      model: actionModelValue.code,
+      model: actionModelValue.code!= undefined ? actionModelValue.code : "",
       loginUserCompanyId: userData?.companyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -656,7 +667,7 @@ export default function ProspectScreen(props) {
       "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
-      "chassisNo": item.chassisNo,
+      "chassisNo": item?.chassisNo,
       "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
@@ -725,21 +736,9 @@ export default function ProspectScreen(props) {
       await res.result.map((item) => {
         if (item.listType === "EDITION") {
           setEditionData(item.vehicleMaster);
-        } else if (item.listType === "ASSEMBLY") {
-          setAssemblyData(item.vehicleMaster);
-        } else if (item.listType === "VARIANT") {
+        }  else if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
-        } else if (item.listType === "STYLE") {
-          setStyleData(item.vehicleMaster);
-        } else if (item.listType === "EXT_COLOR") {
-          setExteriorData(item.vehicleMaster);
-        } else if (item.listType === "INT_COLOR") {
-          setInteriorData(item.vehicleMaster);
-        } else if (item.listType === "VY") {
-          setVyData(item.vehicleMaster);
-        } else if (item.listType === "MY") {
-          setMyData(item.vehicleMaster);
-        }
+        } 
       });
       dispatch(emptyLoader_Action(false));
     } else {
@@ -749,17 +748,20 @@ export default function ProspectScreen(props) {
   };
 
   const fn_CalenderClick = () => {
+   if(actionTypeValue?.code ==="06"){
     if (Object.keys(actionModelValue).length === 0) {
       constant.showMsg("Please select Model");
     } else {
       setActionCal_Modal(true);
     }
+  }else{
+    setActionCal_Modal(true);
+  }
   };
 
   const fn_SlotDone = (selectVeh, slotData) => {
-    setVinData(selectVeh?.chassisNo);
-    setRegData(selectVeh?.regn);
-    console.log("slotdata", slotData);
+   actionTypeValue?.code==='06' ? setVinData(selectVeh?.chassisNo): null;
+  actionTypeValue?.code==='06' ? setRegData(selectVeh?.regn) : null;
     const originalTime = slotData[slotData.length - 1].slot;
     const originalMoment = moment(originalTime, "hh:mm A");
     const updatedMoment = originalMoment.add(30, "minutes");
@@ -914,6 +916,66 @@ export default function ProspectScreen(props) {
       await res.result.map((item) => {
          if (item.listType === "TITLE") {
           setTitle(item.prospectMasterList);
+        }
+      });
+      dispatch(emptyLoader_Action(false));
+    } else {
+      dispatch(emptyLoader_Action(false));
+      constant.showMsg(res.message);
+    }
+  };
+
+
+  const fn_VarientSelect = (d) => {
+    setVarientValue(d);
+    setStyleValue({})
+    setExteriorValue({})
+    setInteriorValue({})
+    setMyDataValue({})
+    setVyDataValue({})
+    setAssemblyValue({})
+    fn_GetVehicleVarient(d);
+  };
+
+  const fn_GetVehicleVarient = (d) => {
+    dispatch(emptyLoader_Action(true));
+    let param = {
+      brandCode: userData?.brandCode,
+      countryCode: userData?.countryCode,
+      companyId: userData?.companyId,
+      calledBy: "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+      edition: "",
+      assembly: "",
+      subModel: d?.code,
+      model: modelValue?.code,
+      code: "",
+      loginUserId: userData?.userId,
+      ipAddress: "1::1",
+    };
+    tokenApiCall(
+      GetVehicleVarientCallBack,
+      APIName.GetVehicleMaster,
+      "POST",
+      param
+    );
+  };
+
+  const GetVehicleVarientCallBack = async (res) => {
+    console.log("search", JSON.stringify(res));
+    if (res.statusCode === 200) {
+      await res.result.map((item) => {
+         if (item.listType === "VARIANT") {
+          setvarientData(item.vehicleMaster);
+        } else if (item.listType === "STYLE") {
+          setStyleData(item.vehicleMaster);
+        } else if (item.listType === "EXT_COLOR") {
+          setExteriorData(item.vehicleMaster);
+        } else if (item.listType === "INT_COLOR") {
+          setInteriorData(item.vehicleMaster);
+        } else if (item.listType === "VY") {
+          setVyData(item.vehicleMaster);
+        } else if (item.listType === "MY") {
+          setMyData(item.vehicleMaster);
         }
       });
       dispatch(emptyLoader_Action(false));
@@ -1228,7 +1290,7 @@ export default function ProspectScreen(props) {
                 refType={Object.keys(varientValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setVarientValue(d)}
+                on_Select={(d) => fn_VarientSelect(d)}
               />
               {/* <TextInput style={styles.input1} >a.r@gmail.com</TextInput> */}
             </View>
@@ -1385,7 +1447,7 @@ export default function ProspectScreen(props) {
               />
             </View>
 
-            <View style={styles.detailMainView}>
+           { actionTypeValue?.code ==="06" &&  <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
               Demo vehicle<Text style={styles.text2}>*</Text>
               </Text>
@@ -1397,6 +1459,7 @@ export default function ProspectScreen(props) {
                 on_Select={(d) => setActionModelValue(d)}
               />
             </View>
+}
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
@@ -1442,7 +1505,7 @@ export default function ProspectScreen(props) {
               </View>
             </View>
 
-            <View style={styles.detailMainView}>
+            { actionTypeValue?.code ==="06" && <View style={styles.detailMainView}>
               <Text style={styles.detailText}>VIN</Text>
               <TextInput
                 placeholder="Type here"
@@ -1452,7 +1515,8 @@ export default function ProspectScreen(props) {
                 {vinData}
               </TextInput>
             </View>
-
+}
+{ actionTypeValue?.code ==="06" && 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
                 Regn.<Text style={styles.text2}>*</Text>
@@ -1465,6 +1529,7 @@ export default function ProspectScreen(props) {
                 {regData}
               </TextInput>
             </View>
+}
 
             <View style={[styles.detailMainView, { alignItems: "flex-start" }]}>
               <Text style={[styles.detailText, { marginTop: "3%" }]}>

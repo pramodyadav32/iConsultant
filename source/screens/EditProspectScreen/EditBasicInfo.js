@@ -63,8 +63,14 @@ export default function EditBasicInfo(props) {
         });
       } else if (item.listType === "DEALCATEGORY") {
         setDealCategoryData(item.prospectMasterList);
+        item.prospectMasterList.map((item) => {
+          item?.code === data?.corpApprovedFlag ? setDealCategoryValue(item) : null;
+        });
       } else if (item.listType === "DEALTYPE") {
         setDealTypeData(item.prospectMasterList);
+        item.prospectMasterList.map((item) => {
+          item?.code === data?.corporateCategory ? setDealTypeValue(item) : null;
+        });
       } else if (item.listType === "CORPORATE") {
         item.prospectMasterList.map((item) => {
           item?.code === data?.dealCompany ? setCompanyValue(item) : null;
@@ -355,7 +361,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
             <View style={styles.basicDetailSubView2}>
               <SelectDropList
                 list={dealCategoryData}
-                title=" "
+                title={dealCategoryValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 disable={corporateCase === "Y" ? false : true}
@@ -380,13 +386,11 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
             <View style={styles.basicDetailSubView2}>
               <SelectDropList
                 list={dealTypeData}
-                title=" "
+                title={dealTypeValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 disable={corporateCase === "Y" ? false : true}
                 on_Select={(d) => {
-                  console.log("aaaaaa = ", dealCategoryValue)
-                  console.log("aaaaaa = ", d)
                   setDealTypeValue(d)
                   setCompanyValue({})
                   setCompanyData([])
