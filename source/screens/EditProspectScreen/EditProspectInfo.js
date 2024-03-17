@@ -99,10 +99,11 @@ export default function EditProspectInfo(props) {
                 })
                 setCityData(item.prospectMasterList)
             } else if (item.listType === 'PROSPECT_CATEGORY') {
+                console.log("data123",item)
                 setProspectData(item.prospectMasterList)
-                // item.prospectMasterList.map((item)=>{
-                //     item?.code === data?.prospectType ? setProspectTypeValue(item) : null
-                // })
+                item.prospectMasterList.map((item)=>{
+                    item?.code === data?.custType ? setProspectTypeValue(item) : null
+                })
             }
         })
         setMobileno(prospectDetail?.mobile)
