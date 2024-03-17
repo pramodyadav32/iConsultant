@@ -132,11 +132,9 @@ export default function CloseInfo(props) {
      }
     setTentativeDateModel(s=>{return{...s,show:false}})
   }
-
-  
-
-  const fn_Create = async() => {
-    // if (Object.keys(sourceValue).length === 0) {
+ 
+  const fn_Validation=()=>{
+      // if (Object.keys(sourceValue).length === 0) {
     //     constant.showMsg("Please select source")
     // } else if (Object.keys(dealCategoryValue).length === 0) {
     //     constant.showMsg("Please select Deal Category")
@@ -145,6 +143,44 @@ export default function CloseInfo(props) {
     // } else if (Object.keys(companyValue).length === 0) {
     //     constant.showMsg("Please select Company")
     // } else {
+   showList ?  fn_GetProspectBasicInfo() : fn_Create()
+  // }
+  }
+
+  const fn_GetProspectBasicInfo = () => {
+    dispatch(emptyLoader_Action(true))
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "prospectNo": Number(data?.prospectID),
+        "loginUserCompanyId": userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1",
+    }
+    tokenApiCall(GetProspectBasicInfoCallBack, APIName.GetProspectBasicInfo, "POST", param)
+}
+
+const GetProspectBasicInfoCallBack = (res) => {
+    console.log("basic",res?.result)
+    if (res.statusCode === 200) {
+      if(res.result?.proformaList.length > 0){
+       fn_Create()
+      }else{
+        setTimeout(()=>{
+          dispatch(emptyLoader_Action(false))
+        },1000)
+        constant.showMsg("This Prospect cannot be closed as Successful Prospect.Because No Proforma Invoice has been Generated")
+      }
+    } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+    }
+}
+  
+
+  const fn_Create = async() => {
+  
       console.log("dislikenDa",JSON.stringify(dislikeData))
       let newArray = []
       await dislikeData.map((data)=>{
@@ -652,7 +688,7 @@ const fn_ListFooter=()=>{
      }
       
         </View>
-        <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+        <Button title='Save' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
 
       </ScrollView>
 

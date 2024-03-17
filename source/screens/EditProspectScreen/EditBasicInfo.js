@@ -33,7 +33,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import moment from "moment";
 
 export default function EditBasicInfo(props) {
-  const { cardClick, data, prospectMaster, fn_SaveBasicInfo } = props;
+  const { cardClick, data, prospectMaster, fn_SaveBasicInfo ,fn_Next} = props;
   const dispatch = useDispatch();
   const { userData, selectedBranch } = useSelector(
     (state) => state.AuthReducer
@@ -244,10 +244,14 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
     console.log("res", res);
     if (res.statusCode === 200) {
       dispatch(home_Refresh_Action(true))
-      res?.result?.resultCode === "Y"
-        ? constant.showMsg("Data Saved Successfully.")
-        : constant.showMsg("Error while data saving.");
-    } else {
+     
+     if(res?.result?.resultCode === "Y"){
+      fn_Next()
+      constant.showMsg("Data Saved Successfully.")
+     }else{
+      constant.showMsg("Error while data saving.");
+     }
+      } else {
       dispatch(emptyLoader_Action(false));
       constant.showMsg(res.message);
     }

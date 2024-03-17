@@ -49,7 +49,7 @@ const data2 = [
 ];
 
 export default function PerformaAccessories(props) {
-  const { navigation,performaBasicInfo } = props;
+  const { navigation,performaBasicInfo,fn_Next } = props;
   const dispatch = useDispatch();
   const { userData, selectedBranch } = useSelector(
     (state) => state.AuthReducer
@@ -333,7 +333,7 @@ export default function PerformaAccessories(props) {
     console.log("search", JSON.stringify(res));
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
-
+    fn_Next()
     } else {
       constant.showMsg(res.message);
     }

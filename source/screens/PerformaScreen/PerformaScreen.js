@@ -101,34 +101,35 @@ export default function PerformaScreen(props) {
    const [generalMasterData,setGeneralMasterData] = useState({})
    const [ins_Location,setins_Location] = useState([])
    const [reg_Data,setReg_Data] = useState({})
+   const [intrestedVehicleList,setintrestedVehicleList] = useState({})
 
    console.log("cardData", route.params.cardData)
    useEffect(() => {
        fn_GetProspectBasicInfo()
       //  fn_GetVehiclePriceInfo()
       // fn_GetProspectDetail()
-      fn_GetProformaTaxMasters()
+      // fn_GetProformaTaxMasters()
    }, [])
 
-   const fn_GetProformaGeneralMasters = () => {
+   const fn_GetProformaGeneralMasters = (data) => {
       let param = {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
          "prospectNo": Number(route.params.cardData?.prospectId),
          "proformaId": 0,
-         "assembly": "",
-         "edition": "",
-         "model": route.params.cardData?.model,
-         "subModel": route.params.cardData?.variant,
-         "style": "",
-         "my": 0,
-         "vy": 0,
-         "exterior": "",
-         "interior": "",
+         "assembly": data?.vehAssemblyType,
+         "edition": data?.vehEditionType,
+         "model": data?.model,
+         "subModel": data?.subModel,
+         "style": data?.vehVariantStyle,
+         "my": data?.modelYear,
+         "vy": data?.vinYear,
+         "exterior": data?.colorCode,
+         "interior":data?.upholsteryCode,
          "calledBy": "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,REGN_TYPE,VEH_PRICE",
          "priceListApplicable": moment(new Date()).format('DD-MMM-YYYY'),//"23-APR-2024",
-         "billingLocation": "",
+         "billingLocation": selectedBranch?.branchCode,
          "usage": "",
          "saleGroup": "",
          "endUse": "",
@@ -154,6 +155,7 @@ export default function PerformaScreen(props) {
       console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
       if (res.statusCode === 200) {
          setProformaGeneralMasters(res.result);
+         setVehiclePriceDetail(res.result?.vehPrice);
          fn_GetProformaTaxMasters()
       } else {
          constant.showMsg(res.message);
@@ -162,30 +164,19 @@ export default function PerformaScreen(props) {
 
    const fn_GetProformaTaxMasters = () => {
       let param = {
-         // brandCode: userData?.brandCode,
-         // countryCode: userData?.countryCode,
-         // companyId: userData?.companyId,
-         // prospectNo: Number(route.params.cardData?.prospectId),
-         // proformaId: 0,
-         // hsnCode: "87042190",
-         // endUse: "EU",
-         // basicPrice: 0,
-         // discount: 0,
-         // loginUserCompanyId: userData?.userCompanyId,
-         // loginUserId: userData?.userId,
-         // ipAddress: "1::1",
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
-    "prospectNo": 8325,
-    "proformaId": 0,
-    "hsnCode": "87042190",
-    "endUse": "EU",
-    "basicPrice": 836232,
-    "discount": 0,
-    "loginUserCompanyId": "ORBIT",
-    "loginUserId": "VINOD",
-    "ipAddress": "1::1"
+         prospectNo: Number(route.params.cardData?.prospectId),
+         proformaId: 0,
+         hsnCode: "87042190",
+         endUse: "EU",
+         basicPrice: 0,
+         discount: 0,
+         loginUserCompanyId: userData?.userCompanyId,
+         loginUserId: userData?.userId,
+         ipAddress: "1::1",
+   
       };
       tokenApiCall(
          GetProformaTaxMastersCallBack,
@@ -199,7 +190,7 @@ export default function PerformaScreen(props) {
       console.log("GetProformaTaxMastersCallBack = ", JSON.stringify(res));
       if (res.statusCode === 200) {
          setPerformaTaxMaster(res?.result)
-         setVehiclePriceDetail(res.result?.vehPriceDetail);
+         // setVehiclePriceDetail(res.result?.vehPriceDetail);
       } else {
          constant.showMsg(res.message);
       }
@@ -224,7 +215,7 @@ export default function PerformaScreen(props) {
    };
 
    const GetProspectBasicInfoCallBack = (res) => {
-      console.log("GetProspectBasicInfoCallBack = ", JSON.stringify(res.result?.proformaList));
+      console.log("GetProspectBasicInfoCallBack = ", JSON.stringify(res.result));
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
          if(res?.result?.proformaList=== null || res?.result?.proformaList=== undefined){
@@ -232,7 +223,8 @@ export default function PerformaScreen(props) {
          }else{
             res?.result?.proformaList.length > 0 ?  setPerformaNo(res?.result?.proformaList[0]?.docNo) : setPerformaNo(0)
          }
-         fn_GetProformaGeneralMasters()
+         setintrestedVehicleList(res?.result?.intrestedVehicleList[0])
+         fn_GetProformaGeneralMasters(res?.result?.intrestedVehicleList[0])
       } else {
          constant.showMsg(res.message);
       }
@@ -800,11 +792,13 @@ export default function PerformaScreen(props) {
                   texMasterData ={performaTaxMaster}
                   SaveInfo = {()=>{fn_SaveBasicInfo()}}
                   prospect_No = {performaNo}
+                  intrestedVehicleList = {intrestedVehicleList}
                 />
             )}
             {active === 1 && <
                PerformaAccessories 
                performaBasicInfo={performaBasicDataHeader}
+               fn_Next={()=>{fn_GetProformaInsuMaster()}}
                />}
             {/* {active === 2 && <PerformaPackage />} */}
             {

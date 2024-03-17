@@ -16,7 +16,7 @@ import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default function EditProspectInfo(props) {
-    const { data, prospectMaster, prospectDetail } = props
+    const { data, prospectMaster, prospectDetail,fn_Next } = props
     const dispatch = useDispatch()
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [activeIndex, setActiveIndex] = useState(true)
@@ -356,7 +356,13 @@ export default function EditProspectInfo(props) {
         console.log("res", res)
         if (res.statusCode === 200) {
             dispatch(home_Refresh_Action(true))
-            res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
+            if(res?.result?.resultCode === "Y"){
+                fn_Next()
+                constant.showMsg("Data Saved Successfully.")
+              }else{
+                constant.showMsg("Error while data saving.");
+              }
+            // res?.result?.resultCode === "Y" ? constant.showMsg("Data Saved Successfully.") : constant.showMsg("Error while data saving.")
         } else {
             dispatch(emptyLoader_Action(false))
             constant.showMsg(res.message)

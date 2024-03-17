@@ -47,7 +47,7 @@ export default function PerformaRegistration(props) {
 
   let newData = []
   regData?.registrationTypeList.map((item)=>{
-    let total = (performaPriceDetail?.basicPricePostDiscount * Number(item?.dataCalculation?.perVal))/100
+    let total = (performaPriceDetail?.vehBasicAmount * Number(item?.dataCalculation?.perVal))/100
     item["total"] = parseInt(total)
     item["subTotal"] = parseInt(total)
     item["addAmount"] = ''
@@ -86,7 +86,7 @@ export default function PerformaRegistration(props) {
      let newObj ={
       "regnVersionSr": index,
      "costHeadCode": item?.code,
-     "basicAmount": performaPriceDetail?.basicPricePostDiscount,
+     "basicAmount": performaPriceDetail?.vehBasicAmount,
      "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
      "totalAmount": parseInt(item.total)
      }

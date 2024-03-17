@@ -45,8 +45,8 @@ const ProspectActionSlotScreen = (props) => {
     useEffect(()=>{
     //    if(vehicleList.length>0){
         setActive(0)
-        vehicleList.length>0 ?  setSelectVeh(vehicleList[0]) : setSelectVeh({})
-     VehicleClick(vehicleList[0],0)
+        vehicleList.length>0 ?  setSelectVeh(vehicleList[0]) : null
+    //  VehicleClick({},0)
     //    }
     },[vehicleList])
 

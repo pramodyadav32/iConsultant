@@ -24,7 +24,7 @@ const priceList=[
    {"code":'CURRENT_DATE','description':"Applicable on Current Date"}
 ]
 export default function PerformaBasicInfo(props) {
-   const { navigation, performaPriceDetail,performaBasicInfo,texMasterData,cardData,performaGeneralMasterData,SaveInfo,prospect_No} = props
+   const { navigation, performaPriceDetail,performaBasicInfo,texMasterData,cardData,performaGeneralMasterData,SaveInfo,prospect_No,intrestedVehicleList} = props
    const dispatch = useDispatch()
    const { userData,selectedBranch } = useSelector(state => state.AuthReducer)
    const [billingLoactionData,setBillingLocationData] =useState([])
@@ -71,7 +71,7 @@ export default function PerformaBasicInfo(props) {
     texMasterData?.selectedProformaValueCodes.map((item)=>{
        newTaxTotal= newTaxTotal+Number(item.perc)
        newSubCharge = newSubCharge + Number(item.surcharge)
-      let newObj = ((performaPriceDetail?.basicPricePostDiscount - Number(discountValue))* Number(item?.perc))/100
+      let newObj = ((performaPriceDetail?.vehBasicAmount - Number(discountValue))* Number(item?.perc))/100
        newTotal = newTotal + Number(newObj)
       item["total"] = newObj
       newArray.push(item)
@@ -171,13 +171,13 @@ export default function PerformaBasicInfo(props) {
          "piMY": 0,
          "piVY": 0,
          "priceSerial": 0,
-         "basicPrice": performaPriceDetail?.basicPricePostDiscount,
+         "basicPrice": performaPriceDetail?.vehBasicAmount,
          "discount": Number(discountValue),
          "itemDiscount": 0,
          "totalTax": parseInt(totalAmount),
          "totalLevy": 0,
-         "exShowroomPostDisc": performaPriceDetail?.exShowroomPostDiscount,
-         "exShowroomPreDisc": performaPriceDetail?.exShowroomPreDiscount,
+         "exShowroomPostDisc": performaPriceDetail?.exShowromPrice,
+         "exShowroomPreDisc": performaPriceDetail?.netShowromPrice,
          "bookingAmount": 0,
          "piUsage": usageValue?.code,
          "piBillingLocation": billingLoactionValue?.code,
@@ -286,7 +286,7 @@ export default function PerformaBasicInfo(props) {
       let newArray = []
       let newTotal = 0
       texMasterData.selectedProformaValueCodes.map((item)=>{
-        let newObj = ((performaPriceDetail?.basicPricePostDiscount - Number(d))* Number(item?.perc))/100
+        let newObj = ((performaPriceDetail?.vehBasicAmount - Number(d))* Number(item?.perc))/100
          item["total"] = newObj
          newTotal = newTotal + Number(newObj)
         newArray.push(item)
@@ -327,22 +327,22 @@ export default function PerformaBasicInfo(props) {
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Model</Text>
-                        <Text style={styles.listText3}>{cardData?.model}</Text>
+                        <Text style={styles.listText3}>{intrestedVehicleList?.model}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Variant</Text>
-                        <Text style={styles.listText3}>{cardData?.variant}</Text>
+                        <Text style={styles.listText3}>{intrestedVehicleList?.vehVariantDesc}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Style</Text>
-                        <Text style={styles.listText3}>STANDARD</Text>
+                        <Text style={styles.listText3}>{intrestedVehicleList?.vehVariantStyle}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>MY/VY</Text>
-                        <Text style={styles.listText3}>{cardData?.prospectFY}</Text>
+                        <Text style={styles.listText3}>{intrestedVehicleList?.modelYear}-{intrestedVehicleList?.vinYear}</Text>
                      </View>
                   </View>
 
@@ -413,22 +413,22 @@ export default function PerformaBasicInfo(props) {
             <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>HSN Code</Text>
-                        <Text style={styles.listText3}>New</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.hsnCode}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.basicPricePostDiscount}</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.vehBasicAmount}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Discount</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPostDiscount}</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.discountAmt}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.basicPricePostDiscount}</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.vehBasicAmount}</Text>
                      </View>
                   </View>
                   </View>
@@ -463,18 +463,18 @@ export default function PerformaBasicInfo(props) {
             <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Ex-Showroom(Pre-Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPreDiscount}</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.exShowromPrice}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Ex-Showroom(Post Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.exShowroomPostDiscount}</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.exShowromPrice}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Booking Amount</Text>
-                        <Text style={styles.listText3}>_</Text>
+                        <Text style={styles.listText3}>{performaPriceDetail?.bookingAmt}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         {/* <Text style={styles.listText2}>MY/VY</Text>
