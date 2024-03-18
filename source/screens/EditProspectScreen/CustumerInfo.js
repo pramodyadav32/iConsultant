@@ -69,39 +69,50 @@ export default function CustumerInfo(props) {
                     fn_GetProfile(item,1)
                 }
               })
-          }else if(item?.listType === "BRAND"){
-            item?.existingVehicleMasterList.map((item)=>{
-                if(item?.code === existing_Vehicle[0]?.make){
-                    setBrandValue(item)
-                }
-              })
-            setBrandData(item?.existingVehicleMasterList)
-          }else if(item?.listType === "BODY_TYPE"){
+          }
+          else if(item?.listType === "BRAND"){
+            let newObj={"code":existing_Vehicle[0]?.make}
+            fn_BrandSelect(newObj,1)
+            // item?.existingVehicleMasterList.map((item)=>{
+            //     if(item?.code === existing_Vehicle[0]?.make){
+            //       fn_BrandSelect(item,1)
+            //         setBrandValue(item)
+            //     }
+            //   })
+            // setBrandData(item?.existingVehicleMasterList)
+          }
+          else if(item?.listType === "BODY_TYPE"){
             setBodyTypeData(item?.existingVehicleMasterList)
+            let newObj={"code":existing_Vehicle[0]?.bodyType}
+            fn_BodyClick(newObj,1)
+            
             item?.existingVehicleMasterList.map((item)=>{
                 if(item?.code === existing_Vehicle[0]?.bodyType){
                     setBodyTypeValue(item)
+                    // fn_BodyClick(item,1)
                 }
               })
-          }else if(item?.listType === "MODEL"){
-            setModelData(item?.existingVehicleMasterList)
-            item?.existingVehicleMasterList.map((item)=>{
-                if(item?.code === existing_Vehicle[0]?.modelCode){
-                    setModelValue(item)
-                }
-              })
+          }
+          else if(item?.listType === "MODEL"){
+            let newObj={"code":existing_Vehicle[0]?.modelCode}
+            fn_ModelClick(newObj,1)
+           
           }else if(item?.listType === "VARIANT"){
-            setVarientData(item?.existingVehicleMasterList)
+            // setVarientData(item?.existingVehicleMasterList)
+            let newObj={"code":existing_Vehicle[0]?.variantCode}
+            fn_VarientClick(item,1)
             item?.existingVehicleMasterList.map((item)=>{
+           
                 if(item?.code === existing_Vehicle[0]?.variantCode){
-                    setVarientValue(item)
+                    // setVarientValue(item)
+                    fn_VarientClick(item,1)
                 }
               })
           }else if(item?.listType === "YEAR_OF_PURCHASE"){
-            setYearPurchaseData(item?.existingVehicleMasterList)
+            // setYearPurchaseData(item?.existingVehicleMasterList)
             item?.existingVehicleMasterList.map((item)=>{
                 if(Number(item?.code) === existing_Vehicle[0]?.yearOfPurchase){
-                    setYearPurchaseValue(item)
+                    // setYearPurchaseValue(item)
                 }
               })
           }
@@ -186,8 +197,230 @@ export default function CustumerInfo(props) {
     const fn_Occuption=(d)=>{
         setOccupationValue(d)
         setProductSerialValue({})
+        setProductSerialData([])
         fn_GetProfile(d,2)
     }
+
+    const fn_BodyClick=(d,type=0)=>{
+      if(type===0){
+      setBodyTypeValue(d)
+      setBrandData([])
+      setBrandValue({})
+      setModelData([])
+      setModelValue({})
+      setVarientData([])
+      setVarientValue({})
+      setYearPurchaseData([])
+      setYearPurchaseValue({})
+      dispatch(emptyLoader_Action(true))
+      }
+        let param = {
+         "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectID":Number(data?.prospectID),
+            "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+            "brandType": type===1 ? existing_Vehicle[0]?.bodyType : d?.code ,
+            "usage": "",
+            "competitorBrand": "" ,
+            "model":'',
+            "subModel": "",
+            "ownerShip": "",
+            "financer": "",
+            "purchaseYear": 0,
+            "occupationCode": type===1 ? existing_Vehicle[0]?.occupation : occupationValue.code,
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(bodyClickCallBack, APIName.GetExistingVehicleMasters, "POST", param,type)
+    }
+
+    const bodyClickCallBack = async (res,type) => {
+      console.log("profile", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+        res?.result.map((item)=>{
+          if(item?.listType === "BRAND"){
+            if(type===1){
+            item?.existingVehicleMasterList.map((item)=>{
+              if(item?.code === existing_Vehicle[0]?.make){
+                setBrandValue(item)
+            }
+            })
+          }
+          setBrandData(item?.existingVehicleMasterList)
+            }
+       })
+      } else {
+          dispatch(emptyLoader_Action(false))
+          constant.showMsg(res.message)
+      }
+  }
+
+    const fn_BrandSelect=(d,type=0)=>{
+      if(type===0){
+      setBrandValue(d)
+      setModelData([])
+      setModelValue({})
+      setVarientData([])
+      setVarientValue({})
+      setYearPurchaseData([])
+      setYearPurchaseValue({})
+      dispatch(emptyLoader_Action(true))
+      }
+      let param = {
+        "brandCode": userData?.brandCode,
+           "countryCode": userData?.countryCode,
+           "companyId": userData?.companyId,
+           "prospectID":Number(data?.prospectID),
+           "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+           "brandType": type===1 ? existing_Vehicle[0]?.bodyType  : bodyTypeValue?.code ,
+           "usage": "",
+           "competitorBrand": type===1 ? existing_Vehicle[0]?.make : d?.code ,
+           "model":'',
+           "subModel": "",
+           "ownerShip": "",
+           "financer": "",
+           "purchaseYear": 0,
+           "occupationCode": type===1 ? existing_Vehicle[0]?.occupation : occupationValue.code,
+           "loginUserCompanyId": userData?.userCompanyId,
+           "loginUserId": userData?.userId,
+           "ipAddress": "1::1"
+       }
+       tokenApiCall(BrandSelectCallBack, APIName.GetExistingVehicleMasters, "POST", param,type)
+    }
+
+    const BrandSelectCallBack = async (res,type) => {
+      console.log("profile1", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+        res?.result.map((item)=>{
+          if(item?.listType === "MODEL"){
+            if(type===1){
+            item?.existingVehicleMasterList.map((item)=>{
+             if(item?.code === existing_Vehicle[0]?.modelCode){
+              
+                    setModelValue(item)
+                }
+            })
+          }
+          setModelData(item?.existingVehicleMasterList)
+            }
+       })
+      } else {
+          dispatch(emptyLoader_Action(false))
+          constant.showMsg(res.message)
+      }
+  }
+
+    const fn_ModelClick=(d,type=0)=>{
+      if(type===0){
+      setModelValue(d)
+      setVarientData([])
+      setVarientValue({})
+      setYearPurchaseData([])
+      setYearPurchaseValue({})
+      dispatch(emptyLoader_Action(true))
+      }
+      let param = {
+        "brandCode": userData?.brandCode,
+           "countryCode": userData?.countryCode,
+           "companyId": userData?.companyId,
+           "prospectID":Number(data?.prospectID),
+           "calledBy": "MODEL,VARIANT",
+           "brandType": type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
+           "usage": "",
+           "competitorBrand": type===1 ? existing_Vehicle[0]?.make : brandValue?.code ,
+           "model":type ===1 ? existing_Vehicle[0]?.modelCode: d?.code,
+           "subModel": "",
+           "ownerShip": "",
+           "financer": "",
+           "purchaseYear": 0,
+           "occupationCode": type===1 ? '': occupationValue?.code,
+           "loginUserCompanyId": userData?.userCompanyId,
+           "loginUserId": userData?.userId,
+           "ipAddress": "1::1"
+      }
+       tokenApiCall(ModelClickCallBack, APIName.GetExistingVehicleMasters, "POST", param,type)
+    }
+
+    const ModelClickCallBack = async (res,type) => {
+      console.log("profile", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+        // console.log("varient123",JSON.stringify(res.result))
+        res?.result.map((item)=>{
+          if(item?.listType === "VARIANT"){
+            if(type===1){
+            item?.existingVehicleMasterList.map((item)=>{
+              console.log("model12",JSON.stringify(item))
+              if(item?.code === existing_Vehicle[0]?.variantCode){
+                  setVarientValue(item)
+              }
+            })
+          }
+          setVarientData([...item?.existingVehicleMasterList])
+            }
+       })
+      } else {
+          dispatch(emptyLoader_Action(false))
+          constant.showMsg(res.message)
+      }
+  }
+    
+  const fn_VarientClick=(d,type=0)=>{
+    if(type===0){
+    setVarientValue(d)
+    setYearPurchaseData([])
+    setYearPurchaseValue({})
+    dispatch(emptyLoader_Action(true))
+    }
+    let param = {
+      "brandCode": userData?.brandCode,
+         "countryCode": userData?.countryCode,
+         "companyId": userData?.companyId,
+         "prospectID":Number(data?.prospectID),
+         "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+         "brandType": type===1 ? existing_Vehicle[0]?.bodyType  : bodyTypeValue?.code ,
+         "usage": "",
+         "competitorBrand": type===1 ? existing_Vehicle[0]?.make : brandValue?.code ,
+         "model":type ===1 ? existing_Vehicle[0]?.modelCode : modelValue?.code,
+         "subModel": type === 1 ? existing_Vehicle[0]?.variantCode : d?.code,
+         "ownerShip": "",
+         "financer": "",
+         "purchaseYear": 0,
+         "occupationCode": type===1 ? existing_Vehicle[0]?.occupation : occupationValue.code,
+         "loginUserCompanyId": userData?.userCompanyId,
+         "loginUserId": userData?.userId,
+         "ipAddress": "1::1"
+     }
+     tokenApiCall(VarientClickCallBack, APIName.GetExistingVehicleMasters, "POST", param,type)
+  }
+
+  const VarientClickCallBack = async (res,type) => {
+    console.log("profile", JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
+    if (res.statusCode === 200) {
+      res?.result.map((item)=>{
+        if(item?.listType === "YEAR_OF_PURCHASE"){
+          if(type===1){
+          item?.existingVehicleMasterList.map((item)=>{
+            if(Number(item?.code) === existing_Vehicle[0]?.yearOfPurchase){
+              setYearPurchaseValue(item)
+          }
+          })
+        }
+        setYearPurchaseData(item?.existingVehicleMasterList)
+          }
+     })
+    
+    } else {
+        dispatch(emptyLoader_Action(false))
+        constant.showMsg(res.message)
+    }
+}
+
     const fn_GetProfile = (d,type) => {
         dispatch(emptyLoader_Action(true))
         let param = {
@@ -196,10 +429,10 @@ export default function CustumerInfo(props) {
             "companyId": userData?.companyId,
             "prospectID":Number(data?.prospectID),
             "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
-            "brandType": "",
+            "brandType": '',
             "usage": "",
             "competitorBrand": "",
-            "model": "",
+            "model":"",
             "subModel": "",
             "ownerShip": "",
             "financer": "",
@@ -217,6 +450,7 @@ export default function CustumerInfo(props) {
         console.log("profile", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
+         
            res?.result.map((item)=>{
                 if(item?.listType === "OCCUPATION_PRODUCT"){
                   setProductSerialData([...item?.existingVehicleMasterList])
@@ -230,7 +464,8 @@ export default function CustumerInfo(props) {
                  
                 }
              })
-
+            
+         
         } else {
             dispatch(emptyLoader_Action(false))
             constant.showMsg(res.message)
@@ -290,7 +525,7 @@ export default function CustumerInfo(props) {
              title={bodyTypeValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-             on_Select={(d)=>setBodyTypeValue(d)}
+             on_Select={(d)=>fn_BodyClick(d)}
            />
             </View>
         </View>
@@ -303,7 +538,7 @@ export default function CustumerInfo(props) {
              title={brandValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-             on_Select={(d)=>setBrandValue(d)}
+             on_Select={(d)=>fn_BrandSelect(d)}
            />
             </View>
         </View>
@@ -317,7 +552,7 @@ export default function CustumerInfo(props) {
              title={modelValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-             on_Select={(d)=>setModelValue(d)}
+             on_Select={(d)=>fn_ModelClick(d)}
            />
             </View>
         </View>
@@ -325,12 +560,13 @@ export default function CustumerInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Variant</Text>
             <View style={styles.mobileSubView}>
+              {console.log("varient",varientValue)}
             <SelectDropList 
              list={varientData}
              title={varientValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
-             on_Select={(d)=>setVarientValue(d)}
+             on_Select={(d)=>fn_VarientClick(d)}
            />
             </View>
         </View> 

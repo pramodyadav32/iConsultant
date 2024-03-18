@@ -704,7 +704,17 @@ export default function ProspectScreen(props) {
     setMyDataValue({})
     setVyDataValue({})
     setAssemblyValue({})
+    setEditionData([])
+    setvarientData([])
+    setStyleData([])
+    setExteriorData([])
+    setInteriorData([])
+    setMyData([])
+    setVyData([])
+    setAssemblyData([])
+    setPriceAvailable("")
     fn_GetVehicleModel(d);
+    
   };
 
   const fn_GetVehicleModel = (d) => {
@@ -936,6 +946,12 @@ export default function ProspectScreen(props) {
     setMyDataValue({})
     setVyDataValue({})
     setAssemblyValue({})
+    setStyleData([])
+    setExteriorData([])
+    setInteriorData([])
+    setMyData([])
+    setVyData([])
+    setPriceAvailable("")
     fn_GetVehicleVarient(d);
   };
 
@@ -969,6 +985,7 @@ export default function ProspectScreen(props) {
          if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
         } else if (item.listType === "STYLE") {
+          console.log("item.listType ==== ", item.listType, item.vehicleMaster)
           setStyleData(item.vehicleMaster);
         } else if (item.listType === "EXT_COLOR") {
           setExteriorData(item.vehicleMaster);
@@ -1467,7 +1484,7 @@ export default function ProspectScreen(props) {
 
            { actionTypeValue?.code ==="06" &&  <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-              Demo vehicle<Text style={styles.text2}>*</Text>
+              Demo Vehicle<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={modelData}

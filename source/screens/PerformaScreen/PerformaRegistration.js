@@ -130,14 +130,14 @@ export default function PerformaRegistration(props) {
 }
   
 const fn_SetAllItemUncheck=()=>{
-  // let newArr = registrationTypeList
-  // registrationTypeList?.map((item) => {
-  //   item.select = false
-  //   newArr.splice(index,1,item)
-  //   setRegistrationTypeList([...newArr])
-  // })
+  let newArr = registrationTypeList
+  registrationTypeList?.map((item, index) => {
+    item.select = false
+    newArr.push(item)
+  })
+  setRegistrationTypeList([...newArr])
   
-    console.log("newArr = ", newArr)
+    // console.log("newArr = ", newArr)
  }
 
  const fn_selectReg=(item,index)=>{
@@ -278,8 +278,7 @@ const fn_SetAllItemUncheck=()=>{
 
           <View style={{flex:1,flexDirection:'row'}}>
             <Pressable style={[styles. bottomMainView,{}]} onPress={()=>{
-              
-              custumerReg ? fn_SetAllItemUncheck() : null
+              !custumerReg ? fn_SetAllItemUncheck() : null
               setCustumerReg(!custumerReg)
               }}>
                 <FastImage source={custumerReg ? images?.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
@@ -313,13 +312,13 @@ const fn_SetAllItemUncheck=()=>{
               />
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.subTotal}</Text>
+            <Text style={styles.text8}>{item?.select ? item?.subTotal : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
             <TextInput onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.total}</Text>
+            <Text style={styles.text8}>{item?.select ? item?.total : 0}</Text>
            </View>
           </View >
                 </View>
@@ -480,7 +479,7 @@ const fn_SetAllItemUncheck=()=>{
     
                     },
                 callHeaderSubView:{
-                flex:0.7,
+                flex:1,
                 justifyContent:'center',
                 },
                 callHeaderSubView2:{
