@@ -969,6 +969,7 @@ export default function ProspectScreen(props) {
          if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
         } else if (item.listType === "STYLE") {
+          console.log("item.listType ==== ", item.listType, item.vehicleMaster)
           setStyleData(item.vehicleMaster);
         } else if (item.listType === "EXT_COLOR") {
           setExteriorData(item.vehicleMaster);

@@ -820,7 +820,10 @@ export default function PerformaScreen(props) {
             />}
             {active === 4 && <PerformaTerm term_Data={termData} />}
 
-            {active === 5 && <DownloadPerforma/>}
+            {active === 5 && <DownloadPerforma
+            performaGeneralMasterData={proformaGeneralMasters}
+            performaBasicInfo={performaBasicDataHeader}
+            />}
          </View>
 
          {/* <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} /> */}

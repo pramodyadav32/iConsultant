@@ -58,6 +58,7 @@ export const APIName = {
   GetExistingVehicleMasters : baseUrl + 'ExistingVehicle/GetExistingVehicleMasters',
   GetExistingVehicleList : baseUrl + 'Proforma/GetExistingVehicleList',
   SaveExistingVehicle : baseUrl + 'ExistingVehicle/SaveExistingVehicle',
+  GetProformaPDF : baseUrl + 'Proforma/GetProformaPDF',
 
 }
 
