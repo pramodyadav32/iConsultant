@@ -540,6 +540,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
             {console.log("model",modelValue)}
             <SelectDropList
               list={modelData}
+              disable={true}
               buttonExt={styles.dropList}
               title={modelValue?.description}
               textExt={styles.dropListText}
@@ -554,6 +555,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
               refType={Object.keys(editionValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
+              disable={true}
               on_Select={(d) => setEditionValue(d)}
 
             />
@@ -563,6 +565,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
             <Text style={styles.detailText}>Variant</Text>
             <SelectDropList
               list={varientData}
+              disable={true}
               title={varientValue?.description}
               refType={Object.keys(varientValue).length===0 ?false : true}
               buttonExt={styles.dropList}

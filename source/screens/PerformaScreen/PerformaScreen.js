@@ -502,30 +502,30 @@ export default function PerformaScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>{vehiclePricedetail?.vehBasicAmount}</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.basicAmount}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>
-                           <Text style={styles.listName3}>NIL</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.temporaryRegistration?.totalAmount > 0 ? performHeaderData?.temporaryRegistration?.totalAmount : "NIL"}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Hypo Charges</Text>
-                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.hypothecationCharges?.totalAmount > 0 ? performHeaderData?.hypothecationCharges?.totalAmount : "NIL"}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Service Charges</Text>
-                           <Text style={styles.listName3}>22-Jan-2024</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.serviceCharges?.totalAmount > 0 ? performHeaderData?.serviceCharges?.totalAmount : "NIL"}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Extd Warr Pack</Text>
-                           <Text style={styles.listName3}>NIL</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.extendedWarrantyPack?.totalAmount > 0 ? performHeaderData?.extendedWarrantyPack?.totalAmount : "NIL" }</Text>
                         </View>
 
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Accessories (Performa)</Text>
-                           <Text style={styles.listName3}>3500.00</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.accessories?.totalAmount > 0 ? performHeaderData?.accessories?.totalAmount : "NIL"}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            {/* <Text style={styles.listText2}>Accessories (Performa)</Text> */}
@@ -533,7 +533,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Total</Text>
-                           <Text style={styles.listName3}>910950.00</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.totalAmount}</Text>
                         </View>
                      </View>
                   </View>
@@ -680,7 +680,6 @@ export default function PerformaScreen(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       prospectNo: Number(route.params.cardData?.prospectId),
-      // prospectNo:8325,
       loginUserCompanyId: userData?.userCompanyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -729,6 +728,7 @@ const performDetailCallBack = (res) => {
    console.log("SaveBasicInfoCal = ", JSON.stringify(res));
      dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
+         setPerformHeaderData(res?.result)
          setActive(1)
          constant.showMsg("Basic Info save successfully")
       } else {
@@ -795,7 +795,7 @@ const performDetailCallBack = (res) => {
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
-                                 fn_TabClick(index, item)
+                                 // fn_TabClick(index, item)
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}

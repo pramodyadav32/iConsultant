@@ -51,6 +51,7 @@ export default function ActionInfo(props) {
 
 
   const renderItem = (item, index) => {
+    console.log("item11",item)
     return (
       <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5), marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
 
@@ -104,9 +105,15 @@ export default function ActionInfo(props) {
               buttonExt={styles.updateButton}
               click_Action={() => fn_UpdateClick(item, index)}
             />
+            {item?.actionCode ==='06' ?
             <Pressable style={styles.feedbackButton} onPress={() => fn_FeedBack(item, index)}>
               <FastImage resizeMode='contain' source={images.feedBackIcon} style={styles.updateIcn} />
             </Pressable>
+            : 
+            <View style={[styles.buttonView2, { flex: 1 }]}>
+
+            </View>
+            }
             {/* <Button title='Update'
             buttonExt={styles.updateButton}
             click_Action={()=>feedBackClick(item,index)}
