@@ -193,34 +193,34 @@ export default function PerformaInsurance(props) {
     let exShowRoomPrice = generalMaster_Data?.vehPrice?.exShowromPrice
     setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
-    setIdvValue(idvCharnges)
+    isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
     let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
     let nilDipCharnges = nilDipCheckStatus ? (idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage) + Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100  : 0
     let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
-    setDiscountDepAmt(discountOnNilDep)
+    isNaN(discountOnNilDep) ? null :  setDiscountDepAmt(Math.round(discountOnNilDep,0))
     let totalDepAmount = Number(nilDipCharnges) - Number(discountOnNilDep)
-    setDep_Amt(totalDepAmount)
+    isNaN(totalDepAmount) ? null :  setDep_Amt(Math.round(totalDepAmount,0))
     let premiumAmountBeforeNcb = Number(rateCharnges) + Number(totalDepAmount)
-    setPremiumAmt_Before(premiumAmountBeforeNcb)
+    isNaN(premiumAmountBeforeNcb) ? null : setPremiumAmt_Before(Math.round(premiumAmountBeforeNcb,0))
     let ncbChanrges = (Number(premiumAmountBeforeNcb) * (Number(ncbSelectedData?.key)))/100
     let premiumAmountAfterNcb = Number(premiumAmountBeforeNcb) - Number(ncbChanrges)
-    setPremiumAmt_After(premiumAmountAfterNcb)
+    isNaN(premiumAmountAfterNcb) ? null :  setPremiumAmt_After(Math.round(premiumAmountAfterNcb,0))
     let otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
     let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount)
-    setNetPremiumAmt(premiumAmountAfterDiscount)
+    isNaN(premiumAmountAfterDiscount) ? null : setNetPremiumAmt(Math.round(premiumAmountAfterDiscount,0))
     let loadingAmount = 0;
     insurenceHeadList?.map((item) => {
       if(item.isChecked){
         loadingAmount = loadingAmount + Number(item?.headAmount)
       }
     })
-    setLoadingAmt(loadingAmount)
+    isNaN(loadingAmount) ? null : setLoadingAmt(Math.round(loadingAmount,0))
     let grossPremiumAmount = Number(premiumAmountAfterDiscount) + loadingAmount
-    setGrossAmt(grossPremiumAmount)
+    isNaN(grossPremiumAmount) ? null : setGrossAmt(Math.round(grossPremiumAmount,0))
     let grossPremiumAmountAfterGST = Number(grossPremiumAmount) * 18/100
-    setTotalPayable(grossPremiumAmountAfterGST)
+    isNaN(grossPremiumAmountAfterGST) ? null : setTotalPayable(Math.round(grossPremiumAmountAfterGST,0))
     let gstAmount = grossPremiumAmountAfterGST-grossPremiumAmount
-    setGstValue(gstAmount)
+    isNaN(gstAmount) ? null : setGstValue(Math.round(gstAmount,0))
   };
 
   return (

@@ -134,17 +134,22 @@ export default function CloseInfo(props) {
   }
  
   const fn_Validation=()=>{
-      // if (Object.keys(sourceValue).length === 0) {
-    //     constant.showMsg("Please select source")
-    // } else if (Object.keys(dealCategoryValue).length === 0) {
-    //     constant.showMsg("Please select Deal Category")
-    // } else if (Object.keys(dealTypeValue).length === 0) {
-    //     constant.showMsg("Please select Deal Type")
-    // } else if (Object.keys(companyValue).length === 0) {
-    //     constant.showMsg("Please select Company")
-    // } else {
+      if (Object.keys(actionTypeValue).length === 0) {
+        constant.showMsg("Please select action Type")
+    } else if (actionTypeValue?.code==='06' && Object.keys(modelValue).length === 0) {
+        constant.showMsg("Please select model")
+    } else if (Object.keys(performValue).length === 0) {
+        constant.showMsg("Please select Performed")
+    } else if (performDate==='') {
+        constant.showMsg("Please select Perform Date")
+    } else if (closureDate==='') {
+      constant.showMsg("Please select closer Date")
+  }else if (Object.keys(closureValue).length === 0) {
+    constant.showMsg("Please select closer Type")
+} 
+    else {
    showList ?  fn_GetProspectBasicInfo() : fn_Create()
-  // }
+  }
   }
 
   const fn_GetProspectBasicInfo = () => {
@@ -180,8 +185,6 @@ const GetProspectBasicInfoCallBack = (res) => {
   
 
   const fn_Create = async() => {
-  
-      console.log("dislikenDa",JSON.stringify(dislikeData))
       let newArray = []
       await dislikeData.map((data)=>{
         data?.dislikeValues.map((item)=>{
@@ -255,6 +258,7 @@ const GetProspectBasicInfoCallBack = (res) => {
   const saveBasicInfoCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
+      dispatch(emptyLoader_Action(false))
       dispatch(home_Refresh_Action(true))
 
     } else {
@@ -545,27 +549,31 @@ const fn_ListFooter=()=>{
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={actionType_Data}
+              title={actionTypeValue?.description}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setActionTypeValue(d)}
             />
           </View>
 
-          <View style={styles.detailMainView}>
+          {actionTypeValue?.code=== '06' &&     <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={modelData}
+              title={modelValue?.description}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setModelValue(d)}
 
             />
           </View>
+}
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed</Text>
             <SelectDropList
               list={perform_Data}
+              title={performValue?.description}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setPerformValue(d)}
@@ -598,7 +606,7 @@ const fn_ListFooter=()=>{
             <Text style={styles.detailText}>Closure Type</Text>
             <SelectDropList
               list={closureData}
-              title=' '
+              title={closureValue?.description}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) =>fn_Closure(d)}
@@ -610,7 +618,7 @@ const fn_ListFooter=()=>{
             <Text style={[styles.detailText, { marginTop: '3%' }]}>Remarks</Text>
             <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
           </View>
-       {closureValue?.code==='C' &&   <View style={styles.detailMainView}>
+          {closureValue?.code==='C' &&   <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Dealer</Text>
             <SelectDropList
               list={dealerData}
@@ -636,7 +644,7 @@ const fn_ListFooter=()=>{
 
             />
           </View>
-          <View style={styles.detailMainView}>
+        <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={compVehModelData}
@@ -650,6 +658,7 @@ const fn_ListFooter=()=>{
 
             />
           </View>
+
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Varient<Text style={styles.text2}>*</Text></Text>

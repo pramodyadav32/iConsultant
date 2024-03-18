@@ -618,7 +618,7 @@ export default function EditProspectScreen(props) {
     }
 
     const fn_CustumerSave=()=>{
-        constant.showMsg("Profile Save Successfully")
+        // constant.showMsg("Profile Save Successfully")
         fn_GetActionTypeCloseList()
     }
 
