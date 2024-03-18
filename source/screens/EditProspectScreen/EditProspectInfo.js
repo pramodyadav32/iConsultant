@@ -249,16 +249,66 @@ export default function EditProspectInfo(props) {
         }
     }
 
+    const fn_Validation=()=>{
+if (Object.keys(prospectTypeValue).length === 0) {
+            constant.showMsg("Please select prospect Type")
+        }else if (Object.keys(titleValue).length === 0) {
+            constant.showMsg("Please select title")
+        }else if (name==='') {
+            constant.showMsg("Please enter name")
+        }else if (mobileno==='') {
+            constant.showMsg("Please enter mobileno")
+        }else if (mobileno.length !=10) {
+            constant.showMsg("Please enter valid mobile no")
+        }else if (email==='') {
+            constant.showMsg("Please enter email")
+        }else if (!common_fn.validEmail(email?.trim())) {
+            constant.showMsg("Please enter valid email")
+        }else if (pan==='') {
+            constant.showMsg("Please enter PAN")
+        }else if (empName==='') {
+            constant.showMsg("Please enter employer name")
+        }else if (empMail==='') {
+            constant.showMsg("Please enter employer email")
+        }else if (!common_fn.validEmail(empMail?.trim())) {
+            constant.showMsg("Please enter valid employer email")
+        }else if (destination==='') {
+            constant.showMsg("Please enter designation")
+        }else if (regAdd1==='') {
+            constant.showMsg("Please enter Regn Address")
+        }else if (Object.keys(reg_State).length === 0) {
+            constant.showMsg("Please select Regn State")
+        }else if (Object.keys(reg_City).length === 0) {
+            constant.showMsg("Please select Regn City")
+        }else if (Object.keys(reg_destict).length === 0) {
+            constant.showMsg("Please select Regn Destict")
+        }else if (reg_Pin==='') {
+            constant.showMsg("Please enter Regn Pin")
+        }else if (reg_Phone ==='') {
+            constant.showMsg("Please enter Regn mobileno")
+        }else if (reg_Phone.length !=10) {
+            constant.showMsg("Please enter valid  Regn mobile no")
+        }else if (resAdd1==='') {
+            constant.showMsg("Please enter Res Address")
+        }else if (Object.keys(res_State).length === 0) {
+            constant.showMsg("Please select Res State")
+        }else if (Object.keys(res_City).length === 0) {
+            constant.showMsg("Please select Res City")
+        }else if (Object.keys(res_destict).length === 0) {
+            constant.showMsg("Please select Res Destict")
+        }else if (res_Pin==='') {
+            constant.showMsg("Please enter Res Pin")
+        }else if (res_Phone ==='') {
+            constant.showMsg("Please enter Res mobileno")
+        }else if (res_Phone.length !=10) {
+            constant.showMsg("Please enter valid  Res mobile no")
+        }else{
+            fn_Create()
+        }
+    }
+
     const fn_Create = () => {
-        // if (Object.keys(sourceValue).length === 0) {
-        //     constant.showMsg("Please select source")
-        // } else if (Object.keys(dealCategoryValue).length === 0) {
-        //     constant.showMsg("Please select Deal Category")
-        // } else if (Object.keys(dealTypeValue).length === 0) {
-        //     constant.showMsg("Please select Deal Type")
-        // } else if (Object.keys(companyValue).length === 0) {
-        //     constant.showMsg("Please select Company")
-        // } else {
+        
             const param = {
                 "brandCode": userData?.brandCode,
                 "countryCode": userData?.countryCode,
@@ -785,7 +835,7 @@ export default function EditProspectInfo(props) {
                     }
 
                 </View>
-                <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+                <Button title='Save' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
 
             </ScrollView>
         </View>

@@ -11,7 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import moment from 'moment';
 import DeviceInfo from 'react-native-device-info';
 
-
+let veh={"chassisNo":""}
 const data = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
     { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
@@ -37,7 +37,7 @@ const ProspectActionSlotScreen = (props) => {
 
     
     useEffect(()=>{
-     setSlotListData([...slotList])
+     setSlotListData(slotList)
    let flagFilter =  slotList.filter((item)=>item?.slotAvailabilityFlag==="N")
    setFlagData(flagFilter)
     },[slotList])
@@ -46,6 +46,7 @@ const ProspectActionSlotScreen = (props) => {
     //    if(vehicleList.length>0){
         setActive(0)
         vehicleList.length>0 ?  setSelectVeh(vehicleList[0]) : null
+        vehicleList.length > 0 ?VehicleClick(vehicleList[0],0) : VehicleClick(veh,0) 
     //  VehicleClick({},0)
     //    }
     },[vehicleList])
@@ -165,7 +166,7 @@ const ProspectActionSlotScreen = (props) => {
             item.slotAvailabilityFlag === 'N' ?
             <View style={styles.eventMainView}>
                 <Text style={styles.eventText}>{item?.slot}</Text>
-                <Text style={styles.eventText2}>Test Drive [Mr. Amarjeet Singh]</Text>
+                <Text style={styles.eventText2}>{item?.customerName}</Text>
             </View>
             : null
         )
@@ -173,8 +174,8 @@ const ProspectActionSlotScreen = (props) => {
 
     const slotListRender=({item,index})=>{
         return(
-            <Pressable onPress={()=> item.slotAvailabilityFlag === 'Y' ? fn_SlotClick(item,index) : null} style={item.slotAvailabilityFlag === 'Y' ? item.Select ? styles.slotButton3  :styles.slotButton : styles.slotButton2}>
-                <Text style={item.Select? styles.slotText2 : styles.slotText}>{item?.slot}</Text>
+            <Pressable onPress={()=> item?.slotAvailabilityFlag === 'Y' ? fn_SlotClick(item,index) : null} style={item?.slotAvailabilityFlag === 'Y' ? item?.Select ? styles.slotButton3  :styles.slotButton : styles.slotButton2}>
+                <Text style={item?.Select? styles.slotText2 : styles.slotText}>{item?.slot}</Text>
             </Pressable>
         )
 
@@ -223,10 +224,10 @@ const ProspectActionSlotScreen = (props) => {
                     />
                 </View>
 {/* } */}
-              {(slotList.length > 0 &&flagData.length >0) &&   <View style={styles.eventListMainView}>
+              {(slotList?.length > 0 &&flagData?.length >0) &&   <View style={styles.eventListMainView}>
                     <FlatList
                      data={slotList}
-                     renderItem={flagData}
+                     renderItem={listRender}
                      ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(8))}
                      ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(0))}
                      ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}

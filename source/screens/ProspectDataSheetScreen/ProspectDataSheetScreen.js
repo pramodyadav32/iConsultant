@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import DataSheetModal from '../../components/DataSheetModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 import moment from 'moment';
+import { useFocusEffect, } from '@react-navigation/native';
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -45,6 +46,20 @@ export default function ProspectDataSheetScreen(props) {
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
    });
+
+   useFocusEffect(
+      React.useCallback(() => {
+        // Screen is in focus
+        fn_GetProspectBasicInfo()
+        console.log('Screen in focus');
+        return () => {
+          // Screen is out of focus
+          console.log('Screen out of focus');
+          // goLive("end",live_Id,broadCastName,broadCasttoken)
+          // Call your function or perform actions here
+        };
+      }, [])
+    ) ;
 
    useEffect(() => {
        fn_GetProspectBasicInfo()

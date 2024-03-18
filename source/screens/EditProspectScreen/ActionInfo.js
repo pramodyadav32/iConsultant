@@ -125,13 +125,18 @@ export default function ActionInfo(props) {
  }
 
   const fn_CalenderClick = () => {
+    if(actionTypeValue.code==='06'){
     if (Object.keys(actionModelValue).length === 0) {
       constant.showMsg("Please select Model")
     } else {
       setActionCal_Modal(true)
+    }}
+    else {
+      setActionCal_Modal(true)
     }
   }
   const fn_ActionDateSelect = (data) => {
+    if(actionTypeValue.code==='06'){
     if (Object.keys(actionModelValue).length === 0) {
       constant.showMsg("Please select Model")
     } else {
@@ -143,6 +148,15 @@ export default function ActionInfo(props) {
       setTimeSlotModal(s => { return { ...s, date: data, utcDateFormate: zoneData } })
       fn_GetDemoVehicleList()
     }
+  }else{
+    const originalDate = moment(data.timestamp);
+    const utcDate = originalDate.utc();
+    const zoneData = utcDate.toISOString()
+    console.log("zoneData",zoneData)
+    setActionDate(moment(data.timestamp).format("DD-MM-yyyy"))
+    setTimeSlotModal(s => { return { ...s, date: data, utcDateFormate: zoneData } })
+    fn_GetDemoVehicleList()
+  }
   }
 
   const fn_GetDemoVehicleList = () => {
@@ -152,7 +166,7 @@ export default function ActionInfo(props) {
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
       "calledBy": "VEHICLE",
-      "model": actionModelValue.code,
+      "model": actionTypeValue.code === '06' ?  actionModelValue.code: "",
       "loginUserCompanyId": "ORBIT",
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
@@ -161,7 +175,6 @@ export default function ActionInfo(props) {
   }
 
   const GetDemoVehicleListCallBack = async (res) => {
-    console.log("searchvehi", JSON.stringify(res))
     if (res.statusCode === 200) {
       setActionCal_Modal(false)
       if(res?.result?.demoVehicleList.length>0){
@@ -179,7 +192,6 @@ export default function ActionInfo(props) {
   }
 
   const fn_GetActionSlots = (item, index) => {
-    console.log("utc",timeSlotModal?.utcDateFormate)
     dispatch(emptyLoader_Action(true))
     let param = {
       "brandCode": userData?.brandCode,
@@ -188,26 +200,24 @@ export default function ActionInfo(props) {
       "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
       "actionCode": "",
-      "chassisNo": item?.chassisNo,
+      "chassisNo": item?.chassisNo=== undefined ? "" :item?.chassisNo ,
       "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
-    console.log("aabb",param)
     tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
   }
 
   const GetActionSlotsCallBack = async (res) => {
-    console.log("searchvehi", JSON.stringify(res))
     if (res.statusCode === 200) {
       let data = []
-      await res.result?.actionSlotList.map((item) => {
+      let newList = [...res.result?.actionSlotList]
+      await newList.map((item) => {
         item["Select"] = false
         data.push(item)
       })
-      console.log("data1112",JSON.stringify(data))
-      // setTimeSlotModal(s => { return { ...s, slotList:[...data] } })
+      setTimeSlotModal(s => { return { ...s, slotList:[...data] } })
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
@@ -216,9 +226,9 @@ export default function ActionInfo(props) {
   }
 
   const fn_SlotDone = (selectVeh, slotData) => {
-    setVinData(selectVeh?.chassisNo)
+    actionTypeValue?.code === '06' ?  setVinData(selectVeh?.chassisNo) : null
     setVehVariant(selectVeh?.variant)
-    setRegData(selectVeh?.regn)
+    actionTypeValue?.code === '06' ?  setRegData(selectVeh?.regn) : null
     setSlotCount(slotData.length)
     setAllSlotList(slotData)
     console.log("slotdata -------", slotData)
@@ -321,7 +331,7 @@ export default function ActionInfo(props) {
             on_Select={(d) => setActionTypeValue(d)}
           />
         </View>
-
+      {actionTypeValue?.code==='06' &&
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
           <SelectDropList
@@ -332,6 +342,7 @@ export default function ActionInfo(props) {
             on_Select={(d) => setActionModelValue(d)}
           />
         </View>
+  }
 
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
@@ -361,16 +372,18 @@ export default function ActionInfo(props) {
 
           </View>
         </View>
-
+        {actionTypeValue?.code==='06' &&
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>VIN</Text>
           <TextInput placeholder='Type here' editable={false} style={styles.input1} >{vinData}</TextInput>
         </View>
-
+  }
+ {actionTypeValue?.code==='06' &&
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
           <TextInput placeholder='Type here' editable={false} style={styles.input1} >{regData}</TextInput>
         </View>
+  }
 
         <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
           <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
