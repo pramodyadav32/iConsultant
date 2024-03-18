@@ -103,7 +103,7 @@ export default function PerformaRegistration(props) {
     "docFY": performaBasicInfo?.proformaList[0]?.docFy,
     "docNo": performaBasicInfo?.proformaList[0]?.docNo,
      "regnVersionNo": 0,
-     "regnNotReq": "string",
+     "regnNotReq": custumerReg ? "NONE" : "",
      "regnSource": sourceValue?.code,
      "regnType": "string",
      "regnLocation": locationValue.code,
@@ -113,7 +113,7 @@ export default function PerformaRegistration(props) {
      "rtoCalcMethod": "string",
      "loginUserId":userData?.userId,
      "ipAddress": "1::1",
-     "proformaRtoList": newList
+     "proformaRtoList": custumerReg ? [] : newList
     }
     tokenApiCall(reg_SaveCallBack, APIName.SaveProformaRegistration, "POST", param);
 
@@ -129,6 +129,17 @@ export default function PerformaRegistration(props) {
   }
 }
   
+const fn_SetAllItemUncheck=()=>{
+  // let newArr = registrationTypeList
+  // registrationTypeList?.map((item) => {
+  //   item.select = false
+  //   newArr.splice(index,1,item)
+  //   setRegistrationTypeList([...newArr])
+  // })
+  
+    console.log("newArr = ", newArr)
+ }
+
  const fn_selectReg=(item,index)=>{
   let newArr = registrationTypeList
     if(item.select){
@@ -266,7 +277,11 @@ export default function PerformaRegistration(props) {
           </View >
 
           <View style={{flex:1,flexDirection:'row'}}>
-            <Pressable style={[styles. bottomMainView,{}]} onPress={()=>setCustumerReg(!custumerReg)}>
+            <Pressable style={[styles. bottomMainView,{}]} onPress={()=>{
+              
+              custumerReg ? fn_SetAllItemUncheck() : null
+              setCustumerReg(!custumerReg)
+              }}>
                 <FastImage source={custumerReg ? images?.checkIcon : images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
               <Text style={styles.text4}>Registration to be done by Customer</Text>
             </Pressable> 
@@ -279,7 +294,7 @@ export default function PerformaRegistration(props) {
             return(
               <View>
                  <View style={{flex:1,flexDirection:'row'}}>
-            <Pressable style={[styles. bottomMainView,{}]} onPress={()=>fn_selectReg(item,index)}>
+            <Pressable style={[styles. bottomMainView,{}]} onPress={()=> {custumerReg ? null : fn_selectReg(item,index)}}>
                 <FastImage source={ item?.select ? images?.checkIcon :images.unCheckIcon} resizeMode='contain' style={styles.checkboxStyle} />
               <Text style={styles.text4}>{item?.description}</Text>
             </Pressable> 
@@ -290,7 +305,7 @@ export default function PerformaRegistration(props) {
            <View style={styles.callHeaderSubView}>
            <SelectDropList
                 list={[]}
-                title={item?.dataCalculation?.perVal+"%"}
+                title={item?.dataCalculation?.perVal+"%"+" "+item?.dataCalculation?.amountVal}
                 disable={true}
                 buttonExt={styles.dropList2}
                 textExt={styles.dropListText2}

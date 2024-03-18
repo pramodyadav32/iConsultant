@@ -43,6 +43,31 @@ const otherRateData = [
 
 ]
 
+const ncbRateData = [
+  { "key": 0, title: 0, description: 0 },
+  { "key": 5, title: 5, description: 5 },
+  { "key": 10, title: 10, description: 10 },
+  { "key": 15, title: 15, description: 15 },
+  { "key": 20, title: 20, description: 20 },
+  { "key": 25, title: 25, description: 25 },
+  { "key": 30, title: 30, description: 30 },
+  { "key": 35, title: 35, description: 35 },
+  { "key": 40, title: 40, description: 40 },
+  { "key": 45, title: 45, description: 45 },
+  { "key": 50, title: 50, description: 50 },
+  { "key": 55, title: 55, description: 55 },
+  { "key": 60, title: 60, description: 60 },
+  { "key": 65, title: 65, description: 65 },
+  { "key": 70, title: 70, description: 70 },
+  { "key": 75, title: 75, description: 75 },
+  { "key": 80, title: 80, description: 80 },
+  { "key": 85, title: 85, description: 85 },
+  { "key": 90, title: 90, description: 90 },
+  { "key": 95, title: 95, description: 95 },
+  { "key": 100, title: 100, description: 100 },
+
+]
+
 export default function PerformaInsurance(props) {
   const { navigation, insurance_Data, generalMaster_Data, insuranceLoc_Data,performaBasicInfo } = props
   const dispatch = useDispatch()
@@ -68,19 +93,24 @@ export default function PerformaInsurance(props) {
   const [discountRuleValue, setDiscountRuleValue] = useState({})
   const [otherRateValue, setOtherRateValue] = useState({})
   const [locationValue, setLocationValue] = useState([])
+  const [nilDipCheckStatus, setNilDipCheckStatus] = useState(false)
+  const [nilDipSelectedData, setNilDipSelectedData] = useState({})
+  const [nilDipData, setNilDipData] = useState([])
+  const [ncbSelectedData, setNcbSelectedData] = useState({})
 
   useEffect(() => {
 
    let insuranceHeadListTemp = insurance_Data?.insurenceHeadList.map((list, index) => {
       return { ...list, isChecked: false, id: index };
     });
-
+    console.log("insurance_Data ==== ", insurance_Data)
     setIdvListData(insurance_Data?.idvList)
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
     setinsurenceDataList(insurance_Data?.insurenceDataList)
     setinsurenceHeadList(insuranceHeadListTemp);
     setinsurenceDetail(insurance_Data?.insurenceDetail)
+    setNilDipData(insurance_Data?.idvCalculationList)
 
     let calData = []
     let type = []
@@ -142,6 +172,11 @@ export default function PerformaInsurance(props) {
       }
     });
     setinsurenceHeadList([...insurenceHeadList])
+    calculateInsurance()
+  };
+
+  const calculateInsurance = () => {
+    
   };
 
   return (
@@ -170,7 +205,7 @@ export default function PerformaInsurance(props) {
 
             <SelectDropList
               list={typeData}
-              desName='3'
+              desName='7'
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setTypevalue(d)}
@@ -203,7 +238,10 @@ export default function PerformaInsurance(props) {
               desName="3"
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setCalOnValue(d)}
+              on_Select={(d) => {
+                setCalOnValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
 
@@ -214,7 +252,10 @@ export default function PerformaInsurance(props) {
               desName='4'
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setIdvListValue(d)}
+              on_Select={(d) => {
+                setIdvListValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
 
@@ -225,18 +266,28 @@ export default function PerformaInsurance(props) {
               desName='5'
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setRateValue(d)}
+              on_Select={(d) => {
+                setRateValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>NIL Dep.</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <FastImage source={images.unCheckIcon} style={[styles.checkboxStyle, { marginRight: constant.moderateScale(10) }]} />
+            <Pressable onPress={()=>setNilDipCheckStatus(!nilDipCheckStatus)}>
+              <FastImage source={nilDipCheckStatus ? images.checkIcon : images.unCheckIcon} style={[styles.checkboxStyle, { marginRight: constant.moderateScale(10) }]} />
+              </Pressable>
               <SelectDropList
-                list={[]}
+                list={nilDipData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-              //  on_Select={(d)=>setActionTypeValue(d)}
+                desName='6'
+                disable={!nilDipCheckStatus}
+               on_Select={(d)=>{
+                setNilDipSelectedData(d)
+                calculateInsurance()
+               }}
               />
             </View>
           </View>
@@ -244,11 +295,13 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Discount on Dep.</Text>
             <SelectDropList
-              list={idvCalculationList}
-              desName='6'
+              list={otherRateData}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setDiscountDepValue(d)}
+              on_Select={(d) => {
+                setDiscountDepValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
 
@@ -260,11 +313,14 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>NCB</Text>
             <SelectDropList
-              list={discountRuleData}
+              list={ncbRateData}
               desName='3'
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setDiscountRuleValue(d)}
+              on_Select={(d) => {
+                setNcbSelectedData(d)
+                calculateInsurance()
+              }}
             />
           </View>
 
@@ -275,7 +331,10 @@ export default function PerformaInsurance(props) {
               desName='3'
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setDiscountRuleValue(d)}
+              on_Select={(d) => {
+                setDiscountRuleValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
 
@@ -285,7 +344,10 @@ export default function PerformaInsurance(props) {
               list={otherRateData}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setOtherRateValue(d)}
+              on_Select={(d) => {
+                setOtherRateValue(d)
+                calculateInsurance()
+              }}
             />
           </View>
 

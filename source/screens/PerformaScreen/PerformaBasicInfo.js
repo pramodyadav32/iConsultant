@@ -37,7 +37,7 @@ export default function PerformaBasicInfo(props) {
    const [endUseValue,setEndUseValue] = useState([])
    const [tcsStatus,setTcsStatus] = useState(false)
    const [discountValue,setDiscountValue] = useState("0")
-   const [loyalAmt,setLoayalAmt] = useState('')
+   const [loyalAmt,setLoayalAmt] = useState(0)
    const [trnsBasicValue,setTrnsBasicValue] = useState({})
    const [texMaster,setTexMaster] = useState([])
    const [texTotal,setTexTotal] = useState(0)
@@ -46,6 +46,12 @@ export default function PerformaBasicInfo(props) {
    const [priceListValue,setPriceListValue] = useState({"code":'CURRENT_DATE','description':"Applicable on Current Date"})
 
    useEffect(()=>{
+      console.log("performaGeneralMasterData = ", performaGeneralMasterData)
+      // console.log("performaGeneralMasterData data = ", performperformaPriceDetail)
+      console.log("performaGeneralMasterData performaBasicInfo = ", performaBasicInfo)
+      console.log("performaGeneralMasterData texMasterData = ", texMasterData)
+      console.log("performaGeneralMasterData cardData = ", cardData)
+      
       performaGeneralMasterData?.selectMasterList.map((item)=>{
          if(item?.listType ==='BILLING_LOCATION'){
           setBillingLocationData(item.basicList)
@@ -400,7 +406,7 @@ export default function PerformaBasicInfo(props) {
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Loyalty Disc Amt</Text>
-              <TextInput style={styles.input1} onChangeText={(d)=>setLoayalAmt(d)} >{loyalAmt}</TextInput>
+              <TextInput style={styles.input1} editable={false} onChangeText={(d)=>setLoayalAmt(d)} >{loyalAmt}</TextInput>
 
             </View>
 

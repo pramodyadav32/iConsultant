@@ -108,6 +108,14 @@ export default function EditBasicInfo(props) {
     console.log("res", res);
     if (res.statusCode === 200) {
       setEventSourceList(res?.result?.campaignsMaster);
+      console.log("data?.campaign = ", data?.campaignCode)
+      console.log("data?.campaign = ", data)
+      if(data?.campaignCode){
+        res?.result?.campaignsMaster?.map((item) => {
+          console.log("data?.campaign = ", data?.campaignCode, item?.serial)
+          data?.campaignCode === item?.serial ? setEventSourceData(item) : null
+        })
+      }
     } else {
       constant.showMsg(res.message);
     }
@@ -298,7 +306,11 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
-                    if(sourceValue?.code !== "07")  setEventSourceData(undefined)
+                    if(sourceValue?.code !== "07"){
+                      setEventSourceData(undefined)
+                    }else{
+
+                    }
                     setSourceValue(d)}
                 }
               />
@@ -318,7 +330,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
               <View style={styles.basicDetailSubView2}>
                 <SelectDropList
                   list={eventSourceList}
-                  title="Select Campaign"
+                  title={eventSourceData?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => setEventSourceData(d)}
