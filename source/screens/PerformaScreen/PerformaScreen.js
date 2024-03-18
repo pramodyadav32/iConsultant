@@ -102,6 +102,7 @@ export default function PerformaScreen(props) {
    const [ins_Location,setins_Location] = useState([])
    const [reg_Data,setReg_Data] = useState({})
    const [intrestedVehicleList,setintrestedVehicleList] = useState({})
+   const [performHeaderData,setPerformHeaderData] = useState({})
 
    console.log("cardData", route.params.cardData)
    useEffect(() => {
