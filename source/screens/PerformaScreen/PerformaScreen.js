@@ -156,23 +156,23 @@ export default function PerformaScreen(props) {
       if (res.statusCode === 200) {
          setProformaGeneralMasters(res.result);
          setVehiclePriceDetail(res.result?.vehPrice);
-         fn_GetProformaTaxMasters()
+         fn_GetProformaTaxMasters(res.result?.vehPrice)
       } else {
          constant.showMsg(res.message);
       }
    };
 
-   const fn_GetProformaTaxMasters = () => {
+   const fn_GetProformaTaxMasters = (data) => {
       let param = {
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
          prospectNo: Number(route.params.cardData?.prospectId),
          proformaId: 0,
-         hsnCode: "87042190",
+         hsnCode: data?.hsnCode,
          endUse: "EU",
-         basicPrice: 0,
-         discount: 0,
+         basicPrice: data?.vehBasicAmount,
+         discount: data?.discountAmt,
          loginUserCompanyId: userData?.userCompanyId,
          loginUserId: userData?.userId,
          ipAddress: "1::1",
@@ -482,7 +482,7 @@ export default function PerformaScreen(props) {
                   <View style={{ flex: 1.8, marginTop: constant.moderateScale(7) }}>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                         <View style={styles.driveListDetailSubView}>
-                           <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                           <FastImage source={{uri:intrestedVehicleList?.imagePath}} resizeMode='contain' style={styles.carImage} />
 
                         </View>
                         <View style={styles.driveListDetailSubView}>
@@ -495,7 +495,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>MY/VY</Text>
-                           <Text style={styles.listName3}>{intrestedVehicleList?.modelYear}/{intrestedVehicleList?.modelYear}</Text>
+                           <Text style={styles.listName3}>{intrestedVehicleList?.modelYear}/{intrestedVehicleList?.vinYear}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>

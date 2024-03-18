@@ -48,6 +48,9 @@ export default function PerformaBasicInfo(props) {
    const [basicPriceDiscount,setBasicPriceDiscount] = useState(0)
    const [exShowRoomPostPrice,setExShowRoomPostPrice] = useState(0)
    const [exShowRoomPrePrice,setExShowRoomPrePrice] = useState(0)
+   const [discountPerTex,setDiscountPerTex] = useState(0)
+   const [tcsValue,setTcsValue] = useState("0")
+   
 
    useEffect(()=>{
       console.log("performaGeneralMasterData = ", performaGeneralMasterData)
@@ -81,19 +84,65 @@ export default function PerformaBasicInfo(props) {
       newArray.push(item)
     })
 
-    setTexMaster([...newArray])
+   //  setTexMaster([...newArray])
     setTexTotal(newTaxTotal)
-    setSurchargeData(newSubCharge)
-    setTotalAmount(newTotal)
+   //  setSurchargeData(newSubCharge)
+   //  setTotalAmount(newTotal)
+   },[texMasterData,performaPriceDetail])
 
-   },[texMasterData])
-
-   useEffect(()=>{
-  setBasicPriceDiscount(performaPriceDetail?.vehBasicAmount)
-  setExShowRoomPostPrice(performaPriceDetail?.exShowromPrice)
+   useEffect(()=>{  
+    fn_CalTax()
   setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice)
-   },[performaPriceDetail])
+   },[performaPriceDetail,texMasterData])
 
+   const fn_CalTax=()=>{
+      let tax = 0
+       texMasterData?.selectedProformaValueCodes.map((item)=>{
+         tax = tax+Number(item.perc)
+        })
+    setTexTotal(tax)
+    fn_createCal(performaPriceDetail?.discountAmt,tax)
+   }
+
+ const fn_createCal=async(d,taxValue)=>{
+    let basicPrice = performaPriceDetail?.vehBasicAmount
+    setDiscountValue(d)
+    let dis = Number(d)
+    let tax = taxValue 
+    let discount_Tax = Math.round(((dis*100)/(tax+100)),0)
+    let basicDiscount = basicPrice-discount_Tax
+    setDiscountPerTex(discount_Tax)
+    setBasicPriceDiscount(basicPrice-discount_Tax)
+    console.log("ddd"+discount_Tax)
+
+    let newArray = []
+    let newTaxTotal = 0
+    let newSubCharge = 0
+    let newTotal = 0
+     texMasterData?.selectedProformaValueCodes.map((item)=>{
+        newTaxTotal= newTaxTotal+Number(item.perc)
+        newSubCharge = newSubCharge + Number(item.surcharge)
+        let newCal =  Math.round(((Number(basicDiscount)*Number(item.perc))/100),0)
+        newTotal = newTotal +newCal
+       item["total"] = newCal
+       newArray.push(item)
+     })
+ 
+     setTexMaster([...newArray])
+     setTexTotal(newTaxTotal)
+     setSurchargeData(newSubCharge)
+     setTotalAmount(newTotal)
+     if(texMasterData?.tcsDetail?.tcsApplicable==="Y"){
+        let newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
+        setTcsValue(newTcs)
+        setTcsStatus(true)
+     }{
+      setTcsStatus(false)
+      setTcsValue(0)
+      
+     }
+     setExShowRoomPostPrice(newTotal+basicDiscount)
+   }
 
    const fn_GetProformaGeneralMasters = (d) => {
       setSalesGroupValue(d)
@@ -381,7 +430,7 @@ export default function PerformaBasicInfo(props) {
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Discount</Text>
-              <TextInput style={styles.input1} keyboardType='numeric' onChangeText={(d)=>fn_GetDiscount(d)} >{discountValue}</TextInput>
+              <TextInput style={styles.input1} keyboardType='numeric' onChangeText={(d)=>fn_createCal(d,texTotal)} >{discountValue}</TextInput>
 
             </View>
 
@@ -435,7 +484,7 @@ export default function PerformaBasicInfo(props) {
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Discount</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.discountAmt}</Text>
+                        <Text style={styles.listText3}>{discountPerTex}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
@@ -465,9 +514,9 @@ export default function PerformaBasicInfo(props) {
 
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>TCS</Text>
-             <Pressable style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>setTcsStatus(!tcsStatus)}>
+             <Pressable style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>null}>
                <FastImage source={tcsStatus ? images?.checkIcon : images?.unCheckIcon} resizeMode='contain' style={mainStyle.tcsCheckBox} />
-              <Text style={mainStyle.tcsText}>0</Text>
+              <Text style={mainStyle.tcsText}>{tcsValue}</Text>
              </Pressable>
             </View>
 
