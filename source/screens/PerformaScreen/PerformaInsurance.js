@@ -88,7 +88,7 @@ export default function PerformaInsurance(props) {
   const [calOnData, setCalOnData] = useState([])
   const [calOnValue, setCalOnValue] = useState({})
   const [rateValue, setRateValue] = useState({})
-  const [discountDepvalue, setDiscountDepValue] = useState({})
+  const [discountDepValue, setDiscountDepValue] = useState({})
   const [discountRuleData, setDiscountRuleData] = useState([])
   const [discountRuleValue, setDiscountRuleValue] = useState({})
   const [otherRateValue, setOtherRateValue] = useState({})
@@ -103,7 +103,7 @@ export default function PerformaInsurance(props) {
    let insuranceHeadListTemp = insurance_Data?.insurenceHeadList.map((list, index) => {
       return { ...list, isChecked: false, id: index };
     });
-    console.log("insurance_Data ==== ", insurance_Data)
+    console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
     setIdvListData(insurance_Data?.idvList)
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
@@ -166,6 +166,7 @@ export default function PerformaInsurance(props) {
   }
 
   const updateInsuranceCheckedList = (selectedData) => {
+    console.log("selectedData = ", selectedData)
     let newArr = insurenceHeadList?.forEach((item) => {
       if (item.id === selectedData.id) {
         return (item.isChecked = !item.isChecked);
@@ -176,7 +177,25 @@ export default function PerformaInsurance(props) {
   };
 
   const calculateInsurance = () => {
-    
+    let exShowRoomPrice = generalMaster_Data?.vehPrice?.exShowromPrice
+    let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
+    let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
+    let nilDipCharnges = nilDipCheckStatus ? (idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage) + Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100  : 0
+    let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
+    let totalDepAmount = Number(nilDipCharnges) - Number(discountOnNilDep)
+    let premiumAmountBeforeNcb = Number(rateCharnges) + Number(totalDepAmount)
+    let ncbChanrges = (Number(premiumAmountBeforeNcb) * (Number(ncbSelectedData?.key)))/100
+    let premiumAmountAfterNcb = Number(premiumAmountBeforeNcb) - Number(ncbChanrges)
+    let otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+    let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount)
+    let loadingAmount = 0;
+    insurenceHeadList?.map((item) => {
+      if(item.isChecked){
+        loadingAmount = loadingAmount + Number(item?.headAmount)
+      }
+    })
+    let grossPremiumAmount = Number(premiumAmountAfterDiscount) + loadingAmount
+    let grossPremiumAmountAfterGST = Number(grossPremiumAmount) * 18/100
   };
 
   return (
@@ -253,6 +272,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("idv selected = ", d)
                 setIdvListValue(d)
                 calculateInsurance()
               }}
@@ -267,6 +287,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("rate selected = ", d)
                 setRateValue(d)
                 calculateInsurance()
               }}
@@ -285,6 +306,7 @@ export default function PerformaInsurance(props) {
                 desName='6'
                 disable={!nilDipCheckStatus}
                on_Select={(d)=>{
+                console.log("nildip selected = ", d)
                 setNilDipSelectedData(d)
                 calculateInsurance()
                }}
@@ -299,6 +321,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("dis on dep selected = ", d)
                 setDiscountDepValue(d)
                 calculateInsurance()
               }}
@@ -318,6 +341,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("ncb selected = ", d)
                 setNcbSelectedData(d)
                 calculateInsurance()
               }}
@@ -332,6 +356,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("dis rule selected = ", d)
                 setDiscountRuleValue(d)
                 calculateInsurance()
               }}
@@ -345,6 +370,7 @@ export default function PerformaInsurance(props) {
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
+                console.log("rate selected = ", d)
                 setOtherRateValue(d)
                 calculateInsurance()
               }}
