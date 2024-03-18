@@ -25,7 +25,7 @@ export default function ActionTodayList(props) {
                    <Pressable style={styles.driveListMainView} onPress={()=>cardClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
-                    <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.lastName}</Text>
+                    <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
                     <View style={styles.horizontalLine} />
                     </View>
                     <FastImage source={images.graph} resizeMode='contain' style={styles.listDriveIcon} />

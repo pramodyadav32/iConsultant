@@ -11,11 +11,11 @@ import * as Async from '../utilities/AsyncStorage'
 
 const data =[
   {'key':1,"title":'Home','source':images.homeIcon,'screenName':'HomeScreen'},
-  {'key':2,"title":'Active Offers','source':images.activeOffer,'screenName':'ActiveOfferScreen'},
+  // {'key':2,"title":'Active Offers','source':images.activeOffer,'screenName':'ActiveOfferScreen'},
   {'key':3,"title":'Dashboard','source':images.DashBoard,'screenName':'HomeScreen'},
-  {'key':4,"title":'Emi Calculator','source':images.emiCalculatorIcon,'screenName':'EmiCalculatorScreen'},
-  {'key':5,"title":'Group5','source':images.notify,'screenName':'HomeScreen'},
-  {'key':6,"title":'Group6','source':images.aboutIcon,'screenName':'HomeScreen'},
+  // {'key':4,"title":'Emi Calculator','source':images.emiCalculatorIcon,'screenName':'EmiCalculatorScreen'},
+  // {'key':5,"title":'Group5','source':images.notify,'screenName':'HomeScreen'},
+  // {'key':6,"title":'Group6','source':images.aboutIcon,'screenName':'HomeScreen'},
   
 ]
 
@@ -25,6 +25,7 @@ export default function CustomSidebarMenu(props) {
   const [active,setActive] = useState(0)
   const {outlets,token,userData} = useSelector(state=>state.AuthReducer)
   console.log("userDa",userData)
+  
   const fn_click=(item,index)=>{
     navigation.navigate(item.screenName)
     props.props.navigation.closeDrawer(); 
@@ -75,12 +76,12 @@ export default function CustomSidebarMenu(props) {
         />
         
  </ScrollView>
- <Pressable onPress={()=>{null}} style={[styles.listView,]}>
+ {/* <Pressable onPress={()=>{null}} style={[styles.listView,]}>
             <View style={styles.listSubView}>
              <FastImage source={images.settingIcon} style={styles.listImage} resizeMode='contain' />
             <Text style={styles.listTitle}>Setting</Text>
             </View>
-            </Pressable>
+            </Pressable> */}
             <Pressable onPress={()=>{fn_Logout()}} style={[styles.listView,{marginBottom:constant.moderateScale(20)}]}>
             <View style={styles.listSubView}>
              <FastImage source={images.logoutIcon} style={styles.listImage} resizeMode='contain' />

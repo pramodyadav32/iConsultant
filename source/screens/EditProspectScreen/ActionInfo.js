@@ -106,7 +106,7 @@ export default function ActionInfo(props) {
               click_Action={() => fn_UpdateClick(item, index)}
             />
             {item?.actionCode ==='06' ?
-            <Pressable style={styles.feedbackButton} onPress={() => fn_FeedBack(item, index)}>
+            <Pressable style={styles.feedbackButton} disabled={item?.status==="P" ? false : true} onPress={() => fn_FeedBack(item, index)}>
               <FastImage resizeMode='contain' source={images.feedBackIcon} style={styles.updateIcn} />
             </Pressable>
             : 
