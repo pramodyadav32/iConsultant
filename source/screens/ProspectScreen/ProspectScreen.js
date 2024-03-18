@@ -128,6 +128,9 @@ export default function ProspectScreen(props) {
   const [actionSlotValue, setActionSlotValue] = useState(' ')
   const [actionSlotValue2, setActionSlotValue2] = useState(' ')
   const [vinData, setVinData] = useState('')
+  const [modelCode, setModelCode] = useState('')
+  const [variant, setVariant] = useState('')
+  
   const [regData, setRegData] = useState('')
   const [comment, setComment] = useState('')
   const [actionSlotLength,setActionSlotLength] = useState([])
@@ -442,9 +445,9 @@ export default function ProspectScreen(props) {
         corporateComment: "",
         salesperson: userData?.empCode,
         hour: totalhours,
-        demoVehModel: "",
-        demoVehVariant: "",
-        demoVehChassisNo: "",
+        demoVehModel: actionTypeValue?.code==='06' ? modelCode: "",
+        demoVehVariant: actionTypeValue?.code==='06' ? variant: "",
+        demoVehChassisNo: actionTypeValue?.code==='06' ? vinData: "",
         make: "",
         loginUserId: userData?.userId,
         ipAddress: "1::1",
@@ -666,7 +669,7 @@ export default function ProspectScreen(props) {
       "companyId": userData?.companyId,
       "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
-      "actionCode": "",
+      "actionCode": actionTypeValue?.code,
       "chassisNo": item?.chassisNo,
       "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
@@ -763,6 +766,9 @@ export default function ProspectScreen(props) {
 
   const fn_SlotDone = (selectVeh, slotData) => {
    actionTypeValue?.code==='06' ? setVinData(selectVeh?.chassisNo): null;
+   actionTypeValue?.code==='06' ? setModelCode(selectVeh?.modelCode): null;
+   actionTypeValue?.code==='06' ? setVariant(selectVeh?.variant): null;
+   
   actionTypeValue?.code==='06' ? setRegData(selectVeh?.regn) : null;
     const originalTime = slotData[slotData.length - 1].slot;
     const originalMoment = moment(originalTime, "hh:mm A");

@@ -200,13 +200,14 @@ export default function ActionInfo(props) {
 
   const fn_GetActionSlots = (item, index) => {
     dispatch(emptyLoader_Action(true))
+    console.log("iiiiiiitem = ")
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
       "companyId": userData?.companyId,
       "branchcode": selectedBranch?.branchCode,
       "calledBy": "TIME_SLOTS",
-      "actionCode": "",
+      "actionCode": actionTypeValue?.code,
       "chassisNo": item?.chassisNo=== undefined ? "" :item?.chassisNo ,
       "empCode": userData?.empCode,
       "date": timeSlotModal?.utcDateFormate,
