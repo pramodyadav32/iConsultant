@@ -43,17 +43,18 @@ export default function HomeScreen(props) {
 
   const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
  
-  useEffect(() => {
-    dispatch(emptyLoader_Action(true))
-    getProspectData()
-    //  getDataCount()
-    //  getProfiles()
-  }, [])
+  // useEffect(() => {
+  //   dispatch(emptyLoader_Action(true))
+  //   getProspectData()
+  //   //  getDataCount()
+  //   //  getProfiles()
+  // }, [])
 
   useFocusEffect(
     React.useCallback(() => {
       // Screen is in focus
-      homeRefresh ? getProspectData() : null
+      getProspectData()
+      dispatch(emptyLoader_Action(true))
       console.log('Screen in focus');
       return () => {
         // Screen is out of focus
@@ -61,7 +62,7 @@ export default function HomeScreen(props) {
         // goLive("end",live_Id,broadCastName,broadCasttoken)
         // Call your function or perform actions here
       };
-    }, [homeRefresh])
+    }, [])
   ) ;
 
   const getProspectData = () => {
