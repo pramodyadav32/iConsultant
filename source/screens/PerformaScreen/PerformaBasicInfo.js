@@ -45,6 +45,10 @@ export default function PerformaBasicInfo(props) {
    const [totalAmount,setTotalAmount] = useState(0)
    const [priceListValue,setPriceListValue] = useState({"code":'CURRENT_DATE','description':"Applicable on Current Date"})
 
+   const [basicPriceDiscount,setBasicPriceDiscount] = useState(0)
+   const [exShowRoomPostPrice,setExShowRoomPostPrice] = useState(0)
+   const [exShowRoomPrePrice,setExShowRoomPrePrice] = useState(0)
+
    useEffect(()=>{
       console.log("performaGeneralMasterData = ", performaGeneralMasterData)
       // console.log("performaGeneralMasterData data = ", performperformaPriceDetail)
@@ -83,6 +87,12 @@ export default function PerformaBasicInfo(props) {
     setTotalAmount(newTotal)
 
    },[texMasterData])
+
+   useEffect(()=>{
+  setBasicPriceDiscount(performaPriceDetail?.vehBasicAmount)
+  setExShowRoomPostPrice(performaPriceDetail?.exShowromPrice)
+  setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice)
+   },[performaPriceDetail])
 
 
    const fn_GetProformaGeneralMasters = (d) => {
@@ -213,6 +223,7 @@ export default function PerformaBasicInfo(props) {
         if(res?.result?.resultCode==='Y'){
          SaveInfo()
         }else{
+         dispatch(emptyLoader_Action(false))
          constant.showMsg("Somethings wents wrong")
         }
        
@@ -428,7 +439,7 @@ export default function PerformaBasicInfo(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Basic Price(Post Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.vehBasicAmount}</Text>
+                        <Text style={styles.listText3}>{basicPriceDiscount}</Text>
                      </View>
                   </View>
                   </View>
@@ -463,11 +474,11 @@ export default function PerformaBasicInfo(props) {
             <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Ex-Showroom(Pre-Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.exShowromPrice}</Text>
+                        <Text style={styles.listText3}>{exShowRoomPrePrice}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Ex-Showroom(Post Discount)</Text>
-                        <Text style={styles.listText3}>{performaPriceDetail?.exShowromPrice}</Text>
+                        <Text style={styles.listText3}>{exShowRoomPostPrice}</Text>
                      </View>
                   </View>
 

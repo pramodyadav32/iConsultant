@@ -495,13 +495,13 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>MY/VY</Text>
-                           <Text style={styles.listName3}>{performaBasicDataHeader?.proformaList[0]?.docFy}</Text>
+                           <Text style={styles.listName3}>{intrestedVehicleList?.modelYear}/{intrestedVehicleList?.modelYear}</Text>
                         </View>
                      </View>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>{vehiclePricedetail?.basicPricePostDiscount}</Text>
+                           <Text style={styles.listName3}>{vehiclePricedetail?.vehBasicAmount}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>
@@ -763,6 +763,7 @@ export default function PerformaScreen(props) {
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
+                                 fn_TabClick(index, item)
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}
