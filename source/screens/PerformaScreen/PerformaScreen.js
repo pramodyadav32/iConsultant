@@ -680,7 +680,7 @@ export default function PerformaScreen(props) {
       companyId: userData?.companyId,
       prospectNo: Number(route.params.cardData?.prospectId),
       // prospectNo:8325,
-      loginUserCompanyId: "ORBIT",
+      loginUserCompanyId: userData?.userCompanyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
    };
@@ -694,9 +694,40 @@ export default function PerformaScreen(props) {
 
   const SaveBasicInfoCallBack = (res) => {
    console.log("SaveBasicInfoCal = ", JSON.stringify(res));
-     dispatch(emptyLoader_Action(false))
+   //   dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
+       fn_performDetail(res?.result?.proformaList[0])
+      } else {
+         constant.showMsg(res.message);
+      }
+};
+
+const fn_performDetail=(data)=>{
+   let param = {
+      brandCode: userData?.brandCode,
+      countryCode: userData?.countryCode,
+      companyId: userData?.companyId,
+      "userId": userData?.userId,
+      "ipAddress": "1::1",
+      "docLocation": data?.docLocation,
+      "docCode": data?.docCode,
+      "docFY": data?.docFy,
+      "docNo": data?.docNo
+
+   };
+   tokenApiCall(
+      performDetailCallBack,
+      APIName.GetProformaDetals,
+      "POST",
+      param
+   );
+}
+
+const performDetailCallBack = (res) => {
+   console.log("SaveBasicInfoCal = ", JSON.stringify(res));
+     dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
          setActive(1)
          constant.showMsg("Basic Info save successfully")
       } else {
