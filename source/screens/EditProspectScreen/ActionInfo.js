@@ -395,15 +395,11 @@ export default function ActionInfo(props) {
   }
 
   const fn_Create = () => {
-    // if (Object.keys(sourceValue).length === 0) {
-    //     constant.showMsg("Please select source")
-    // } else if (Object.keys(dealCategoryValue).length === 0) {
-    //     constant.showMsg("Please select Deal Category")
-    // } else if (Object.keys(dealTypeValue).length === 0) {
-    //     constant.showMsg("Please select Deal Type")
-    // } else if (Object.keys(companyValue).length === 0) {
-    //     constant.showMsg("Please select Company")
-    // } else {
+    if (Object.keys(actionTypeValue).length === 0) {
+        constant.showMsg("Please select action Type")
+    } else if (actionDate === '') {
+        constant.showMsg("Please select Action Date")
+    }  else {
       console.log("selectVeh, slotData ---", actionSlotValue, actionSlotValue2)
       console.log("actionModelValue ---", actionModelValue)
       console.log("updateModalData ---", moment(new Date()).format("hh"))
@@ -449,7 +445,7 @@ export default function ActionInfo(props) {
     console.log("param", param)
     tokenApiCall(saveBasicInfoCallBack, APIName.SaveNewAndUpdateAction, "POST", param)
 
-    // }
+    }
 
   }
 
