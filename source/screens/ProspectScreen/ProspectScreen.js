@@ -1090,21 +1090,34 @@ export default function ProspectScreen(props) {
                 </TextInput>
               </View>
             ) : null}
+
+<View style={styles.detailMainView}>
+              <Text style={styles.detailText}>
+              Title<Text style={styles.text2}>*</Text>
+              </Text>
+              <SelectDropList
+                list={title}
+                title={titleValue?.description=== undefined ? ' ' : titleValue?.description}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+                on_Select={(d) => setTitleValue(d)}
+              />
+            </View>
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
                 Name<Text style={styles.text2}>*</Text>
               </Text>
               <View style={styles.mobileSubView}>
-                <SelectDropList
+                {/* <SelectDropList
                   list={title}
                   title={titleValue?.description=== undefined ? ' ' : titleValue?.description}
                   buttonExt={styles.dropNameList2}
                   textExt={styles.dropNameListText}
                   on_Select={(d) => setTitleValue(d)}
-                />
+                /> */}
                 <TextInput
                   onChangeText={(d) => setName(d)}
-                  style={[styles.input1, { marginLeft: "2%" }]}
+                  style={[styles.input1, {}]}
                 >
                   {name}
                 </TextInput>

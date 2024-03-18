@@ -97,6 +97,19 @@ export default function PerformaInsurance(props) {
   const [nilDipSelectedData, setNilDipSelectedData] = useState({})
   const [nilDipData, setNilDipData] = useState([])
   const [ncbSelectedData, setNcbSelectedData] = useState({})
+  const [idvValue,setIdvValue]= useState(0)
+  const [permiumAmt_Before,setPremiumAmt_Before]= useState(0)
+  const [permiumAmt_After,setPremiumAmt_After] = useState(0)
+  const [premiumAmt,setPremiumAmt] = useState(0)
+  const [dep_Amt,setDep_Amt] = useState(0)
+  const [discount_DepAmt,setDiscountDepAmt] = useState(0)
+  const [net_PremiumAmt,setNetPremiumAmt] = useState(0)
+  const [loadingAmt,setLoadingAmt] = useState(0)
+  const [gross_Amt,setGrossAmt] = useState(0)
+  const [gstValue,setGstValue] = useState(0)
+  const [totalPayable,setTotalPayable] = useState(0)
+  const [priceValue,setPriceValue] = useState(0)
+
 
   useEffect(() => {
 
@@ -178,24 +191,36 @@ export default function PerformaInsurance(props) {
 
   const calculateInsurance = () => {
     let exShowRoomPrice = generalMaster_Data?.vehPrice?.exShowromPrice
+    setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
+    setIdvValue(idvCharnges)
     let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
     let nilDipCharnges = nilDipCheckStatus ? (idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage) + Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100  : 0
     let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
+    setDiscountDepAmt(discountOnNilDep)
     let totalDepAmount = Number(nilDipCharnges) - Number(discountOnNilDep)
+    setDep_Amt(totalDepAmount)
     let premiumAmountBeforeNcb = Number(rateCharnges) + Number(totalDepAmount)
+    setPremiumAmt_Before(premiumAmountBeforeNcb)
     let ncbChanrges = (Number(premiumAmountBeforeNcb) * (Number(ncbSelectedData?.key)))/100
     let premiumAmountAfterNcb = Number(premiumAmountBeforeNcb) - Number(ncbChanrges)
+    setPremiumAmt_After(premiumAmountAfterNcb)
     let otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
     let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount)
+    setNetPremiumAmt(premiumAmountAfterDiscount)
     let loadingAmount = 0;
     insurenceHeadList?.map((item) => {
       if(item.isChecked){
         loadingAmount = loadingAmount + Number(item?.headAmount)
       }
     })
+    setLoadingAmt(loadingAmount)
     let grossPremiumAmount = Number(premiumAmountAfterDiscount) + loadingAmount
+    setGrossAmt(grossPremiumAmount)
     let grossPremiumAmountAfterGST = Number(grossPremiumAmount) * 18/100
+    setTotalPayable(grossPremiumAmountAfterGST)
+    let gstAmount = grossPremiumAmountAfterGST-grossPremiumAmount
+    setGstValue(gstAmount)
   };
 
   return (
@@ -401,66 +426,65 @@ export default function PerformaInsurance(props) {
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Value</Text>
-                <Text style={styles.text6}>907,444</Text>
+                <Text style={styles.text6}>{priceValue}</Text>
               </View>
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>IDV Value</Text>
-                <Text style={styles.text6}>0</Text>
+                <Text style={styles.text6}>{idvValue}</Text>
               </View>
             </View>
 
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <View style={[styles.bottomMainView2, {}]}>
-                <Text style={styles.text5}>Premium Amt</Text>
-                <Text style={styles.text6}>0 <Text style={styles.text7}>(Before NCP)</Text></Text>
-              </View>
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Dep. Amt</Text>
-                <Text style={styles.text6}>0</Text>
+                <Text style={styles.text6}>{dep_Amt}</Text>
               </View>
-            </View>
-
-            <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Discount on Dep Amt</Text>
-                <Text style={styles.text6}>0</Text>
-              </View>
-              <View style={[styles.bottomMainView2, {}]}>
-                <Text style={styles.text5}>Premium Amt</Text>
-                <Text style={styles.text6}>0 <Text style={styles.text7}>(Before NCB)</Text></Text>
+                <Text style={styles.text6}>{discount_DepAmt}</Text>
               </View>
             </View>
 
             <View style={{ flex: 1, flexDirection: 'row' }}>
+            
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Premium Amt</Text>
-                <Text style={styles.text6}>0 <Text style={styles.text7}>(After NCB)</Text></Text>
+                <Text style={styles.text6}>{permiumAmt_Before} <Text style={styles.text7}>(Before NCB)</Text></Text>
               </View>
               <View style={[styles.bottomMainView2, {}]}>
+                <Text style={styles.text5}>Premium Amt</Text>
+                <Text style={styles.text6}>{permiumAmt_After} <Text style={styles.text7}>(After NCB)</Text></Text>
+              </View>
+            </View>
+
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+            
+              <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Net Premium Amt</Text>
-                <Text style={styles.text6}>0 <Text style={styles.text7}>(After Discount)</Text></Text>
+                <Text style={styles.text6}>{net_PremiumAmt} <Text style={styles.text7}>(After Discount)</Text></Text>
+              </View>
+              <View style={[styles.bottomMainView2, {}]}>
+                <Text style={styles.text5}>Gross Premium Amt</Text>
+                <Text style={styles.text6}>{gross_Amt}</Text>
               </View>
             </View>
 
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Loading Amt</Text>
-                <Text style={styles.text6}>0</Text>
+                <Text style={styles.text6}>{loadingAmt}</Text>
               </View>
               <View style={[styles.bottomMainView2, {}]}>
-                <Text style={styles.text5}>Gross Premium Amt</Text>
-                <Text style={styles.text6}>0</Text>
+                <Text style={styles.text5}>GST</Text>
+                <Text style={styles.text6}>{gstValue}</Text>
               </View>
             </View>
 
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <View style={[styles.bottomMainView2, {}]}>
-                <Text style={styles.text5}>GST</Text>
-                <Text style={styles.text6}>0</Text>
-              </View>
+             
               <View style={[styles.bottomMainView2, {}]}>
                 <Text style={styles.text5}>Total Premium Payable</Text>
-                <Text style={styles.text6}>0</Text>
+                <Text style={styles.text6}>{totalPayable}</Text>
               </View>
             </View>
 

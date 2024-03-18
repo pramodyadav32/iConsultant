@@ -12,7 +12,6 @@ import moment from "moment"
 import { APIName, tokenApiCall } from "../utilities/apiCaller"
 const UpdateActionModal = (props) => {
     const {isVisible,onRequestClose, onRequestSave,data,modelData,actionType_Data, performData} = props
-    console.log("data",actionType_Data)
     const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
     const [actionCal_Modal, setActionCal_Modal] = useState(false)
     const [actionDate,setActionDate] = useState('')
@@ -24,9 +23,19 @@ const UpdateActionModal = (props) => {
 
   useEffect(()=>{
     actionType_Data.map((item)=>{
-          item.code===data?.actionCode ? setActionTypeValue(item) : null
-    })
-  },[actionType_Data])
+          item.code===data?.actionCode ? setActionTypeValue(item) : null  
+    })   
+  },[actionType_Data,data])
+
+  useEffect(()=>{
+    modelData.map((item)=>{
+        item.code===data?.model? setModelValue(item) : null
+  })
+  },[modelData,data])
+
+  useEffect(()=>{
+    setActionDate(moment(data?.dueAt,"DD-MMM-YYYY").format("DD-MMM-YYYY"))
+  },[data])
 
     const fn_ActionDateSelect = (data) => {  
         setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"))
@@ -68,6 +77,8 @@ const UpdateActionModal = (props) => {
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
              list={actionType_Data}
+             refType={Object.keys(actionTypeValue).length===0 ?false : true}
+             disable={true}
              title={actionTypeValue?.description}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
@@ -79,6 +90,9 @@ const UpdateActionModal = (props) => {
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
              list={modelData}
+             refType={Object.keys(modelValue).length===0 ?false : true}
+             title={modelValue?.description}
+             disable={true}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setModelValue(d)}
