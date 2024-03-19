@@ -41,6 +41,11 @@ const settingIcon = require('../assets/Icons/settingIcon.png')
 const editIcon = require('../assets/Icons/editIcon.png')
 const performaCard = require('../assets/Icons/performaCard.png')
 const feedBackIcon = require('../assets/Icons/feedBackIcon.png')
+const share = require('../assets/Icons/share.png')
+const download = require('../assets/Icons/download.png')
+const sliderImage = require('../assets/Icons/sliderImage.png')
+
+
 
 
 export default {
@@ -87,4 +92,7 @@ export default {
   settingIcon,
   performaCard,
   feedBackIcon,
+  share,
+  download,
+  sliderImage,
 };

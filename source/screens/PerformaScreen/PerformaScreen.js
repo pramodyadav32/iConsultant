@@ -477,6 +477,7 @@ export default function PerformaScreen(props) {
    }
 
    const renderItem = ({ item, index }) => {
+
       return (
          <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -489,7 +490,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Model</Text>
@@ -503,7 +504,7 @@ export default function PerformaScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.basicAmount}</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.totalAmount > 0 ? performHeaderData?.vehicleCost?.totalAmount : 'NIL'}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>
@@ -534,7 +535,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Total</Text>
-                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.totalAmount}</Text>
+                           <Text style={styles.listName3}>{fn_BasicHeaderTotal()}</Text>
                         </View>
                      </View>
                   </View>
@@ -544,6 +545,17 @@ export default function PerformaScreen(props) {
       )
    }
 
+   const fn_BasicHeaderTotal=()=>{
+      let data=Number(performHeaderData?.vehicleCost?.totalAmount) + 
+      Number(performHeaderData?.accessories?.totalAmount) +
+       Number(performHeaderData?.extendedWarrantyPack?.totalAmount)+
+       Number(performHeaderData?.serviceCharges?.totalAmount)+
+       Number(performHeaderData?.hypothecationCharges?.totalAmount)+
+       Number(performHeaderData?.temporaryRegistration?.totalAmount)
+
+       return(data)
+
+   }
 
 
    const fn_TabClick = (type) => {
@@ -673,7 +685,7 @@ export default function PerformaScreen(props) {
                   </Pressable> */}
                   <View style={{ flex: 1, flexDirection: 'row' }}>
                       <View style={{ flex: 1, }}>
-                          <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage2} />
+                          <FastImage source={{uri:route.params.cardData?.modelImgUrl}} resizeMode='contain' style={styles.carImage2} />
                           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                               <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                                   <Text style={styles.listName3}>PID : </Text>
@@ -686,7 +698,7 @@ export default function PerformaScreen(props) {
                           <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                               <View style={styles.driveListDetailSubView}>
                                   <Text style={styles.listText4}>Prospect Name</Text>
-                                  <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.lastName}</Text>
+                                  <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.middleName} {route.params.cardData?.lastName}</Text>
                               </View>
                               <View style={styles.driveListDetailSubView2}>
                                   <Text style={styles.listText4}>Model</Text>
@@ -898,13 +910,14 @@ const performDetailCallBack = (res) => {
              getTermsInfoAndMove={()=>fn_GetTerms()}
             />}
             {active === 4 && <PerformaTerm term_Data={termData}
-            moveToPerformaInvoice={()=>setActive(5)}
+            moveToPerformaInvoice={()=>getPrformaPdf()}
             />}
 
             {active === 5 && <DownloadPerforma
             performaGeneralMasterData={proformaGeneralMasters}
             performaBasicInfo={performaBasicDataHeader}
             invoice_Data = {invoiceData}
+            fn_Next={()=>null}
             />}
          </View>
 

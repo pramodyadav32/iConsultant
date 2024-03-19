@@ -32,7 +32,7 @@ import RNFetchBlob from "rn-fetch-blob";
 const fs = RNFetchBlob.fs;
 
 export default function DownloadPerforma(props) {
-  const { performaGeneralMasterData, performaBasicInfo,invoice_Data } = props;
+  const { performaGeneralMasterData, performaBasicInfo,invoice_Data,fn_Next } = props;
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.AuthReducer);
   const [active, setActive] = useState(false);
@@ -47,9 +47,10 @@ export default function DownloadPerforma(props) {
       performaGeneralMasterData
     );
 
-    setBase64String(invoice_Data)
-    fn_CreatePdfFromBase64(invoice_Data);
-    // getPrformaPdf();
+    // setBase64String(invoice_Data)
+    // fn_CreatePdfFromBase64(invoice_Data)
+    // storageRequestPermission(invoice_Data);
+    getPrformaPdf();
   }, [invoice_Data]);
 
   const getPrformaPdf = (item) => {
@@ -74,6 +75,22 @@ export default function DownloadPerforma(props) {
    );
   };
 
+  const getEstimatePdf_Callback = (res, item) => {
+    dispatch(emptyLoader_Action(false));
+    if (res.statusCode === 200) {
+      let temp = res?.result?.fileBase;
+      if (temp === "") {
+        constant.showMsg("No PDF is available");
+      } else {
+  
+       storageRequestPermission(temp)
+     
+      }
+    } else {
+      constant.showMsg("Somethings wents wrong");
+    }
+  };
+
  
 
   function storageRequestPermission(base64Data) {
@@ -85,15 +102,15 @@ export default function DownloadPerforma(props) {
     : PERMISSIONS.IOS.MEDIA_LIBRARY ,
         
     ).then(result => {
-      // constant.showMsg("cameraRequestPermission")
+      constant.showMsg("cameraRequestPermission",result)
       console.log("reuest"+JSON.stringify(result))
       switch (result) {
         case 'denied':
-          // constant.showMsg("denied",result)
+          constant.showMsg("denied",result)
         console.log("req"+result)
           break;
         case 'granted':
-          // constant.showMsg("granted",result)
+          constant.showMsg("granted",result)
           fn_CreatePdfFromBase64(base64Data);
        console.log("granted"+result)
           break;
@@ -105,6 +122,32 @@ export default function DownloadPerforma(props) {
           break;
       }
     });
+  }
+
+  
+  const fn_CancelPerform = () => {
+    let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "userId": userData?.userId,
+      "ipAddress": "1::1",
+      "docLocation": performaBasicInfo?.proformaList[0]?.docLocation,
+      "docCode": performaBasicInfo?.proformaList[0]?.docCode,
+      "docFY": performaBasicInfo?.proformaList[0]?.docFy,
+      "docNo": performaBasicInfo?.proformaList[0]?.docNo,
+    }
+    tokenApiCall(SaveInsuranceCallBack, APIName.CancelProforma, "POST", param)
+  }
+
+  const SaveInsuranceCallBack = (res) => {
+    console.log("savePackage", JSON.stringify(res))
+    if (res.statusCode === 200) {
+      constant.showMsg("performa Cancel Successfully")
+      fn_Next()
+    } else {
+      constant.showMsg(res.message)
+    }
   }
 
 
@@ -126,7 +169,7 @@ export default function DownloadPerforma(props) {
   };
 
   const fn_SavePdf = () => {
-    constant.showMsg(` Pdf save to  ${route.params?.url}`);
+    constant.showMsg(` Pdf save to  ${pdfPath}`);
   };
 
   const fn_SharePdf = () => {
@@ -180,7 +223,7 @@ export default function DownloadPerforma(props) {
       >
         <Button
           title="Cancel Proforma"
-          click_Action={() => null}
+          click_Action={() => fn_CancelPerform()}
           buttonExt={styles.cancelPerformaButton}
         />
         <Pressable

@@ -26,7 +26,7 @@ let data1=[
 ]
 
 export default function CloseInfo(props) {
-  const { actionType_Data, modelData, data, perform_Data } = props
+  const { actionType_Data, modelData, data, perform_Data,fn_Next } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeData, setActionTypeData] = useState([])
@@ -146,9 +146,57 @@ export default function CloseInfo(props) {
       constant.showMsg("Please select closer Date")
   }else if (Object.keys(closureValue).length === 0) {
     constant.showMsg("Please select closer Type")
-} 
-    else {
-   showList ?  fn_GetProspectBasicInfo() : fn_Create()
+} else if(showDislikeAndBrand){
+  if (Object.keys(compVehBrandSelected).length === 0) {
+    constant.showMsg("Please select competiton Brand")
+    } else if (Object.keys(compVehModelSelected).length === 0) {
+      constant.showMsg("Please select competiton Model")
+      }else if (Object.keys(compVehVarientSelected).length === 0) {
+        constant.showMsg("Please select competiton Varient")
+        } else{
+          let newArray = []
+           dislikeData.map((data)=>{
+            data?.dislikeValues.map((item)=>{
+              item.select ? newArray.push(item) : null
+            })
+           })   
+           
+           if(newArray.length>0){
+            fn_Create(1)
+           }else{
+            constant.showMsg("please choose dissatisfaction reason")
+           }
+          
+          }
+}else if(showDislike){
+  let newArray = []
+  dislikeData.map((data)=>{
+   data?.dislikeValues.map((item)=>{
+     item.select ? newArray.push(item) : null
+   })
+  })   
+  
+  if(newArray.length>0){
+   fn_Create(1)
+  }else{
+   constant.showMsg("please choose dissatisfaction reason")
+  }
+}else if(showList?.show){
+   let filterParam =  showList?.data.filter((item)=>{return(item?.dateValue === undefined)})
+
+   if(filterParam.length===0){
+    fn_GetProspectBasicInfo() 
+   }else{
+    constant.showMsg("Please select Tentative Delv Date")
+   }
+}
+ else {
+  if (Object.keys(dealerValue).length === 0) {
+    constant.showMsg("Please select Dealer")
+    }else{
+      fn_Create(1)
+    }
+   
   }
   }
 
@@ -170,7 +218,7 @@ const GetProspectBasicInfoCallBack = (res) => {
     console.log("basic",res?.result)
     if (res.statusCode === 200) {
       if(res.result?.proformaList.length > 0){
-       fn_Create()
+        fn_GetProfileModel()
       }else{
         setTimeout(()=>{
           dispatch(emptyLoader_Action(false))
@@ -184,7 +232,70 @@ const GetProspectBasicInfoCallBack = (res) => {
 }
   
 
-  const fn_Create = async() => {
+const fn_GetProfileModel = () => {
+ 
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "userId": userData?.userId,
+      "ipAddress": "1::1",
+      "userCompanyId": userData?.userCompanyId,
+      "prospectNo": Number(data?.prospectID),
+      "dataType": "EXISTING_PRODUCT"
+  }
+  tokenApiCall(GetProfileModelCallBack, APIName.GetExistingVehicleList, "POST", param)
+}
+
+const GetProfileModelCallBack = async (res) => {
+  console.log("exitstingdata", JSON.stringify(res))
+  if (res.statusCode === 200) {
+     if(res?.result?.existingVehicleList[0].occupation===''){
+      constant.showMsg("Please fill profile detail")
+     }else{
+      fn_GetProspectDetail()
+     }   
+  } else {
+      dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+  }
+}
+
+
+const fn_GetProspectDetail = () => {
+
+  let param = {
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "prospectNo": Number(data?.prospectID),
+      "loginUserCompanyId": userData?.userCompanyId,
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1",
+
+  }
+  tokenApiCall(GetProspectDetailCallBack, APIName.GetProspectDetails, "POST", param)
+}
+
+const GetProspectDetailCallBack = (res) => {
+  console.log("search", JSON.stringify(res)) 
+  if (res.statusCode === 200) {
+     if(res.result?.prospectDetails?.regnAddress1==='') {
+      constant.showMsg("Please fill Regn. Address Detail")
+    }else if(res.result?.prospectDetails?.resAddress1===''){
+      constant.showMsg("Please fill Res. Address Detail")
+    }else{
+     fn_Create(0)
+    }     
+  } else {
+    dispatch(emptyLoader_Action(false))
+      constant.showMsg(res.message)
+  }
+}
+
+
+  const fn_Create = async(type=0) => {
+     type===1 ? dispatch.emptyLoader_Action(true) : null
       let newArray = []
       await dislikeData.map((data)=>{
         data?.dislikeValues.map((item)=>{
@@ -258,8 +369,10 @@ const GetProspectBasicInfoCallBack = (res) => {
   const saveBasicInfoCallBack = (res) => {
     console.log("res", res)
     if (res.statusCode === 200) {
+       constant.showMsg("Prospect Close Successfully")
       dispatch(emptyLoader_Action(false))
       dispatch(home_Refresh_Action(true))
+      fn_Next()
 
     } else {
       dispatch(emptyLoader_Action(false))
@@ -521,7 +634,6 @@ const listrenderItem=(item,index)=>{
               on_Select={(d) => null}
             />
       </View>
-      {console.log("neww",moment(new Date()).add(61, 'd').format("YYYY-MM-DD"))}
       <Pressable style={styles.otherListSubView5} onPress={()=>setTentativeDateModel({show:true,index:index,obj:item})} >
       <SelectDropList
               list={actionType_Data}

@@ -221,10 +221,7 @@ export default function HomeScreen(props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
       <StatusBar translucent={false} />
       <HomeHeader title='Home' mainExt={styles.drawerStyle} showDrawer={navigation} />
-      <ScrollView
-       showsVerticalScrollIndicator={false}
-       refreshControl={<RefreshControl refreshing={refresh}  onRefresh={()=>fn_refresh()} />}
-      >
+   
         <View style={{ position: "relative", paddingHorizontal: constant.moderateScale(10), paddingVertical: constant.moderateScale(5) }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Pressable onPress={() => fn_Button(1)} style={styles.homeBoxStyle}  >
@@ -331,6 +328,10 @@ export default function HomeScreen(props) {
             <FastImage source={images.rightArrow} tintColor={constant.whiteColor} resizeMode='contain' style={styles.userStyle} />
           </Pressable>
         </View>
+        <ScrollView
+       showsVerticalScrollIndicator={false}
+       refreshControl={<RefreshControl refreshing={refresh}  onRefresh={()=>fn_refresh()} />}
+      >
         {active === 1 &&
           <ActionTodayList
             data={Action_Today}

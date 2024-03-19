@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { SafeAreaView,ScrollView,View,Text,FlatList,StyleSheet,Pressable,Image, StatusBar } from 'react-native';
+import { SafeAreaView,ScrollView,View,Text,FlatList,StyleSheet,Pressable,Image, StatusBar, ImageBackground } from 'react-native';
 import * as constant from '../utilities/constants'
 import * as common_fn from '../utilities/common_fn'
 import images from '../utilities/images';
@@ -45,7 +45,9 @@ export default function CustomSidebarMenu(props) {
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#00000099',}}>
       <StatusBar backgroundColor={'#000'} />
-        <View  style={[styles.menuTopView]}>
+      <ImageBackground source={images?.sliderImage} tintColor={'transparent'} style={styles.backBg}>
+
+      <View  style={[styles.menuTopView]}>
           <Pressable onPress={()=>{props.props.navigation.closeDrawer()}}>
              <FastImage source={images.backIcon} style={styles.drawerTopImage} resizeMode='contain' />
           </Pressable>
@@ -62,7 +64,7 @@ export default function CustomSidebarMenu(props) {
       <ScrollView style={{paddingTop:'3%'}}>
         <FlatList 
         data={data}
-        ListHeaderComponent={()=>common_fn.listSpace(constant.resW(2))}
+        // ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(0))}
         renderItem={({item,index})=>{
           return(
             <Pressable onPress={()=>{fn_click(item,index)}} style={[styles.listView,]}>
@@ -82,12 +84,14 @@ export default function CustomSidebarMenu(props) {
             <Text style={styles.listTitle}>Setting</Text>
             </View>
             </Pressable> */}
-            <Pressable onPress={()=>{fn_Logout()}} style={[styles.listView,{marginBottom:constant.moderateScale(20)}]}>
+            <Pressable onPress={()=>{fn_Logout()}} style={[styles.listView,{marginBottom:constant.moderateScale(25)}]}>
             <View style={styles.listSubView}>
              <FastImage source={images.logoutIcon} style={styles.listImage} resizeMode='contain' />
             <Text style={styles.listTitle}>Logout</Text>
             </View>
             </Pressable>
+      </ImageBackground>
+       
     </SafeAreaView>
   );
 }
@@ -97,7 +101,7 @@ listView:{
   flexDirection:'row',
   alignItems:'center',
   marginLeft:constant.moderateScale(15),
-  paddingVertical:'4%',
+  paddingVertical:constant.moderateScale(10),
   marginRight:"3%",
 },
 text1:{
@@ -171,4 +175,9 @@ text2:{
     color:constant.whiteColor,
     alignSelf:'center'
   },
+  backBg:{
+    height:'100%',
+    width:'100%',
+    backgroundColor:'transparent'
+  }
 })

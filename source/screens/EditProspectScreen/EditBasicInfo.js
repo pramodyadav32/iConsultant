@@ -54,7 +54,7 @@ export default function EditBasicInfo(props) {
   const [eventSourceList, setEventSourceList] = useState([]);
 
   useEffect(() => {
-    console.log("prospectMaster =====", JSON.stringify(prospectMaster))
+    console.log("prospectMaster =====", JSON.stringify(data))
     prospectMaster.map((item) => {
       if (item.listType === "SOURCE") {
         setSourceData(item.prospectMasterList);
@@ -63,25 +63,33 @@ export default function EditBasicInfo(props) {
         });
       } else if (item.listType === "DEALCATEGORY") {
         setDealCategoryData(item.prospectMasterList);
+       
         item.prospectMasterList.map((item) => {
           item?.code === data?.corpApprovedFlag ? setDealCategoryValue(item) : null;
         });
+       
       } else if (item.listType === "DEALTYPE") {
-        setDealTypeData(item.prospectMasterList);
-        item.prospectMasterList.map((item) => {
-          item?.code === data?.corporateCategory ? setDealTypeValue(item) : null;
-        });
+        // setDealTypeData(item.prospectMasterList);
+        // item.prospectMasterList.map((item) => {
+        //   item?.code === data?.corporateCategory ? setDealTypeValue(item) : null;
+        // });
+        fn_GetProspectMaster(data?.corpApprovedFlag, "", "DEAL_TYPE")
+       
       } else if (item.listType === "CORPORATE") {
-        item.prospectMasterList.map((item) => {
-          item?.code === data?.dealCompany ? setCompanyValue(item) : null;
-        });
-        setCompanyData(item.prospectMasterList);
+        setCompanyValue({})
+        setCompanyData([])
+        fn_GetProspectMaster(data?.corpApprovedFlag,data?.corporateCategory, "CORPORATE")
+        // item.prospectMasterList.map((item) => {
+        //   item?.code === data?.dealCompany ? setCompanyValue(item) : null;
+        // });
+        // setCompanyData(item.prospectMasterList);
       }
     });
     setCorporateCase(data?.isCorporateCase);
     setCorporateComment(data?.corporateComment);
     setGeneralComment(data?.comment);
     fn_GetEventSource()
+
   }, [prospectMaster]);
 
   const fn_GetEventSource = () => {
@@ -123,6 +131,7 @@ export default function EditBasicInfo(props) {
 
 
   const fn_GetProspectMaster = (dealCategory, dealType, calledByDropdown) => {
+    console.log("flag",dealCategory + "  "+ dealType)
     dispatch(emptyLoader_Action(true))
     let param = {
         "brandCode": userData?.brandCode,
@@ -160,9 +169,13 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
         if(calledByDropdown === "DEAL_TYPE"){
           res?.result.map((item) => {
           if (item.listType === "DEALTYPE") {
+             item.prospectMasterList.map((item) => {
+          item?.code === data?.corporateCategory ? setDealTypeValue(item) : null;
+        });
             setDealTypeData(item.prospectMasterList);
           }
         });
+        
         }else{
           res?.result.map((item) => {
           if (item.listType === "CORPORATE") {
@@ -383,6 +396,10 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
                 disable={corporateCase === "Y" ? false : true}
                 on_Select={(d) => {
                   setDealCategoryValue(d)
+                  setCompanyValue({})
+                  setCompanyData([])
+                  setDealTypeData([])
+                  setDealTypeValue({})
                   fn_GetProspectMaster(d?.code, "", "DEAL_TYPE")
                 }
                 }

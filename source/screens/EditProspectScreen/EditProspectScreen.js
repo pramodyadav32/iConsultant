@@ -722,6 +722,7 @@ export default function EditProspectScreen(props) {
                             modelData={veh_ModelData}
                             perform_Data={performData}
                             data={basicInfo}
+                            fn_Next={()=>navigation.pop(2)}
                         />
                     }
                 </View>
