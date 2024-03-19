@@ -34,7 +34,7 @@ const UpdateActionModal = (props) => {
   },[modelData,data])
 
   useEffect(()=>{
-    setActionDate(moment(data?.dueAt,"DD-MMM-YYYY").format("DD-MMM-YYYY"))
+    // setActionDate(moment(data?.dueAt,"DD-MMM-YYYY").format("DD-MMM-YYYY"))
   },[data])
 
     const fn_ActionDateSelect = (data) => {  
@@ -45,7 +45,7 @@ const UpdateActionModal = (props) => {
       const fn_Create = () => {
         if (Object.keys(actionTypeValue).length === 0) {
             constant.showMsg("Please select action type")
-        } else if (Object.keys(modelValue).length === 0) {
+        } else if (actionTypeValue.code==='06' && Object.keys(modelValue).length === 0) {
             constant.showMsg("Please select Model")
         } else if (Object.keys(performValue).length === 0) {
             constant.showMsg("Please select Performed")
@@ -86,7 +86,7 @@ const UpdateActionModal = (props) => {
            />
         </View>
 
-        <View style={styles.detailMainView}>
+     {actionTypeValue?.code=== '06' &&  <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
            <SelectDropList 
              list={modelData}
@@ -98,7 +98,7 @@ const UpdateActionModal = (props) => {
              on_Select={(d)=>setModelValue(d)}
            />
         </View>
-
+}
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed</Text>
            <SelectDropList 
