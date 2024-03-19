@@ -20,7 +20,7 @@ const data2 = [
  ]
 
 export default function PerformaRegistration(props) {
-   const { navigation, regData,performaGeneralMasterData,performaBasicInfo,performaPriceDetail } = props
+   const { navigation, regData,performaGeneralMasterData,performaBasicInfo,performaPriceDetail, getTermsInfoAndMove } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const [selectState,setSelectState] = useState(false)
@@ -123,12 +123,12 @@ export default function PerformaRegistration(props) {
  const reg_SaveCallBack = (res) => {
   console.log("registration", JSON.stringify(res));
   if (res.statusCode === 200) {
-    
+    getTermsInfoAndMove()
   } else {
      constant.showMsg(res.message);
   }
 }
-  
+
 const fn_SetAllItemUncheck=()=>{
   let newArr = []
   registrationTypeList?.map((item, index) => {

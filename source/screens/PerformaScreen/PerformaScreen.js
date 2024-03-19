@@ -849,8 +849,11 @@ const performDetailCallBack = (res) => {
              performaGeneralMasterData={proformaGeneralMasters}
              performaBasicInfo={performaBasicDataHeader}
              performaPriceDetail={vehiclePricedetail}
+             getTermsInfoAndMove={()=>fn_GetTerms()}
             />}
-            {active === 4 && <PerformaTerm term_Data={termData} />}
+            {active === 4 && <PerformaTerm term_Data={termData}
+            moveToPerformaInvoice={()=>setActive(5)}
+            />}
 
             {active === 5 && <DownloadPerforma
             performaGeneralMasterData={proformaGeneralMasters}

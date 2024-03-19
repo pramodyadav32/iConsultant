@@ -190,7 +190,7 @@ export default function PerformaInsurance(props) {
   };
 
   const calculateInsurance = () => {
-    let exShowRoomPrice = generalMaster_Data?.vehPrice?.exShowromPrice
+    let exShowRoomPrice = Number(generalMaster_Data?.vehPrice?.exShowromPrice)
     setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))

@@ -12,7 +12,7 @@ import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 
 export default function PerformaTerm(props) {
-   const { navigation,term_Data } = props
+   const { navigation,term_Data, moveToPerformaInvoice } = props
    const dispatch = useDispatch()
    const { userData } = useSelector(state => state.AuthReducer)
    const [active, setActive] = useState(false)
@@ -69,7 +69,7 @@ export default function PerformaTerm(props) {
           
   
          </View>
-         <Button title='Next' click_Action={() => null} buttonExt={styles.performaButton} />
+         <Button title='Next' click_Action={() => moveToPerformaInvoice()} buttonExt={styles.performaButton} />
        </ScrollView>
         </View>
    )
