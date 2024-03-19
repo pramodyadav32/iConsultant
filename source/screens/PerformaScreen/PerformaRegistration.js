@@ -130,7 +130,7 @@ export default function PerformaRegistration(props) {
 }
   
 const fn_SetAllItemUncheck=()=>{
-  let newArr = registrationTypeList
+  let newArr = []
   registrationTypeList?.map((item, index) => {
     item.select = false
     newArr.push(item)

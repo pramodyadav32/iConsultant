@@ -283,7 +283,7 @@ export default function PerformaAccessories(props) {
 
  const fn_calculateDiscount = (item) => {
    console.log("aaaaaaaa=", item?.price,  item?.negociatedPrice)
-   return ((Number(item?.price) - Number(item?.negociatedPrice)) * 100)/Number(item?.price)
+   return Math.round(((Number(item?.price) - Number(item?.negociatedPrice)) * 100)/Number(item?.price), 2)
  };
 
  const saveAccessoriesAndPackages = () => {
@@ -302,8 +302,8 @@ export default function PerformaAccessories(props) {
          "partNo": item?.partNo,
          "qty": Number(item?.quantity),
          "unit": item?.unit,
-         "discountPer": fn_calculateDiscount(item),
-         "mrp": item?.negociatedPrice
+         "discountPer": fn_calculateDiscount(item) === "null" ? 0 : fn_calculateDiscount(item),
+         "mrp": Number(item?.negociatedPrice)
        }
        tempArr.push(obj)
     });

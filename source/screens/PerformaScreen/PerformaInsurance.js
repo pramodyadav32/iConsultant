@@ -219,6 +219,8 @@ export default function PerformaInsurance(props) {
     isNaN(grossPremiumAmount) ? null : setGrossAmt(Math.round(grossPremiumAmount,0))
     let grossPremiumAmountAfterGST = Number(grossPremiumAmount) * 18/100
     isNaN(grossPremiumAmountAfterGST) ? null : setTotalPayable(Math.round(grossPremiumAmountAfterGST,0))
+    console.log("grossPremiumAmount = ", grossPremiumAmount)
+    console.log("grossPremiumAmountAfterGST = ", grossPremiumAmountAfterGST)
     let gstAmount = grossPremiumAmountAfterGST-grossPremiumAmount
     isNaN(gstAmount) ? null : setGstValue(Math.round(gstAmount,0))
   };

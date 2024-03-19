@@ -272,11 +272,11 @@ export default function PerformaBasicInfo(props) {
         if(res?.result?.resultCode==='Y'){
          SaveInfo()
         }else{
-         dispatch(emptyLoader_Action(false))
          constant.showMsg("Somethings wents wrong")
         }
-       
+        dispatch(emptyLoader_Action(false))
       } else {
+         dispatch(emptyLoader_Action(false))
          constant.showMsg(res.message);
       }
    };
