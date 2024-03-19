@@ -34,6 +34,8 @@ export default function PerformaRegistration(props) {
    const [codeData,setcodeData] = useState([])
    const [codeValue,setcodeValue] = useState([])
    const [billingLocationData,setBillingLocationData] = useState([])
+   const [rtoLocation,setRtoLocation] = useState([])
+   const [rtoLocationSelected,setRtoLocationSelected] = useState({})
    const [billingLocationValue,setBillingLocationValue] = useState([])
    const [custumerReg,setCustumerReg] = useState(false)
    const [performaListData,setPerformListData] = useState([])
@@ -77,6 +79,12 @@ export default function PerformaRegistration(props) {
     setBillingLocationData(item.basicList)
    }
   })
+
+  performaGeneralMasterData?.selectMasterList.map((item)=>{
+    if(item?.listType ==='RTO_CODE'){
+      setRtoLocation(item.basicList)
+    }
+   })
 
 
  },[regData])
@@ -271,12 +279,12 @@ const fn_AddAmtTotalCal=()=>{
             <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Regn Code</Text>
               <SelectDropList
-                list={[]}
+                list={rtoLocation}
                 disable={true}
-                title={locationValue.code==='' ? ' ' : locationValue?.code }
+                // title={locationValue.code==='' ? ' ' : locationValue?.code }
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-               //  on_Select={(d)=>setActionTypeValue(d)}
+                on_Select={(d)=>setRtoLocationSelected(d)}
               />
             </View>
 

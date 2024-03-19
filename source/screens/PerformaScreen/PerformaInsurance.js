@@ -11,6 +11,10 @@ import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 
+const sourceData = [
+  { 'key': 1, "title": 'Calculator', 'description': 'Calculator' }
+]
+
 const data2 = [
   { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
   { 'key': 2, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -158,8 +162,8 @@ export default function PerformaInsurance(props) {
       "docCode": performaBasicInfo?.proformaList[0]?.docCode,
       "docFY": performaBasicInfo?.proformaList[0]?.docFy,
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
-      "insuranceYN": "string",
-      "insuLocation": "string",
+      "insuranceYN": selectState ? "Y" : "N",
+      "insuLocation": selectState ? "" : "",
       "insuCompanyCode": "string",
       "insuBasicPreAmount": 0,
       "insuGSTAmount": 0,
@@ -240,7 +244,7 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Source</Text>
             <SelectDropList
-              list={[]}
+              list={sourceData}
               disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
@@ -266,7 +270,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Location</Text>
             <SelectDropList
               list={insuranceLoc_Data}
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setLocationValue(d)}
@@ -276,7 +280,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Company</Text>
             <SelectDropList
               list={INSU_COMPANY}
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setCompanyValue(d)}
@@ -288,7 +292,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={calOnData}
               desName="3"
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -303,7 +307,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={idvListData}
               desName='4'
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -319,7 +323,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={basicPremiumList}
               desName='5'
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -332,7 +336,7 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>NIL Dep.</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Pressable onPress={()=>setNilDipCheckStatus(!nilDipCheckStatus)}>
+            <Pressable onPress={()=> {selectState || (typeValue?.dataValue != "THIRD_PARTY")? setNilDipCheckStatus(!nilDipCheckStatus) : null}}>
               <FastImage source={nilDipCheckStatus ? images.checkIcon : images.unCheckIcon} style={[styles.checkboxStyle, { marginRight: constant.moderateScale(10) }]} />
               </Pressable>
               <SelectDropList
@@ -340,7 +344,7 @@ export default function PerformaInsurance(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 desName='6'
-                disable={!selectState}
+                disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
                 disable={!nilDipCheckStatus}
                on_Select={(d)=>{
                 console.log("nildip selected = ", d)
@@ -355,7 +359,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Discount on Dep.</Text>
             <SelectDropList
               list={otherRateData}
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -366,16 +370,16 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.selectMainView]}>
+          {/* <View style={[styles.selectMainView]}>
             <Text style={styles.detailText}>Select</Text>
             <Text style={styles.detailText}>-</Text>
-          </View>
+          </View> */}
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>NCB</Text>
             <SelectDropList
               list={ncbRateData}
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -391,7 +395,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={discountRuleData}
               desName='3'
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -406,7 +410,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Rate</Text>
             <SelectDropList
               list={otherRateData}
-              disable={!selectState}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
