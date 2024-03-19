@@ -694,7 +694,7 @@ export default function PerformaBasicInfo(props) {
                   { marginTop: constant.moderateScale(10) },
                 ]}
               >
-                <Text style={styles.detailText}>Trnx Basic</Text>
+                <Text style={styles.detailText}>Trnx Basis</Text>
                 <SelectDropList
                   list={transData}
                   buttonExt={styles.dropList}

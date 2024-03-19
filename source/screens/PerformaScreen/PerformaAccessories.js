@@ -284,7 +284,7 @@ export default function PerformaAccessories(props) {
 
  const fn_calculateDiscount = (item) => {
    console.log("aaaaaaaa=", item?.price,  item?.negociatedPrice)
-   return Math.round(((Number(item?.price) - Number(item?.negociatedPrice)) * 100)/Number(item?.price), 2)
+   return Number((((Number(item?.price) - Number(item?.negociatedPrice)) * 100)/Number(item?.price)).toFixed(2))
  };
 
  const saveAccessoriesAndPackages = () => {

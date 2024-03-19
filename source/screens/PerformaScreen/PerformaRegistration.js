@@ -44,6 +44,7 @@ export default function PerformaRegistration(props) {
 
   
  useEffect(()=>{
+  console.log("performaPriceDetail1111 = ", performaPriceDetail)
   // setRegistrationTypeList(regData?.registrationTypeList)
   setSelectMasterList(regData?.selectMasterList)
   setPriceDetails(regData?.priceDetails)
@@ -51,9 +52,12 @@ export default function PerformaRegistration(props) {
 
   let newData = []
   regData?.registrationTypeList.map((item)=>{
-    let total = (performaPriceDetail?.vehBasicAmount * Number(item?.dataCalculation?.perVal))/100
-    item["total"] = parseInt(total)
-    item["subTotal"] = parseInt(total)
+    let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
+    let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
+    item["totalPre"] = parseInt(totalPre)
+    item["totalPost"] = parseInt(totalPost)
+    item["subTotalPre"] = parseInt(totalPre)
+    item["subTotalPost"] = parseInt(totalPost)
     item["addAmount"] = ''
     newData.push(item)
   })
@@ -168,7 +172,8 @@ const fn_SetAllItemUncheck=()=>{
     if(item.select){
       item.select = false
       item.addAmount = ""
-      item.total = isNaN(Number(item?.subTotal)+Number(0)) ? 0 :Number(item?.subTotal)+Number(0)
+      item.totalPre = (isNaN(Number(item?.subTotalPre)+Number(0)) ? 0 :Number(item?.subTotalPre)+Number(0)) 
+      item.totalPost = (isNaN(Number(item?.subTotalPost)+Number(0)) ? 0 :Number(item?.subTotalPost)+Number(0))
       newArr.splice(index,1,item)
       setRegistrationTypeList([...newArr])
     }else{
@@ -183,7 +188,8 @@ const fn_SetAllItemUncheck=()=>{
    registrationTypeList.map((item,index)=>{
     if(index=== selectInx){
       item.addAmount = Number(d)
-      item.total = isNaN(Number(item?.subTotal)+Number(d)) ? 0 :Number(item?.subTotal)+Number(d) 
+      item.totalPre =  isNaN(Number(item?.subTotalPre)+Number(d)) ? 0 :Number(item?.subTotalPre)+Number(d)
+      item.totalPost =  isNaN(Number(item?.subTotalPost)+Number(d)) ? 0 :Number(item?.subTotalPost)+Number(d) 
       newArray.push(item)
     }else{
       newArray.push(item)
@@ -221,7 +227,7 @@ const fn_PriceTotalCal=()=>{
   let add1 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add1 = add1+Number(item?.subTotal)
+   add1 = add1+ (slectedCalcOn === "preDis" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
     }
   })
   return(add1)
@@ -231,7 +237,7 @@ const fn_AddAmtTotalCal=()=>{
   let add2 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add2 = add2 + Number(item?.total)
+   add2 = add2 +  (slectedCalcOn === "preDis" ? Number(item?.totalPre) : Number(item?.totalPost))
     }
   })
   return(add2)

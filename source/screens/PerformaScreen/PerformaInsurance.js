@@ -113,6 +113,7 @@ export default function PerformaInsurance(props) {
   const [gstValue,setGstValue] = useState(0)
   const [totalPayable,setTotalPayable] = useState(0)
   const [priceValue,setPriceValue] = useState(0)
+  const [insuranceLocation, setInsuranceLocation] = useState([])
 
 
   useEffect(() => {
@@ -121,6 +122,7 @@ export default function PerformaInsurance(props) {
       return { ...list, isChecked: false, id: index };
     });
     console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
+    console.log("insurance_Data ==== ", JSON.stringify(insurance_Data))
     setIdvListData(insurance_Data?.idvList)
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
@@ -132,6 +134,7 @@ export default function PerformaInsurance(props) {
     let calData = []
     let type = []
     let rule = []
+    let insuLocation = []
     insurance_Data?.insurenceDataList.map((item) => {
       if (item?.dataType === 'INSU_CALC_ON') {
         calData.push(item)
@@ -140,11 +143,14 @@ export default function PerformaInsurance(props) {
       }
       else if (item?.dataType === 'INSU_DISCOUNT_CALC_RULE') {
         rule.push(item)
+      }else if (item?.dataType === 'INSU_LOCATION') {
+        insuLocation.push(item)
       }
     })
     setCalOnData(calData)
     setTypeData(type)
     setDiscountRuleData(rule)
+    setInsuranceLocation(insuLocation)
     generalMaster_Data?.selectMasterList?.map((item) => {
       if (item?.listType === 'INSU_COMPANY') {
         setINSU_COMPANY(item?.basicList)
@@ -229,6 +235,18 @@ export default function PerformaInsurance(props) {
     isNaN(gstAmount) ? null : setGstValue(Math.round(gstAmount,0))
   };
 
+  const resetDropDownData = () => {
+    setCalOnValue({})
+    setRateValue({})
+    setDiscountDepValue({})
+    setDiscountRuleValue({})
+    setOtherRateValue({})
+    setNilDipCheckStatus(false)
+    setNilDipSelectedData({})
+    setNcbSelectedData({})
+    
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -269,7 +287,8 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Location</Text>
             <SelectDropList
-              list={insuranceLoc_Data}
+              list={insuranceLocation}
+              desName='3'
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
@@ -283,7 +302,10 @@ export default function PerformaInsurance(props) {
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setCompanyValue(d)}
+              on_Select={(d) => {
+                setCompanyValue(d)
+                resetDropDownData()
+              }}
             />
           </View>
 
@@ -336,7 +358,7 @@ export default function PerformaInsurance(props) {
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>NIL Dep.</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Pressable onPress={()=> {selectState || (typeValue?.dataValue != "THIRD_PARTY")? setNilDipCheckStatus(!nilDipCheckStatus) : null}}>
+            <Pressable onPress={()=> {selectState && (typeValue?.dataValue !== "THIRD_PARTY")? setNilDipCheckStatus(!nilDipCheckStatus) : null}}>
               <FastImage source={nilDipCheckStatus ? images.checkIcon : images.unCheckIcon} style={[styles.checkboxStyle, { marginRight: constant.moderateScale(10) }]} />
               </Pressable>
               <SelectDropList
