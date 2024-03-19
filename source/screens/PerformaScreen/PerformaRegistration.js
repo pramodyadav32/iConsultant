@@ -37,6 +37,7 @@ export default function PerformaRegistration(props) {
    const [billingLocationValue,setBillingLocationValue] = useState([])
    const [custumerReg,setCustumerReg] = useState(false)
    const [performaListData,setPerformListData] = useState([])
+  
 
   
  useEffect(()=>{
@@ -157,7 +158,7 @@ const fn_SetAllItemUncheck=()=>{
    let newArray = []
    registrationTypeList.map((item,index)=>{
     if(index=== selectInx){
-      item.total = Number(item?.subTotal)+Number(d)
+      item.total = isNaN(Number(item?.subTotal)+Number(d)) ? Number(item?.subTotal)+Number(d) : 0
       newArray.push(item)
     }else{
       newArray.push(item)
@@ -340,7 +341,7 @@ const fn_Footer=()=>{
             <Text style={styles.text8}>{item?.select ? item?.subTotal : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
-            <TextInput onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
+            <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
             <Text style={styles.text8}>{item?.select ? item?.total : 0}</Text>
