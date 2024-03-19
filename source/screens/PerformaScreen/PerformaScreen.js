@@ -477,6 +477,7 @@ export default function PerformaScreen(props) {
    }
 
    const renderItem = ({ item, index }) => {
+
       return (
          <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -503,7 +504,7 @@ export default function PerformaScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.basicAmount > 0 ? performHeaderData?.vehicleCost?.basicAmount : 'NIL'}</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.totalAmount > 0 ? performHeaderData?.vehicleCost?.totalAmount : 'NIL'}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>
@@ -534,7 +535,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Total</Text>
-                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.totalAmount}</Text>
+                           <Text style={styles.listName3}>{fn_BasicHeaderTotal()}</Text>
                         </View>
                      </View>
                   </View>
@@ -544,6 +545,17 @@ export default function PerformaScreen(props) {
       )
    }
 
+   const fn_BasicHeaderTotal=()=>{
+      let data=Number(performHeaderData?.vehicleCost?.totalAmount) + 
+      Number(performHeaderData?.accessories?.totalAmount) +
+       Number(performHeaderData?.extendedWarrantyPack?.totalAmount)+
+       Number(performHeaderData?.serviceCharges?.totalAmount)+
+       Number(performHeaderData?.hypothecationCharges?.totalAmount)+
+       Number(performHeaderData?.temporaryRegistration?.totalAmount)
+
+       return(data)
+
+   }
 
 
    const fn_TabClick = (type) => {
