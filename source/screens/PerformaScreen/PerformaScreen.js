@@ -73,9 +73,9 @@ const data3 = [
    { key: 2, title: "Accessories" },
    // { 'key': 3, "title": 'Package', },
    { key: 4, title: "Insurance" },
-   { key: 5, title: "Registration" },
+   { key: 5, title: "RTO" },
    { key: 6, title: "Term" },
-   { key: 7, title: "Performa" },
+   { key: 7, title: "Proforma" },
 
 ];
 

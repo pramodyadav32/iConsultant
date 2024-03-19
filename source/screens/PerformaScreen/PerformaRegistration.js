@@ -83,17 +83,28 @@ export default function PerformaRegistration(props) {
  const reg_Save=()=>{
    let newList = []
    registrationTypeList.map((item,index)=>{
+    if(item.select){
      let newObj ={
       "regnVersionSr": index,
-     "costHeadCode": item?.code,
-     "basicAmount": performaPriceDetail?.vehBasicAmount,
-     "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
-     "totalAmount": parseInt(item.total)
+      "costHeadCode": item?.code,
+      "basicAmount": performaPriceDetail?.vehBasicAmount,
+      "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
+      "totalAmount": parseInt(item.total)
      }
      newList.push(newObj)
+    }
    })
-  
+  let shouldSave = false
 
+console.log("custumerReg =====", custumerReg)
+console.log("newList?.length =====", newList?.length)
+if(custumerReg){
+  shouldSave = true
+}else if(newList?.length > 0){
+  shouldSave = true
+}
+console.log("shouldSave =====", shouldSave)
+if(shouldSave){
    let param = {
     brandCode: userData?.brandCode,
     countryCode: userData?.countryCode,
@@ -110,13 +121,15 @@ export default function PerformaRegistration(props) {
      "regnRtoCode": "string",
      "rtoCalcType": "string",
      "rtoCalcOn": "string",
-     "rtoCalcMethod": "string",
+     "rtoCalcMethod": custumerReg ? "" : newList[0]?.rtoAmtCalcBasis,
      "loginUserId":userData?.userId,
      "ipAddress": "1::1",
      "proformaRtoList": custumerReg ? [] : newList
     }
     tokenApiCall(reg_SaveCallBack, APIName.SaveProformaRegistration, "POST", param);
-
+  }else{
+    constant.showMsg("Please select RTO method");
+  }
  }
 
 
@@ -176,11 +189,11 @@ const fn_SetAllItemUncheck=()=>{
          <View style={{flex:1,backgroundColor:'#F9F9F9',borderWidth:1,borderColor:constant.whiteColor,borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
             <View style={{flex:1,flexDirection:'row'}}>
             <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>Distict</Text>
+            <Text style={styles.text5}>District</Text>
               <Text style={styles.text6}>-</Text>
             </View> 
             <View style={[styles. bottomMainView2,{}]}>
-            <Text style={styles.text5}>Chatges Applicable On</Text>
+            <Text style={styles.text5}>Charges Applicable On</Text>
               <Text style={styles.text6}>{moment(new Date).format("DD-MMM-YYYY")}</Text>
             </View> 
             </View>

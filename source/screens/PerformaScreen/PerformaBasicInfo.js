@@ -132,8 +132,13 @@ export default function PerformaBasicInfo(props) {
      setTexTotal(newTaxTotal)
      setSurchargeData(newSubCharge)
      setTotalAmount(newTotal)
-     if(texMasterData?.tcsDetail?.tcsApplicable==="Y"){
-        let newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
+     if(texMasterData?.tcsDetail[0]?.tcsApplicable==="Y"){
+      let newTcs = 0
+         texMasterData?.tcsDetail?.map((item) => {
+            if(item === trnsBasicValue?.code){
+               newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
+            }
+         })
         setTcsValue(newTcs)
         setTcsStatus(true)
      }{
@@ -201,6 +206,11 @@ export default function PerformaBasicInfo(props) {
    };
 
    const fn_Create=()=>{
+      console.log("performaPriceDetail = ", performaPriceDetail)
+      console.log("performaPriceDetail = ", performaPriceDetail === null)
+      if(performaPriceDetail === null){
+         constant.showMsg("Price not available for this vehcile")
+      }else{
      dispatch(emptyLoader_Action(true))
       let newParam = []
        texMasterData?.selectedProformaValueCodes.map((item)=>{
@@ -218,18 +228,18 @@ export default function PerformaBasicInfo(props) {
          "piDoc": "SRP",
          "piFY": '',  //current date fy
          "piNo": Number(prospect_No),
-         "priceListApplicable": "CURRENT_DATE",
+         "priceListApplicable": moment(new Date()).format("DD-MMM-YYYY"),
          "make": userData?.brandCode,
          "assembly":cardData?.vehAssemblyType,
          "edition": cardData?.vehEditionType,
-         "model": cardData?.model,
-         "variant": cardData?.variant,
-         "exterior": cardData?.colorCode,
-         "interior": cardData?.upholsteryCode,
-         "piStyle": cardData?.vehVariantStyle,
-         "piMY": 0,
-         "piVY": 0,
-         "priceSerial": 0,
+         "model": intrestedVehicleList?.model,//cardData?.model,
+         "variant": intrestedVehicleList?.subModel,
+         "exterior": intrestedVehicleList?.colorCode,
+         "interior": intrestedVehicleList?.upholsteryCode,
+         "piStyle": intrestedVehicleList?.vehVariantStyle,
+         "piMY": intrestedVehicleList?.modelYear,
+         "piVY": intrestedVehicleList?.vinYear,
+         "priceSerial": performaPriceDetail?.priceSerial,
          "basicPrice": performaPriceDetail?.vehBasicAmount,
          "discount": Number(discountValue),
          "itemDiscount": 0,
@@ -262,7 +272,7 @@ export default function PerformaBasicInfo(props) {
          "vehiclePrice": 0,
        }
        tokenApiCall(SaveProformaBasicInfoCallBack, APIName.SaveProformaBasicInfo, "POST", param)
-
+      }
    }
 
 
@@ -291,7 +301,7 @@ export default function PerformaBasicInfo(props) {
             <Text style={styles.costListText2}>Tax%</Text>
          </View>
          <View style={styles.costListSubView3}>
-            <Text style={styles.costListText2}>surcharge%</Text>
+            <Text style={styles.costListText2}>Surcharge%</Text>
          </View>
          <View style={styles.costListSubView3}>
             <Text style={styles.costListText2}>Total</Text>

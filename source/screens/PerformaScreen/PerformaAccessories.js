@@ -109,7 +109,8 @@ export default function PerformaAccessories(props) {
   };
 
   const fn_AddNegociatedPrice = (item, index, d) => {
-   if(item?.mrp - d < 0){
+    console.log("fn_AddNegociatedPrice = ", item?.price, d)
+   if(item?.price - d < 0){
       constant.showMsg("Negociated price can not be more than MRP.");
    }else{
       let newArr = accessoriesData;

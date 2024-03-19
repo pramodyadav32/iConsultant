@@ -23,9 +23,13 @@ import { APIName, imageUrl, tokenApiCall } from "../../utilities/apiCaller";
 import CommonHeader from "../../components/CommonHeader";
 import SelectDropList from "../../components/SelectDropList";
 import Button from "../../components/Button";
+import { check, PERMISSIONS, RESULTS, request, openSettings } from 'react-native-permissions';
+import DeviceInfo from 'react-native-device-info';
 import PDFView from "react-native-view-pdf";
 import Share from "react-native-share";
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import RNFetchBlob from "rn-fetch-blob";
+const fs = RNFetchBlob.fs;
 
 export default function DownloadPerforma(props) {
   const { performaGeneralMasterData, performaBasicInfo } = props;
@@ -39,9 +43,12 @@ export default function DownloadPerforma(props) {
 
   useEffect(() => {
     console.log(
-      "performaGeneralMasterData = ",
-      performaBasicInfo,
+      "performaGeneralMasterData1111111 = ",
       performaGeneralMasterData
+    );
+    console.log(
+      "performaBasicInfo1111111 = ",
+      performaBasicInfo
     );
     getPrformaPdf();
   }, []);
@@ -54,43 +61,75 @@ export default function DownloadPerforma(props) {
       companyId: userData?.companyId,
       userId: userData?.userId,
       ipAddress: "1::1",
-      docLocation: "MADU01",
-      docCode: "SRP",
-      docFY: "2023-2024",
-      docNo: 49,
+      docLocation: performaBasicInfo?.proformaList[0]?.docLocation,
+      docCode: performaBasicInfo?.proformaList[0]?.docCode,
+      docFY: performaBasicInfo?.proformaList[0]?.docFy,
+      docNo: 51,//performaBasicInfo?.proformaList[0]?.docNo,
     };
     console.log("param" + JSON.stringify(param));
-    apiConfig.tokenApiCall(
+    tokenApiCall(
       getEstimatePdf_Callback,
-      apiConfig.APIName.GetProformaPDF,
+      APIName.GetProformaPDF
+      ,
       "POST",
-      JSON.stringify(param),
-      item
-    );
+      param
+   );
   };
 
   const getEstimatePdf_Callback = (res, item) => {
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
-      requestClose();
+      // requestClose();
       let temp = res?.result?.fileBase;
       if (temp === "") {
         constant.showMsg("No PDF is available");
       } else {
         setBase64String(temp)
-        fn_CreatePdfFromBase64(temp);
+        storageRequestPermission(temp)
       }
     } else {
       constant.showMsg("Somethings wents wrong");
     }
   };
 
+  function storageRequestPermission(base64Data) {
+    let androidVersion = DeviceInfo.getSystemVersion();
+
+    request(
+      Platform.OS === 'android'
+      ? androidVersion < 13 ?  (PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE) : (PERMISSIONS.ANDROID.MANAGE_EXTERNAL_STORAGE )
+    : PERMISSIONS.IOS.MEDIA_LIBRARY ,
+        
+    ).then(result => {
+      // constant.showMsg("cameraRequestPermission")
+      console.log("reuest"+JSON.stringify(result))
+      switch (result) {
+        case 'denied':
+          // constant.showMsg("denied",result)
+        console.log("req"+result)
+          break;
+        case 'granted':
+          // constant.showMsg("granted",result)
+          fn_CreatePdfFromBase64(base64Data);
+       console.log("granted"+result)
+          break;
+        case 'blocked':
+          // constant.showMsg("blocked",result)
+          console.log("granted"+result)
+        break;
+        default:
+          break;
+      }
+    });
+  }
+
+
   const fn_CreatePdfFromBase64 = async (base64Data) => {
     const dirs = fs.dirs; //Use the dir API
     fPath = dirs.DocumentDir;
-
+    console.log("aaaa fPath = ",fPath)
     fPath = `${fPath}/Invoice_${"doc_no"}.pdf`;
-
+    console.log("aaaa fPath2 = ",fPath)
     fs.writeFile(fPath, base64Data, "base64")
       .then((success) => {
         setPdfPath(fPath);
@@ -99,7 +138,6 @@ export default function DownloadPerforma(props) {
         console.log("aaaa error=", err.message);
       });
 
-    let filePath = null;
     const configOptions = { fileCache: true };
   };
 
@@ -109,8 +147,8 @@ export default function DownloadPerforma(props) {
 
   const fn_SharePdf = () => {
     const options = {
-      title: ` ${route.params?.title}`,
-      url: `file://${route.params?.url}`,
+      title: "Performa Invoice",
+      url: `file://${pdfPath}`,
       type: "file/pdf",
     };
 
@@ -167,7 +205,7 @@ export default function DownloadPerforma(props) {
             fn_SavePdf();
           }}
         >
-          <FastImage source={images.notify} style={styles.printerImage} />
+          <FastImage source={images.download} style={styles.printerImage} />
         </Pressable>
         <Pressable
           style={styles.sharePerformaButton}
@@ -175,7 +213,7 @@ export default function DownloadPerforma(props) {
             fn_SharePdf();
           }}
         >
-          <FastImage source={images.notify} style={styles.printerImage} />
+          <FastImage source={images.share} style={styles.printerImage} />
         </Pressable>
       </View>
     </View>
