@@ -47,10 +47,10 @@ export default function DownloadPerforma(props) {
       performaGeneralMasterData
     );
 
-    setBase64String(invoice_Data)
-    fn_CreatePdfFromBase64(invoice_Data)
+    // setBase64String(invoice_Data)
+    // fn_CreatePdfFromBase64(invoice_Data)
     // storageRequestPermission(invoice_Data);
-    // getPrformaPdf();
+    getPrformaPdf();
   }, [invoice_Data]);
 
   const getPrformaPdf = (item) => {

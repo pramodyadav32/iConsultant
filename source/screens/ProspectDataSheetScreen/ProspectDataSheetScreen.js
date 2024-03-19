@@ -161,7 +161,6 @@ export default function ProspectDataSheetScreen(props) {
 
 
    const renderItem = ({ item, index }) => {
-      console.log("iiiitem = ", item)
       return (
          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
             <Pressable style={styles.driveListMainView}  >
@@ -185,7 +184,7 @@ export default function ProspectDataSheetScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Model</Text>

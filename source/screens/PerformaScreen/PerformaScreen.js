@@ -489,7 +489,7 @@ export default function PerformaScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Prospect Name</Text>
-                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.lastName}</Text>
+                           <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Model</Text>
@@ -503,7 +503,7 @@ export default function PerformaScreen(props) {
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Vehicle Cost</Text>
-                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.basicAmount}</Text>
+                           <Text style={styles.listName3}>{performHeaderData?.vehicleCost?.basicAmount > 0 ? performHeaderData?.vehicleCost?.basicAmount : 'NIL'}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Temp Regn</Text>
@@ -673,7 +673,7 @@ export default function PerformaScreen(props) {
                   </Pressable> */}
                   <View style={{ flex: 1, flexDirection: 'row' }}>
                       <View style={{ flex: 1, }}>
-                          <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage2} />
+                          <FastImage source={{uri:route.params.cardData?.modelImgUrl}} resizeMode='contain' style={styles.carImage2} />
                           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                               <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                                   <Text style={styles.listName3}>PID : </Text>
@@ -686,7 +686,7 @@ export default function PerformaScreen(props) {
                           <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                               <View style={styles.driveListDetailSubView}>
                                   <Text style={styles.listText4}>Prospect Name</Text>
-                                  <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.lastName}</Text>
+                                  <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.middleName} {route.params.cardData?.lastName}</Text>
                               </View>
                               <View style={styles.driveListDetailSubView2}>
                                   <Text style={styles.listText4}>Model</Text>
