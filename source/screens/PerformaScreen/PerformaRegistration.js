@@ -37,6 +37,8 @@ export default function PerformaRegistration(props) {
    const [billingLocationValue,setBillingLocationValue] = useState([])
    const [custumerReg,setCustumerReg] = useState(false)
    const [performaListData,setPerformListData] = useState([])
+  const [priceTotal,setPricetotal] = useState(0)
+  const [addAmt_Total,setAddAmt_Total] = useState(0)
 
   
  useEffect(()=>{
@@ -157,6 +159,8 @@ const fn_SetAllItemUncheck=()=>{
   let newArr = registrationTypeList
     if(item.select){
       item.select = false
+      item.addAmount = ""
+      item.total = isNaN(Number(item?.subTotal)+Number(0)) ? 0 :Number(item?.subTotal)+Number(0)
       newArr.splice(index,1,item)
       setRegistrationTypeList([...newArr])
     }else{
@@ -170,15 +174,60 @@ const fn_SetAllItemUncheck=()=>{
    let newArray = []
    registrationTypeList.map((item,index)=>{
     if(index=== selectInx){
-      item.total = Number(item?.subTotal)+Number(d)
+      item.addAmount = Number(d)
+      item.total = isNaN(Number(item?.subTotal)+Number(d)) ? 0 :Number(item?.subTotal)+Number(d) 
       newArray.push(item)
     }else{
       newArray.push(item)
     }
-   
+  
    })
    setRegistrationTypeList([...newArray])
  }
+
+const fn_Footer=()=>{
+  return(
+  <View>
+  <View style={{flex:1,flexDirection:'row'}}>
+</View>
+
+<View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5),backgroundColor:'#00000029',paddingVertical:constant.moderateScale(10),borderBottomLeftRadius:10,borderBottomRightRadius:10}]}>
+<View style={[styles.callHeaderSubView,{alignItems:'center'}]}>
+<Text style={styles.text8}>Total</Text>
+</View>
+<View style={styles.callHeaderSubView2}>
+<Text style={styles.text8}>{fn_PriceTotalCal()}</Text>
+</View>
+<View style={styles.callHeaderSubView3}>
+{/* <Text style={styles.text8}>0</Text> */}
+</View>
+<View style={styles.callHeaderSubView2}>
+<Text style={styles.text8}>{fn_AddAmtTotalCal()}</Text>
+</View>
+</View >
+ </View>
+  )
+}
+
+const fn_PriceTotalCal=()=>{
+  let add1 = 0
+  registrationTypeList.map((item,index)=>{
+    if(item?.select){
+   add1 = add1+Number(item?.subTotal)
+    }
+  })
+  return(add1)
+}
+
+const fn_AddAmtTotalCal=()=>{
+  let add2 = 0
+  registrationTypeList.map((item,index)=>{
+    if(item?.select){
+   add2 = add2 + Number(item?.total)
+    }
+  })
+  return(add2)
+}
 
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
@@ -272,7 +321,7 @@ const fn_SetAllItemUncheck=()=>{
             </View>
 
             </View>
-            <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
+            <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingTop:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
           
           <View style={[styles.callHeaderMainView,{paddingHorizontal:constant.moderateScale(3)}]}>
            <View style={styles.callHeaderSubView}>
@@ -302,6 +351,7 @@ const fn_SetAllItemUncheck=()=>{
 
            <FlatList 
             data={registrationTypeList}
+            ListFooterComponent={()=>fn_Footer()}
             renderItem={({item,index})=>{
             return(
               <View>
@@ -328,7 +378,7 @@ const fn_SetAllItemUncheck=()=>{
             <Text style={styles.text8}>{item?.select ? item?.subTotal : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
-            <TextInput onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
+            <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
             <Text style={styles.text8}>{item?.select ? item?.total : 0}</Text>

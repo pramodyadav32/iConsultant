@@ -103,6 +103,7 @@ export default function PerformaScreen(props) {
    const [reg_Data,setReg_Data] = useState({})
    const [intrestedVehicleList,setintrestedVehicleList] = useState({})
    const [performHeaderData,setPerformHeaderData] = useState({})
+   const [invoiceData,setInvoiceData] = useState("")
 
    console.log("cardData", route.params.cardData)
    useEffect(() => {
@@ -558,10 +559,55 @@ export default function PerformaScreen(props) {
       } else if (type === 4) {
          fn_GetTerms()
       }else if(type===5){
-         setActive(5)
+         
+         getPrformaPdf()
       }
 
    }
+
+   const getPrformaPdf = (item) => {
+      console.log("performBasic",performaBasicDataHeader)
+      dispatch(emptyLoader_Action(true));
+      const param = {
+        brandCode: userData?.brandCode,
+        countryCode: userData?.countryCode,
+        companyId: userData?.companyId,
+        userId: userData?.userId,
+        ipAddress: "1::1",
+        docLocation: "MADU01",
+        docCode: "SRP",
+        docFY: "2023-2024",
+        docNo: 49,
+      //   docLocation:performaBasicDataHeader?.proformaList[0]?.docLocation,
+      //   docCode: performaBasicDataHeader?.proformaList[0]?.docCode,
+      //   docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
+      //   docNo:performaBasicDataHeader?.proformaList[0]?.docNo,
+      };
+      console.log("param" + JSON.stringify(param));
+      tokenApiCall(
+        getEstimatePdf_Callback,
+        APIName.GetProformaPDF,
+        "POST",
+        JSON.stringify(param),
+        item
+      );
+    };
+  
+    const getEstimatePdf_Callback = (res, item) => {
+      dispatch(emptyLoader_Action(false));
+      if (res.statusCode === 200) {
+        let temp = res?.result?.fileBase;
+        if (temp === "") {
+          constant.showMsg("No PDF is available");
+        } else {
+         setInvoiceData(temp)
+         setActive(5)
+       
+        }
+      } else {
+        constant.showMsg("Somethings wents wrong");
+      }
+    };
 
    const actionRenderItem = ({ item, index }) => {
       return (
@@ -795,7 +841,7 @@ const performDetailCallBack = (res) => {
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
-                                 // fn_TabClick(index, item)
+                                 fn_TabClick(index, item)
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}
@@ -858,6 +904,7 @@ const performDetailCallBack = (res) => {
             {active === 5 && <DownloadPerforma
             performaGeneralMasterData={proformaGeneralMasters}
             performaBasicInfo={performaBasicDataHeader}
+            invoice_Data = {invoiceData}
             />}
          </View>
 

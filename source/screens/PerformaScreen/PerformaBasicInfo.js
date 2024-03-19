@@ -104,24 +104,25 @@ export default function PerformaBasicInfo(props) {
     fn_createCal(performaPriceDetail?.discountAmt,tax)
    }
 
+
+
  const fn_createCal=async(d,taxValue)=>{
     let basicPrice = performaPriceDetail?.vehBasicAmount
     setDiscountValue(d)
     let dis = Number(d)
-    let tax = taxValue 
-    let discount_Tax = Math.round(((dis*100)/(tax+100)),0)
-    let basicDiscount = basicPrice-discount_Tax
+    let tax = isNaN(taxValue) ? 0 : taxValue
+    let discount_Tax = isNaN(Math.round(((dis*100)/(tax+100)),0)) ? 0 :  Math.round(((dis*100)/(tax+100)),0) 
+    let basicDiscount = isNaN(basicPrice-discount_Tax) ? 0 : basicPrice-discount_Tax
     setDiscountPerTex(discount_Tax)
-    setBasicPriceDiscount(basicPrice-discount_Tax)
-    console.log("ddd"+discount_Tax)
+    setBasicPriceDiscount(basicDiscount)
 
     let newArray = []
     let newTaxTotal = 0
     let newSubCharge = 0
     let newTotal = 0
      texMasterData?.selectedProformaValueCodes.map((item)=>{
-        newTaxTotal= newTaxTotal+Number(item.perc)
-        newSubCharge = newSubCharge + Number(item.surcharge)
+        newTaxTotal= newTaxTotal+Number(item?.perc)
+        newSubCharge = newSubCharge + Number(item?.surcharge)
         let newCal =  Math.round(((Number(basicDiscount)*Number(item.perc))/100),0)
         newTotal = newTotal +newCal
        item["total"] = newCal
@@ -129,17 +130,17 @@ export default function PerformaBasicInfo(props) {
      })
  
      setTexMaster([...newArray])
-     setTexTotal(newTaxTotal)
-     setSurchargeData(newSubCharge)
-     setTotalAmount(newTotal)
-     if(texMasterData?.tcsDetail[0]?.tcsApplicable==="Y"){
+     setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal)
+     setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge)
+     setTotalAmount(isNaN(newTotal) ? 0 : newTotal)
+     if(texMasterData?.tcsDetail?.tcsApplicable==="Y"){
       let newTcs = 0
-         texMasterData?.tcsDetail?.map((item) => {
-            if(item === trnsBasicValue?.code){
-               newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
-            }
-         })
-        setTcsValue(newTcs)
+      texMasterData?.tcsDetail?.map((item) => {
+         if(item?.trxnBasis === trnsBasicValue?.code){
+            newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
+         }
+      })
+        setTcsValue(isNaN(newTcs) ? 0 : newTcs)
         setTcsStatus(true)
      }{
       setTcsStatus(false)
@@ -204,6 +205,22 @@ export default function PerformaBasicInfo(props) {
          constant.showMsg(res.message);
       }
    };
+
+   const fn_Validation=()=>{
+      if(Object.keys(billingLoactionValue).length===0){
+         constant.showMsg("Please select billing locaton")
+      }else if(Object.keys(usageValue).length===0){
+         constant.showMsg("Please select usage")
+      }else if(Object.keys(salesGroupValue).length===0){
+         constant.showMsg("Please select sale Group")
+      }else if(Object.keys(endUseValue).length===0){
+         constant.showMsg("Please select end Use")
+      }else if(Object.keys(trnsBasicValue).length===0){
+         constant.showMsg("Please select Trnx Basic")
+      }else{
+         fn_Create()
+      }
+   }
 
    const fn_Create=()=>{
       console.log("performaPriceDetail = ", performaPriceDetail)
@@ -559,7 +576,7 @@ export default function PerformaBasicInfo(props) {
         
           
          </View>
-         <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+         <Button title='Create Proforma' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
      </ScrollView>
       </View>
    )
