@@ -176,15 +176,37 @@ export default function PerformaBasicInfo(props) {
       "texMasterData?.tcsDetail[0]?.tcsApplicable =  ",
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
-    if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaa true");
+   //  if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
+   //    console.log("aaaaaaaaaaaaaaaaaaaaaaa true");
+   //    let newTcs = 0;
+   //    texMasterData?.tcsDetail?.map((item) => {
+   //       // console.log("aaaaaaaaaaaaaaaaaaaaaaa true", item?.trxnBasis === trnsBasicValue?.code, item?.trxnBasis, trnsBasicValue?.code);
+   //      if (item?.trxnBasis === trnsBasicValue?.code) {
+   //       setTcsPercentageValue(item?.tcsRate)
+   //        newTcs = Math.round(
+   //          ((newTotal + basicDiscount) * item?.tcsRate) / 100,
+   //          0
+   //        );
+   //      }
+   //    });
+   //    setTcsValue(isNaN(newTcs) ? 0 : newTcs);
+   //    setTcsStatus(true);
+   //  } else {
+   //    console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
+   //    setTcsStatus(false);
+   //    setTcsValue(0);
+   //  }
+    setExShowRoomPostPrice(newTotal + basicDiscount);
+  };
+
+  fn_TcsCalculation=(data)=>{
+   if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
       let newTcs = 0;
       texMasterData?.tcsDetail?.map((item) => {
-         console.log("aaaaaaaaaaaaaaaaaaaaaaa true", item?.trxnBasis === trnsBasicValue?.code, item?.trxnBasis, trnsBasicValue?.code);
-        if (item?.trxnBasis === trnsBasicValue?.code) {
+        if (item?.trxnBasis === data?.code) {
          setTcsPercentageValue(item?.tcsRate)
           newTcs = Math.round(
-            ((newTotal + basicDiscount) * item?.tcsRate) / 100,
+            ((totalAmount + basicPriceDiscount) * item?.tcsRate) / 100,
             0
           );
         }
@@ -196,8 +218,8 @@ export default function PerformaBasicInfo(props) {
       setTcsStatus(false);
       setTcsValue(0);
     }
-    setExShowRoomPostPrice(newTotal + basicDiscount);
-  };
+  }
+
 
   const fn_GetProformaGeneralMasters = (d) => {
     setSalesGroupValue(d);
@@ -272,8 +294,7 @@ export default function PerformaBasicInfo(props) {
   };
 
   const fn_Create = () => {
-    console.log("performaPriceDetail = ", performaPriceDetail);
-    console.log("performaPriceDetail = ", performaPriceDetail === null);
+
     if (performaPriceDetail === null) {
       constant.showMsg("Price not available for this vehcile");
     } else {
@@ -701,7 +722,7 @@ export default function PerformaBasicInfo(props) {
                   textExt={styles.dropListText}
                   on_Select={(d) => {
                      setTrnsBasicValue(d)
-                     fn_createCal(discountValue, texTotal)
+                     fn_TcsCalculation(d)
                   }}
                 />
               </View>
