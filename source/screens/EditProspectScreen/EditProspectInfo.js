@@ -161,7 +161,8 @@ export default function EditProspectInfo(props) {
         setReg_Destict(reg_destict)
         setReg_Pin(reg_Pin)
         setReg_Phone(reg_Phone)
-        setCopyToReg(!copyToOff)
+        setCopyRegToOff(!copyToOff)
+        setCopyToOff(!copyToOff)
     }
 
     const fn_copyAddress3 = () => {

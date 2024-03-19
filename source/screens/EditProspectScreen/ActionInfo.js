@@ -431,9 +431,9 @@ export default function ActionInfo(props) {
       "minutes1": Number(moment(new Date()).format("mm")),
       "hour2": Number(slotTime?.split(":")[0]),
       "minutes2": Number(slotTime?.split(":")[1]),
-      "demoVehModel": actionModelValue?.code,
-      "demoVehVariant": vehVariant,
-      "demoVehChassisNo": vinData,
+      "demoVehModel": actionTypeValue?.code ==='06' ? actionModelValue?.code : "",
+      "demoVehVariant": actionTypeValue?.code ==='06' ? vehVariant : "",
+      "demoVehChassisNo": actionTypeValue?.code ==='06' ? vinData : "",
       "projectDate": moment(prospectData?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY'),// project closure date
       "activeRate": prospectData?.prospectRating,// hot etc
       "loginUserId": userData?.userId,

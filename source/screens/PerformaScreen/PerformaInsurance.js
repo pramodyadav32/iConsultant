@@ -229,14 +229,17 @@ export default function PerformaInsurance(props) {
 
         <View style={styles.cal_SubView2}>
 
+        <Pressable onPress={()=>setSelectState(!selectState)}>
           <View style={[styles.selectMainView]}>
             <Text style={styles.detailText}>Select</Text>
             <FastImage source={selectState ? images.checkIcon : images.unCheckIcon} style={styles.selectCheckIcon} />
           </View>
+          </Pressable>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Source</Text>
             <SelectDropList
               list={[]}
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
             //  on_Select={(d)=>setActionTypeValue(d)}
@@ -245,11 +248,12 @@ export default function PerformaInsurance(props) {
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Type</Text>
-            {console.log("calon", typeData)}
+            {console.log("typeData", typeData)}
 
             <SelectDropList
               list={typeData}
-              desName='7'
+              desName='3'
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setTypevalue(d)}
@@ -260,6 +264,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Location</Text>
             <SelectDropList
               list={insuranceLoc_Data}
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setLocationValue(d)}
@@ -269,6 +274,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Company</Text>
             <SelectDropList
               list={INSU_COMPANY}
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setCompanyValue(d)}
@@ -280,6 +286,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={calOnData}
               desName="3"
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -294,6 +301,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={idvListData}
               desName='4'
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -309,6 +317,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={basicPremiumList}
               desName='5'
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -329,6 +338,7 @@ export default function PerformaInsurance(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 desName='6'
+                disable={!selectState}
                 disable={!nilDipCheckStatus}
                on_Select={(d)=>{
                 console.log("nildip selected = ", d)
@@ -343,6 +353,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Discount on Dep.</Text>
             <SelectDropList
               list={otherRateData}
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -362,7 +373,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>NCB</Text>
             <SelectDropList
               list={ncbRateData}
-              desName='3'
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -378,6 +389,7 @@ export default function PerformaInsurance(props) {
             <SelectDropList
               list={discountRuleData}
               desName='3'
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -392,6 +404,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Rate</Text>
             <SelectDropList
               list={otherRateData}
+              disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -409,7 +422,7 @@ export default function PerformaInsurance(props) {
             renderItem={({ item, index }) => {
               return (
                 <View style={{ flex: 1, flexDirection: "row" }}>
-                  <Pressable style={styles.bottomMainView} onPress={() => { updateInsuranceCheckedList(item) }}>
+                  <Pressable style={styles.bottomMainView} onPress={() => { selectState ?updateInsuranceCheckedList(item) : null }}>
                     <FastImage
                       source={item?.isChecked ? images.checkIcon : images.unCheckIcon}
                       style={styles.checkboxStyle}
