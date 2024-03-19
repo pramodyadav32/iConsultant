@@ -16,9 +16,12 @@ import { set_UserData } from '../../utilities/AsyncStorage';
 export default function LoginScreen(props) {
 
     const dispatch = useDispatch()
-    const [comp_Id, setComp_Id] = useState('Aras')
-    const [user_Id,setUser_Id] = useState('dilip')
-    const [password, setPassword] = useState('orbit')
+    // const [comp_Id, setComp_Id] = useState('Aras')
+    // const [user_Id,setUser_Id] = useState('dilip')
+    // const [password, setPassword] = useState('orbit')
+    const [comp_Id, setComp_Id] = useState('')
+    const [user_Id,setUser_Id] = useState('')
+    const [password, setPassword] = useState('')
     const [active, setActive] = useState(true)
 
     const fn_Veify = () => {

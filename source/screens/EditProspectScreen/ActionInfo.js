@@ -65,7 +65,7 @@ export default function ActionInfo(props) {
 
         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
           <View style={[styles.driveListDetailSubView, {}]}>
-            <Text style={styles.listText2}>Action</Text>
+            <Text style={styles.listText2}>Pending Action</Text>
             <Text style={styles.listText3}>{item?.actionDescription}</Text>
           </View>
           <View style={styles.driveListDetailSubView2}>
@@ -80,7 +80,18 @@ export default function ActionInfo(props) {
             <Text style={styles.listText3}>{item?.statusDesc}</Text>
           </View>
           <View style={styles.driveListDetailSubView2}>
-            <Text style={styles.listText2}>Completed on</Text>
+            <Text style={styles.listText2}>Projected Closure Date</Text>
+            <Text style={styles.listText3}>{moment(item?.projectedCloserDate,'DD-MMM-YYYY').format("DD-MMM-YYYY")}</Text>
+          </View>
+        </View>
+
+        {/* <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={styles.driveListDetailSubView}>
+            <Text style={styles.listText2}>Stutus</Text>
+            <Text style={styles.listText3}>{item?.statusDesc}</Text>
+          </View>
+          <View style={styles.driveListDetailSubView2}>
+            <Text style={styles.listText2}>Previous Action Completed on</Text>
             <Text style={styles.listText3}>{item?.performedOn}</Text>
           </View>
         </View>
@@ -94,7 +105,7 @@ export default function ActionInfo(props) {
             <Text style={styles.listText2}>Projected Closure Date</Text>
             <Text style={styles.listText3}>{moment(item?.projectedCloserDate,'DD-MMM-YYYY').format("DD-MMM-YYYY")}</Text>
           </View>
-        </View>
+        </View> */}
 
         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
           <View style={[styles.buttonView2, { flex: 0.45 }]}>

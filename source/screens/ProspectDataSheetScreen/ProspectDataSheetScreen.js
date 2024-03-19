@@ -333,7 +333,7 @@ export default function ProspectDataSheetScreen(props) {
                   </View>
                   <View style={styles.driveListDetailSubView2}>
                      <Text style={styles.listText2}>State </Text>
-                     <Text style={styles.listText3}>{prospectInfo?.resState}</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resStateDescription}</Text>
                   </View>
                </View>
 
@@ -351,7 +351,7 @@ export default function ProspectDataSheetScreen(props) {
                <View style={styles.driveListDetailView}>
                   <View style={styles.driveListDetailSubView}>
                      <Text style={styles.listText2}>District</Text>
-                     <Text style={styles.listText3}>{prospectInfo?.resDistrict}</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resDistrictDescription}</Text>
                   </View>
                   <View style={styles.driveListDetailSubView2}>
                      <Text style={styles.listText2}>PIN</Text>
@@ -380,14 +380,14 @@ export default function ProspectDataSheetScreen(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>State </Text>
-                        <Text style={styles.listText3}>{prospectInfo?.regnState}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnStateDescription}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>City</Text>
-                        <Text style={styles.listText3}>{prospectInfo?.regnCity}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnCityDescription}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Sub-Zone</Text>
@@ -398,7 +398,7 @@ export default function ProspectDataSheetScreen(props) {
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>District</Text>
-                        <Text style={styles.listText3}>{prospectInfo?.regnDistrict}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.regnDistrictDescription}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>PIN</Text>
@@ -427,14 +427,14 @@ export default function ProspectDataSheetScreen(props) {
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>State </Text>
-                        <Text style={styles.listText3}>{prospectInfo?.offcState}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offStateDescription}</Text>
                      </View>
                   </View>
 
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>City</Text>
-                        <Text style={styles.listText3}>{prospectInfo?.offcCity}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offCityDescription}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>Sub-Zone</Text>
@@ -445,7 +445,7 @@ export default function ProspectDataSheetScreen(props) {
                   <View style={styles.driveListDetailView}>
                      <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>District</Text>
-                        <Text style={styles.listText3}>{prospectInfo?.offcDistrict}</Text>
+                        <Text style={styles.listText3}>{prospectInfo?.offDistrictDescription}</Text>
                      </View>
                      <View style={styles.driveListDetailSubView2}>
                         <Text style={styles.listText2}>PIN</Text>
@@ -558,7 +558,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Campaign</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.campaignCode === "0" ? "-" : prospectBasicInfo?.campaignCode}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.campaignDesc === "" ? "-" : prospectBasicInfo?.campaignDesc}</Text>
                         </View>
                      </View>
 
@@ -569,7 +569,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>General Comments</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.generalComment}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.comment}</Text>
                         </View>
                      </View>
 
@@ -586,7 +586,7 @@ export default function ProspectDataSheetScreen(props) {
                  <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Action Comment</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.comment}</Text>
+                           <Text style={styles.listText3}>-</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Project Closure</Text>
@@ -634,7 +634,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                      </View>
 
-                     <View style={styles.driveListDetailView}>
+                     {/* <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>Financer</Text>
                            <Text style={styles.listText3}>{prospectBasicInfo?.financerDesc}</Text>
@@ -643,7 +643,7 @@ export default function ProspectDataSheetScreen(props) {
                            <Text style={styles.listText2}>Finance Location</Text>
                            <Text style={styles.listText3}>{prospectBasicInfo?.financerLocation}</Text>
                         </View>
-                     </View>
+                     </View> */}
 
                      <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
@@ -674,7 +674,7 @@ export default function ProspectDataSheetScreen(props) {
                         </View>
                         <View style={styles.driveListDetailSubView}>
                            <Text style={styles.listText2}>General Comment</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.generalComment}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.comment}</Text>
                         </View>
 
                      </View>

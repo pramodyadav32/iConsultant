@@ -250,30 +250,30 @@ export default function EditProspectInfo(props) {
     }
 
     const fn_Validation=()=>{
-if (Object.keys(prospectTypeValue).length === 0) {
+       if (Object.keys(prospectTypeValue).length === 0) {
             constant.showMsg("Please select prospect Type")
         }else if (Object.keys(titleValue).length === 0) {
             constant.showMsg("Please select title")
         }else if (name==='') {
             constant.showMsg("Please enter name")
         }else if (mobileno==='') {
-            constant.showMsg("Please enter mobileno")
+            constant.showMsg("Please enter mobile no")
         }else if (mobileno.length !=10) {
             constant.showMsg("Please enter valid mobile no")
         }else if (email==='') {
             constant.showMsg("Please enter email")
         }else if (!common_fn.validEmail(email?.trim())) {
             constant.showMsg("Please enter valid email")
-        }else if (panData==='') {
-            constant.showMsg("Please enter PAN")
-        }else if (empName==='') {
-            constant.showMsg("Please enter employer name")
-        }else if (empMail==='') {
-            constant.showMsg("Please enter employer email")
-        }else if (!common_fn.validEmail(empMail?.trim())) {
-            constant.showMsg("Please enter valid employer email")
-        }else if (destination==='') {
-            constant.showMsg("Please enter designation")
+        // }else if (panData==='') {
+        //     constant.showMsg("Please enter PAN")
+        // }else if (empName==='') {
+        //     constant.showMsg("Please enter employer name")
+        // }else if (empMail==='') {
+        //     constant.showMsg("Please enter employer email")
+        // }else if (!common_fn.validEmail(empMail?.trim())) {
+        //     constant.showMsg("Please enter valid employer email")
+        // }else if (destination==='') {
+        //     constant.showMsg("Please enter designation")
         }else if (regAdd1==='') {
             constant.showMsg("Please enter Regn Address")
         }else if (Object.keys(reg_State).length === 0) {
@@ -285,7 +285,7 @@ if (Object.keys(prospectTypeValue).length === 0) {
         }else if (reg_Pin==='') {
             constant.showMsg("Please enter Regn Pin")
         }else if (reg_Phone ==='') {
-            constant.showMsg("Please enter Regn mobileno")
+            constant.showMsg("Please enter Regn mobile no")
         }else if (reg_Phone.length !=10) {
             constant.showMsg("Please enter valid  Regn mobile no")
         }else if (resAdd1==='') {
@@ -299,7 +299,7 @@ if (Object.keys(prospectTypeValue).length === 0) {
         }else if (res_Pin==='') {
             constant.showMsg("Please enter Res Pin")
         }else if (res_Phone ==='') {
-            constant.showMsg("Please enter Res mobileno")
+            constant.showMsg("Please enter Res mobile no")
         }else if (res_Phone.length !=10) {
             constant.showMsg("Please enter valid  Res mobile no")
         }else{
