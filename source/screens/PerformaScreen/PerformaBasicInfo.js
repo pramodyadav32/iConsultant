@@ -104,6 +104,8 @@ export default function PerformaBasicInfo(props) {
     fn_createCal(performaPriceDetail?.discountAmt,tax)
    }
 
+
+
  const fn_createCal=async(d,taxValue)=>{
     let basicPrice = performaPriceDetail?.vehBasicAmount
     setDiscountValue(d)
@@ -198,6 +200,22 @@ export default function PerformaBasicInfo(props) {
          constant.showMsg(res.message);
       }
    };
+
+   const fn_Validation=()=>{
+      if(Object.keys(billingLoactionValue).length===0){
+         constant.showMsg("Please select billing locaton")
+      }else if(Object.keys(usageValue).length===0){
+         constant.showMsg("Please select usage")
+      }else if(Object.keys(salesGroupValue).length===0){
+         constant.showMsg("Please select sale Group")
+      }else if(Object.keys(endUseValue).length===0){
+         constant.showMsg("Please select end Use")
+      }else if(Object.keys(trnsBasicValue).length===0){
+         constant.showMsg("Please select Trnx Basic")
+      }else{
+         fn_Create()
+      }
+   }
 
    const fn_Create=()=>{
      dispatch(emptyLoader_Action(true))
@@ -548,7 +566,7 @@ export default function PerformaBasicInfo(props) {
         
           
          </View>
-         <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+         <Button title='Create Proforma' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
      </ScrollView>
       </View>
    )
