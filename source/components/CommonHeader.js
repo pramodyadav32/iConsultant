@@ -20,7 +20,7 @@ const CommonHeader = (props) => {
      </View>
      <View style={styles.rightView}>
   {showInfo && <Pressable style={styles.infoButton}>
-   <FastImage source={images.bellIcon} style={styles.bellIcon} resizeMode="contain" />
+   {/* <FastImage source={images.bellIcon} style={styles.bellIcon} resizeMode="contain" /> */}
      </Pressable>
 }
 {edit && <Pressable style={styles.infoButton} onPress={()=>editClick()}>

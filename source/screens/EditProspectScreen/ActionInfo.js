@@ -70,7 +70,7 @@ export default function ActionInfo(props) {
           </View>
           <View style={styles.driveListDetailSubView2}>
             <Text style={styles.listText2}>Due on </Text>
-            <Text style={styles.listText3}>{item?.dueOn}</Text>
+            <Text style={styles.listText3}>{moment(item?.dueOn,"DD-MMM-YYYY").format("DD-MMM-YYYY")}</Text>
           </View>
         </View>
 
@@ -92,7 +92,7 @@ export default function ActionInfo(props) {
           </View>
           <View style={styles.driveListDetailSubView2}>
             <Text style={styles.listText2}>Projected Closure Date</Text>
-            <Text style={styles.listText3}>{item?.projectedCloserDate}</Text>
+            <Text style={styles.listText3}>{moment(item?.projectedCloserDate,'DD-MMM-YYYY').format("DD-MMM-YYYY")}</Text>
           </View>
         </View>
 
@@ -395,7 +395,7 @@ export default function ActionInfo(props) {
 
         <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
           <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
-          <TextInput placeholder='Enter Comment' onChangeText={(d) => setComment(d)} style={styles.commentInput} >{comment}</TextInput>
+          <TextInput placeholder='Enter Comment' onChangeText={(d) =>{setComment(d)}} style={styles.commentInput} >{comment}</TextInput>
         </View>
 
       </View>

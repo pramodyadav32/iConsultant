@@ -18,12 +18,12 @@ const HomeHeader = (props) => {
      <Text style={styles.title}>{title}</Text>
      </View>
      <View style={styles.rightView}>
-     <Pressable style={styles.infoButton}>
+     {/* <Pressable style={styles.infoButton}>
         <Image source={images.searchIcon} style={styles.infoImage}  resizeMode="contain" />
      </Pressable>
    <Pressable style={styles.infoButton}>
         <Image source={images.bellIcon} style={styles.infoImage}  resizeMode="contain" />
-     </Pressable>
+     </Pressable> */}
 </View>
      </View> 
     )

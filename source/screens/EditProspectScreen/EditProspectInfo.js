@@ -162,7 +162,6 @@ export default function EditProspectInfo(props) {
         setReg_Pin(reg_Pin)
         setReg_Phone(reg_Phone)
         setCopyRegToOff(!copyToOff)
-        setCopyToOff(!copyToOff)
     }
 
     const fn_copyAddress3 = () => {
@@ -265,7 +264,7 @@ if (Object.keys(prospectTypeValue).length === 0) {
             constant.showMsg("Please enter email")
         }else if (!common_fn.validEmail(email?.trim())) {
             constant.showMsg("Please enter valid email")
-        }else if (pan==='') {
+        }else if (panData==='') {
             constant.showMsg("Please enter PAN")
         }else if (empName==='') {
             constant.showMsg("Please enter employer name")

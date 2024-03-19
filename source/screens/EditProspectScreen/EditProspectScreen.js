@@ -506,7 +506,7 @@ export default function EditProspectScreen(props) {
                     </Pressable> */}
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, }}>
-                            <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                            <FastImage source={{ uri: route.params.cardData?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                                     <Text style={styles.listName3}>PID : </Text>
@@ -555,12 +555,13 @@ export default function EditProspectScreen(props) {
 
     const fn_TabClick = (type) => {
         if (type === 0) {
-            setActive(type)
-            Animated.timing(animatedValue, {
-                toValue: type,
-                duration: 800, // Adjust the duration of the animation
-                useNativeDriver: false,
-            }).start();
+            // setActive(type)
+            fn_GetProspectBasicInfo()
+            // Animated.timing(animatedValue, {
+            //     toValue: type,
+            //     duration: 800, // Adjust the duration of the animation
+            //     useNativeDriver: false,
+            // }).start();
         } else if (type === 1) {
             fn_GetProspectDetail()
         } else if (type === 2) {
@@ -617,7 +618,7 @@ export default function EditProspectScreen(props) {
     }
 
     const fn_CustumerSave=()=>{
-        constant.showMsg("Profile Save Successfully")
+        // constant.showMsg("Profile Save Successfully")
         fn_GetActionTypeCloseList()
     }
 

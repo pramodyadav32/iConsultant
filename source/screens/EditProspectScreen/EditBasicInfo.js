@@ -280,7 +280,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
           >
             <View style={[styles.listDetailSubView, {}]}>
               <Text style={styles.text2}>Opened on</Text>
-              <Text style={styles.list3}>{data?.prospectOpenedOn}</Text>
+              <Text style={styles.list3}>{moment(data?.prospectOpenedOn,"DD-MMM-YYYY").format("DD-MMM-YYYY")}</Text>
             </View>
             <View style={styles.driveListDetailSubView2}>
               <Text style={styles.text2}>OLM Lead</Text>
