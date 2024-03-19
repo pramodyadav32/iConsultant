@@ -41,6 +41,8 @@ export default function PerformaRegistration(props) {
    const [performaListData,setPerformListData] = useState([])
   const [priceTotal,setPricetotal] = useState(0)
   const [addAmt_Total,setAddAmt_Total] = useState(0)
+  const [calculationOnData,setCalculationOnData] = useState([])
+  const [calculationOnValue,setCalculationOnValue] = useState({})
 
   
  useEffect(()=>{
@@ -51,6 +53,7 @@ export default function PerformaRegistration(props) {
   setPerformListData(performaBasicInfo?.proformaList)
 
   let newData = []
+  console.log("regData",regData)
   regData?.registrationTypeList.map((item)=>{
     let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
     let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
@@ -65,6 +68,7 @@ export default function PerformaRegistration(props) {
 
   let location=[]
   let source = []
+  let rtoCal = []
   regData?.selectMasterList.map((item)=>{
     if(item?.group === 'REGN_LOCATION')
     {
@@ -72,11 +76,14 @@ export default function PerformaRegistration(props) {
     }else if(item?.group === 'SOURCE')
     {
       source.push(item)
+    }else if(item?.group === 'RTO_CALC_ON'){
+      rtoCal.push(item)
     }
   
   })
   setSourceData(source)
   setLoactionData(location)
+  setCalculationOnData(rtoCal)
 
   performaGeneralMasterData?.selectMasterList.map((item)=>{
    if(item?.listType ==='BILLING_LOCATION'){
@@ -134,7 +141,7 @@ if(shouldSave){
      "regnLocation": locationValue.code,
      "regnRtoCode": locationValue?.code,
      "rtoCalcType": sourceValue?.code,
-     "rtoCalcOn": "EX_SR_POST_DISC",
+     "rtoCalcOn": calculationOnValue?.code,
      "rtoCalcMethod": custumerReg ? "" : newList[0]?.rtoAmtCalcBasis,
      "loginUserId":userData?.userId,
      "ipAddress": "1::1",
@@ -324,13 +331,23 @@ const fn_AddAmtTotalCal=()=>{
               />
             </View>
 
-            <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+            {/* <View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
               <Text style={styles.detailText}>Billing Location</Text>
               <SelectDropList
                 list={billingLocationData}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d)=>setBillingLocationValue(d)}
+              />
+            </View> */}
+
+<View style={[styles.detailMainView,{marginTop:constant.moderateScale(10)}]}>
+              <Text style={styles.detailText}>Calculate On</Text>
+              <SelectDropList
+                list={calculationOnData}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+                on_Select={(d)=>setCalculationOnValue(d)}
               />
             </View>
 
