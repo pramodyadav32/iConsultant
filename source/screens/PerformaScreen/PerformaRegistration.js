@@ -167,6 +167,30 @@ const fn_SetAllItemUncheck=()=>{
    setRegistrationTypeList([...newArray])
  }
 
+const fn_Footer=()=>{
+  return(
+  <View>
+  <View style={{flex:1,flexDirection:'row'}}>
+</View>
+
+<View style={[styles.callHeaderMainView,{marginTop:constant.moderateScale(5),backgroundColor:'#00000029',paddingVertical:constant.moderateScale(10),borderBottomLeftRadius:10,borderBottomRightRadius:10}]}>
+<View style={[styles.callHeaderSubView,{alignItems:'center'}]}>
+<Text style={styles.text8}>Total</Text>
+</View>
+<View style={styles.callHeaderSubView2}>
+<Text style={styles.text8}>0</Text>
+</View>
+<View style={styles.callHeaderSubView3}>
+{/* <Text style={styles.text8}>0</Text> */}
+</View>
+<View style={styles.callHeaderSubView2}>
+<Text style={styles.text8}>0</Text>
+</View>
+</View >
+ </View>
+  )
+}
+
    return (
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
@@ -259,7 +283,7 @@ const fn_SetAllItemUncheck=()=>{
             </View>
 
             </View>
-            <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
+            <View style={{flex:1,backgroundColor:'#F9F9F9',borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingTop:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
           
           <View style={[styles.callHeaderMainView,{paddingHorizontal:constant.moderateScale(3)}]}>
            <View style={styles.callHeaderSubView}>
@@ -289,6 +313,7 @@ const fn_SetAllItemUncheck=()=>{
 
            <FlatList 
             data={registrationTypeList}
+            ListFooterComponent={()=>fn_Footer()}
             renderItem={({item,index})=>{
             return(
               <View>

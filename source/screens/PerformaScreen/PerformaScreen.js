@@ -795,7 +795,7 @@ const performDetailCallBack = (res) => {
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
-                                 // fn_TabClick(index, item)
+                                 fn_TabClick(index, item)
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}
