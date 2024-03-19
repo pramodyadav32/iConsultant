@@ -305,10 +305,11 @@ export default function PerformaScreen(props) {
          companyId: userData?.companyId,
          userId: userData?.userId,
          ipAddress: "1::1",
-         docLocation: "MADU01",
-         docCode: "SRP",
-         docFY: "2023-2024",
-         docNo: 43,
+         docLocation: performaBasicDataHeader?.proformaList[0]?.docLocation,
+         docCode:performaBasicDataHeader?.proformaList[0]?.docCode,
+         docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
+         docNo: performaBasicDataHeader?.proformaList[0]?.docNo,
+
       };
       tokenApiCall(GetTermsCallBack, APIName.GetProformaTerms, "POST", param);
    };
@@ -331,10 +332,10 @@ export default function PerformaScreen(props) {
          companyId: userData?.companyId,
          userId: userData?.userId,
          ipAddress: "1::1",
-         "docLocation": "MADU01",
-         "docCode": "SRP",
-         "docFY": "2023-2024",
-         "docNo": 49
+         docLocation: performaBasicDataHeader?.proformaList[0]?.docLocation,
+         docCode:performaBasicDataHeader?.proformaList[0]?.docCode,
+         docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
+         docNo: performaBasicDataHeader?.proformaList[0]?.docNo,
       };
       tokenApiCall(GetProformaInsuMasterCallBack, APIName.GetProformaInsuMaster, "POST", param);
    };
@@ -453,10 +454,10 @@ export default function PerformaScreen(props) {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
-         "docLocation": "MADU01",
-         "docCode": "SRP",
-         "docFY": "2023-2024",
-         "docNo": 49,
+         docLocation: performaBasicDataHeader?.proformaList[0]?.docLocation,
+         docCode:performaBasicDataHeader?.proformaList[0]?.docCode,
+         docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
+         docNo: performaBasicDataHeader?.proformaList[0]?.docNo,
          "regnSource": "",
          "rtoCalcOn": "2024-02-01",
          "loginUserId": userData?.userId,
@@ -586,14 +587,14 @@ export default function PerformaScreen(props) {
         companyId: userData?.companyId,
         userId: userData?.userId,
         ipAddress: "1::1",
-        docLocation: "MADU01",
-        docCode: "SRP",
-        docFY: "2023-2024",
-        docNo: 49,
-      //   docLocation:performaBasicDataHeader?.proformaList[0]?.docLocation,
-      //   docCode: performaBasicDataHeader?.proformaList[0]?.docCode,
-      //   docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
-      //   docNo:performaBasicDataHeader?.proformaList[0]?.docNo,
+      //   docLocation: "MADU01",
+      //   docCode: "SRP",
+      //   docFY: "2023-2024",
+      //   docNo: 49,
+        docLocation:performaBasicDataHeader?.proformaList[0]?.docLocation,
+        docCode: performaBasicDataHeader?.proformaList[0]?.docCode,
+        docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
+        docNo:performaBasicDataHeader?.proformaList[0]?.docNo,
       };
       console.log("param" + JSON.stringify(param));
       tokenApiCall(

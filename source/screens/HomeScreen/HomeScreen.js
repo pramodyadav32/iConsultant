@@ -17,6 +17,7 @@ import ActiveProspectList from './ActiveProspectList';
 import { emptyLoader_Action, home_Refresh_Action } from '../../redux/actions/AuthAction';
 import { useFocusEffect, } from '@react-navigation/native';
 
+const deviceSize = DeviceInfo.isTablet();
 const data = [
   { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
   { 'key': 2, "title": 'Help Center', 'source': images.info, 'screenName': 'HomeScreen' },
@@ -40,6 +41,7 @@ export default function HomeScreen(props) {
   const [refresh,setrefresh] = useState(false)
   const [testdriveCount,setTestDriveCount] = useState(0)
   const scaleValue = new Animated.Value(1);
+  const [dataCounts,setDataCounts] = useState({})
 
   const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
  
@@ -98,6 +100,7 @@ export default function HomeScreen(props) {
       res?.result.upcommingActionList != null ? SetUpComingListData(res.result?.upcommingActionList) : null
       res?.result.testDeriveTodayList != null ? setTestDriveData(res.result?.testDeriveTodayList) : null
       res?.result.activeProspectList != null ? setActiveProspect(res.result?.activeProspectList) : null
+      setDataCounts(res.result?.dataCounts)
        const groupedData = {};
 
    await res.result?.upcommingActionList.forEach(item => {
@@ -159,13 +162,13 @@ export default function HomeScreen(props) {
   const fn_Button1 = (type) => {
     if (type == 1) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(3), y: constant.moderateScale(130) }, // Example new position
+        toValue: { x: constant.resW(3), y: constant.moderateScale(129.4) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(52), y: constant.moderateScale(130) }, // Example new position
+        toValue: { x: constant.resW(51), y: constant.moderateScale(129.4) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
@@ -177,7 +180,7 @@ export default function HomeScreen(props) {
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(200), y: constant.moderateScale(265) }, // Example new position
+        toValue: { x: constant.moderateScale(196), y: constant.moderateScale(265) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")
@@ -193,19 +196,19 @@ export default function HomeScreen(props) {
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(52), y: constant.moderateScale(132) }, // Example new position
+        toValue: { x: constant.resW(50.8), y: constant.moderateScale(131.5) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(12), y: constant.moderateScale(268) }, // Example new position
+        toValue: { x: constant.moderateScale(10.6), y: constant.moderateScale(268) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(277), y: constant.moderateScale(268) }, // Example new position
+        toValue: { x: constant.moderateScale(268), y: constant.moderateScale(268) }, // Example new position
         useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")
@@ -221,22 +224,24 @@ export default function HomeScreen(props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
       <StatusBar translucent={false} />
       <HomeHeader title='Home' mainExt={styles.drawerStyle} showDrawer={navigation} />
-   
+        {Object.keys(dataCounts).length===0 ? null :
         <View style={{ position: "relative", paddingHorizontal: constant.moderateScale(10), paddingVertical: constant.moderateScale(5) }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Pressable onPress={() => fn_Button(1)} style={styles.homeBoxStyle}  >
+            <Pressable onPress={() => fn_Button(1)} style={ deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle}  >
               <Text style={styles.boxText}>Actions Today</Text>
+              {console.log("dataCounts",dataCounts)}
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
                     size={constant.moderateScale(50)}
                     indeterminate={false}
-                    progress={Action_Today.length / 100}
+                    progress={(dataCounts?.totalActionToday/dataCounts?.totalDoneActionToday)}
                     color={'#FE0F17'}
+                    animated={true}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}
-                    thickness={8}
-                    showsText={true}
+                    thickness={6}
+                    showsText={false}
                     textStyle={{
                       fontSize: constant.moderateScale(15),
                       fontFamily: constant.typeRegular,
@@ -251,7 +256,7 @@ export default function HomeScreen(props) {
               </View>
 
             </Pressable>
-            <Pressable onPress={() => fn_Button(2)} style={styles.homeBoxStyle} >
+            <Pressable onPress={() => fn_Button(2)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
               <Text style={styles.boxText}>Upcoming Actions</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
@@ -262,19 +267,19 @@ export default function HomeScreen(props) {
 
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: constant.moderateScale(6) }}>
-            <Pressable onPress={() => fn_Button(3)} style={styles.homeBoxStyle} >
+            <Pressable onPress={() => fn_Button(3)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
               <Text style={styles.boxText}>Test Drives Today</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
-                    size={constant.moderateScale(50)}
+                    size={constant.moderateScale(60)}
                     indeterminate={false}
-                    progress={testdriveCount / 100}
+                    progress={(dataCounts?.totalDoneTestDriveToday/dataCounts?.totalTestDriveToday)}
                     color={'#FE0F17'}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}
                     thickness={8}
-                    showsText={true}
+                    showsText={false}
                     textStyle={{
                       fontSize: constant.moderateScale(15),
                       fontFamily: constant.typeRegular,
@@ -288,11 +293,11 @@ export default function HomeScreen(props) {
 
               </View>
             </Pressable>
-            <Pressable onPress={() => fn_Button(4)} style={styles.homeBoxStyle} >
+            <Pressable onPress={() => fn_Button(4)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
               <Text style={styles.boxText}>Active Prospect</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
-                  <Progress.Circle
+                  {/* <Progress.Circle
                     size={constant.moderateScale(50)}
                     indeterminate={false}
                     progress={activeProspect.length/100}
@@ -307,7 +312,7 @@ export default function HomeScreen(props) {
                       color: '#535353'
                     }}
 
-                  />
+                  /> */}
                   {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("ActionProspectScreen",{dataList:activeProspect})} style={styles.homeSubBoxText}>{activeProspect.length}</Text>
@@ -315,8 +320,15 @@ export default function HomeScreen(props) {
               </View>
             </Pressable>
           </View>
+        {
+          deviceSize ?
+          <Animated.View style={[styles.homeHorz2, { transform: position.getTranslateTransform() }]} />
+          :
           <Animated.View style={[styles.homeHorz, { transform: position.getTranslateTransform() }]} />
+
+        }
         </View>
+}
         <View style={styles.topButtonView}>
           <Pressable style={styles.userButton} onPress={() => fn_buttonClick(1)}>
             <Text style={styles.userText}>Create Prospect</Text>
