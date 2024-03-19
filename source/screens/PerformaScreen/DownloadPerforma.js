@@ -28,7 +28,7 @@ import Share from "react-native-share";
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 
 export default function DownloadPerforma(props) {
-  const { performaGeneralMasterData, performaBasicInfo } = props;
+  const { performaGeneralMasterData, performaBasicInfo,invoice_Data } = props;
   const dispatch = useDispatch();
   const { userData } = useSelector((state) => state.AuthReducer);
   const [active, setActive] = useState(false);
@@ -43,8 +43,11 @@ export default function DownloadPerforma(props) {
       performaBasicInfo,
       performaGeneralMasterData
     );
-    getPrformaPdf();
-  }, []);
+
+    setBase64String(invoice_Data)
+    fn_CreatePdfFromBase64(invoice_Data);
+    // getPrformaPdf();
+  }, [invoice_Data]);
 
   const getPrformaPdf = (item) => {
     dispatch(emptyLoader_Action(true));
@@ -60,36 +63,22 @@ export default function DownloadPerforma(props) {
       docNo: 49,
     };
     console.log("param" + JSON.stringify(param));
-    apiConfig.tokenApiCall(
+    tokenApiCall(
       getEstimatePdf_Callback,
-      apiConfig.APIName.GetProformaPDF,
+      APIName.GetProformaPDF,
       "POST",
       JSON.stringify(param),
       item
     );
   };
 
-  const getEstimatePdf_Callback = (res, item) => {
-    dispatch(emptyLoader_Action(false));
-    if (res.statusCode === 200) {
-      requestClose();
-      let temp = res?.result?.fileBase;
-      if (temp === "") {
-        constant.showMsg("No PDF is available");
-      } else {
-        setBase64String(temp)
-        fn_CreatePdfFromBase64(temp);
-      }
-    } else {
-      constant.showMsg("Somethings wents wrong");
-    }
-  };
+ 
 
   const fn_CreatePdfFromBase64 = async (base64Data) => {
     const dirs = fs.dirs; //Use the dir API
-    fPath = dirs.DocumentDir;
+   let  newPath = dirs.DocumentDir;
 
-    fPath = `${fPath}/Invoice_${"doc_no"}.pdf`;
+    let fPath = `${newPath}/Invoice_${"doc_no"}.pdf`;
 
     fs.writeFile(fPath, base64Data, "base64")
       .then((success) => {

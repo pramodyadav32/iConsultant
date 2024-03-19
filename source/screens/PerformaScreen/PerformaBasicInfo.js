@@ -108,20 +108,19 @@ export default function PerformaBasicInfo(props) {
     let basicPrice = performaPriceDetail?.vehBasicAmount
     setDiscountValue(d)
     let dis = Number(d)
-    let tax = taxValue 
-    let discount_Tax = Math.round(((dis*100)/(tax+100)),0)
-    let basicDiscount = basicPrice-discount_Tax
+    let tax = isNaN(taxValue) ? 0 : taxValue
+    let discount_Tax = isNaN(Math.round(((dis*100)/(tax+100)),0)) ? 0 :  Math.round(((dis*100)/(tax+100)),0) 
+    let basicDiscount = isNaN(basicPrice-discount_Tax) ? 0 : basicPrice-discount_Tax
     setDiscountPerTex(discount_Tax)
-    setBasicPriceDiscount(basicPrice-discount_Tax)
-    console.log("ddd"+discount_Tax)
+    setBasicPriceDiscount(basicDiscount)
 
     let newArray = []
     let newTaxTotal = 0
     let newSubCharge = 0
     let newTotal = 0
      texMasterData?.selectedProformaValueCodes.map((item)=>{
-        newTaxTotal= newTaxTotal+Number(item.perc)
-        newSubCharge = newSubCharge + Number(item.surcharge)
+        newTaxTotal= newTaxTotal+Number(item?.perc)
+        newSubCharge = newSubCharge + Number(item?.surcharge)
         let newCal =  Math.round(((Number(basicDiscount)*Number(item.perc))/100),0)
         newTotal = newTotal +newCal
        item["total"] = newCal
@@ -129,12 +128,12 @@ export default function PerformaBasicInfo(props) {
      })
  
      setTexMaster([...newArray])
-     setTexTotal(newTaxTotal)
-     setSurchargeData(newSubCharge)
-     setTotalAmount(newTotal)
+     setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal)
+     setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge)
+     setTotalAmount(isNaN(newTotal) ? 0 : newTotal)
      if(texMasterData?.tcsDetail?.tcsApplicable==="Y"){
         let newTcs = Math.round(((newTotal+basicDiscount)*texMasterData?.tcsDetail?.tcsRate)/100,0)
-        setTcsValue(newTcs)
+        setTcsValue(isNaN(newTcs) ? 0 : newTcs)
         setTcsStatus(true)
      }{
       setTcsStatus(false)
