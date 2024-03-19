@@ -898,13 +898,14 @@ const performDetailCallBack = (res) => {
              getTermsInfoAndMove={()=>fn_GetTerms()}
             />}
             {active === 4 && <PerformaTerm term_Data={termData}
-            moveToPerformaInvoice={()=>setActive(5)}
+            moveToPerformaInvoice={()=>getPrformaPdf()}
             />}
 
             {active === 5 && <DownloadPerforma
             performaGeneralMasterData={proformaGeneralMasters}
             performaBasicInfo={performaBasicDataHeader}
             invoice_Data = {invoiceData}
+            fn_Next={()=>null}
             />}
          </View>
 

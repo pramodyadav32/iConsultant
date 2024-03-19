@@ -60,6 +60,7 @@ export const APIName = {
   SaveExistingVehicle : baseUrl + 'ExistingVehicle/SaveExistingVehicle',
   GetProformaDetals : baseUrl + 'Proforma/GetProformaDetals',
   GetProformaPDF : baseUrl + 'Proforma/GetProformaPDF',
+  CancelProforma : baseUrl + 'Proforma/CancelProforma',
 
 }
 

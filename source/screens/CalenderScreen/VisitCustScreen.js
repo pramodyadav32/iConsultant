@@ -33,6 +33,7 @@ const fn_EmptyComp=()=>{
 }
 
   const renderItem=({item,index})=>{
+    console.log("item",item)
     return(
         <View style={styles.driveListMainView}>
             <View style={styles.driveListTopView}>
