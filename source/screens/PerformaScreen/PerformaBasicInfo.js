@@ -313,7 +313,7 @@ export default function PerformaBasicInfo(props) {
         coNo: 0,
         piLocation: cardData?.prospectLocation, //prospect location
         piDoc: "SRP",
-        piFY: "2023-2024", //current datefy
+        piFY: performaBasicInfo?.proformaList.length > 0 ?  performaBasicInfo?.proformaList[0]?.docFy : "", //current datefy
         piNo: Number(prospect_No),
         priceListApplicable: "CURRENT_DATE",//moment(new Date()).format("DD-MMM-YYYY"),
         make: userData?.brandCode,
