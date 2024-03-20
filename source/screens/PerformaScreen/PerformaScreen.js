@@ -559,7 +559,7 @@ export default function PerformaScreen(props) {
    }
 
 
-   const fn_TabClick = (type) => {
+   const  fn_TabClick = (type) => {
       if (type === 0) {
          setActive(type)
       } else if (type === 1) {
@@ -854,7 +854,7 @@ const performDetailCallBack = (res) => {
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
-                                 fn_TabClick(index, item)
+                                 // fn_TabClick(index, item)
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}

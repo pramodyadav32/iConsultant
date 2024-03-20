@@ -44,7 +44,7 @@ const fn_EmptyComp=()=>{
             <View style={styles.driveListDetailView}>
              <View style={styles.driveListDetailSubView}>
                 <Text style={styles.listText2}>Prospect ID</Text>
-                <Text style={styles.listText3}>{item?.pNo}</Text>
+                <Text style={styles.listText3}>{item?.prospectId}</Text>
              </View>
              <View style={styles.driveListDetailSubView2}>
                 <Text style={styles.listText2}>Next Action</Text>

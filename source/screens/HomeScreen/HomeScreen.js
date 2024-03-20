@@ -42,7 +42,8 @@ export default function HomeScreen(props) {
   const [testdriveCount,setTestDriveCount] = useState(0)
   const scaleValue = new Animated.Value(1);
   const [dataCounts,setDataCounts] = useState({})
-
+  const [testCount,setTestCount] = useState(0)
+  const [activeCount,setActiveCount] = useState(0)
   const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
  
   // useEffect(() => {
@@ -101,7 +102,9 @@ export default function HomeScreen(props) {
       res?.result.testDeriveTodayList != null ? setTestDriveData(res.result?.testDeriveTodayList) : null
       res?.result.activeProspectList != null ? setActiveProspect(res.result?.activeProspectList) : null
       setDataCounts(res.result?.dataCounts)
-       const groupedData = {};
+      setTestCount((res.result?.dataCounts?.totalDoneTestDriveToday/res.result?.dataCounts?.totalTestDriveToday))
+      setActiveCount((res.result?.dataCounts?.totalActionToday/res.result?.dataCounts?.totalDoneActionToday))
+      const groupedData = {};
 
    await res.result?.upcommingActionList.forEach(item => {
   const dateKey = item.actionDate;
@@ -224,7 +227,6 @@ export default function HomeScreen(props) {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
       <StatusBar translucent={false} />
       <HomeHeader title='Home' mainExt={styles.drawerStyle} showDrawer={navigation} />
-        {Object.keys(dataCounts).length===0 ? null :
         <View style={{ position: "relative", paddingHorizontal: constant.moderateScale(10), paddingVertical: constant.moderateScale(5) }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Pressable onPress={() => fn_Button(1)} style={ deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle}  >
@@ -233,15 +235,15 @@ export default function HomeScreen(props) {
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
-                    size={constant.moderateScale(50)}
+                    size={constant.moderateScale(60)}
                     indeterminate={false}
-                    progress={(dataCounts?.totalActionToday/dataCounts?.totalDoneActionToday)}
+                    progress={activeCount}
                     color={'#FE0F17'}
                     animated={true}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}
-                    thickness={6}
-                    showsText={false}
+                    thickness={deviceSize ? 8 : 5}
+                    showsText={dataCounts?.totalDoneTestDriveToday != undefined ? true :false}
                     textStyle={{
                       fontSize: constant.moderateScale(15),
                       fontFamily: constant.typeRegular,
@@ -274,12 +276,12 @@ export default function HomeScreen(props) {
                   <Progress.Circle
                     size={constant.moderateScale(60)}
                     indeterminate={false}
-                    progress={(dataCounts?.totalDoneTestDriveToday/dataCounts?.totalTestDriveToday)}
+                    progress={testCount}
                     color={'#FE0F17'}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}
-                    thickness={8}
-                    showsText={false}
+                    thickness={deviceSize ? 8 : 5}
+                    showsText={dataCounts?.totalDoneTestDriveToday != undefined ? true :false}
                     textStyle={{
                       fontSize: constant.moderateScale(15),
                       fontFamily: constant.typeRegular,
@@ -328,7 +330,6 @@ export default function HomeScreen(props) {
 
         }
         </View>
-}
         <View style={styles.topButtonView}>
           <Pressable style={styles.userButton} onPress={() => fn_buttonClick(1)}>
             <Text style={styles.userText}>Create Prospect</Text>
