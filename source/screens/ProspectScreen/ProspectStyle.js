@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     proceedButton:{
      width:constant.moderateScale(135),
      alignSelf:'center',
-     marginTop:constant.resW(30),
+     marginTop:constant.resW(20),
      marginBottom:constant.resW(5)
     },
     proccedButtonText:{

@@ -46,6 +46,7 @@ export default function EditProspectInfo(props) {
     const [res_City, setRes_City] = useState([])
     const [res_CityData,setRes_CityData] = useState([])
     const [res_destictData,setRes_DistictData]= useState([])
+    const [res_StateData,setRes_StateData] = useState([])
     const [res_destict, setRes_Destict] = useState({})
     const [res_Pin, setRes_Pin] = useState("")
     const [res_Phone, setRes_Phone] = useState('')
@@ -57,6 +58,7 @@ export default function EditProspectInfo(props) {
     const [reg_City, setReg_City] = useState({})
     const [reg_CityData,setReg_CityData] = useState([])
     const [reg_destictData,setReg_DistictData]= useState([])
+    const [reg_StateData,setRegStateData] = useState([])
     const [reg_destict, setReg_Destict] = useState({})
     const [reg_Pin, setReg_Pin] = useState("")
     const [reg_Phone, setReg_Phone] = useState('')
@@ -71,6 +73,7 @@ export default function EditProspectInfo(props) {
     const [off_destict, setOff_Destict] = useState({})
     const [off_Pin, setOff_Pin] = useState("")
     const [off_Phone, setOff_Phone] = useState('')
+    const [off_StateData,setOffStateData] = useState([])
 
     const [copyToRes, setCopyToRes] = useState(false)
     const [copyToOff, setCopyToOff] = useState(false)
@@ -80,6 +83,8 @@ export default function EditProspectInfo(props) {
         prospectMaster.map((item) => {
           if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)
+                setRes_StateData(item?.prospectMasterList)
+                setOffStateData(item?.prospectMasterList)
                 item.prospectMasterList.map((item) => {
                     item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
                     item?.code === prospectDetail?.resState ? prospectDetail?.resState != '' ? fn_GetProspectMaster(item,2) : null : null
@@ -141,30 +146,66 @@ export default function EditProspectInfo(props) {
     }
 
     const fn_copyAddress1 = () => {
-        setRes_Add1(regAdd1)
-        setRes_Add2(regAdd2)
-        setRes_Add3(regAdd3)
-        setRes_State(reg_State)
-        setRes_City(reg_City)
-        setRes_Destict(reg_destict)
-        setRes_Pin(reg_Pin)
-        setRes_Phone(reg_Phone)
-        setCopyToRes(!copyToRes)
+        if(copyToRes){
+            setRes_Add1(prospectDetail?.resAddress1)
+            setRes_Add2(prospectDetail?.resAddress2)
+            setRes_Add3(prospectDetail?.resAddress3)
+            setRes_Phone(prospectDetail?.resPhone)
+            setRes_Pin(prospectDetail?.resPincode)
+            basicState(2)          
+            setCopyToRes(false)
+        }else{
+            // setReg_Destict({})
+            setRes_Add1(regAdd1)
+            setRes_Add2(regAdd2)
+            setRes_Add3(regAdd3)
+            setRes_State(reg_State)
+            setRes_City(reg_City)
+            setRes_Destict(reg_destict)
+            setRes_Pin(reg_Pin)
+            setRes_Phone(reg_Phone)
+            setCopyToRes(true)
+            // setRes_CityData([])
+            // setRes_DistictData([])
+            fn_GetProspectMaster2(reg_State,2)          
+        }
     }
 
     const fn_copyAddress2 = () => {
-        setReg_Add1(regAdd1)
-        setReg_Add2(regAdd2)
-        setReg_Add3(regAdd3)
-        setReg_State(reg_State)
-        setReg_City(reg_City)
-        setReg_Destict(reg_destict)
-        setReg_Pin(reg_Pin)
-        setReg_Phone(reg_Phone)
-        setCopyRegToOff(!copyToOff)
+        if(copyToOff){
+            setOff_Add1(prospectDetail?.offcAddress1)
+            setOff_Add2(prospectDetail?.offcAddress2)
+            setOff_Add3(prospectDetail?.offcAddress3)
+            setOff_Phone(prospectDetail?.offcPincode)
+            setOff_Pin(prospectDetail?.offcPhone)
+            basicState(3)  
+            setCopyToOff(false) 
+        }else{
+            setOff_Add1(regAdd1)
+            setOff_Add2(regAdd2)
+            setOff_Add3(regAdd3)
+            setOff_State(reg_State)
+            setOff_City(reg_City)
+            setOff_Destict(reg_destict)
+            setOff_Pin(reg_Pin)
+            setOff_Phone(reg_Phone)
+            setCopyToOff(true)
+            // setOff_CityData([])
+            // setOff_DistictData([])
+            fn_GetProspectMaster2(reg_State,3)  
+        }
     }
 
     const fn_copyAddress3 = () => {
+        if(copyRegToOff){
+            setOff_Add1(prospectDetail?.offcAddress1)
+            setOff_Add2(prospectDetail?.offcAddress2)
+            setOff_Add3(prospectDetail?.offcAddress3)
+            setOff_Phone(prospectDetail?.offcPincode)
+            setOff_Pin(prospectDetail?.offcPhone)
+            basicState(3)  
+            setCopyRegToOff(false) 
+        }else{
         setOff_Add1(resAdd1)
         setOff_Add2(resAdd2)
         setOff_Add3(resAdd3)
@@ -173,10 +214,108 @@ export default function EditProspectInfo(props) {
         setOff_Destict(res_destict)
         setOff_Pin(res_Pin)
         setOff_Phone(res_Phone)
-        setCopyRegToOff(!copyRegToOff)
+        setCopyRegToOff(true)
+        fn_GetProspectMaster2(res_State,3) 
+        }
+    }
+
+    const basicState=(type)=>{
+        prospectMaster.map((item) => {
+            if (item.listType === 'STATE') {
+                setStateData(item.prospectMasterList)
+                setRes_StateData(item?.prospectMasterList)
+                setOffStateData(item?.prospectMasterList)
+                  item.prospectMasterList.map((item) => {
+                    //   item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
+                   type===2 && item?.code === prospectDetail?.resState ? prospectDetail?.resState != '' ? fn_GetProspectMaster(item,2) : null : null
+                   type===3 && item?.code === prospectDetail?.offcState ? prospectDetail?.offcState != '' ? fn_GetProspectMaster(item,3) : null : null
+  
+                  })
+              } else if (item.listType === 'CITY') {
+                  item.prospectMasterList.map((item) => {
+                    //   item?.code === prospectDetail?.regnCity ? prospectDetail?.regnCity != '' ? setReg_City(item) : null : null
+                    type===2 && item?.code === prospectDetail?.resCity ? prospectDetail?.resCity != '' ? setRes_City(item) : null : null
+                    type===3 && item?.code === prospectDetail?.offcCity ? prospectDetail?.offcCity != '' ? setOff_City(item) : null : null
+  
+                  })
+                  setCityData(item.prospectMasterList)
+              } 
+          })
+    }
+
+    const fn_GetProspectMaster2 = (item,type) => {
+        console.log("item",item)
+        dispatch(emptyLoader_Action(true))
+     type=== 1? setReg_State(item) : type === 2 ? setRes_State(item) : setOff_State(item)
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "branchCode": selectedBranch?.branchCode,
+            "calledBy": "CITY,DISTRICT",
+            "entityCode": "",
+            "title": "",
+            "stateCode": item?.code,
+            "corpDealCategory": "",
+            "dealType": "",
+            "purchaseIntension": "",
+            "prospectType": "",
+            "importance": "",
+            "financer": "",
+            "drivenBy": "",
+            "gender": "",
+            "teams": "",
+            "empId": "",
+            "custType": "",
+            "competitionModelSearch": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+
+        }
+        tokenApiCall(GetProspectMasterCallBack2, APIName.GetProspectMaster, "POST", param,type)
+    }
+
+    const GetProspectMasterCallBack2 = async (res,type) => {
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            if(type===1){
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setReg_CityData(item?.prospectMasterList)
+                    }else{
+                        setReg_DistictData(item?.prospectMasterList)
+
+                    }
+                })
+            }else if(type===2){
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setRes_CityData(item?.prospectMasterList)
+                    }else{
+                        setRes_DistictData(item?.prospectMasterList)
+                      
+                    }
+                })
+            }else{
+                res.result.map((item)=>{
+                    if(item?.listType==='CITY'){
+                        setOff_CityData(item?.prospectMasterList)
+                    }else{
+                        setOff_DistictData(item?.prospectMasterList)
+
+                    }
+                })
+            }
+        } else {
+
+            constant.showMsg(res.message)
+        }
     }
 
     const fn_GetProspectMaster = (item,type) => {
+        console.log("item",item)
+        dispatch(emptyLoader_Action(true))
      type=== 1? setReg_State(item) : type === 2 ? setRes_State(item) : setOff_State(item)
         let param = {
             "brandCode": userData?.brandCode,
@@ -209,6 +348,7 @@ export default function EditProspectInfo(props) {
 
     const GetProspectMasterCallBack = async (res,type) => {
         console.log("search1111", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
             if(type===1){
                 res.result.map((item)=>{
@@ -597,15 +737,27 @@ export default function EditProspectInfo(props) {
                             <View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Address (Regn.)</Text>
-                                    <TextInput onChangeText={(d) => { setReg_Add1(d) }} style={styles.input1} >{regAdd1}</TextInput>
+                                    <TextInput onChangeText={(d) => { 
+                                        setReg_Add1(d) 
+                                        setCopyToRes(false)
+                                        setCopyToOff(false)
+                                        }} style={styles.input1} >{regAdd1}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setReg_Add2(d) }} style={styles.input1} >{regAdd2}</TextInput>
+                                    <TextInput onChangeText={(d) => {
+                                         setReg_Add2(d) 
+                                         setCopyToRes(false)
+                                         setCopyToOff(false)
+                                         }} style={styles.input1} >{regAdd2}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setReg_Add3(d) }} style={styles.input1} >{regAdd3}</TextInput>
+                                    <TextInput onChangeText={(d) => { 
+                                        setReg_Add3(d)
+                                        setCopyToRes(false)
+                                        setCopyToOff(false)
+                                         }} style={styles.input1} >{regAdd3}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>State</Text>
@@ -615,7 +767,14 @@ export default function EditProspectInfo(props) {
                                             title={reg_State?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => fn_GetProspectMaster(d,1)}
+                                            on_Select={(d) =>{ 
+                                                setCopyToRes(false)
+                                                setCopyToOff(false)
+                                                setReg_CityData([])
+                                                setReg_City({})
+                                                setReg_DistictData([])
+                                                setReg_Destict({})
+                                                fn_GetProspectMaster(d,1)}}
                                         />
                                     </View>
                                 </View>
@@ -628,7 +787,11 @@ export default function EditProspectInfo(props) {
                                             title={reg_City?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setReg_City(d)}
+                                            on_Select={(d) =>{ 
+                                                setReg_City(d)
+                                                setCopyToRes(false)
+                                                setCopyToOff(false)
+                                            }}
 
                                         />
                                     </View>
@@ -642,7 +805,11 @@ export default function EditProspectInfo(props) {
                                             title={reg_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setReg_Destict(d)}
+                                            on_Select={(d) =>{
+                                                 setReg_Destict(d)
+                                                 setCopyToRes(false)
+                                                 setCopyToOff(false)
+                                            }}
                                         />
                                     </View>
                                 </View>
@@ -650,7 +817,11 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput maxLength={6} onChangeText={(d) => { setReg_Pin(d) }} style={styles.input1} >{reg_Pin}</TextInput>
+                                        <TextInput maxLength={6} onChangeText={(d) => { 
+                                            setReg_Pin(d)
+                                            setCopyToRes(false)
+                                            setCopyToOff(false)
+                                             }} style={styles.input1} >{reg_Pin}</TextInput>
 
                                     </View>
                                 </View>
@@ -658,7 +829,11 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput maxLength={10} onChangeText={(d) => { setReg_Phone(d) }} style={styles.input1} >{reg_Phone}</TextInput>
+                                        <TextInput maxLength={10} onChangeText={(d) => { 
+                                            setReg_Phone(d) 
+                                            setCopyToRes(false)
+                                            setCopyToOff(false)
+                                            }} style={styles.input1} >{reg_Phone}</TextInput>
 
                                     </View>
                                 </View>
@@ -684,25 +859,43 @@ export default function EditProspectInfo(props) {
                             <View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Address (Regn.)</Text>
-                                    <TextInput onChangeText={(d) => { setRes_Add1(d) }} style={styles.input1} >{resAdd1}</TextInput>
+                                    <TextInput onChangeText={(d) => { 
+                                        setRes_Add1(d)
+                                        setCopyRegToOff(false) 
+                                        }} style={styles.input1} >{resAdd1}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setRes_Add2(d) }} style={styles.input1} >{resAdd2}</TextInput>
+                                    <TextInput onChangeText={(d) => {
+                                         setRes_Add2(d)
+                                         setCopyRegToOff(false)
+                                          }} style={styles.input1} >{resAdd2}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setRes_Add3(d) }} style={styles.input1} >{resAdd3}</TextInput>
+                                    <TextInput onChangeText={(d) => {
+                                         setRes_Add3(d) 
+                                         setCopyRegToOff(false)
+                                         }} style={styles.input1} >{resAdd3}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>State</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={stateData}
+                                            list={res_StateData}
                                             title={res_State?.description}
+                                            refType={Object.keys(res_State).length===0 ?false : true}
+
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => fn_GetProspectMaster(d,2)}
+                                            on_Select={(d) => {
+                                                setCopyRegToOff(false)
+                                                setRes_CityData([])
+                                                setRes_City({})
+                                                setRes_DistictData([])
+                                                setRes_Destict({})
+                                                fn_GetProspectMaster(d,2)}
+                                            }
                                         />
                                     </View>
                                 </View>
@@ -713,9 +906,14 @@ export default function EditProspectInfo(props) {
                                         <SelectDropList
                                             list={res_CityData}
                                             title={res_City?.description}
+                                            refType={Object.keys(res_City).length===0 ?false : true}
+
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setRes_City(d)}
+                                            on_Select={(d) => {
+                                                setCopyRegToOff(false)
+                                                setRes_City(d)
+                                            }}
 
                                         />
                                     </View>
@@ -726,10 +924,14 @@ export default function EditProspectInfo(props) {
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
                                             list={res_destictData}
+                                            refType={Object.keys(res_destict).length===0 ?false : true}
                                             title={res_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => setRes_Destict(d)}
+                                            on_Select={(d) => {
+                                                setCopyRegToOff(false)
+                                                setRes_Destict(d)
+                                            }}
                                         />
                                     </View>
                                 </View>
@@ -737,7 +939,10 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput maxLength={6} onChangeText={(d) => { setRes_Pin(d) }} style={styles.input1} >{res_Pin}</TextInput>
+                                        <TextInput maxLength={6} onChangeText={(d) => {
+                                             setRes_Pin(d)
+                                             setCopyRegToOff(false)
+                                              }} style={styles.input1} >{res_Pin}</TextInput>
 
                                     </View>
                                 </View>
@@ -745,7 +950,10 @@ export default function EditProspectInfo(props) {
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
                                     <View style={styles.mobileSubView}>
-                                        <TextInput maxLength={10} onChangeText={(d) => { setRes_Phone(d) }} style={styles.input1} >{res_Phone}</TextInput>
+                                        <TextInput maxLength={10} onChangeText={(d) => { 
+                                            setRes_Phone(d) 
+                                            setCopyRegToOff(false)
+                                            }} style={styles.input1} >{res_Phone}</TextInput>
 
                                     </View>
                                 </View>
@@ -777,11 +985,19 @@ export default function EditProspectInfo(props) {
                                     <Text style={styles.detailText}>State</Text>
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
-                                            list={stateData}
+                                            list={off_StateData}
                                             title={off_State?.description}
+                                            refType={Object.keys(off_State).length===0 ?false : true}
+
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
-                                            on_Select={(d) => fn_GetProspectMaster(d,3)}
+                                            on_Select={(d) =>{ 
+                                                setOff_CityData([])
+                                                setOff_City({})
+                                                setOff_DistictData([])
+                                                setOff_Destict({})
+                                                fn_GetProspectMaster(d,3)
+                                            }}
                                         />
                                     </View>
                                 </View>
@@ -792,6 +1008,8 @@ export default function EditProspectInfo(props) {
                                         <SelectDropList
                                             list={off_CityData}
                                             title={off_City?.description}
+                                            refType={Object.keys(off_City).length===0 ?false : true}
+
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}
                                             on_Select={(d) => setOff_City(d)}
@@ -805,6 +1023,7 @@ export default function EditProspectInfo(props) {
                                     <View style={styles.mobileSubView}>
                                         <SelectDropList
                                             list={off_destictData}
+                                            refType={Object.keys(off_destictData).length===0 ?false : true}
                                             title={off_destict?.description}
                                             buttonExt={styles.dropList}
                                             textExt={styles.dropListText}

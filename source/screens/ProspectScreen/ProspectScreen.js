@@ -1282,7 +1282,7 @@ export default function ProspectScreen(props) {
             </View>
             <Button
               title="Proceed"
-              buttonExt={styles.proceedButton}
+              buttonExt={[styles.proceedButton,{marginTop:constant.resW(6),}]}
               textExt={styles.proccedButtonText}
               click_Action={() => fn_General_Validation()}
             />
