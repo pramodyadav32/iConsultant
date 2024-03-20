@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import {
    FlatList,
    View,
@@ -82,6 +82,7 @@ const data3 = [
 export default function PerformaScreen(props) {
    const { navigation, route } = props
    const dispatch = useDispatch()
+   const flatListRef = useRef(null)
    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(0)
@@ -114,6 +115,7 @@ export default function PerformaScreen(props) {
    }, [])
 
    const fn_GetProformaGeneralMasters = (data) => {
+      dispatch(emptyLoader_Action(true))
       let param = {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
@@ -155,7 +157,9 @@ export default function PerformaScreen(props) {
 
    const GetProformaGeneralMastersCallBack = (res) => {
       console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
+      dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
+         
          setProformaGeneralMasters(res.result);
          setVehiclePriceDetail(res.result?.vehPrice);
          fn_GetProformaTaxMasters(res.result?.vehPrice)
@@ -227,6 +231,11 @@ export default function PerformaScreen(props) {
          }
          setintrestedVehicleList(res?.result?.intrestedVehicleList[0])
          fn_GetProformaGeneralMasters(res?.result?.intrestedVehicleList[0])
+         setActive(0)
+         flatListRef?.current?.scrollToIndex({
+            animated: true,
+            index: 0
+        })
       } else {
          constant.showMsg(res.message);
       }
@@ -564,6 +573,7 @@ export default function PerformaScreen(props) {
          setActive(type)
       } else if (type === 1) {
          setActive(type)
+        
       } else if (type === 2) {
          fn_GetProformaInsuMaster()
          // fn_GetPackage()
@@ -572,7 +582,7 @@ export default function PerformaScreen(props) {
       } else if (type === 4) {
          fn_GetTerms()
       }else if(type===5){
-         
+        
          getPrformaPdf()
       }
 
@@ -838,6 +848,7 @@ const performDetailCallBack = (res) => {
                <FlatList
                   horizontal
                   data={data3}
+                  ref={flatListRef}
                   showsHorizontalScrollIndicator={false}
                   ItemSeparatorComponent={() =>
                      common_fn.listVer_Space(constant.moderateScale(15))
@@ -849,12 +860,13 @@ const performDetailCallBack = (res) => {
                               index === active ? styles.tabButton : styles.tabButton2
                            }
                            onPress={() => {
+                              // fn_TabClick(index, item)
                               if(index === 0){
                                  fn_TabClick(index, item)
                               }else if(performaBasicDataHeader?.proformaList[0] !== undefined){
                                  fn_TabClick(index, item)
                               }else{
-                                 // fn_TabClick(index, item)
+                              
                                  constant.showMsg("No performa found for this prospect, please create performa first");
                               }
                            }}
@@ -918,7 +930,7 @@ const performDetailCallBack = (res) => {
             performaGeneralMasterData={proformaGeneralMasters}
             performaBasicInfo={performaBasicDataHeader}
             invoice_Data = {invoiceData}
-            fn_Next={()=>null}
+            fn_Next={()=> fn_GetProspectBasicInfo()}
             />}
          </View>
 

@@ -142,9 +142,14 @@ export default function DownloadPerforma(props) {
 
   const SaveInsuranceCallBack = (res) => {
     console.log("savePackage", JSON.stringify(res))
-    if (res.statusCode === 200) {
-      constant.showMsg("performa Cancel Successfully")
-      fn_Next()
+    if (res.statusCode === 200) {   
+      if(res?.result?.resultCode==='Y'){
+        constant.showMsg("performa Cancel Successfully")
+        fn_Next()  
+      }else{
+        constant.showMsg("Opp. Somethings wents wrong")      
+      }
+     
     } else {
       constant.showMsg(res.message)
     }
