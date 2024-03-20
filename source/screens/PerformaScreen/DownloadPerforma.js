@@ -82,9 +82,7 @@ export default function DownloadPerforma(props) {
       if (temp === "") {
         constant.showMsg("No PDF is available");
       } else {
-  
        storageRequestPermission(temp)
-     
       }
     } else {
       constant.showMsg("Somethings wents wrong");
