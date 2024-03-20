@@ -39,8 +39,14 @@ export default function DownloadPerforma(props) {
   const [listData, setListData] = useState([]);
   const [pdfPath, setPdfPath] = useState("");
   const [base64String, setBase64String] = useState("");
-  const [resourceType, setResourceType] = useState('file')
+  const [resourceType, setResourceType] = useState('base64')
+  const [resource,setResource] = useState({})
 
+  // const resources = {
+  //   file: pdfPath, //Platform.OS === 'ios' ? 'downloadedDocument.pdf' : '/sdcard/Download/downloadedDocument.pdf',
+  //   url: "https://www.africau.edu/images/default/sample.pdf",
+  //   base64: base64String,
+  // };
   useEffect(() => {
     console.log(
       "performaGeneralMasterData1111111 = ",
@@ -82,8 +88,13 @@ export default function DownloadPerforma(props) {
       if (temp === "") {
         constant.showMsg("No PDF is available");
       } else {
-  
-       storageRequestPermission(temp)
+        setResource({
+          file: '', //Platform.OS === 'ios' ? 'downloadedDocument.pdf' : '/sdcard/Download/downloadedDocument.pdf',
+          url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+          base64: temp,
+        })
+        // fn_CreatePdfFromBase64(temp);
+      //  storageRequestPermission(temp)
      
       }
     } else {
@@ -159,12 +170,16 @@ export default function DownloadPerforma(props) {
   const fn_CreatePdfFromBase64 = async (base64Data) => {
     const dirs = fs.dirs; //Use the dir API
    let  newPath = dirs.DocumentDir;
+   const blob = base64Data;
+   let date = new Date();
+   const filePath = newPath + '/' + Math.floor(date.getTime() + date.getSeconds() / 2) + '.pdf'
 
-    let fPath = `${newPath}/Invoice_${"doc_no"}.pdf`;
-
-    fs.writeFile(fPath, base64Data, "base64")
+    // let fPath = `${newPath}/Invoice_${"doc_no5"}.pdf`;
+    fs.writeFile(filePath,blob, "base64")
       .then((success) => {
-        setPdfPath(fPath);
+        constant.showMsg(` Pdf save to  file://${filePath}`);
+        setPdfPath(filePath);
+
       })
       .catch((err) => {
         console.log("aaaa error=", err.message);
@@ -174,35 +189,50 @@ export default function DownloadPerforma(props) {
   };
 
   const fn_SavePdf = () => {
-    constant.showMsg(` Pdf save to  ${pdfPath}`);
+    // constant.showMsg(` Pdf save to  ${pdfPath}`);
+    fn_CreatePdfFromBase64(resource?.base64)
   };
 
-  const fn_SharePdf = () => {
-    const options = {
-      title: "Performa Invoice",
-      url: `file://${pdfPath}`,
-      type: "file/pdf",
-    };
+  const fn_SharePdf = (base64Data) => {
 
-    Share.open(options)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        err && console.log(err);
-      });
+    const dirs = fs.dirs; //Use the dir API
+    let  newPath = dirs.DocumentDir;
+    const blob = base64Data
+    let date = new Date();
+    const filePath = newPath + '/' + Math.floor(date.getTime() + date.getSeconds() / 2) + '.pdf'
+ 
+     // let fPath = `${newPath}/Invoice_${"doc_no5"}.pdf`;
+     fs.writeFile(filePath,blob, "base64")
+       .then((success) => {
+        console.log('base',filePath)
+        const options = {
+          title: "Performa Invoice",
+          url: `file://${filePath}`,
+          type: "file/pdf",
+        };
+    
+        Share.open(options)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            err && console.log(err);
+          });
+ 
+       
+       })
+       .catch((err) => {
+         console.log("aaaa error=", err.message);
+       });
+   
   };
 
-  const resources = {
-    file: pdfPath, //Platform.OS === 'ios' ? 'downloadedDocument.pdf' : '/sdcard/Download/downloadedDocument.pdf',
-    url: "https://www.africau.edu/images/default/sample.pdf",
-    base64: base64String,
-  };
-
+ 
+ 
   return (
     <View style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <View
+        // showsVerticalScrollIndicator={false}
         style={{
           flex: 1,
           backgroundColor: constant.whiteColor,
@@ -210,15 +240,19 @@ export default function DownloadPerforma(props) {
           borderBottomLeftRadius: 10,
         }}
       >
+    
+        {Object.keys(resource).length > 0 &&
         <PDFView
           fadeInDuration={250.0}
           style={{ flex: 1 }}
-          resource={resources[resourceType]}
+          resource={resource[resourceType]}
           resourceType={resourceType}
           onLoad={() => console.log(`PDF rendered from ${resourceType}`)}
           onError={(error) => console.log("Cannot render PDF", error)}
         />
-      </ScrollView>
+ } 
+
+      </View>
       <View
         style={{
           flexDirection: "row",
@@ -234,7 +268,7 @@ export default function DownloadPerforma(props) {
         <Pressable
           style={styles.printerPerformaButton}
           onPress={() => {
-            fn_SavePdf();
+            fn_CreatePdfFromBase64(resource?.base64)
           }}
         >
           <FastImage source={images.download} style={styles.printerImage} />
@@ -242,7 +276,7 @@ export default function DownloadPerforma(props) {
         <Pressable
           style={styles.sharePerformaButton}
           onPress={() => {
-            fn_SharePdf();
+            fn_SharePdf(resource?.base64);
           }}
         >
           <FastImage source={images.share} style={styles.printerImage} />
