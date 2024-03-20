@@ -170,13 +170,13 @@ export default function PerformaInsurance(props) {
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "insuranceYN": selectState ? "Y" : "N",
       "insuLocation": selectState ? "" : "",
-      "insuCompanyCode": "string",
-      "insuBasicPreAmount": 0,
-      "insuGSTAmount": 0,
+      "insuCompanyCode": companyValue?.code,
+      "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
+      "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
     }
-    tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
+    // tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
   }
 
   const SaveInsuranceCallBack = (res) => {
@@ -227,7 +227,7 @@ export default function PerformaInsurance(props) {
     isNaN(loadingAmount) ? null : setLoadingAmt(Math.round(loadingAmount,0))
     let grossPremiumAmount = Number(premiumAmountAfterDiscount) + loadingAmount
     isNaN(grossPremiumAmount) ? null : setGrossAmt(Math.round(grossPremiumAmount,0))
-    let grossPremiumAmountAfterGST = Number(grossPremiumAmount) * 18/100
+    let grossPremiumAmountAfterGST = Number(grossPremiumAmount) + (Number(grossPremiumAmount) * 18)/100
     isNaN(grossPremiumAmountAfterGST) ? null : setTotalPayable(Math.round(grossPremiumAmountAfterGST,0))
     console.log("grossPremiumAmount = ", grossPremiumAmount)
     console.log("grossPremiumAmountAfterGST = ", grossPremiumAmountAfterGST)
@@ -235,16 +235,33 @@ export default function PerformaInsurance(props) {
     isNaN(gstAmount) ? null : setGstValue(Math.round(gstAmount,0))
   };
 
-  const resetDropDownData = () => {
+  const resetDropDownDataThirdParty = () => {
+    setLocationValue({})
+    setCompanyValue({})
     setCalOnValue({})
+    setIdvListValue({})
     setRateValue({})
-    setDiscountDepValue({})
-    setDiscountRuleValue({})
-    setOtherRateValue({})
     setNilDipCheckStatus(false)
     setNilDipSelectedData({})
+    setDiscountDepValue({})
     setNcbSelectedData({})
-    
+    setDiscountRuleValue({})
+    setOtherRateValue({})
+  }
+
+  const resetDropDownDataNoInsurance = () => {
+    setTypevalue({})
+    setLocationValue({})
+    setCompanyValue({})
+    setCalOnValue({})
+    setIdvListValue({})
+    setRateValue({})
+    setNilDipCheckStatus(false)
+    setNilDipSelectedData({})
+    setDiscountDepValue({})
+    setNcbSelectedData({})
+    setDiscountRuleValue({})
+    setOtherRateValue({})
   }
 
   return (
@@ -253,7 +270,10 @@ export default function PerformaInsurance(props) {
 
         <View style={styles.cal_SubView2}>
 
-        <Pressable onPress={()=>setSelectState(!selectState)}>
+        <Pressable onPress={()=>{
+          setSelectState(!selectState)
+          resetDropDownDataNoInsurance()
+          }}>
           <View style={[styles.selectMainView]}>
             <Text style={styles.detailText}>Select</Text>
             <FastImage source={selectState ? images.checkIcon : images.unCheckIcon} style={styles.selectCheckIcon} />
@@ -280,7 +300,10 @@ export default function PerformaInsurance(props) {
               disable={!selectState}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setTypevalue(d)}
+              on_Select={(d) => {
+                setTypevalue(d)
+                resetDropDownDataThirdParty()
+              }}
             />
           </View>
 
@@ -304,7 +327,6 @@ export default function PerformaInsurance(props) {
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCompanyValue(d)
-                resetDropDownData()
               }}
             />
           </View>

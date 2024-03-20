@@ -106,11 +106,12 @@ export default function PerformaRegistration(props) {
    registrationTypeList.map((item,index)=>{
     if(item.select){
      let newObj ={
+      "rtoAmtCalcBasis": item?.rtoAmtCalcBasis,
       "regnVersionSr": index,
       "costHeadCode": item?.code,
       "basicAmount": performaPriceDetail?.vehBasicAmount,
       "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
-      "totalAmount": parseInt(item.total)
+      "totalAmount": calculationOnData === "EX_SR_PRE_DISC" ? parseInt(item.totalPre) : parseInt(item.totalPost)
      }
      newList.push(newObj)
     }
@@ -124,7 +125,11 @@ if(custumerReg){
 }else if(newList?.length > 0){
   shouldSave = true
 }
-console.log("shouldSave =====", shouldSave)
+console.log("custumerReg =====", custumerReg)
+console.log("sourceValue =====", sourceValue)
+console.log("rtoLocationSelected =====", rtoLocationSelected)
+console.log("newList[0]?.rtoAmtCalcBasis =====", newList[0]?.rtoAmtCalcBasis)
+console.log("calculationOnValue?.code =====", calculationOnValue?.code)
 if(shouldSave){
    let param = {
     brandCode: userData?.brandCode,
@@ -139,14 +144,15 @@ if(shouldSave){
      "regnSource": sourceValue?.code,
      "regnType": "",
      "regnLocation": locationValue.code,
-     "regnRtoCode": locationValue?.code,
-     "rtoCalcType": sourceValue?.code,
+     "regnRtoCode": rtoLocationSelected?.code === undefined ? "" : rtoLocationSelected?.code,
+     "rtoCalcType": "CALC",
      "rtoCalcOn": calculationOnValue?.code,
      "rtoCalcMethod": custumerReg ? "" : newList[0]?.rtoAmtCalcBasis,
      "loginUserId":userData?.userId,
      "ipAddress": "1::1",
      "proformaRtoList": custumerReg ? [] : newList
     }
+    // console.log("param =====", param)
     tokenApiCall(reg_SaveCallBack, APIName.SaveProformaRegistration, "POST", param);
   }else{
     constant.showMsg("Please select RTO method");
@@ -234,7 +240,7 @@ const fn_PriceTotalCal=()=>{
   let add1 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add1 = add1+ (slectedCalcOn === "preDis" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
+   add1 = add1+ (calculationOnData === "EX_SR_PRE_DISC" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
     }
   })
   return(add1)
@@ -244,7 +250,7 @@ const fn_AddAmtTotalCal=()=>{
   let add2 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add2 = add2 +  (slectedCalcOn === "preDis" ? Number(item?.totalPre) : Number(item?.totalPost))
+   add2 = add2 +  (calculationOnData === "EX_SR_PRE_DISC" ? Number(item?.totalPre) : Number(item?.totalPost))
     }
   })
   return(add2)
@@ -293,7 +299,7 @@ const fn_AddAmtTotalCal=()=>{
               <Text style={styles.detailText}>Regn Code</Text>
               <SelectDropList
                 list={rtoLocation}
-                disable={true}
+                disable={false}
                 // title={locationValue.code==='' ? ' ' : locationValue?.code }
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
@@ -406,13 +412,13 @@ const fn_AddAmtTotalCal=()=>{
               />
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? item?.subTotal : 0}</Text>
+            <Text style={styles.text8}>{item?.select ? (calculationOnData === "EX_SR_PRE_DISC" ? item?.subTotalPre : item?.subTotalPost) : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
             <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? item?.total : 0}</Text>
+            <Text style={styles.text8}>{item?.select ? (calculationOnData === "EX_SR_PRE_DISC" ? item?.totalPre : item?.totalPost) : 0}</Text>
            </View>
           </View >
                 </View>
