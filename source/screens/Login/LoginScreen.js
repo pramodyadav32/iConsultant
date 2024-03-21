@@ -12,6 +12,7 @@ import * as constant from '../../utilities/constants'
 import * as common from '../../utilities/common_fn'
 import { apiCall, APIName } from '../../utilities/apiCaller'
 import { set_UserData } from '../../utilities/AsyncStorage';
+import TouchID from 'react-native-touch-id';
 
 export default function LoginScreen(props) {
 
@@ -50,6 +51,17 @@ export default function LoginScreen(props) {
         console.log("loginres"+JSON.stringify(res))
         if (res != undefined && res?.isAuthenticated) {
             dispatch(emptyLoader_Action(false))
+
+            Alert.alert(
+                '',
+                'Do you want to enable face id and touch id?',  
+                [
+                   {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                   {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                { cancelable: false }
+           )
+
             let data = { loginStatus : true , data: res?.loginContext, token: res?.token, outlets: res?.outlets }
             Async.set_UserData('true', res?.loginContext, res?.token, res?.outlets)
             dispatch(userData_Action(data))
