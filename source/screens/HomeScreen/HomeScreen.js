@@ -97,13 +97,18 @@ export default function HomeScreen(props) {
        initialValue,   
        )
        setTestDriveCount(sumWithInitial)
-      res?.result.actionTodayList != null ? setActionToday(res?.result.actionTodayList) : null
+       console.log("aaaaaaaaa res.result?.dataCounts?.totalDoneTestDriveToday=", res.result?.dataCounts?.totalDoneTestDriveToday)
+       console.log("aaaaaaaaa res.result?.dataCounts?.totalTestDriveToday=", res.result?.dataCounts?.totalTestDriveToday)
+       console.log("aaaaaaaaa res.result?.dataCounts?.totalActionToday=", res.result?.dataCounts?.totalActionToday)
+       console.log("aaaaaaaaa res.result?.dataCounts?.totalDoneActionToday=", res.result?.dataCounts?.totalDoneActionToday)
+       console.log((res.result?.dataCounts?.totalDoneTestDriveToday/res.result?.dataCounts?.totalTestDriveToday)*100)
+       res?.result.actionTodayList != null ? setActionToday(res?.result.actionTodayList) : null
       res?.result.upcommingActionList != null ? SetUpComingListData(res.result?.upcommingActionList) : null
       res?.result.testDeriveTodayList != null ? setTestDriveData(res.result?.testDeriveTodayList) : null
       res?.result.activeProspectList != null ? setActiveProspect(res.result?.activeProspectList) : null
       setDataCounts(res.result?.dataCounts)
-      setTestCount((res.result?.dataCounts?.totalDoneTestDriveToday/res.result?.dataCounts?.totalTestDriveToday))
-      setActiveCount((res.result?.dataCounts?.totalActionToday/res.result?.dataCounts?.totalDoneActionToday))
+      setTestCount((Number(res.result?.dataCounts?.totalDoneTestDriveToday)/Number(res.result?.dataCounts?.totalTestDriveToday))*100)
+      setActiveCount((Number(res.result?.dataCounts?.totalDoneActionToday)/Number(res.result?.dataCounts?.totalActionToday))*100)
       const groupedData = {};
 
    await res.result?.upcommingActionList.forEach(item => {
@@ -231,7 +236,7 @@ export default function HomeScreen(props) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Pressable onPress={() => fn_Button(1)} style={ deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle}  >
               <Text style={styles.boxText}>Actions Today</Text>
-              {console.log("dataCounts",dataCounts)}
+              {console.log("aaaaaaaaaaa dataCounts",activeCount, dataCounts?.totalDoneTestDriveToday)}
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
@@ -271,12 +276,13 @@ export default function HomeScreen(props) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: constant.moderateScale(6) }}>
             <Pressable onPress={() => fn_Button(3)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
               <Text style={styles.boxText}>Test Drives Today</Text>
+              {console.log("aaaaaaaaaaa testCount = ", testCount, dataCounts?.totalDoneTestDriveToday)}
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
                     size={constant.moderateScale(60)}
                     indeterminate={false}
-                    progress={testCount}
+                    progress={isNaN(testCount) ? 0 : testCount}
                     color={'#FE0F17'}
                     unfilledColor={'#FE0F1730'}
                     borderWidth={0}
