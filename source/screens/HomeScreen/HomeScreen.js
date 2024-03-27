@@ -236,13 +236,12 @@ export default function HomeScreen(props) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Pressable onPress={() => fn_Button(1)} style={ deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle}  >
               <Text style={styles.boxText}>Actions Today</Text>
-              {console.log("aaaaaaaaaaa dataCounts",activeCount, dataCounts?.totalDoneTestDriveToday)}
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
                     size={constant.moderateScale(60)}
                     indeterminate={false}
-                    progress={activeCount}
+                    progress={isNaN(activeCount)? 0 : activeCount}
                     color={'#FE0F17'}
                     animated={true}
                     unfilledColor={'#FE0F1730'}
@@ -256,7 +255,6 @@ export default function HomeScreen(props) {
                     }}
 
                   />
-                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("ActionTodayScreen",{dataList:Action_Today})} style={styles.homeSubBoxText}>{Action_Today.length}</Text>
 
@@ -276,7 +274,6 @@ export default function HomeScreen(props) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: constant.moderateScale(6) }}>
             <Pressable onPress={() => fn_Button(3)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
               <Text style={styles.boxText}>Test Drives Today</Text>
-              {console.log("aaaaaaaaaaa testCount = ", testCount, dataCounts?.totalDoneTestDriveToday)}
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
@@ -295,7 +292,6 @@ export default function HomeScreen(props) {
                     }}
 
                   />
-                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
                 </View>
                 <Text onPress={() => navigation.navigate("TodayTestDriveScreen",{dataList : test_DriveData})} style={styles.homeSubBoxText}>{testdriveCount}</Text>
 
@@ -305,24 +301,7 @@ export default function HomeScreen(props) {
               <Text style={styles.boxText}>Active Prospect</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
-                  {/* <Progress.Circle
-                    size={constant.moderateScale(50)}
-                    indeterminate={false}
-                    progress={activeProspect.length/100}
-                    color={'#FE0F17'}
-                    unfilledColor={'#FE0F1730'}
-                    borderWidth={0}
-                    thickness={8}
-                    showsText={true}
-                    textStyle={{
-                      fontSize: constant.moderateScale(15),
-                      fontFamily: constant.typeRegular,
-                      color: '#535353'
-                    }}
-
-                  /> */}
-                  {/* <FastImage source={images.DashboardIcon} resizeMode='contain' style={styles.dashBoardIcon} /> */}
-                </View>
+              </View>
                 <Text onPress={() => navigation.navigate("ActionProspectScreen",{dataList:activeProspect})} style={styles.homeSubBoxText}>{activeProspect.length}</Text>
 
               </View>

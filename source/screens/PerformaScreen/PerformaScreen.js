@@ -228,9 +228,11 @@ export default function PerformaScreen(props) {
             setPerformaNo(0)
          }else{
             res?.result?.proformaList.length > 0 ?  setPerformaNo(res?.result?.proformaList[0]?.docNo) : setPerformaNo(0)
+            res?.result?.proformaList.length > 0 ? fn_performDetail(res?.result?.proformaList[0],1) : null
          }
          setintrestedVehicleList(res?.result?.intrestedVehicleList[0])
          fn_GetProformaGeneralMasters(res?.result?.intrestedVehicleList[0])
+       
          setActive(0)
          flatListRef?.current?.scrollToIndex({
             animated: true,
@@ -766,13 +768,13 @@ export default function PerformaScreen(props) {
    //   dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
-       fn_performDetail(res?.result?.proformaList[0])
+       fn_performDetail(res?.result?.proformaList[0],2)
       } else {
          constant.showMsg(res.message);
       }
 };
 
-const fn_performDetail=(data)=>{
+const fn_performDetail=(data,type)=>{
    let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -789,17 +791,20 @@ const fn_performDetail=(data)=>{
       performDetailCallBack,
       APIName.GetProformaDetals,
       "POST",
-      param
+      param,
+      type
    );
 }
 
-const performDetailCallBack = (res) => {
+const performDetailCallBack = (res,type) => {
    console.log("SaveBasicInfoCal = ", JSON.stringify(res));
      dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformHeaderData(res?.result)
+         if(type===2){
          setActive(1)
          constant.showMsg("Basic Info save successfully")
+         }
       } else {
          constant.showMsg(res.message);
       }
@@ -912,7 +917,7 @@ const performDetailCallBack = (res) => {
                generalMaster_Data = {generalMasterData}
                insuranceLoc_Data = {ins_Location}
                performaBasicInfo={performaBasicDataHeader}
-
+               fn_Next={()=> fn_Registration()}
                />
             }
             {active === 3 && <PerformaRegistration 

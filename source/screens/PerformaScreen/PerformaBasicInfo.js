@@ -743,7 +743,7 @@ export default function PerformaBasicInfo(props) {
                   <Text style={styles.listText2}>
                     Ex-Showroom(Post Discount)
                   </Text>
-                  <Text style={styles.listText3}>{exShowRoomPostPrice}</Text>
+                  <Text style={styles.listText3}>{exShowRoomPostPrice+tcsValue}</Text>
                 </View>
               </View>
 

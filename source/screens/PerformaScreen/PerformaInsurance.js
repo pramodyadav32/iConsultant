@@ -73,7 +73,7 @@ const ncbRateData = [
 ]
 
 export default function PerformaInsurance(props) {
-  const { navigation, insurance_Data, generalMaster_Data, insuranceLoc_Data,performaBasicInfo } = props
+  const { navigation, insurance_Data,fn_Next ,generalMaster_Data, insuranceLoc_Data,performaBasicInfo } = props
   const dispatch = useDispatch()
   const { userData } = useSelector(state => state.AuthReducer)
   const [selectState, setSelectState] = useState(false)
@@ -176,12 +176,18 @@ export default function PerformaInsurance(props) {
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
     }
-    // tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
+    tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
   }
 
   const SaveInsuranceCallBack = (res) => {
     console.log("savePackage", JSON.stringify(res))
     if (res.statusCode === 200) {
+      if(res?.result?.resultCode==='Y'){
+        constant.showMsg("Data save successfully")
+        fn_Next()
+      }else{
+        fn_Next()
+      }
 
     } else {
       constant.showMsg(res.message)
@@ -361,7 +367,7 @@ export default function PerformaInsurance(props) {
               }}
             />
           </View>
-
+        
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Rate</Text>
             <SelectDropList

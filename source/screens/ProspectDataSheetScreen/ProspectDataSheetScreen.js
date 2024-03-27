@@ -298,12 +298,16 @@ export default function ProspectDataSheetScreen(props) {
                   <Text style={styles.listText3}>{item?.statusDesc}</Text>
                </View>
                <View style={styles.driveListDetailSubView2}>
+                  <Text style={styles.listText2}>Projected Closure Date</Text>
+                  <Text style={styles.listText3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
+               </View>
+               {/* <View style={styles.driveListDetailSubView2}>
                   <Text style={styles.listText2}>Completed on</Text>
                   <Text style={styles.listText3}>{item?.performedOn === null ? "" : moment(item?.performedOn, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
-               </View>
+               </View> */}
             </View>
 
-            <View style={styles.driveListDetailView}>
+            {/* <View style={styles.driveListDetailView}>
                <View style={styles.driveListDetailSubView}>
                   <Text style={styles.listText2}>Remarks</Text>
                   <Text style={styles.listText3}>{item?.remark}</Text>
@@ -312,7 +316,7 @@ export default function ProspectDataSheetScreen(props) {
                   <Text style={styles.listText2}>Projected Closure Date</Text>
                   <Text style={styles.listText3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                </View>
-            </View>
+            </View> */}
 
 
 
@@ -339,7 +343,7 @@ export default function ProspectDataSheetScreen(props) {
                <View style={styles.driveListDetailView}>
                   <View style={styles.driveListDetailSubView}>
                      <Text style={styles.listText2}>City</Text>
-                     <Text style={styles.listText3}>{prospectInfo?.resCity}</Text>
+                     <Text style={styles.listText3}>{prospectInfo?.resCityDescription}</Text>
                   </View>
                   <View style={styles.driveListDetailSubView2}>
                      <Text style={styles.listText2}>Sub-Zone</Text>

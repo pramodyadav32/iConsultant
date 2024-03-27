@@ -37,7 +37,7 @@ export default function CloseInfo(props) {
   const [performValue, setPerformValue] = useState({})
   const [performDate, setPerformdate] = useState('')
   const [comment, setcomment] = useState('')
-  const [closureDate, setClosureDate] = useState('')
+  const [closureDate, setClosureDate] = useState(moment(new Date()).format("DD-MMM-yyyy"))
   const [closureData, setClosureData] = useState([])
   const [closureValue, setClosureValue] = useState({})
   const [remark, setRemark] = useState('')
@@ -145,8 +145,11 @@ export default function CloseInfo(props) {
     } else if (closureDate==='') {
       constant.showMsg("Please select closer Date")
   }else if (Object.keys(closureValue).length === 0) {
-    constant.showMsg("Please select closer Type")
-} else if(showDislikeAndBrand){
+    constant.showMsg("Plesae select at least one Reason!")
+}else if(remark===''){
+  constant.showMsg("Plesae enter remarks")
+}
+ else if(showDislikeAndBrand){
   if (Object.keys(compVehBrandSelected).length === 0) {
     constant.showMsg("Please select competiton Brand")
     } else if (Object.keys(compVehModelSelected).length === 0) {
@@ -162,7 +165,8 @@ export default function CloseInfo(props) {
            })   
            
            if(newArray.length>0){
-            fn_Create(1)
+           
+            fn_GetProspectBasicInfo() 
            }else{
             constant.showMsg("please choose dissatisfaction reason")
            }
@@ -177,7 +181,7 @@ export default function CloseInfo(props) {
   })   
   
   if(newArray.length>0){
-   fn_Create(1)
+    fn_GetProspectBasicInfo() 
   }else{
    constant.showMsg("please choose dissatisfaction reason")
   }
@@ -185,7 +189,7 @@ export default function CloseInfo(props) {
    let filterParam =  showList?.data.filter((item)=>{return(item?.dateValue === undefined)})
 
    if(filterParam.length===0){
-    fn_GetProspectBasicInfo() 
+    fn_Create(1)
    }else{
     constant.showMsg("Please select Tentative Delv Date")
    }
@@ -194,7 +198,7 @@ export default function CloseInfo(props) {
   if (Object.keys(dealerValue).length === 0) {
     constant.showMsg("Please select Dealer")
     }else{
-      fn_Create(1)
+      fn_GetProspectBasicInfo() 
     }
    
   }
@@ -248,11 +252,15 @@ const fn_GetProfileModel = () => {
 }
 
 const GetProfileModelCallBack = async (res) => {
-  console.log("exitstingdata", JSON.stringify(res))
+ 
   if (res.statusCode === 200) {
      if(res?.result?.existingVehicleList[0].occupation===''){
+      setTimeout(()=>{
+        dispatch(emptyLoader_Action(false))
+      },1000)
       constant.showMsg("Please fill profile detail")
      }else{
+     
       fn_GetProspectDetail()
      }   
   } else {
@@ -281,8 +289,14 @@ const GetProspectDetailCallBack = (res) => {
   console.log("search", JSON.stringify(res)) 
   if (res.statusCode === 200) {
      if(res.result?.prospectDetails?.regnAddress1==='') {
+      setTimeout(()=>{
+        dispatch(emptyLoader_Action(false))
+      },1000)
       constant.showMsg("Please fill Regn. Address Detail")
     }else if(res.result?.prospectDetails?.resAddress1===''){
+      setTimeout(()=>{
+        dispatch(emptyLoader_Action(false))
+      },1000)
       constant.showMsg("Please fill Res. Address Detail")
     }else{
      fn_Create(0)
@@ -295,7 +309,7 @@ const GetProspectDetailCallBack = (res) => {
 
 
   const fn_Create = async(type=0) => {
-     type===1 ? dispatch.emptyLoader_Action(true) : null
+     type===1 ? dispatch(emptyLoader_Action(true)) : null
       let newArray = []
       await dislikeData.map((data)=>{
         data?.dislikeValues.map((item)=>{
@@ -303,12 +317,10 @@ const GetProspectDetailCallBack = (res) => {
         })
        })
 
-       console.log("row data",JSON.stringify(data1))
       let newArrayTable = []
       await data1?.map((item)=>{
           item.select ? newArrayTable.push(item) : null
        })
-       console.log("newArrayTable = ", newArrayTable)
 
        let closureList = []
        showList.show ? 
@@ -619,10 +631,10 @@ const listrenderItem=(item,index)=>{
        <Text style={styles.otherListText2}>{item?.assemblyDescription}</Text>
       </View>
       <View style={styles.otherListSubView7} >
-       <Text style={styles.otherListText2}>{item?.modelDescription}</Text>
+       <Text style={[styles.otherListText2,{width:'93%'}]}>{item?.modelDescription}</Text>
       </View>
       <View style={styles.otherListSubView7} >
-       <Text style={styles.otherListText2}>{item?.exteriorDescription}</Text>
+       <Text style={[styles.otherListText2,{width:'93%'}]}>{item?.exteriorDescription}</Text>
       </View>
       <View style={styles.otherListSubView8} >
       <SelectDropList
@@ -708,7 +720,7 @@ const fn_ListFooter=()=>{
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Closure Date</Text>
-            <Pressable style={styles.calenderMainView} onPress={() => setclosureCal_Modal(true)}>
+            <Pressable style={styles.calenderMainView} onPress={() => null}>
               <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{closureDate}</TextInput>
               <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
             </Pressable>

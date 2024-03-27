@@ -35,7 +35,7 @@ export default function ActionInfo(props) {
   const [vinData, setVinData] = useState('')
   const [vehVariant, setVehVariant] = useState('')
   const [regData, setRegData] = useState('')
-  const [comment, setComment] = useState('')
+  const [comment, setCommentValue] = useState('')
   const [updateModal, setUpdateModal] = useState({ show: false, data: {} })
   const [updateModalData, setUpdateModalData] = useState()
   const [timeSlotModal, setTimeSlotModal] = useState({ show: false, date: '', vehicleList: [], slotList: [], utcDateFormate: '' })
@@ -51,8 +51,9 @@ export default function ActionInfo(props) {
 
 
   const renderItem = (item, index) => {
-    console.log("item11",item)
+   
     return (
+      <View>
       <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5), marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
 
         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
@@ -134,6 +135,11 @@ export default function ActionInfo(props) {
 
 
 
+      </View>
+      {index === data?.length-1 ?
+       fn_Footer()
+       : null  
+    }
       </View>
     )
   }
@@ -325,8 +331,14 @@ export default function ActionInfo(props) {
     }
   }
 
+  const fn_SetComment=(d)=>{
+    console.log("dd",d)
+    setCommentValue(d)
+  }
+
   const fn_Footer = () => {
     return (
+      <>
       <View style={{
         backgroundColor: '#F9F9F9',
         borderWidth: 2, borderRadius: 10,
@@ -406,10 +418,11 @@ export default function ActionInfo(props) {
 
         <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
           <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
-          <TextInput placeholder='Enter Comment' onChangeText={(d) =>{setComment(d)}} style={styles.commentInput} >{comment}</TextInput>
+          <TextInput placeholder='Enter Comment' multiline  onChangeText={fn_SetComment} style={styles.commentInput} >{comment}</TextInput>
         </View>
 
       </View>
+      </>
     )
   }
 
@@ -527,9 +540,11 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
 
         <FlatList
           data={data}
-          keyboardShouldPersistTaps={'handled'}
+          keyboardShouldPersistTaps={'always'}
+          
+          removeClippedSubviews={false}
           renderItem={({ item, index }) => renderItem(item, index)}
-          ListFooterComponent={() => fn_Footer()}
+          // ListFooterComponent={() => fn_Footer()}
         />
 
 
@@ -575,6 +590,7 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
           consultantList={consultantList}
           onRequestClose={() => setFeedBackModal(s => { return { ...s, show: false } })}
       />
+
     </View>
   );
 }
