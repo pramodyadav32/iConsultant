@@ -176,27 +176,8 @@ export default function PerformaBasicInfo(props) {
       "texMasterData?.tcsDetail[0]?.tcsApplicable =  ",
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
-   //  if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
-   //    console.log("aaaaaaaaaaaaaaaaaaaaaaa true");
-   //    let newTcs = 0;
-   //    texMasterData?.tcsDetail?.map((item) => {
-   //       // console.log("aaaaaaaaaaaaaaaaaaaaaaa true", item?.trxnBasis === trnsBasicValue?.code, item?.trxnBasis, trnsBasicValue?.code);
-   //      if (item?.trxnBasis === trnsBasicValue?.code) {
-   //       setTcsPercentageValue(item?.tcsRate)
-   //        newTcs = Math.round(
-   //          ((newTotal + basicDiscount) * item?.tcsRate) / 100,
-   //          0
-   //        );
-   //      }
-   //    });
-   //    setTcsValue(isNaN(newTcs) ? 0 : newTcs);
-   //    setTcsStatus(true);
-   //  } else {
-   //    console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
-   //    setTcsStatus(false);
-   //    setTcsValue(0);
-   //  }
     setExShowRoomPostPrice(newTotal + basicDiscount);
+   Object.keys(trnsBasicValue).length === 0 ? null :  fn_TcsCalculation(trnsBasicValue)
   };
 
   fn_TcsCalculation=(data)=>{
@@ -446,10 +427,10 @@ export default function PerformaBasicInfo(props) {
           <Text style={styles.costListText2}>Total</Text>
         </View>
         <View style={[styles.costListSubView3, {}]}>
-          <Text style={styles.costListText3}>{texTotal.toFixed(2)}</Text>
+          <Text style={styles.costListText3}>{texTotal.toFixed(2)}%</Text>
         </View>
         <View style={[styles.costListSubView3, {}]}>
-          <Text style={styles.costListText3}>{surchargeData.toFixed(2)}</Text>
+          <Text style={styles.costListText3}>{surchargeData.toFixed(2)}%</Text>
         </View>
         <View style={[styles.costListSubView3, {}]}>
           <Text style={styles.costListText3}>{totalAmount.toFixed(2)}</Text>
@@ -733,7 +714,7 @@ export default function PerformaBasicInfo(props) {
                   { marginTop: constant.moderateScale(10) },
                 ]}
               >
-                <Text style={styles.detailText}>TCS{tcsPercentageValue}%</Text>
+                <Text style={styles.detailText}>TCS {tcsPercentageValue}%</Text>
                 <Pressable
                   style={{
                     flex: 1,

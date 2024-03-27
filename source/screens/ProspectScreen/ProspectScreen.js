@@ -1357,7 +1357,10 @@ export default function ProspectScreen(props) {
                 refType={Object.keys(exteriorValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) => setExteriorValue(d)}
+                on_Select={(d) =>{
+                  setExteriorValue(d)
+                  setAssemblyValue({});
+                }}
               />
             </View>
 
@@ -1383,7 +1386,10 @@ export default function ProspectScreen(props) {
                   refType={Object.keys(my_DataValue).length===0 ?false : true}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
-                  on_Select={(d) => setMyDataValue(d)}
+                  on_Select={(d) => {
+                    setMyDataValue(d)
+                    setAssemblyValue({});
+                  }}
                 />
                 <Text> </Text>
                 <SelectDropList
@@ -1392,7 +1398,10 @@ export default function ProspectScreen(props) {
                   refType={Object.keys(vy_DataValue).length===0 ?false : true}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
-                  on_Select={(d) => setVyDataValue(d)}
+                  on_Select={(d) => {
+                    setVyDataValue(d)
+                    setAssemblyValue({});
+                  }}
                 />
               </View>
             </View>

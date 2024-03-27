@@ -809,7 +809,7 @@ const performDetailCallBack = (res) => {
       <SafeAreaView style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
          <StatusBar translucent={false} backgroundColor={constant.blackColor} />
          <CommonHeader
-            title="Performa"
+            title="Proforma"
             mainExt={styles.drawerStyle}
             onBack={() => navigation.goBack()}
          />
