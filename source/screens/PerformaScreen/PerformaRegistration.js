@@ -241,7 +241,7 @@ const fn_PriceTotalCal=()=>{
   let add1 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add1 = add1+ (calculationOnData === "EX_SR_PRE_DISC" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
+   add1 = add1+ (calculationOnValue?.code === "EX_SR_PRE_DISC" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
     }
   })
   return(add1)
@@ -251,7 +251,7 @@ const fn_AddAmtTotalCal=()=>{
   let add2 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add2 = add2 +  (calculationOnData === "EX_SR_PRE_DISC" ? Number(item?.totalPre) : Number(item?.totalPost))
+   add2 = add2 +  (calculationOnValue?.code === "EX_SR_PRE_DISC" ? Number(item?.totalPre) : Number(item?.totalPost))
     }
   })
   return(add2)
@@ -391,6 +391,7 @@ const fn_AddAmtTotalCal=()=>{
             data={registrationTypeList}
             ListFooterComponent={()=>fn_Footer()}
             renderItem={({item,index})=>{
+              console.log("item",JSON.stringify(item))
             return(
               <View>
                  <View style={{flex:1,flexDirection:'row'}}>
@@ -413,13 +414,13 @@ const fn_AddAmtTotalCal=()=>{
               />
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? (calculationOnData === "EX_SR_PRE_DISC" ? item?.subTotalPre : item?.subTotalPost) : 0}</Text>
+            <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.subTotalPre : item?.subTotalPost) : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
             <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? (calculationOnData === "EX_SR_PRE_DISC" ? item?.totalPre : item?.totalPost) : 0}</Text>
+            <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.totalPre : item?.totalPost) : 0}</Text>
            </View>
           </View >
                 </View>
