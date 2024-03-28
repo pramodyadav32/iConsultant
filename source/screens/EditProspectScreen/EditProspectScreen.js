@@ -519,7 +519,7 @@ export default function EditProspectScreen(props) {
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Prospect Name</Text>
-                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.lastName}</Text>
+                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.middleName} {route.params.cardData?.lastName}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Model</Text>

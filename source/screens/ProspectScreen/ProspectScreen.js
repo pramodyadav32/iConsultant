@@ -175,7 +175,7 @@ export default function ProspectScreen(props) {
     if (res.statusCode === 200) {
       setEventSourceList(res?.result?.campaignsMaster);
     } else {
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -201,7 +201,7 @@ export default function ProspectScreen(props) {
     console.log("search", JSON.stringify(res));
     if (res.statusCode === 200) {
     } else {
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -264,7 +264,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -294,7 +294,7 @@ export default function ProspectScreen(props) {
       SetActionTypeData(res?.result[0]?.actionMasterList);
       setActive(3);
     } else {
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -333,7 +333,7 @@ export default function ProspectScreen(props) {
         constant.showMsg("Opps, Record not found");
       }
     } else {
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -1588,6 +1588,7 @@ export default function ProspectScreen(props) {
               <TextInput
                 placeholder="Enter Comment"
                 style={styles.commentInput}
+                onChangeText={(d)=>setComment(d)}
               >
                 {comment}
               </TextInput>

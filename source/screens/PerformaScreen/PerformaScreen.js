@@ -538,11 +538,11 @@ export default function PerformaScreen(props) {
                         </View>
 
                         <View style={styles.driveListDetailSubView}>
-                           <Text style={styles.listText2}>Accessories (Performa)</Text>
+                           <Text style={styles.listText2}>Accessories (Proforma)</Text>
                            <Text style={styles.listName3}>{performHeaderData?.accessories?.totalAmount > 0 ? performHeaderData?.accessories?.totalAmount : "NIL"}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView}>
-                           {/* <Text style={styles.listText2}>Accessories (Performa)</Text> */}
+                           {/* <Text style={styles.listText2}>Accessories (Proforma)</Text> */}
                            {/* <Text style={styles.listName3}>3500.00</Text> */}
                         </View>
                         <View style={styles.driveListDetailSubView}>
@@ -872,7 +872,7 @@ const performDetailCallBack = (res,type) => {
                                  fn_TabClick(index, item)
                               }else{
                               
-                                 constant.showMsg("No performa found for this prospect, please create performa first");
+                                 constant.showMsg("No proforma found for this prospect, please create performa first");
                               }
                            }}
                         >

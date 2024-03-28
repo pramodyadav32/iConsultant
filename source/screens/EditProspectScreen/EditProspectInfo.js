@@ -645,17 +645,23 @@ export default function EditProspectInfo(props) {
 
 
                         <View style={styles.detailMainView}>
-                            <Text style={styles.detailText}>Name</Text>
+                            <Text style={styles.detailText}>Title</Text>
                             <View style={styles.mobileSubView}>
                                 <SelectDropList
                                     list={title}
                                     title={titleValue?.description==='' || titleValue?.description=== undefined ? " " : titleValue?.description }
-                                    buttonExt={styles.dropNameList}
-                                    textExt={styles.dropNameListText}
+                                    buttonExt={styles.dropList}
+                                    textExt={styles.dropListText}
                                     on_Select={(d) => setTitleValue(d)}
 
                                 />
-                                <TextInput onChangeText={(d) => setName(d)} style={[styles.input1, { marginLeft: '2%' }]} >{name}</TextInput>
+                            </View>
+                        </View>
+                        <View style={styles.detailMainView}>
+                            <Text style={styles.detailText}>Name</Text>
+                            <View style={styles.mobileSubView}>
+                                
+                                <TextInput onChangeText={(d) => setName(d)} style={[styles.input1]} >{name}</TextInput>
 
                             </View>
                         </View>
@@ -670,7 +676,7 @@ export default function EditProspectInfo(props) {
                                     textExt={styles.dropNameListText}
                                     on_Select={(d) => setTitleSonValue(d)}
                                 /> */}
-                                <TextInput onChangeText={(d) => setSonName(d)} style={[styles.input1, { marginLeft: '2%' }]} >{sonName}</TextInput>
+                                <TextInput onChangeText={(d) => setSonName(d)} style={[styles.input1]} >{sonName}</TextInput>
 
                             </View>
                         </View>

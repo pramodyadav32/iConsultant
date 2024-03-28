@@ -327,7 +327,7 @@ export default function ActionInfo(props) {
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
-      constant.showMsg(res.message)
+      // constant.showMsg(res.message)
     }
   }
 
@@ -529,7 +529,7 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
         console.log("newDat", newData)
         setFeedBackModal(s=>{return{...s,show:true,data:newData}})
     } else {
-        constant.showMsg(res.message)
+        // constant.showMsg(res.message)
     }
 }
 

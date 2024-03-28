@@ -141,7 +141,7 @@ export default function CreatePerforma(props) {
   return (
     <SafeAreaView style={{flex:1,backgroundColor:'#E1E1E1'}}>
       <StatusBar translucent={false} backgroundColor={constant.blackColor} />
-     <CommonHeader title='Performa' mainExt={styles.drawerStyle} showInfo={false} onBack={()=>navigation.goBack()} />
+     <CommonHeader title='Proforma' mainExt={styles.drawerStyle} showInfo={false} onBack={()=>navigation.goBack()} />
    <View>
      <FlatList
               data={data}

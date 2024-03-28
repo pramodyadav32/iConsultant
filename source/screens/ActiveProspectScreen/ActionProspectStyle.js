@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         },
         carImage:{
           height:constant.moderateScale(110),
-          width:constant.moderateScale(130),
+          width:constant.moderateScale(120),
         },
         horizontalLine:{
           height:constant.moderateScale(2),
