@@ -165,10 +165,9 @@ export default function CloseInfo(props) {
            })   
            
            if(newArray.length>0){
-           
-            fn_GetProspectBasicInfo() 
+            fn_Create(1)
            }else{
-            constant.showMsg("please choose dissatisfaction reason")
+            constant.showMsg("Plesae select at least one Reason!")
            }
           
           }
@@ -181,15 +180,16 @@ export default function CloseInfo(props) {
   })   
   
   if(newArray.length>0){
-    fn_GetProspectBasicInfo() 
+    fn_Create(1)
+   
   }else{
-   constant.showMsg("please choose dissatisfaction reason")
+   constant.showMsg("Plesae select at least one Reason!")
   }
 }else if(showList?.show){
    let filterParam =  showList?.data.filter((item)=>{return(item?.dateValue === undefined)})
 
    if(filterParam.length===0){
-    fn_Create(1)
+    fn_GetProspectBasicInfo() 
    }else{
     constant.showMsg("Please select Tentative Delv Date")
    }
@@ -198,7 +198,7 @@ export default function CloseInfo(props) {
   if (Object.keys(dealerValue).length === 0) {
     constant.showMsg("Please select Dealer")
     }else{
-      fn_GetProspectBasicInfo() 
+      fn_Create(1)
     }
    
   }

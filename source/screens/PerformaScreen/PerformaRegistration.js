@@ -47,13 +47,14 @@ export default function PerformaRegistration(props) {
   
  useEffect(()=>{
   console.log("performaPriceDetail1111 = ", performaPriceDetail)
+  console.log("performa",performaBasicInfo?.proformaList)
   // setRegistrationTypeList(regData?.registrationTypeList)
   setSelectMasterList(regData?.selectMasterList)
   setPriceDetails(regData?.priceDetails)
   setPerformListData(performaBasicInfo?.proformaList)
 
   let newData = []
-  console.log("regData",regData)
+  console.log("regData",JSON.stringify(regData))
   regData?.registrationTypeList.map((item)=>{
     let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
     let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100

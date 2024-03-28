@@ -70,7 +70,7 @@ export default function DownloadPerforma(props) {
       docLocation: performaBasicInfo?.proformaList[0]?.docLocation,
       docCode: performaBasicInfo?.proformaList[0]?.docCode,
       docFY: performaBasicInfo?.proformaList[0]?.docFy,
-      docNo: 51,//performaBasicInfo?.proformaList[0]?.docNo,
+      docNo: performaBasicInfo?.proformaList[0]?.docNo,
     };
     console.log("param" + JSON.stringify(param));
     tokenApiCall(

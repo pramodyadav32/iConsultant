@@ -19,7 +19,12 @@ export default function PerformaTerm(props) {
    const [listData,setListData] = useState([])
 
    useEffect(()=>{
-    setListData(term_Data)
+    let newArr = []
+    term_Data.map((item)=>{
+        item["select"] = true
+        newArr.push(item)     
+    })
+    setListData([...newArr])
    },[term_Data])
  
    const fn_SelectTerm=(item,index)=>{
