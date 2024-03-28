@@ -107,12 +107,8 @@ export default function HomeScreen(props) {
       res?.result.testDeriveTodayList != null ? setTestDriveData(res.result?.testDeriveTodayList) : null
       res?.result.activeProspectList != null ? setActiveProspect(res.result?.activeProspectList) : null
       setDataCounts(res.result?.dataCounts)
-      console.log("aaaaaaaaa totalDoneTestDriveToday = ", Number(res.result?.dataCounts?.totalDoneTestDriveToday))
-      console.log("aaaaaaaaa totalTestDriveToday = ", Number(res.result?.dataCounts?.totalTestDriveToday))
-      console.log("aaaaaaaaa totalDoneActionToday = ", Number(res.result?.dataCounts?.totalDoneActionToday))
-      console.log("aaaaaaaaa totalActionToday = ", Number(res.result?.dataCounts?.totalActionToday))
-      setTestCount((Number(res.result?.dataCounts?.totalDoneTestDriveToday)/Number(res.result?.dataCounts?.totalTestDriveToday))*100)
-      setActiveCount((Number(res.result?.dataCounts?.totalDoneActionToday)/Number(res.result?.dataCounts?.totalActionToday))*100)
+      setTestCount((Number(res.result?.dataCounts?.totalDoneTestDriveToday)/Number(res.result?.dataCounts?.totalTestDriveToday)))
+      setActiveCount((Number(res.result?.dataCounts?.totalDoneActionToday)/Number(res.result?.dataCounts?.totalActionToday)))
       const groupedData = {};
 
    await res.result?.upcommingActionList.forEach(item => {

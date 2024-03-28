@@ -209,14 +209,12 @@ export default function PerformaInsurance(props) {
     let exShowRoomPrice = calOnValue?.dataValue === "EX_SHOWROOM_PRE_DISC" ? Number(insurance_Data?.exShowroomValueBeforeDiscount) : Number(insurance_Data?.exShowroomValueAfterDiscount)
     setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
-    console.log("aaaaaaaaaa idvCharnges = ", idvCharnges)
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
     let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
-    console.log("aaaaaaaaaa rateCharnges = ", rateCharnges)
     let nilDipCharnges = nilDipCheckStatus ? ((idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage)))/100) + ((idvCharnges * Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100 : 0
-    console.log("aaaaaaaaaa nilDipCharnges = ", nilDipCharnges)
+    
     let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
-    console.log("aaaaaaaaaa discountOnNilDep = ", discountOnNilDep)
+    
     isNaN(discountOnNilDep) ? null :  setDiscountDepAmt(Math.round(discountOnNilDep,0))
     let totalDepAmount = Number(nilDipCharnges) - Number(discountOnNilDep)
     console.log("aaaaaaaaaa totalDepAmount = ", totalDepAmount)

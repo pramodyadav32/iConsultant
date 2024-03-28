@@ -52,7 +52,7 @@ const SelectDropList = (props) => {
           else if(desName==='4')
             return selectedItem.idvPer
             else if(desName==='5')
-            return selectedItem.basicPremiumPerc1+selectedItem?.basicPremiumPerc2
+            return selectedItem.basicPremiumPerc1+"% + "+selectedItem?.basicPremiumPerc2
            else if(desName==='6')
            return selectedItem?.idv2NildepPercentage
             else
