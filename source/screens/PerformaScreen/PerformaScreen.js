@@ -907,7 +907,10 @@ const performDetailCallBack = (res,type) => {
             {active === 1 && <
                PerformaAccessories 
                performaBasicInfo={performaBasicDataHeader}
-               fn_Next={()=>{fn_GetProformaInsuMaster()}}
+               fn_Next={()=>{
+                  fn_SaveBasicInfo()
+                  fn_GetProformaInsuMaster()
+               }}
                />}
             {/* {active === 2 && <PerformaPackage />} */}
             {
@@ -917,7 +920,9 @@ const performDetailCallBack = (res,type) => {
                generalMaster_Data = {generalMasterData}
                insuranceLoc_Data = {ins_Location}
                performaBasicInfo={performaBasicDataHeader}
-               fn_Next={()=> fn_Registration()}
+               fn_Next={()=> {
+                  fn_Registration()
+               }}
                />
             }
             {active === 3 && <PerformaRegistration 

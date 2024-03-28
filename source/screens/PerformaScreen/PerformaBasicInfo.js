@@ -125,6 +125,7 @@ export default function PerformaBasicInfo(props) {
 
   useEffect(() => {
     fn_CalTax();
+    setTrnsBasicValue({code: "PAN_CARD", description: "Pan Card available" })
     setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice);
   }, [performaPriceDetail, texMasterData]);
 
@@ -177,7 +178,7 @@ export default function PerformaBasicInfo(props) {
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
     setExShowRoomPostPrice(newTotal + basicDiscount);
-   Object.keys(trnsBasicValue).length === 0 ? null :  fn_TcsCalculation(trnsBasicValue)
+    fn_TcsCalculation({ code: "PAN_CARD", description: "Pan Card available" })
   };
 
   fn_TcsCalculation=(data)=>{
@@ -700,6 +701,7 @@ export default function PerformaBasicInfo(props) {
                 <SelectDropList
                   list={transData}
                   buttonExt={styles.dropList}
+                  title={trnsBasicValue?.description}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
                      setTrnsBasicValue(d)

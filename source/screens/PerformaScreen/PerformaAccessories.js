@@ -474,17 +474,18 @@ const styles = StyleSheet.create({
   },
   curr_IssueInput:{
     borderWidth:1,
-    height:constant.moderateScale(35),
+    height:constant.moderateScale(38),
     fontSize:constant.moderateScale(14),
     width:'90%',
     textAlign:'center',
     borderRadius:5,
     borderColor:'#ABABAB',
     fontFamily:constant.typeRegular,
+    includeFontPadding:true
   },
   curr_IssueInput1:{
     // borderWidth:1,
-    height:constant.moderateScale(35),
+    height:constant.moderateScale(38),
     fontSize:constant.moderateScale(14),
     width:'90%',
     textAlign:'center',
