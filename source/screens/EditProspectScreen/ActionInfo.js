@@ -211,7 +211,7 @@ export default function ActionInfo(props) {
 
     } else {
       dispatch(emptyLoader_Action(false))
-      constant.showMsg(res.message)
+      // constant.showMsg(res.message)
     }
   }
 
@@ -246,7 +246,7 @@ export default function ActionInfo(props) {
       dispatch(emptyLoader_Action(false))
     } else {
       dispatch(emptyLoader_Action(false))
-      constant.showMsg(res.message)
+      // constant.showMsg(res.message)
     }
   }
 

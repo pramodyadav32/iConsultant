@@ -483,7 +483,7 @@ export default function ProspectScreen(props) {
         constant.showMsg("Opps. Somethings wents wrong.");
       }
     } else {
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -522,7 +522,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -657,7 +657,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -693,7 +693,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -758,7 +758,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -838,7 +838,7 @@ export default function ProspectScreen(props) {
       setPriceAvailable(res?.result?.priceAvailableTag);
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -886,7 +886,7 @@ export default function ProspectScreen(props) {
       setCityData(res?.result[0]?.prospectMasterList);
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -939,7 +939,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 
@@ -1006,7 +1006,7 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      constant.showMsg(res.message);
+      // constant.showMsg(res.message);
     }
   };
 

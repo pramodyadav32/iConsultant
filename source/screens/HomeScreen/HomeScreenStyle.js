@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     carImage:{
       height:constant.moderateScale(110),
-      width:constant.moderateScale(130),
+      width:constant.moderateScale(120),
     },
     horizontalLine:{
       height:constant.moderateScale(2),
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     },
     homeBoxStyle2:{
       backgroundColor:constant.whiteColor,
-      height:constant.moderateScale(130),
+      height:constant.moderateScale(120),
       width:constant.resW(47.7),
       borderRadius:10,
       borderColor:constant.whiteColor,

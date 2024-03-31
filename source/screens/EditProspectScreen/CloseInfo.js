@@ -56,9 +56,9 @@ export default function CloseInfo(props) {
   const [compVehBrandData, setCompVehBrandData] = useState([])
   const [compVehModelData, setCompVehModelData] = useState([])
   const [compVehVarientData, setCompVehVarientData] = useState([])
-  const [compVehBrandSelected, setCompVehBrandSelected] = useState()
-  const [compVehModelSelected, setCompVehModelSelected] = useState()
-  const [compVehVarientSelected, setCompVehVarientSelected] = useState()
+  const [compVehBrandSelected, setCompVehBrandSelected] = useState({})
+  const [compVehModelSelected, setCompVehModelSelected] = useState({})
+  const [compVehVarientSelected, setCompVehVarientSelected] = useState({})
 
   const [dealerData,setDealerData] = useState([])
   const [dealerValue,setDealerValue] = useState({})
@@ -150,7 +150,7 @@ export default function CloseInfo(props) {
   constant.showMsg("Plesae enter remarks")
 }
  else if(showDislikeAndBrand){
-  if (Object.keys(compVehBrandSelected).length === 0) {
+  if (compVehBrandSelected === undefined && Object.keys(compVehBrandSelected).length === 0) {
     constant.showMsg("Please select competiton Brand")
     } else if (Object.keys(compVehModelSelected).length === 0) {
       constant.showMsg("Please select competiton Model")

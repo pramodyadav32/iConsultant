@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
             },
             carImage2:{
               height:constant.moderateScale(110),
-              width:constant.moderateScale(130),
+              width:constant.moderateScale(120),
             },
             cardHorLine:{
               height:constant.moderateScale(2),
