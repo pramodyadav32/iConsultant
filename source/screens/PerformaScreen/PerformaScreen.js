@@ -105,6 +105,8 @@ export default function PerformaScreen(props) {
    const [intrestedVehicleList,setintrestedVehicleList] = useState({})
    const [performHeaderData,setPerformHeaderData] = useState({})
    const [invoiceData,setInvoiceData] = useState("")
+   const [proformaId,setProformaId] = useState(route.params?.performaId)
+   const [saveAccessories,setSaveAccessories] = useState([])
 
    console.log("cardData", route.params.cardData)
    useEffect(() => {
@@ -121,7 +123,7 @@ export default function PerformaScreen(props) {
          "countryCode": userData?.countryCode,
          "companyId": userData?.companyId,
          "prospectNo": Number(route.params.cardData?.prospectId),
-         "proformaId": 0,
+         "proformaId": proformaId,
          "assembly": data?.vehAssemblyType,
          "edition": data?.vehEditionType,
          "model": data?.model,
@@ -174,7 +176,7 @@ export default function PerformaScreen(props) {
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
          prospectNo: Number(route.params.cardData?.prospectId),
-         proformaId: 0,
+         proformaId: proformaId,
          hsnCode: data?.hsnCode,
          endUse: "EU",
          basicPrice: data?.vehBasicAmount,
@@ -229,6 +231,8 @@ export default function PerformaScreen(props) {
          }else{
             res?.result?.proformaList.length > 0 ?  setPerformaNo(res?.result?.proformaList[0]?.docNo) : setPerformaNo(0)
             res?.result?.proformaList.length > 0 ? fn_performDetail(res?.result?.proformaList[0],1) : null
+            // res.result?.proformaList.length > 0 ? setProformaId(res.result?.proformaList[0]?.docRunningNo) : null
+
          }
          setintrestedVehicleList(res?.result?.intrestedVehicleList[0])
          fn_GetProformaGeneralMasters(res?.result?.intrestedVehicleList[0])
@@ -574,8 +578,7 @@ export default function PerformaScreen(props) {
       if (type === 0) {
          setActive(type)
       } else if (type === 1) {
-         setActive(type)
-        
+         fn_GetAccessories(performaBasicDataHeader?.proformaList[0])        
       } else if (type === 2) {
          fn_GetProformaInsuMaster()
          // fn_GetPackage()
@@ -768,7 +771,10 @@ export default function PerformaScreen(props) {
    //   dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
+       res.result?.proformaList.length > 0 ? setProformaId(res.result?.proformaList[0]?.docRunningNo) : null
        fn_performDetail(res?.result?.proformaList[0],2)
+       fn_GetAccessories(res?.result?.proformaList[0])
+       
       } else {
          constant.showMsg(res.message);
       }
@@ -805,6 +811,37 @@ const performDetailCallBack = (res,type) => {
          setActive(1)
          constant.showMsg("Basic Info save successfully")
          }
+      } else {
+         constant.showMsg(res.message);
+      }
+};
+
+const fn_GetAccessories=(data)=>{
+   let param={
+     "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "docLocation": data?.docLocation,
+      "docCode": data?.docCode,
+      "docFY": data?.docFy,
+      "docNo": data?.docNo,
+      "loginUserId": userData?.userId,
+      "ipAddress": "1::1",
+  }
+  tokenApiCall(
+   GetAccessoriesCallBack,
+   APIName.GetTrnAccessories,
+   "POST",
+   param
+);
+}
+
+const GetAccessoriesCallBack = (res) => {
+   console.log("GetTrnAccessoriesapiResp == ", JSON.stringify(res));
+     dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+         setSaveAccessories(res?.result?.proformaAccessoriesList)
+        setActive(1)
       } else {
          constant.showMsg(res.message);
       }
@@ -902,10 +939,12 @@ const performDetailCallBack = (res,type) => {
                   SaveInfo = {()=>{fn_SaveBasicInfo()}}
                   prospect_No = {performaNo}
                   intrestedVehicleList = {intrestedVehicleList}
+                  proformaId = {proformaId}
                 />
             )}
-            {active === 1 && <
-               PerformaAccessories 
+            {active === 1 && 
+            <PerformaAccessories 
+               accessoriesSaveData = {saveAccessories}
                performaBasicInfo={performaBasicDataHeader}
                fn_Next={()=>{
                   fn_SaveBasicInfo()

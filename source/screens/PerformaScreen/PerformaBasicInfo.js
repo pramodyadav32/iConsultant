@@ -46,6 +46,7 @@ export default function PerformaBasicInfo(props) {
     SaveInfo,
     prospect_No,
     intrestedVehicleList,
+    proformaId
   } = props;
   const dispatch = useDispatch();
   const { userData, selectedBranch } = useSelector(
@@ -92,9 +93,20 @@ export default function PerformaBasicInfo(props) {
     performaGeneralMasterData?.selectMasterList.map((item) => {
       if (item?.listType === "BILLING_LOCATION") {
         setBillingLocationData(item.basicList);
+        console.log("bilkling",item)
+        item.basicList.map((item)=>{item?.isSelected==='Y' ? setBillingLocationValue(item) : null })
       } else if (item?.listType === "USAGE") {
         setUsageData(item.basicList);
+        item.basicList.map((item,index)=>{item?.isSelected==='Y' ? setUsageValue(item) : null })
+
       } else if (item?.listType === "SALE_GROUP") {
+        item.basicList.map((item,index)=>{
+          if(item?.isSelected==='Y'){
+           setSalesGroupValue(item) 
+           fn_GetProformaGeneralMasters(item)
+          }
+          })
+
         setSalesGroupData(item.basicList);
       }
       //   else if(item?.listType ==='END_USE'){
@@ -211,16 +223,16 @@ export default function PerformaBasicInfo(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       prospectNo: Number(cardData?.prospectId),
-      proformaId: 0,
-      assembly: "",
-      edition: "",
-      model: cardData?.model,
-      subModel: cardData?.variant,
-      style: "",
-      my: 0,
-      vy: 0,
-      exterior: "",
-      interior: "",
+      proformaId: proformaId,
+      "assembly": intrestedVehicleList?.vehAssemblyType,
+      "edition": intrestedVehicleList?.vehEditionType,
+      "model": intrestedVehicleList?.model,
+      "subModel": intrestedVehicleList?.subModel,
+      "style": intrestedVehicleList?.vehVariantStyle,
+      "my": intrestedVehicleList?.modelYear,
+      "vy": intrestedVehicleList?.vinYear,
+      "exterior": intrestedVehicleList?.colorCode,
+      "interior":intrestedVehicleList?.upholsteryCode,
       calledBy:
         "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,REGN_TYPE,VEH_PRICE",
       priceListApplicable: moment(new Date()).format("DD-MMM-YYYY"), //"23-APR-2024",
@@ -246,12 +258,14 @@ export default function PerformaBasicInfo(props) {
   };
 
   const GetProformaGeneralMastersCallBack = (res) => {
-    console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
+    console.log("GetProformaGeneralMastersCallBack12 = ", JSON.stringify(res));
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
       res.result?.selectMasterList.map((item) => {
         if (item?.listType === "END_USE") {
           setEndUseData(item.basicList);
+        item.basicList.map((item,index)=>{item?.isSelected==='Y' ? setEndUseValue(item) : null })
+
         }
       });
     } else {
@@ -548,7 +562,9 @@ export default function PerformaBasicInfo(props) {
               <SelectDropList
                 list={billingLoactionData}
                 buttonExt={styles.dropList}
+                refType={Object.keys(billingLoactionValue).length===0 ?false : true}
                 textExt={styles.dropListText}
+                title={billingLoactionValue?.description}
                 on_Select={(d) => setBillingLocationValue(d)}
               />
             </View>
@@ -586,8 +602,10 @@ export default function PerformaBasicInfo(props) {
                 <Text style={styles.detailText}>Usage</Text>
                 <SelectDropList
                   list={usageData}
+                  refType={Object.keys(usageValue).length===0 ?false : true}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
+                  title={usageValue?.description}
                   on_Select={(d) => setUsageValue(d)}
                 />
               </View>
@@ -603,6 +621,8 @@ export default function PerformaBasicInfo(props) {
                   list={salesGroupData}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
+                  title={salesGroupValue?.description}
+                  refType={Object.keys(salesGroupValue).length===0 ?false : true}
                   on_Select={(d) => fn_GetProformaGeneralMasters(d)}
                 />
               </View>
@@ -618,6 +638,8 @@ export default function PerformaBasicInfo(props) {
                   list={endUseData}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
+                  title={endUseValue?.description}
+                  refType={Object.keys(endUseValue).length===0 ?false : true}
                   on_Select={(d) => setEndUseValue(d)}
                 />
               </View>

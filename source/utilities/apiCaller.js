@@ -61,6 +61,7 @@ export const APIName = {
   GetProformaDetals : baseUrl + 'Proforma/GetProformaDetals',
   GetProformaPDF : baseUrl + 'Proforma/GetProformaPDF',
   CancelProforma : baseUrl + 'Proforma/CancelProforma',
+  GetTrnAccessories : baseUrl + 'Proforma/GetTrnAccessories'
 
 }
 

@@ -42,6 +42,7 @@ export default function ProspectDataSheetScreen(props) {
    const [dataSheet, setDataSheet] = useState({})
    const [prospectInfo, setProspectInfo] = useState({})
    const [actionInfo,setActionInfo] = useState([])
+   const [performaId,setPerformaId] = useState(0)
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
@@ -116,6 +117,8 @@ export default function ProspectDataSheetScreen(props) {
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setProspectBasicInfo(res.result?.prospectBasicInfo)
+         let newId = res.result?.proformaList.length > 0 ? res.result?.proformaList[0]?.docRunningNo : 0
+         setPerformaId(newId)
          setActive(1)
          Animated.timing(animatedValue, {
             toValue: 1,
@@ -477,7 +480,7 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_Edit=()=>{
-      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData})
+      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData,"performaId":performaId})
 
    }
 

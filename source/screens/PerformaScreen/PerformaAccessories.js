@@ -49,7 +49,7 @@ const data2 = [
 ];
 
 export default function PerformaAccessories(props) {
-  const { navigation,performaBasicInfo,fn_Next } = props;
+  const { navigation,performaBasicInfo,fn_Next, accessoriesSaveData } = props;
   const dispatch = useDispatch();
   const { userData, selectedBranch } = useSelector(
     (state) => state.AuthReducer
@@ -65,6 +65,9 @@ export default function PerformaAccessories(props) {
   const [totalQty, setTotalQty] = useState();
   const [partList, setPartList] = useState([]);
   
+  useEffect(()=>{
+  //  setAccessoriesData(accessoriesSaveData)
+  },[accessoriesSaveData])
 
   const accessoriesList = ({ item, index }) => {
     return (
