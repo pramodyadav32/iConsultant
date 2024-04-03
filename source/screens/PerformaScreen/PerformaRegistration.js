@@ -85,7 +85,7 @@ export default function PerformaRegistration(props) {
       
     }else if(item?.group === 'RTO_CALC_ON'){
       rtoCal.push(item)
-      item?.isSelected === 'Y' ? calculationOnValue(item) : null
+      item?.isSelected === 'Y' ? setCalculationOnValue(item) : null
 
     }
   
