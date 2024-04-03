@@ -58,11 +58,11 @@ export default function PerformaRegistration(props) {
   regData?.registrationTypeList.map((item)=>{
     let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
     let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
-    item["totalPre"] = parseInt(totalPre)
-    item["totalPost"] = parseInt(totalPost)
+    item["totalPre"] = parseInt(totalPre)+Number(item?.dataCalculation?.amountVal)
+    item["totalPost"] = parseInt(totalPost)+Number(item?.dataCalculation?.amountVal)
     item["subTotalPre"] = parseInt(totalPre)
     item["subTotalPost"] = parseInt(totalPost)
-    item["addAmount"] = ''
+    item["addAmount"] = item?.dataCalculation?.amountVal
     item["select"] = item?.isSelected === "Y" ? true : false
     newData.push(item)
   })
@@ -195,9 +195,9 @@ const fn_SetAllItemUncheck=()=>{
   let newArr = registrationTypeList
     if(item.select){
       item.select = false
-      item.addAmount = ""
-      item.totalPre = (isNaN(Number(item?.subTotalPre)+Number(0)) ? 0 :Number(item?.subTotalPre)+Number(0)) 
-      item.totalPost = (isNaN(Number(item?.subTotalPost)+Number(0)) ? 0 :Number(item?.subTotalPost)+Number(0))
+      item.addAmount = Number(item?.dataCalculation?.amountVal)
+      item.totalPre = (isNaN(Number(item?.subTotalPre)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.subTotalPre)+Number(item?.dataCalculation?.amountVal)) 
+      item.totalPost = (isNaN(Number(item?.subTotalPost)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.subTotalPost)+Number(item?.dataCalculation?.amountVal))
       newArr.splice(index,1,item)
       setRegistrationTypeList([...newArr])
     }else{
@@ -434,7 +434,7 @@ const fn_AddAmtTotalCal=()=>{
             <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.subTotalPre : item?.subTotalPost) : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
-            <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.addAmount}</TextInput>        
+            <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.select ? item?.addAmount:0}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
             <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.totalPre : item?.totalPost) : 0}</Text>
