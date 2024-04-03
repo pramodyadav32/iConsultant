@@ -196,8 +196,10 @@ export default function PerformaScreen(props) {
 
    const GetProformaTaxMastersCallBack = (res) => {
       console.log("GetProformaTaxMastersCallBack = ", JSON.stringify(res));
+      dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaTaxMaster(res?.result)
+         setActive(0)
          // setVehiclePriceDetail(res.result?.vehPriceDetail);
       } else {
          constant.showMsg(res.message);
@@ -205,6 +207,7 @@ export default function PerformaScreen(props) {
    };
 
    const fn_GetProspectBasicInfo = () => {
+      dispatch(emptyLoader_Action(true))
       let param = {
          brandCode: userData?.brandCode,
          countryCode: userData?.countryCode,
@@ -576,7 +579,8 @@ export default function PerformaScreen(props) {
 
    const  fn_TabClick = (type) => {
       if (type === 0) {
-         setActive(type)
+         fn_GetProspectBasicInfo()
+        
       } else if (type === 1) {
          fn_GetAccessories(performaBasicDataHeader?.proformaList[0])        
       } else if (type === 2) {

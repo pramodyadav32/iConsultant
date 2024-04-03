@@ -67,6 +67,24 @@ export default function PerformaAccessories(props) {
   
   useEffect(()=>{
   //  setAccessoriesData(accessoriesSaveData)
+  let newArray = []
+  accessoriesSaveData.map((item)=>{
+    let newObj={
+      "description": item?.partDesc,
+      "itemCategory": item?.itemCategory,
+      "itemGroup": item?.itemGroup,
+      "partNo": item?.partNo,
+      "price": item?.mrpPrice,
+      "quantity": item?.qty,
+      "stock": 666,
+      "unit": item?.unit,
+      "totalAmount" :Number(item?.mrpPrice)* Number(item?.qty) ,
+      "negociatedPrice": item?.mrpPrice
+  }
+  newArray.push(newObj)
+  })
+  setAccessoriesData(newArray)
+ 
   },[accessoriesSaveData])
 
   const accessoriesList = ({ item, index }) => {
