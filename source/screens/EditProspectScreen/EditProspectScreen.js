@@ -286,6 +286,7 @@ export default function EditProspectScreen(props) {
 
     const GetActionDetailCallBack = (res) => {
         // dispatch(emptyLoader_Action(false))
+        console.log("actionList",JSON.stringify(res))
         if (res.statusCode === 200) {
             fn_GetActionMasterList()
             setActionInfo(res.result?.actionInfoList)
@@ -363,8 +364,40 @@ export default function EditProspectScreen(props) {
         }
     }
 
-    const fn_GetActionTypeCloseList = () => {
+    const fn_GetActionBeforeCloser = () => {
         dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "PROSPECT_ID",
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "type": "",
+            "code": "",
+            "status": "A",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+            "actionDate": ""
+
+        }
+        tokenApiCall(GetActionBeforeCloserCallBack, APIName.GetActionsList, "POST", param)
+    }
+
+    const GetActionBeforeCloserCallBack = (res) => {
+        // dispatch(emptyLoader_Action(false))
+        console.log("actionList",JSON.stringify(res))
+        if (res.statusCode === 200) {
+            setActionInfo(res.result?.actionInfoList)
+            fn_GetActionTypeCloseList()
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+
+    const fn_GetActionTypeCloseList = () => {
+       
         let param = {
             "brandCode": userData?.brandCode,
             "countryCode": userData?.countryCode,
@@ -573,7 +606,8 @@ export default function EditProspectScreen(props) {
             fn_GetProfile()
 
         } else {
-            fn_GetActionTypeCloseList()
+            fn_GetActionBeforeCloser()
+            // fn_GetActionTypeCloseList()
             // setActive(5)
         }
 
@@ -619,7 +653,8 @@ export default function EditProspectScreen(props) {
 
     const fn_CustumerSave=()=>{
         // constant.showMsg("Profile Save Successfully")
-        fn_GetActionTypeCloseList()
+        fn_GetActionBeforeCloser()
+        // fn_GetActionTypeCloseList()
     }
 
     return (
@@ -711,7 +746,7 @@ export default function EditProspectScreen(props) {
                             prospectMaster={prospectMasterData}
                             existing_Vehicle = {existingVehicle}
                             custumerSave = {()=>fn_CustumerSave()}
-                            fn_Next={()=> fn_GetActionTypeCloseList()}
+                            fn_Next={()=> fn_GetActionBeforeCloser()}
 
                         />
                     }
@@ -721,6 +756,7 @@ export default function EditProspectScreen(props) {
                             actionType_Data={actionTypeData}
                             modelData={veh_ModelData}
                             perform_Data={performData}
+                            action_Info={actionInfo}
                             data={basicInfo}
                             fn_Next={()=>navigation.pop(2)}
                         />

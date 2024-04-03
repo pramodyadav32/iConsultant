@@ -931,6 +931,7 @@ export default function ProspectScreen(props) {
   const EntityClickCallBack = async (res) => {
     console.log("search", JSON.stringify(res));
     if (res.statusCode === 200) {
+      setTitleValue({})
       await res.result.map((item) => {
          if (item.listType === "TITLE") {
           setTitle(item.prospectMasterList);
@@ -1120,6 +1121,7 @@ export default function ProspectScreen(props) {
               <SelectDropList
                 list={title}
                 title={titleValue?.description=== undefined ? ' ' : titleValue?.description}
+                refType={Object.keys(titleValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setTitleValue(d)}

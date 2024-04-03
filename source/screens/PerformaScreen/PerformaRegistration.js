@@ -328,11 +328,11 @@ const fn_AddAmtTotalCal=()=>{
               index===0 &&  <View style={{flex:1,flexDirection:'row'}}>
                 <View style={[styles. bottomMainView2,{}]}>
                 <Text style={styles.text5}>Style</Text>
-                  <Text style={styles.text6}>{item?.vehExteriorColor}</Text>
+                  <Text style={styles.text6}>{item?.vehVariantStyle}</Text>
                 </View> 
                 <View style={[styles. bottomMainView2,{}]}>
                 <Text style={styles.text5}>MV/VY</Text>
-                  <Text style={styles.text6}>{item?.docFy}</Text>
+                  <Text style={styles.text6}>{item?.modelYear}-{item?.vinYear}</Text>
                 </View> 
                 </View>
               

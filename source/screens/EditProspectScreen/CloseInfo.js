@@ -26,7 +26,7 @@ let data1=[
 ]
 
 export default function CloseInfo(props) {
-  const { actionType_Data, modelData, data, perform_Data,fn_Next } = props
+  const { actionType_Data, modelData, data, perform_Data,fn_Next,action_Info } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeData, setActionTypeData] = useState([])
@@ -69,6 +69,26 @@ export default function CloseInfo(props) {
     fn_GetClosureMaster()
     fn_GetCompitionVehicleInfo("", "", "BRAND")
   }, [])
+
+  useEffect(()=>{
+    action_Info.length>0 ?
+    actionType_Data.map((item)=>{
+      if(item?.code===action_Info[0]?.actionCode){
+        if(action_Info[0]?.actionCode==='06'){
+          modelData.map((item)=>{
+            if(item?.code===action_Info[0]?.model){
+              setModelValue(item)
+            }
+          })
+        }
+        setActionTypeValue(item)
+      }
+    })
+    : null
+  },[action_Info])
+
+ 
+
 
 
   const fn_GetClosureMaster = () => {
@@ -674,9 +694,13 @@ const fn_ListFooter=()=>{
             <SelectDropList
               list={actionType_Data}
               title={actionTypeValue?.description}
+              refType={Object.keys(actionTypeValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              on_Select={(d) => setActionTypeValue(d)}
+              on_Select={(d) => {
+                setActionTypeValue(d)
+                setModelValue({})
+              }}
             />
           </View>
 
@@ -685,6 +709,7 @@ const fn_ListFooter=()=>{
             <SelectDropList
               list={modelData}
               title={modelValue?.description}
+              refType={Object.keys(modelValue).length===0 ?false : true}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => setModelValue(d)}

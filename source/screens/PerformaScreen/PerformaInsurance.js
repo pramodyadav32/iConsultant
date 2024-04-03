@@ -140,6 +140,7 @@ export default function PerformaInsurance(props) {
         calData.push(item)
       item?.selectedValue==='Y' ? setCalOnValue(item) : null 
       item?.selectedValue === 'Y' ? calculateInsurance() : null
+      item?.selectedValue === 'Y' ? setSelectState(true) : null
 
       } else if (item?.dataType === 'INSU_TYPE') {
         type.push(item)

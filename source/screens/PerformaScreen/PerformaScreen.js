@@ -752,7 +752,7 @@ export default function PerformaScreen(props) {
       )
   }
 
-  const fn_SaveBasicInfo=()=>{
+  const fn_SaveBasicInfo=(type)=>{
    let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -766,19 +766,23 @@ export default function PerformaScreen(props) {
       SaveBasicInfoCallBack,
       APIName.GetProspectBasicInfo,
       "POST",
-      param
+      param,
+      type
    );
   }
 
-  const SaveBasicInfoCallBack = (res) => {
+  const SaveBasicInfoCallBack = (res,type) => {
    console.log("SaveBasicInfoCal = ", JSON.stringify(res));
    //   dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaBasicDataHeader(res?.result)
        res.result?.proformaList.length > 0 ? setProformaId(res.result?.proformaList[0]?.docRunningNo) : null
-       fn_performDetail(res?.result?.proformaList[0],2)
-       fn_GetAccessories(res?.result?.proformaList[0])
-       
+        if(type===2){
+         fn_performDetail(res?.result?.proformaList[0],3)
+        }else{
+         fn_performDetail(res?.result?.proformaList[0],2)
+         fn_GetAccessories(res?.result?.proformaList[0])
+        }
       } else {
          constant.showMsg(res.message);
       }
@@ -940,7 +944,7 @@ const GetAccessoriesCallBack = (res) => {
                   performaGeneralMasterData={proformaGeneralMasters}
                   cardData = {route.params.cardData}
                   texMasterData ={performaTaxMaster}
-                  SaveInfo = {()=>{fn_SaveBasicInfo()}}
+                  SaveInfo = {()=>{fn_SaveBasicInfo(1)}}
                   prospect_No = {performaNo}
                   intrestedVehicleList = {intrestedVehicleList}
                   proformaId = {proformaId}
@@ -951,7 +955,7 @@ const GetAccessoriesCallBack = (res) => {
                accessoriesSaveData = {saveAccessories}
                performaBasicInfo={performaBasicDataHeader}
                fn_Next={()=>{
-                  fn_SaveBasicInfo()
+                  fn_SaveBasicInfo(2)
                   fn_GetProformaInsuMaster()
                }}
                />}

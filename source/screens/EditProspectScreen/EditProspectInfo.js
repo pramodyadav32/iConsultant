@@ -558,7 +558,7 @@ export default function EditProspectInfo(props) {
             constant.showMsg(res.message)
         }
     }
-    const fn_EntityClick=(d)=>{
+    const fn_EntityClick=(d,type=0)=>{
         setProspectTypeValue(d)
         dispatch(emptyLoader_Action(true));
         let param = {
@@ -591,24 +591,30 @@ export default function EditProspectInfo(props) {
           EntityClickCallBack,
           APIName.GetProspectMaster,
           "POST",
-          param
+          param,
+          type
         );
       }
     
     
-      const EntityClickCallBack = async (res) => {
+      const EntityClickCallBack = async (res,type) => {
         console.log("search", JSON.stringify(res));
         if (res.statusCode === 200) {
+            
           await res.result.map((item) => {
-             if (item.listType === "TITLE") {
+            //  if (item.listType === "TITLE") {
                 if (item.listType === 'TITLE') {
                     setTitle(item.prospectMasterList)
-                    item.prospectMasterList.map((item) => {
+                 if(type===0){   item.prospectMasterList.map((item) => {
+                        console.log("item",item)
                         item?.code === prospectDetail?.title ? setTitleValue(item) : null
                     })
+                }else{
+                    setTitleValue({})
+                }
                 } 
               
-            }
+            // }
           });
           dispatch(emptyLoader_Action(false));
         } else {
@@ -638,7 +644,7 @@ export default function EditProspectInfo(props) {
                                     refType={Object.keys(prospectTypeValue).length===0 ?false : true}
                                     buttonExt={styles.dropList}
                                     textExt={styles.dropListText}
-                                    on_Select={(d) => {fn_EntityClick(d)}}
+                                    on_Select={(d) => {fn_EntityClick(d,1)}}
                                 />
                             </View>
                         </View>
@@ -651,6 +657,7 @@ export default function EditProspectInfo(props) {
                                     list={title}
                                     title={titleValue?.description==='' || titleValue?.description=== undefined ? " " : titleValue?.description }
                                     buttonExt={styles.dropList}
+                                    refType={Object.keys(titleValue).length===0 ?false : true}
                                     textExt={styles.dropListText}
                                     on_Select={(d) => setTitleValue(d)}
 
