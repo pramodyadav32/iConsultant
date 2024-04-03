@@ -190,17 +190,17 @@ export default function PerformaBasicInfo(props) {
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
     setExShowRoomPostPrice(newTotal + basicDiscount);
-    fn_TcsCalculation({ code: "PAN_CARD", description: "Pan Card available" })
+    fn_TcsCalculation({ code: "PAN_CARD", description: "Pan Card available"}, (newTotal + basicDiscount))
   };
 
-  fn_TcsCalculation=(data)=>{
+  fn_TcsCalculation=(data, firstTimeTotal)=>{
    if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
       let newTcs = 0;
       texMasterData?.tcsDetail?.map((item) => {
         if (item?.trxnBasis === data?.code) {
          setTcsPercentageValue(item?.tcsRate)
           newTcs = Math.round(
-            ((totalAmount + basicPriceDiscount) * item?.tcsRate) / 100,
+            ((firstTimeTotal === 0 ? (exShowRoomPostPrice) : firstTimeTotal) * item?.tcsRate) / 100,
             0
           );
         }
@@ -727,7 +727,7 @@ export default function PerformaBasicInfo(props) {
                   textExt={styles.dropListText}
                   on_Select={(d) => {
                      setTrnsBasicValue(d)
-                     fn_TcsCalculation(d)
+                     fn_TcsCalculation(d, 0)
                   }}
                 />
               </View>
@@ -767,7 +767,7 @@ export default function PerformaBasicInfo(props) {
                   <Text style={styles.listText2}>
                     Ex-Showroom(Post Discount)
                   </Text>
-                  <Text style={styles.listText3}>{exShowRoomPostPrice+tcsValue}</Text>
+                  <Text style={styles.listText3}>{exShowRoomPostPrice}</Text>
                 </View>
               </View>
 

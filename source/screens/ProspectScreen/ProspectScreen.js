@@ -892,6 +892,7 @@ export default function ProspectScreen(props) {
 
   const fn_EntityClick=(d)=>{
     setEntityValue(d)
+    setTitleValue({})
     dispatch(emptyLoader_Action(true));
     let param = {
       brandCode: userData?.brandCode,

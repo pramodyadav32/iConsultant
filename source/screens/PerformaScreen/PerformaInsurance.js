@@ -480,7 +480,7 @@ export default function PerformaInsurance(props) {
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
-            <Text style={styles.detailText}>Rate</Text>
+            <Text style={styles.detailText}>Discount Rate</Text>
             <SelectDropList
               list={otherRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
