@@ -138,13 +138,20 @@ export default function PerformaInsurance(props) {
     insurance_Data?.insurenceDataList.map((item) => {
       if (item?.dataType === 'INSU_CALC_ON') {
         calData.push(item)
+      item?.selectedValue==='Y' ? setCalOnValue(item) : null 
+      item?.selectedValue === 'Y' ? calculateInsurance() : null
+
       } else if (item?.dataType === 'INSU_TYPE') {
         type.push(item)
+        item?.selectedValue==='Y' ? setTypevalue(item) : null 
       }
       else if (item?.dataType === 'INSU_DISCOUNT_CALC_RULE') {
         rule.push(item)
+        item?.selectedValue==='Y' ? setDiscountRuleValue(item) : null 
+        item?.selectedValue ==='Y' ?  calculateInsurance() : null
       }else if (item?.dataType === 'INSU_LOCATION') {
         insuLocation.push(item)
+        item?.selectedValue==='Y' ? setLocationValue(item) : null 
       }
     })
     setCalOnData(calData)
@@ -153,6 +160,8 @@ export default function PerformaInsurance(props) {
     setInsuranceLocation(insuLocation)
     generalMaster_Data?.selectMasterList?.map((item) => {
       if (item?.listType === 'INSU_COMPANY') {
+        item?.selectedValue==='Y' ? setCompanyValue(item) : null 
+
         setINSU_COMPANY(item?.basicList)
       }
     })
@@ -308,6 +317,8 @@ export default function PerformaInsurance(props) {
               desName='3'
               disable={!selectState}
               buttonExt={styles.dropList}
+              refType={Object.keys(typeValue).length===0 ?false : true}
+              title={typeValue?.dataDescription}
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setTypevalue(d)
@@ -323,6 +334,8 @@ export default function PerformaInsurance(props) {
               desName='3'
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
+              title={locationValue?.dataDescription}
+              refType={Object.keys(locationValue).length===0 ?false : true}
               textExt={styles.dropListText}
               on_Select={(d) => setLocationValue(d)}
             />
@@ -331,8 +344,10 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>Company</Text>
             <SelectDropList
               list={INSU_COMPANY}
+              refType={Object.keys(companyValue).length===0 ?false : true}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
+              title={companyValue?.dataDescription}
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCompanyValue(d)
@@ -347,6 +362,8 @@ export default function PerformaInsurance(props) {
               desName="3"
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
+             title={calOnValue?.dataDescription}
+             refType={Object.keys(calOnValue).length===0 ?false : true}
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCalOnValue(d)
@@ -451,6 +468,8 @@ export default function PerformaInsurance(props) {
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
+              title={discountRuleValue?.dataDescription}
+              refType={Object.keys(discountDepValue).length===0 ?false : true}
               on_Select={(d) => {
                 console.log("dis rule selected = ", d)
                 setDiscountRuleValue(d)

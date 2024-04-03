@@ -63,6 +63,7 @@ export default function PerformaRegistration(props) {
     item["subTotalPre"] = parseInt(totalPre)
     item["subTotalPost"] = parseInt(totalPost)
     item["addAmount"] = ''
+    item["select"] = item?.isSelected === "Y" ? true : false
     newData.push(item)
   })
   setRegistrationTypeList([...newData])
@@ -70,15 +71,22 @@ export default function PerformaRegistration(props) {
   let location=[]
   let source = []
   let rtoCal = []
+  console.log("item",regData)
   regData?.selectMasterList.map((item)=>{
     if(item?.group === 'REGN_LOCATION')
     {
       location.push(item)
+      item?.isSelected === 'Y' ? setLoactionValue(item) : null
+
     }else if(item?.group === 'SOURCE')
     {
       source.push(item)
+      item?.isSelected === 'Y' ? setSourceValue(item) : null
+      
     }else if(item?.group === 'RTO_CALC_ON'){
       rtoCal.push(item)
+      item?.isSelected === 'Y' ? calculationOnValue(item) : null
+
     }
   
   })
@@ -95,6 +103,8 @@ export default function PerformaRegistration(props) {
   performaGeneralMasterData?.selectMasterList.map((item)=>{
     if(item?.listType ==='RTO_CODE'){
       setRtoLocation(item.basicList)
+      item?.isSelected === 'Y' ? setRtoLocationSelected(item) : null
+
     }
    })
 
@@ -290,6 +300,8 @@ const fn_AddAmtTotalCal=()=>{
               <Text style={styles.detailText}>Regn Location</Text>
               <SelectDropList
                 list={locationData}
+                title={locationValue?.description}
+                refType={Object.keys(locationValue).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d)=>setLoactionValue(d)}
@@ -301,7 +313,8 @@ const fn_AddAmtTotalCal=()=>{
               <SelectDropList
                 list={rtoLocation}
                 disable={false}
-                // title={locationValue.code==='' ? ' ' : locationValue?.code }
+                title={rtoLocationSelected?.description }
+                refType={Object.keys(rtoLocationSelected).length===0 ?false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d)=>setRtoLocationSelected(d)}
@@ -333,6 +346,8 @@ const fn_AddAmtTotalCal=()=>{
               <SelectDropList
                 list={sourceData}
                 buttonExt={styles.dropList}
+                title={sourceValue?.description}
+                refType={Object.keys(sourceValue).length===0 ?false : true}
                 textExt={styles.dropListText}
                 on_Select={(d)=>setSourceValue(d)}
               />
@@ -353,6 +368,8 @@ const fn_AddAmtTotalCal=()=>{
               <SelectDropList
                 list={calculationOnData}
                 buttonExt={styles.dropList}
+                refType={Object.keys(calculationOnValue).length===0 ?false : true}
+                title={calculationOnValue?.description}
                 textExt={styles.dropListText}
                 on_Select={(d)=>setCalculationOnValue(d)}
               />
