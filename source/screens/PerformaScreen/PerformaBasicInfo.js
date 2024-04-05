@@ -495,7 +495,7 @@ export default function PerformaBasicInfo(props) {
             >
               <View style={[styles.driveListDetailSubView, {}]}>
                 <Text style={styles.listText2}>Proforma Inv no</Text>
-                <Text style={styles.listText3}>New</Text>
+                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length > 0 ? "Edit" : "New"}</Text>
               </View>
               <View style={styles.driveListDetailSubView2}>
                 <Text style={styles.listText2}>Dated</Text>

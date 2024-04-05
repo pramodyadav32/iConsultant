@@ -277,7 +277,7 @@ const fn_AddAmtTotalCal=()=>{
             <View style={{flex:1,flexDirection:'row'}}>
             <View style={[styles. bottomMainView2,{}]}>
             <Text style={styles.text5}>District</Text>
-              <Text style={styles.text6}>-</Text>
+              <Text style={styles.text6}>{regData?.priceDetails?.districtName}</Text>
             </View> 
             <View style={[styles. bottomMainView2,{}]}>
             <Text style={styles.text5}>Charges Applicable On</Text>
