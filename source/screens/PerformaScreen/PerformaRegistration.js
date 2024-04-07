@@ -58,8 +58,15 @@ export default function PerformaRegistration(props) {
   regData?.registrationTypeList.map((item)=>{
     let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
     let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
+    let totalCarPrice = (regData?.priceDetails?.vehFullValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
+    let totalCarPriceDiscount = (regData?.priceDetails?.vehFullValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
+
     item["totalPre"] = parseInt(totalPre)+Number(item?.dataCalculation?.amountVal)
     item["totalPost"] = parseInt(totalPost)+Number(item?.dataCalculation?.amountVal)
+    item["PreCarPrice"] = parseInt(totalCarPrice)+Number(item?.dataCalculation?.amountVal)
+    item["PostCarPrice"]=parseInt(totalCarPriceDiscount)+Number(item?.dataCalculation?.amountVal)
+    item["PreSubCarPrice"] = parseInt(totalCarPrice)
+    item["PostSubCarPrice"]=parseInt(totalCarPriceDiscount)
     item["subTotalPre"] = parseInt(totalPre)
     item["subTotalPost"] = parseInt(totalPost)
     item["addAmount"] = item?.dataCalculation?.amountVal
@@ -122,7 +129,7 @@ export default function PerformaRegistration(props) {
       "costHeadCode": item?.code,
       "basicAmount": performaPriceDetail?.vehBasicAmount,
       "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
-      "totalAmount": calculationOnData === "EX_SR_PRE_DISC" ? parseInt(item.totalPre) : parseInt(item.totalPost)
+      "totalAmount": calculationOnValue?.code === "EX_SR_PRE_DISC" ? parseInt(item.totalPre) : calculationOnValue?.code === "TOT_CAR_PRICE" ? parseInt(item.PreCarPrice) : calculationOnValue?.code === "TOT_CAR_PRICE_PRE_DISC"? parseInt(item.PostCarPrice) : parseInt(item.totalPost)
      }
      newList.push(newObj)
     }
@@ -198,6 +205,10 @@ const fn_SetAllItemUncheck=()=>{
       item.addAmount = Number(item?.dataCalculation?.amountVal)
       item.totalPre = (isNaN(Number(item?.subTotalPre)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.subTotalPre)+Number(item?.dataCalculation?.amountVal)) 
       item.totalPost = (isNaN(Number(item?.subTotalPost)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.subTotalPost)+Number(item?.dataCalculation?.amountVal))
+
+      item.PreCarPrice = (isNaN(Number(item?.PreSubCarPrice)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.PreSubCarPrice)+Number(item?.dataCalculation?.amountVal))
+      item.PostCarPrice = (isNaN(Number(item?.PostSubCarPrice)+Number(item?.dataCalculation?.amountVal)) ? 0 :Number(item?.PostSubCarPrice)+Number(item?.dataCalculation?.amountVal))
+
       newArr.splice(index,1,item)
       setRegistrationTypeList([...newArr])
     }else{
@@ -214,6 +225,8 @@ const fn_SetAllItemUncheck=()=>{
       item.addAmount = Number(d)
       item.totalPre =  isNaN(Number(item?.subTotalPre)+Number(d)) ? 0 :Number(item?.subTotalPre)+Number(d)
       item.totalPost =  isNaN(Number(item?.subTotalPost)+Number(d)) ? 0 :Number(item?.subTotalPost)+Number(d) 
+      item.PreCarPrice =  isNaN(Number(item?.PreSubCarPrice)+Number(d)) ? 0 :Number(item?.PreSubCarPrice)+Number(d)
+      item.PostCarPrice =  isNaN(Number(item?.PostSubCarPrice)+Number(d)) ? 0 :Number(item?.PostSubCarPrice)+Number(d) 
       newArray.push(item)
     }else{
       newArray.push(item)
@@ -248,23 +261,80 @@ const fn_Footer=()=>{
 }
 
 const fn_PriceTotalCal=()=>{
-  let add1 = 0
-  registrationTypeList.map((item,index)=>{
-    if(item?.select){
-   add1 = add1+ (calculationOnValue?.code === "EX_SR_PRE_DISC" ? Number(item?.subTotalPre) : Number(item?.subTotalPost)) 
-    }
-  })
-  return(add1)
+  if(calculationOnValue?.code==="EX_SR_PRE_DISC" ){
+    let add1 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add1 = add1+  Number(item?.subTotalPre)
+      }
+    })
+    return(add1)
+  }else if(calculationOnValue?.code==="TOT_CAR_PRICE"){
+    let add1 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add1 = add1+ ( Number(item?.PreSubCarPrice)) 
+      }
+    })
+    return(add1)
+
+  }else if(calculationOnValue?.code==="TOT_CAR_PRICE_PRE_DISC"){
+    let add1 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add1 = add1+ ( Number(item?.PostSubCarPrice)) 
+      }
+    })
+    return(add1)
+  }else{
+    let add1 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add1 = add1+ Number(item?.subTotalPost)
+      }
+    })
+    return(add1)
+  }
+ 
 }
 
 const fn_AddAmtTotalCal=()=>{
-  let add2 = 0
+
+
+  if(calculationOnValue?.code==="EX_SR_PRE_DISC" ){
+    let add2 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add2 = add2 +  Number(item?.totalPre)
+      }
+    })
+    return(add2)
+  }else if(calculationOnValue?.code==="TOT_CAR_PRICE"){
+    let add2 = 0
   registrationTypeList.map((item,index)=>{
     if(item?.select){
-   add2 = add2 +  (calculationOnValue?.code === "EX_SR_PRE_DISC" ? Number(item?.totalPre) : Number(item?.totalPost))
+   add2 = add2 +   Number(item?.PreCarPrice)
     }
   })
   return(add2)
+
+  }else if(calculationOnValue?.code==="TOT_CAR_PRICE_PRE_DISC"){
+    let add2 = 0
+  registrationTypeList.map((item,index)=>{
+    if(item?.select){
+   add2 = add2 +  Number(item?.PostCarPrice)
+    }
+  })
+  return(add2)
+  }else{
+    let add2 = 0
+    registrationTypeList.map((item,index)=>{
+      if(item?.select){
+     add2 = add2 +   Number(item?.totalPost)
+      }
+    })
+    return(add2)
+  }
 }
 
    return (
@@ -277,7 +347,7 @@ const fn_AddAmtTotalCal=()=>{
             <View style={{flex:1,flexDirection:'row'}}>
             <View style={[styles. bottomMainView2,{}]}>
             <Text style={styles.text5}>District</Text>
-              <Text style={styles.text6}>-</Text>
+              <Text style={styles.text6}>{regData?.priceDetails?.districtName}</Text>
             </View> 
             <View style={[styles. bottomMainView2,{}]}>
             <Text style={styles.text5}>Charges Applicable On</Text>
@@ -431,13 +501,18 @@ const fn_AddAmtTotalCal=()=>{
               />
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.subTotalPre : item?.subTotalPost) : 0}</Text>
+            <Text style={styles.text8}>{
+            item?.select ?
+             (calculationOnValue?.code === "EX_SR_PRE_DISC" ? 
+             item?.subTotalPre : calculationOnValue?.code === "TOT_CAR_PRICE"? item?.PreSubCarPrice : calculationOnValue?.code === "TOT_CAR_PRICE_PRE_DISC" ? item?.PostSubCarPrice : item?.subTotalPost) : 0}</Text>
            </View>
            <View style={styles.callHeaderSubView3}>
             <TextInput keyboardType='numeric' onChangeText={(d)=>fn_AddAmount(d,index)} editable={item?.select ? true : false} style={styles.dropList3} >{item?.select ? item?.addAmount:0}</TextInput>        
            </View>
            <View style={styles.callHeaderSubView2}>
-            <Text style={styles.text8}>{item?.select ? (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.totalPre : item?.totalPost) : 0}</Text>
+            <Text style={styles.text8}>{
+            item?.select ? 
+            (calculationOnValue?.code === "EX_SR_PRE_DISC" ? item?.totalPre : calculationOnValue?.code === "TOT_CAR_PRICE"? item?.PreCarPrice : calculationOnValue?.code === "TOT_CAR_PRICE_PRE_DISC" ? item?.PostCarPrice : item?.totalPost) : 0}</Text>
            </View>
           </View >
                 </View>

@@ -88,7 +88,7 @@ export default function PerformaBasicInfo(props) {
       performaBasicInfo
     );
     console.log("performaGeneralMasterData texMasterData = ", texMasterData);
-    console.log("performaGeneralMasterData cardData = ", cardData);
+    console.log("performaGeneralMasterData cardData = ", performaBasicInfo);
 
     performaGeneralMasterData?.selectMasterList.map((item) => {
       if (item?.listType === "BILLING_LOCATION") {
@@ -137,7 +137,10 @@ export default function PerformaBasicInfo(props) {
 
   useEffect(() => {
     fn_CalTax();
-    setTrnsBasicValue({code: "PAN_CARD", description: "Pan Card available" })
+    transData.map((item)=>{
+      console.log("trans",JSON.stringify(item))
+      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
+    })
     setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice);
   }, [performaPriceDetail, texMasterData]);
 
@@ -190,7 +193,10 @@ export default function PerformaBasicInfo(props) {
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
     setExShowRoomPostPrice(newTotal + basicDiscount);
-    fn_TcsCalculation({ code: "PAN_CARD", description: "Pan Card available"}, (newTotal + basicDiscount))
+    transData.map((item)=>{
+      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount)) : null
+    })
+   
   };
 
   fn_TcsCalculation=(data, firstTimeTotal)=>{
@@ -495,7 +501,7 @@ export default function PerformaBasicInfo(props) {
             >
               <View style={[styles.driveListDetailSubView, {}]}>
                 <Text style={styles.listText2}>Proforma Inv no</Text>
-                <Text style={styles.listText3}>New</Text>
+                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length===0 ? 'new' :performaBasicInfo?.proformaList[0]?.docRunningNo }</Text>
               </View>
               <View style={styles.driveListDetailSubView2}>
                 <Text style={styles.listText2}>Dated</Text>
@@ -724,6 +730,7 @@ export default function PerformaBasicInfo(props) {
                   list={transData}
                   buttonExt={styles.dropList}
                   title={trnsBasicValue?.description}
+                  refType={Object.keys(trnsBasicValue).length===0 ?false : true}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
                      setTrnsBasicValue(d)

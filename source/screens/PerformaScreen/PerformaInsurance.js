@@ -185,6 +185,26 @@ export default function PerformaInsurance(props) {
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
+      "insuranceType": "string",
+      "insuSource": "string",
+      "insuranceCalcOn": "string",
+      "insuversion": 0,
+      "insudiscrule": "string",
+      "basicpremiumperc1": 0,
+      "basicpremiumperc2": 0,
+      "ncb": 0,
+      "idv": 0,
+      "insudiscountperc": 0,
+      "insuAssetValueGross": 0,
+      "insuAssetValueNet": 0,
+      "insuLoadingAmt": 0,
+      "idv2NildepApply": "string",
+      "idv2NildepPercentage": 0,
+      "idv2NildepAmount": 0,
+      "idv2NildepAddOnAmount": 0,
+      "idv2NildepDiscountPercentage": 0,
+      "idv2NildepDiscountAmount": 0,
+      "insuFinalDiscount": 0
     }
     tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
   }
@@ -311,8 +331,6 @@ export default function PerformaInsurance(props) {
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Type</Text>
-            {console.log("typeData", typeData)}
-
             <SelectDropList
               list={typeData}
               desName='3'

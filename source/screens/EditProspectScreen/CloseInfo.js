@@ -26,7 +26,7 @@ let data1=[
 ]
 
 export default function CloseInfo(props) {
-  const { actionType_Data, modelData, data, perform_Data,fn_Next,action_Info } = props
+  const { actionType_Data, modelData, data, perform_Data,fn_Next,action_Info,proformaDetail } = props
   const dispatch = useDispatch()
   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
   const [actionTypeData, setActionTypeData] = useState([])
@@ -167,7 +167,7 @@ export default function CloseInfo(props) {
   }else if (Object.keys(closureValue).length === 0) {
     constant.showMsg("Plesae select at least one Reason!")
 }else if(remark===''){
-  constant.showMsg("Plesae enter remarks")
+  constant.showMsg("Please Enter Remarks Alert.")
 }
  else if(showDislikeAndBrand){
   if (compVehBrandSelected === undefined && Object.keys(compVehBrandSelected).length === 0) {
@@ -175,7 +175,7 @@ export default function CloseInfo(props) {
     } else if (Object.keys(compVehModelSelected).length === 0) {
       constant.showMsg("Please select competiton Model")
       }else if (Object.keys(compVehVarientSelected).length === 0) {
-        constant.showMsg("Please select competiton Varient")
+        constant.showMsg("Please Select Variant")
         } else{
           let newArray = []
            dislikeData.map((data)=>{
@@ -187,7 +187,7 @@ export default function CloseInfo(props) {
            if(newArray.length>0){
             fn_Create(1)
            }else{
-            constant.showMsg("Plesae select at least one Reason!")
+            constant.showMsg("Please select at least one Reason.")
            }
           
           }
@@ -203,7 +203,7 @@ export default function CloseInfo(props) {
     fn_Create(1)
    
   }else{
-   constant.showMsg("Plesae select at least one Reason!")
+   constant.showMsg("Please select at least one Reason.")
   }
 }else if(showList?.show){
    let filterParam =  showList?.data.filter((item)=>{return(item?.dateValue === undefined)})
@@ -413,6 +413,7 @@ const GetProspectDetailCallBack = (res) => {
   }
 
   const fn_GetCompitionVehicleInfo = (brandCode, modelCode, calledBy) => {
+    console.log("proforma",JSON.stringify(proformaDetail))
     dispatch(emptyLoader_Action(true))
     let param = {
         "brandCode": userData?.brandCode,
@@ -420,7 +421,7 @@ const GetProspectDetailCallBack = (res) => {
         "companyId": userData?.companyId,
         "branchCode": selectedBranch?.branchCode,
         "prospectNo": Number(data?.prospectID),
-        "proformaId": 0,
+        "proformaId":proformaDetail != undefined ?  proformaDetail.length > 0 ? proformaDetail[0]?.docRunningNo : 0 : 0 ,
         "assembly": "",
         "edition": "",
         "model": "",

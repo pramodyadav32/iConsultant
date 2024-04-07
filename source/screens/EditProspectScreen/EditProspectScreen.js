@@ -23,7 +23,7 @@ import FeedBackModal from '../../components/FeedBackModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 import CustumerInfo from './CustumerInfo';
 import moment from 'moment';
-
+import { CommonActions } from '@react-navigation/native';
 const data = [
     { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
 
@@ -67,6 +67,7 @@ export default function EditProspectScreen(props) {
     const [existingVehicle,setExistingVehicle] = useState([])
     const [allVehicleData,setAllVehicleData] = useState([])
     const [vehicleReqListData,setVehicleReqListData] = useState([])
+    const [proformaDetail,setProformaDetail] = useState([])
     useEffect(() => {
         console.log("route.params.cardData = ", route.params.cardData)
         fn_GetProspectBasicInfo()
@@ -87,9 +88,10 @@ export default function EditProspectScreen(props) {
     }
 
     const GetProspectBasicInfoCallBack = (res) => {
-        console.log("basic",res?.result)
+        console.log("basic123",res?.result)
         if (res.statusCode === 200) {
             setBasicInfo(res.result?.prospectBasicInfo)
+            res.result?.proformaList === null ? null : setProformaDetail(res?.result?.proformaList)
             fn_GetProspectMaster()
         } else {
             dispatch(emptyLoader_Action(false))
@@ -757,8 +759,16 @@ export default function EditProspectScreen(props) {
                             modelData={veh_ModelData}
                             perform_Data={performData}
                             action_Info={actionInfo}
+                            proformaDetail={proformaDetail}
                             data={basicInfo}
-                            fn_Next={()=>navigation.pop(2)}
+                            fn_Next={()=>{
+                                props.navigation.dispatch(
+                                    CommonActions.reset({
+                                      index: 0,
+                                      routes: [{ name: 'HomeScreen' }],
+                                    }),
+                                  );
+                            }}
                         />
                     }
                 </View>

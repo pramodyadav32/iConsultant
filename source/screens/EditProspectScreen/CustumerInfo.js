@@ -100,10 +100,11 @@ export default function CustumerInfo(props) {
           }else if(item?.listType === "VARIANT"){
             // setVarientData(item?.existingVehicleMasterList)
             let newObj={"code":existing_Vehicle[0]?.variantCode}
-            fn_VarientClick(item,1)
+            // fn_VarientClick(item,1)
             item?.existingVehicleMasterList.map((item)=>{
            
                 if(item?.code === existing_Vehicle[0]?.variantCode){
+                
                     // setVarientValue(item)
                     fn_VarientClick(item,1)
                 }
@@ -354,9 +355,9 @@ export default function CustumerInfo(props) {
           if(item?.listType === "VARIANT"){
             if(type===1){
             item?.existingVehicleMasterList.map((item)=>{
-              console.log("model12",JSON.stringify(item))
               if(item?.code === existing_Vehicle[0]?.variantCode){
                   setVarientValue(item)
+                  fn_VarientClick(item,1)
               }
             })
           }
@@ -399,7 +400,6 @@ export default function CustumerInfo(props) {
   }
 
   const VarientClickCallBack = async (res,type) => {
-    console.log("profile", JSON.stringify(res))
     dispatch(emptyLoader_Action(false))
     if (res.statusCode === 200) {
       res?.result.map((item)=>{
@@ -450,13 +450,14 @@ export default function CustumerInfo(props) {
         console.log("profile", JSON.stringify(res))
         dispatch(emptyLoader_Action(false))
         if (res.statusCode === 200) {
-         
+          console.log("bbb",existing_Vehicle)
            res?.result.map((item)=>{
                 if(item?.listType === "OCCUPATION_PRODUCT"){
                   setProductSerialData([...item?.existingVehicleMasterList])
                  if(type===1){
                     item?.existingVehicleMasterList.map((item)=>{
                         if(item?.code === existing_Vehicle[0]?.productSerial){
+                          alert("aaa",item)
                             setProductSerialValue(item)
                         }
                       })
@@ -511,6 +512,7 @@ export default function CustumerInfo(props) {
             <SelectDropList 
              list={usageData}
              title={usageValue?.description}
+             refType={Object.keys(usageValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setUsageValue(d)}
@@ -524,6 +526,7 @@ export default function CustumerInfo(props) {
              list={bodyTypeData}
              title={bodyTypeValue?.description}
              buttonExt={styles.dropList}
+             refType={Object.keys(bodyTypeValue).length===0 ? true : false}
              textExt={styles.dropListText}
              on_Select={(d)=>fn_BodyClick(d)}
            />
@@ -536,6 +539,7 @@ export default function CustumerInfo(props) {
             <SelectDropList 
              list={brandData}
              title={brandValue?.description}
+             refType={Object.keys(brandValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>fn_BrandSelect(d)}
@@ -550,6 +554,7 @@ export default function CustumerInfo(props) {
             <SelectDropList 
              list={modelData}
              title={modelValue?.description}
+             refType={Object.keys(modelValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>fn_ModelClick(d)}
@@ -560,10 +565,11 @@ export default function CustumerInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Variant</Text>
             <View style={styles.mobileSubView}>
-              {console.log("varient",varientValue)}
+            
             <SelectDropList 
              list={varientData}
              title={varientValue?.description}
+             refType={Object.keys(varientValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>fn_VarientClick(d)}
@@ -574,9 +580,11 @@ export default function CustumerInfo(props) {
         <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Year of Purchase</Text>
             <View style={styles.mobileSubView}>
+            {console.log("varient",yearPurchaseValue)}
             <SelectDropList 
              list={yearPurchaseData}
              title={yearPurchaseValue?.description}
+             refType={Object.keys(yearPurchaseValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setYearPurchaseValue(d)}
@@ -590,6 +598,7 @@ export default function CustumerInfo(props) {
             <SelectDropList 
              list={qtyData}
              title={qtyValue?.description}
+             refType={Object.keys(qtyValue).length===0 ? true : false}
              buttonExt={styles.dropList}
              textExt={styles.dropListText}
              on_Select={(d)=>setQtyValue(d)}
