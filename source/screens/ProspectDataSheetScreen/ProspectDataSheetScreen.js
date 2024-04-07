@@ -592,7 +592,7 @@ export default function ProspectDataSheetScreen(props) {
                  <View style={styles.driveListDetailView}>
                         <View style={styles.driveListDetailSubView}>
                         <Text style={styles.listText2}>Action Comment</Text>
-                           <Text style={styles.listText3}>{prospectBasicInfo?.corporateComment}</Text>
+                           <Text style={styles.listText3}>{prospectBasicInfo?.actionComment}</Text>
                         </View>
                         <View style={styles.driveListDetailSubView2}>
                            <Text style={styles.listText2}>Project Closure</Text>

@@ -222,6 +222,7 @@ export default function CustumerInfo(props) {
             "prospectID":Number(data?.prospectID),
             "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
             "brandType": type===1 ? existing_Vehicle[0]?.bodyType : d?.code ,
+            "bodyType": type===1 ? existing_Vehicle[0]?.bodyType : d?.code ,
             "usage": "",
             "competitorBrand": "" ,
             "model":'',
@@ -277,6 +278,7 @@ export default function CustumerInfo(props) {
            "prospectID":Number(data?.prospectID),
            "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
            "brandType": type===1 ? existing_Vehicle[0]?.bodyType  : bodyTypeValue?.code ,
+           "bodyType": type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
            "usage": "",
            "competitorBrand": type===1 ? existing_Vehicle[0]?.make : d?.code ,
            "model":'',
@@ -307,6 +309,7 @@ export default function CustumerInfo(props) {
             })
           }
           setModelData(item?.existingVehicleMasterList)
+          console.log("aaaaaaaaaaaaaa = ", modelData)
             }
        })
       } else {
@@ -330,7 +333,8 @@ export default function CustumerInfo(props) {
            "companyId": userData?.companyId,
            "prospectID":Number(data?.prospectID),
            "calledBy": "MODEL,VARIANT",
-           "brandType": type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
+           "brandType": "",//type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
+           "bodyType": type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
            "usage": "",
            "competitorBrand": type===1 ? existing_Vehicle[0]?.make : brandValue?.code ,
            "model":type ===1 ? existing_Vehicle[0]?.modelCode: d?.code,
@@ -383,7 +387,8 @@ export default function CustumerInfo(props) {
          "companyId": userData?.companyId,
          "prospectID":Number(data?.prospectID),
          "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
-         "brandType": type===1 ? existing_Vehicle[0]?.bodyType  : bodyTypeValue?.code ,
+         "brandType": "",//type===1 ? existing_Vehicle[0]?.bodyType  : bodyTypeValue?.code ,
+         "bodyType": type===1 ? existing_Vehicle[0]?.bodyType : bodyTypeValue?.code ,
          "usage": "",
          "competitorBrand": type===1 ? existing_Vehicle[0]?.make : brandValue?.code ,
          "model":type ===1 ? existing_Vehicle[0]?.modelCode : modelValue?.code,
@@ -430,6 +435,7 @@ export default function CustumerInfo(props) {
             "prospectID":Number(data?.prospectID),
             "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
             "brandType": '',
+            "bodyType": "" ,
             "usage": "",
             "competitorBrand": "",
             "model":"",
