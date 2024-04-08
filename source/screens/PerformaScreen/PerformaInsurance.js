@@ -185,23 +185,23 @@ export default function PerformaInsurance(props) {
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
-      "insuranceType": "string",
-      "insuSource": "string",
-      "insuranceCalcOn": "string",
+      "insuranceType": typeValue?.dataValue,
+      "insuSource": "Calculator",
+      "insuranceCalcOn": calOnValue?.dataType,
       "insuversion": 0,
-      "insudiscrule": "string",
+      "insudiscrule": discountRuleValue?.dataType,
       "basicpremiumperc1": 0,
       "basicpremiumperc2": 0,
-      "ncb": 0,
-      "idv": 0,
-      "insudiscountperc": 0,
+      "ncb": ncbSelectedData?.title,
+      "idv": idvValue,
+      "insudiscountperc": otherRateValue?.title,
       "insuAssetValueGross": 0,
       "insuAssetValueNet": 0,
-      "insuLoadingAmt": 0,
+      "insuLoadingAmt": loadingAmt,
       "idv2NildepApply": "string",
-      "idv2NildepPercentage": 0,
+      "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": 0,
-      "idv2NildepAddOnAmount": 0,
+      "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
       "idv2NildepDiscountPercentage": 0,
       "idv2NildepDiscountAmount": 0,
       "insuFinalDiscount": 0
@@ -236,7 +236,7 @@ export default function PerformaInsurance(props) {
   };
 
   const calculateInsurance = () => {
-    let exShowRoomPrice = calOnValue?.dataValue === "EX_SHOWROOM_PRE_DISC" ? Number(insurance_Data?.exShowroomValueBeforeDiscount) : Number(insurance_Data?.exShowroomValueAfterDiscount)
+    let exShowRoomPrice = calOnValue?.dataValue === "EX_SHOWROOM_PRE_DISC" ? Number(insurance_Data?.exShowroomValueBeforeDiscount) : calOnValue?.dataValue === "ASSET_VALUE_POST_DISC" ? Number(insurance_Data?.vehFullValueAfterDiscount) : calOnValue?.dataValue === "ASSET_VALUE_PRE_DISC" ? Number(insurance_Data?.vehFullValueBeforeDiscount) :   Number(insurance_Data?.exShowroomValueAfterDiscount)
     setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
@@ -386,7 +386,7 @@ export default function PerformaInsurance(props) {
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCalOnValue(d)
-                calculateInsurance()
+               setTimeout(()=>{calculateInsurance()},1000)  
               }}
             />
           </View>
