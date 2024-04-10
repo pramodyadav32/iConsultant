@@ -34,7 +34,7 @@ export default function ActionList(props) {
                 </View>
                 <View style={{flex:1,flexDirection:'row'}}>
                     <View style={{flex:1,}}>
-                    <FastImage source={require('../../assets/dummy/car.png')} resizeMode='contain' style={styles.carImage} />
+                    <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
                     <View style={[{flexDirection:'row',justifyContent:'space-between',flex:1,paddingRight:constant.moderateScale(18)}]}>
                     <Text style={styles.ModelText3}>{item?.model}</Text>
                     <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>

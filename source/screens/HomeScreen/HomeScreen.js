@@ -171,25 +171,25 @@ export default function HomeScreen(props) {
     if (type == 1) {
       Animated.spring(position, {
         toValue: { x: constant.resW(3), y: constant.moderateScale(129.4) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
         toValue: { x: constant.resW(51), y: constant.moderateScale(129.4) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
         toValue: { x: constant.moderateScale(12), y: constant.moderateScale(265) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
         toValue: { x: constant.moderateScale(196), y: constant.moderateScale(265) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")
     }
@@ -199,25 +199,25 @@ export default function HomeScreen(props) {
     if (type == 1) {
       Animated.spring(position, {
         toValue: { x: constant.resW(2), y: constant.moderateScale(132) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
         toValue: { x: constant.resW(50.8), y: constant.moderateScale(131.5) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
         toValue: { x: constant.moderateScale(10.6), y: constant.moderateScale(268) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
         toValue: { x: constant.moderateScale(268), y: constant.moderateScale(268) }, // Example new position
-        useNativeDriver: false, // Ensure to set useNativeDriver to false for non-transform animations
+        useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")
     }
