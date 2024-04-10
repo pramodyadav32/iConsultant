@@ -501,7 +501,7 @@ export default function PerformaBasicInfo(props) {
             >
               <View style={[styles.driveListDetailSubView, {}]}>
                 <Text style={styles.listText2}>Proforma Inv no</Text>
-                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length===0 ? 'new' :performaBasicInfo?.proformaList[0]?.docRunningNo }</Text>
+                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length===0 ? 'new' :performaBasicInfo?.proformaList[0]?.docNo }</Text>
                 {/* <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length > 0 ? "Edit" : "New"}</Text> */}
               </View>
               <View style={styles.driveListDetailSubView2}>

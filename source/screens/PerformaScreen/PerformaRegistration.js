@@ -127,7 +127,7 @@ export default function PerformaRegistration(props) {
       "rtoAmtCalcBasis": item?.rtoAmtCalcBasis,
       "regnVersionSr": index,
       "costHeadCode": item?.code,
-      "basicAmount": performaPriceDetail?.vehBasicAmount,
+      "basicAmount": fn_AddAmtTotalCal(),
       "additionalAmount": item?.addAmount==='' ? 0 : parseInt(item?.addAmount),
       "totalAmount": calculationOnValue?.code === "EX_SR_PRE_DISC" ? parseInt(item.totalPre) : calculationOnValue?.code === "TOT_CAR_PRICE" ? parseInt(item.PreCarPrice) : calculationOnValue?.code === "TOT_CAR_PRICE_PRE_DISC"? parseInt(item.PostCarPrice) : parseInt(item.totalPost)
      }
