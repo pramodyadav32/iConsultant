@@ -119,7 +119,7 @@ export default function PerformaInsurance(props) {
   useEffect(() => {
 
    let insuranceHeadListTemp = insurance_Data?.insurenceHeadList.map((list, index) => {
-      return { ...list, isChecked: false, id: index };
+      return { ...list, isChecked: list?.selectedValue, id: index };
     });
     console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
     console.log("insurance_Data ==== ", JSON.stringify(insurance_Data))
@@ -170,6 +170,19 @@ export default function PerformaInsurance(props) {
   }, [insurance_Data, generalMaster_Data])
 
   const fn_SaveInsurance = () => {
+    let temp = []
+    insurenceHeadList?.map((item, index) => {
+      if(item?.isChecked){
+        let checkBoxParams = {
+          "srNo": index+1,
+          "insuCalcVersion": "" + item?.insuCalcVersionNo,
+          "headCode": item?.headCode,
+          "headAmount": Number(item?.headAmount)
+        }
+        temp.push(checkBoxParams)
+      }
+    })
+    
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
@@ -204,7 +217,8 @@ export default function PerformaInsurance(props) {
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
       "idv2NildepDiscountPercentage": 0,
       "idv2NildepDiscountAmount": 0,
-      "insuFinalDiscount": 0
+      "insuFinalDiscount": 0,
+      "proformaHeadList":temp
     }
     tokenApiCall(SaveInsuranceCallBack, APIName.SaveProformaInsurance, "POST", param)
   }
