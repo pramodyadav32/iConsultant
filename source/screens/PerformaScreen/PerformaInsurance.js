@@ -179,7 +179,7 @@ export default function PerformaInsurance(props) {
       "docFY": performaBasicInfo?.proformaList[0]?.docFy,
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "insuranceYN": selectState ? "Y" : "N",
-      "insuLocation": selectState ? "" : "",
+      "insuLocation": selectState ? locationValue?.dataValue : "",
       "insuCompanyCode": companyValue?.code,
       "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
       "insuGSTAmount": gstValue,
@@ -198,7 +198,7 @@ export default function PerformaInsurance(props) {
       "insuAssetValueGross": 0,
       "insuAssetValueNet": 0,
       "insuLoadingAmt": loadingAmt,
-      "idv2NildepApply": "string",
+      "idv2NildepApply": nilDipCheckStatus ? "Y" : "N",
       "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": 0,
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
@@ -241,8 +241,10 @@ export default function PerformaInsurance(props) {
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
     let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
-    let nilDipCharnges = nilDipCheckStatus ? ((idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage)))/100) + ((idvCharnges * Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100 : 0
-    
+    let nilDipCharnges = 0
+    if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
+      nilDipCharnges = nilDipCheckStatus ? ((idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage)))/100) + ((idvCharnges * Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100 : 0
+    }
     let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
     
     isNaN(discountOnNilDep) ? null :  setDiscountDepAmt(Math.round(discountOnNilDep,0))
