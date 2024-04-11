@@ -23,7 +23,7 @@ const data2 = [
 ]
 
 const otherRateData = [
-  { "key": 0, title: 0, description: 0 },
+  { "key": 0, title: 0, description: "0" },
   { "key": 1, title: 1, description: 1 },
   { "key": 2, title: 2, description: 2 },
   { "key": 3, title: 3, description: 3 },
@@ -128,13 +128,27 @@ export default function PerformaInsurance(props) {
     sourceData.map((item)=>{
       item?.title === insurance_Data?.insurenceDetail?.insuSource ? setSourceValue(item) : null
     })
+    otherRateData.map((item)=>{
+      item?.title === insurance_Data?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
+      item?.title === insurance_Data?.insurenceDetail?.idv2NildepAmount ? setDiscountDepValue(item) : null
+
+    })
+    insurance_Data?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
+
     setIdvListData(insurance_Data?.idvList)
+    insurance_Data?.idvList.map((item)=>{
+      item?.isSelected === "Y" ? setIdvValue(item): null
+    })
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
     setinsurenceDataList(insurance_Data?.insurenceDataList)
     setinsurenceHeadList(insuranceHeadListTemp);
     setinsurenceDetail(insurance_Data?.insurenceDetail)
     setNilDipData(insurance_Data?.idvCalculationList)
+
+    insurance_Data?.idvCalculationList.map((item)=>{
+      item?.idv2NildepPercentage === insurance_Data?.insurenceDetail?.idv2NildepPer ? setNilDipSelectedData(item) : null
+    })
 
     let calData = []
     let type = []
@@ -166,7 +180,12 @@ export default function PerformaInsurance(props) {
     setInsuranceLocation(insuLocation)
     generalMaster_Data?.selectMasterList?.map((item) => {
       if (item?.listType === 'INSU_COMPANY') {
-        item?.selectedValue==='Y' ? setCompanyValue(item) : null 
+          item?.basicList.map((items)=>{
+           
+ items?.isSelected==='Y' ? setCompanyValue(items) : null 
+          })
+
+       
 
         setINSU_COMPANY(item?.basicList)
       }
@@ -384,12 +403,13 @@ export default function PerformaInsurance(props) {
           </View>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
             <Text style={styles.detailText}>Company</Text>
+            {console.log("company",companyValue)}
             <SelectDropList
               list={INSU_COMPANY}
               refType={Object.keys(companyValue).length===0 ?false : true}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
-              title={companyValue?.dataDescription}
+              title={companyValue?.description}
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCompanyValue(d)
@@ -473,6 +493,8 @@ export default function PerformaInsurance(props) {
               list={otherRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
+              title={discountDepValue.description}
+              refType={Object.keys(discountDepValue).length===0 ?false : true}
               textExt={styles.dropListText}
               on_Select={(d) => {
                 console.log("dis on dep selected = ", d)
@@ -527,6 +549,8 @@ export default function PerformaInsurance(props) {
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
+              title={otherRateValue?.title}
+              refType={Object.keys(otherRateValue).length===0 ?false : true}
               on_Select={(d) => {
                 console.log("rate selected = ", d)
                 setOtherRateValue(d)
