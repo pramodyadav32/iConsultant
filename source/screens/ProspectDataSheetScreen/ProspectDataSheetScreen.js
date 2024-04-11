@@ -297,7 +297,7 @@ export default function ProspectDataSheetScreen(props) {
 
             <View style={styles.driveListDetailView}>
                <View style={styles.driveListDetailSubView}>
-                  <Text style={styles.listText2}>Stutus</Text>
+                  <Text style={styles.listText2}>Status</Text>
                   <Text style={styles.listText3}>{item?.statusDesc}</Text>
                </View>
                <View style={styles.driveListDetailSubView2}>

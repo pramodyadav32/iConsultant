@@ -166,9 +166,10 @@ export default function CloseInfo(props) {
       constant.showMsg("Please select closer Date")
   }else if (Object.keys(closureValue).length === 0) {
     constant.showMsg("Plesae select at least one Reason!")
-}else if(remark===''){
-  constant.showMsg("Please Enter Remarks Alert.")
 }
+// else if(remark===''){
+//   constant.showMsg("Please Enter Remarks Alert.")
+// }
  else if(showDislikeAndBrand){
   if (compVehBrandSelected === undefined && Object.keys(compVehBrandSelected).length === 0) {
     constant.showMsg("Please select competiton Brand")
@@ -272,15 +273,15 @@ const fn_GetProfileModel = () => {
 }
 
 const GetProfileModelCallBack = async (res) => {
- 
+  console.log("aaa",res)
   if (res.statusCode === 200) {
-     if(res?.result?.existingVehicleList[0].occupation===''){
+     if(res?.result?.existingVehicleList.length===0 ||res?.result?.existingVehicleList[0]?.occupation===''){
       setTimeout(()=>{
         dispatch(emptyLoader_Action(false))
       },1000)
       constant.showMsg("Please fill profile detail")
      }else{
-     
+      // dispatch(emptyLoader_Action(false))
       fn_GetProspectDetail()
      }   
   } else {

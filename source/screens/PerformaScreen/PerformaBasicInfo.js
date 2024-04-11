@@ -81,7 +81,7 @@ export default function PerformaBasicInfo(props) {
   const [tcsValue, setTcsValue] = useState("0");
 
   useEffect(() => {
-    console.log("performaGeneralMasterData = ", performaGeneralMasterData);
+    console.log("performaGeneralMasterData = ", JSON.stringify(performaGeneralMasterData));
     console.log("performaPriceDetail data = ", performaPriceDetail);
     console.log(
       "performaGeneralMasterData performaBasicInfo = ",
@@ -607,12 +607,13 @@ export default function PerformaBasicInfo(props) {
                 ]}
               >
                 <Text style={styles.detailText}>Usage</Text>
+               
                 <SelectDropList
                   list={usageData}
-                  refType={Object.keys(usageValue).length===0 ?false : true}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   title={usageValue?.description}
+                  refType={Object.keys(usageValue).length===0 ?false : true}
                   on_Select={(d) => setUsageValue(d)}
                 />
               </View>

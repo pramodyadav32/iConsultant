@@ -114,7 +114,8 @@ export default function PerformaInsurance(props) {
   const [totalPayable,setTotalPayable] = useState(0)
   const [priceValue,setPriceValue] = useState(0)
   const [insuranceLocation, setInsuranceLocation] = useState([])
-
+  const [sourceValue,setSourceValue] = useState({})
+ 
 
   useEffect(() => {
 
@@ -123,6 +124,10 @@ export default function PerformaInsurance(props) {
     });
     console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
     console.log("insurance_Data ==== ", JSON.stringify(insurance_Data))
+
+    sourceData.map((item)=>{
+      item?.title === insurance_Data?.insurenceDetail?.insuSource ? setSourceValue(item) : null
+    })
     setIdvListData(insurance_Data?.idvList)
     setbasicPremiumList(insurance_Data?.basicPremiumList)
     setidvCalculationList(insurance_Data?.idvCalculationList)
@@ -340,8 +345,10 @@ export default function PerformaInsurance(props) {
               list={sourceData}
               disable={!selectState}
               buttonExt={styles.dropList}
+              refType={Object.keys(sourceValue).length===0 ?false : true}
               textExt={styles.dropListText}
-            //  on_Select={(d)=>setActionTypeValue(d)}
+              title={sourceValue?.description}
+             on_Select={(d)=>setSourceValue(d)}
             />
           </View>
 

@@ -566,11 +566,15 @@ export default function PerformaScreen(props) {
 
    const fn_BasicHeaderTotal=()=>{
       let data=Number(performHeaderData?.vehicleCost?.totalAmount) + 
-      Number(performHeaderData?.accessories?.totalAmount) +
+     ((performHeaderData?.accessories?.flagStatus==="Y") ? Number(performHeaderData?.accessories?.totalAmount) : 0) +
        Number(performHeaderData?.extendedWarrantyPack?.totalAmount)+
        Number(performHeaderData?.serviceCharges?.totalAmount)+
        Number(performHeaderData?.hypothecationCharges?.totalAmount)+
-       Number(performHeaderData?.temporaryRegistration?.totalAmount)
+       Number(performHeaderData?.temporaryRegistration?.totalAmount)+
+       (performHeaderData?.insurance?.flagStatus ==="Y" ? Number(performHeaderData?.insurance?.totalAmount) : 0) +
+      (performHeaderData?.tcs?.flagStatus ==="Y" ? Number(performHeaderData?.tcs?.totalAmount) : 0) +
+      ( performHeaderData?.permanentRegn?.flagStatus ==="Y" ? Number(performHeaderData?.permanentRegn?.totalAmount) : 0)
+
 
        return(data)
 
@@ -584,9 +588,11 @@ export default function PerformaScreen(props) {
       } else if (type === 1) {
          fn_GetAccessories(performaBasicDataHeader?.proformaList[0])        
       } else if (type === 2) {
+         fn_SaveBasicInfo(2)
          fn_GetProformaInsuMaster()
          // fn_GetPackage()
       } else if (type === 3) {
+         fn_SaveBasicInfo(2)
          fn_Registration()
       } else if (type === 4) {
          fn_GetTerms()
@@ -968,6 +974,7 @@ const GetAccessoriesCallBack = (res) => {
                insuranceLoc_Data = {ins_Location}
                performaBasicInfo={performaBasicDataHeader}
                fn_Next={()=> {
+                  fn_SaveBasicInfo(2)
                   fn_Registration()
                }}
                />
@@ -977,7 +984,10 @@ const GetAccessoriesCallBack = (res) => {
              performaGeneralMasterData={proformaGeneralMasters}
              performaBasicInfo={performaBasicDataHeader}
              performaPriceDetail={vehiclePricedetail}
-             getTermsInfoAndMove={()=>fn_GetTerms()}
+             getTermsInfoAndMove={()=>{
+               fn_SaveBasicInfo(2)
+               fn_GetTerms()
+            }}
             />}
             {active === 4 && <PerformaTerm term_Data={termData}
             moveToPerformaInvoice={()=>getPrformaPdf()}
