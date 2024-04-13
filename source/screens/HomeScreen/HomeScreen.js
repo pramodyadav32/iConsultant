@@ -131,12 +131,12 @@ export default function HomeScreen(props) {
 
   const getDataCount = () => {
     let param = {
-      "brandCode": "ISUZU",
-      "countryCode": "IN",
-      "companyId": "ARAS",
-      "branchCode": "MADU01",
-      "loginUserCompanyId": "ORBIT",
-      "loginUserId": "VINOD",
+      "brandCode": userData?.brandCode,
+      "countryCode": userData?.countryCode,
+      "companyId": userData?.companyId,
+      "branchCode": selectedBranch?.branchCode,
+      "loginUserCompanyId": userData?.userCompanyId,
+      "loginUserId": userData?.userId,
       "ipAddress": "1::1"
     }
     tokenApiCall(dataCountCallBack, APIName.GetDataCounts, "POST", param)

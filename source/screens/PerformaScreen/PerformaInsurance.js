@@ -239,8 +239,8 @@ export default function PerformaInsurance(props) {
       "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": 0,
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
-      "idv2NildepDiscountPercentage": 0,
-      "idv2NildepDiscountAmount": 0,
+      "idv2NildepDiscountPercentage": Number(discountDepValue?.key),
+      "idv2NildepDiscountAmount": Number(discountDepAmt),
       "insuFinalDiscount": 0,
       "proformaHeadList":temp
     }

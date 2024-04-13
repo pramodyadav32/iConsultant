@@ -122,8 +122,8 @@ export default function EditProspectInfo(props) {
         setOff_Add1(prospectDetail?.offcAddress1)
         setOff_Add2(prospectDetail?.offcAddress2)
         setOff_Add3(prospectDetail?.offcAddress3)
-        setOff_Phone(prospectDetail?.offcPincode)
-        setOff_Pin(prospectDetail?.offcPhone)
+        setOff_Phone(prospectDetail?.offcPhone)
+        setOff_Pin(prospectDetail?.offcPincode)
 
         setReg_Add1(prospectDetail?.regnAddress1)
         setReg_Add2(prospectDetail?.regnAddress2)

@@ -355,10 +355,10 @@ const GetProspectDetailCallBack = (res) => {
             "interior": item?.interiorCode,
             "qty": item?.quantity,
             "expectedDelvDate": item?.zoneDate,
-            "proformaLocation": "",
-            "proformaDoc": "",
-            "proformaFY": "",
-            "proformaNo": 0
+            "proformaLocation": proformaDetail[0]?.docLocation,
+            "proformaDoc": proformaDetail[0]?.docCode,
+            "proformaFY": proformaDetail[0]?.docFy,
+            "proformaNo": Number(proformaDetail[0]?.docNo)
           }
           closureList.push(newObj)
         }

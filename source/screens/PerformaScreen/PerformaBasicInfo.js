@@ -348,7 +348,7 @@ export default function PerformaBasicInfo(props) {
         createIP: "1::1",
         gstList: newParam.join(",").toString(), //textcodeeeee
         calledBy: "PROSPECT",
-        endUse: endUseData?.code,
+        endUse: endUseValue?.code,
         insuCode: "",
         insuLocation: "",
         itemGroup: "",
