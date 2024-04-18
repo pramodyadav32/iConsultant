@@ -155,7 +155,7 @@ export default function DownloadPerforma(props) {
     console.log("savePackage", JSON.stringify(res))
     if (res.statusCode === 200) {   
       if(res?.result?.resultCode==='Y'){
-        constant.showMsg("proforma Cancel Successfully")
+        constant.showMsg("Proforma Cancel Successfully")
         fn_Next()  
       }else{
         constant.showMsg("Opp. Somethings wents wrong")      

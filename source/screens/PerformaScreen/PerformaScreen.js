@@ -165,6 +165,7 @@ export default function PerformaScreen(props) {
          setProformaGeneralMasters(res.result);
          setVehiclePriceDetail(res.result?.vehPrice);
          fn_GetProformaTaxMasters(res.result?.vehPrice)
+         
       } else {
          constant.showMsg(res.message);
       }
@@ -954,6 +955,7 @@ const GetAccessoriesCallBack = (res) => {
                   prospect_No = {performaNo}
                   intrestedVehicleList = {intrestedVehicleList}
                   proformaId = {proformaId}
+                  
                 />
             )}
             {active === 1 && 

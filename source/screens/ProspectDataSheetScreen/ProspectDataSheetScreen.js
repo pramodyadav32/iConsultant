@@ -32,7 +32,7 @@ const data2 = [
 export default function ProspectDataSheetScreen(props) {
    const { navigation, route } = props
    const dispatch = useDispatch()
-   const { userData } = useSelector(state => state.AuthReducer)
+   const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
    const tabWidth = constant.resW(49);
    const [active, setActive] = useState(1)
    const [animatedValue] = useState(new Animated.Value(1));
@@ -52,6 +52,7 @@ export default function ProspectDataSheetScreen(props) {
       React.useCallback(() => {
         // Screen is in focus
         fn_GetProspectBasicInfo()
+        getProspectData()
         console.log('Screen in focus');
         return () => {
           // Screen is out of focus
@@ -62,11 +63,39 @@ export default function ProspectDataSheetScreen(props) {
       }, [])
     ) ;
 
-   useEffect(() => {
-       fn_GetProspectBasicInfo()
-      // fn_GetProspectDetail()
-      // fn_GetDataSheetDetail()
-   }, [])
+   // useEffect(() => {
+   //     fn_GetProspectBasicInfo()
+   //    // fn_GetProspectDetail()
+   //    // fn_GetDataSheetDetail()
+   // }, [])
+
+
+   const getProspectData = () => {
+      let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "prospectStatus": "A",
+        "prospectNo": Number(route.params.cardData?.prospectId),
+        "rating": "ALL",
+        "loginUserCompanyId": userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+      }
+      tokenApiCall(prospectCallBack, APIName.GetProspectsList, "POST", param)
+    }
+
+    const prospectCallBack = (res) => {
+      console.log("prospectData", JSON.stringify(res))
+      dispatch(emptyLoader_Action(false))
+      if (res.statusCode === 200) {
+      
+      } else {
+         constant.showMsg(res.message)
+      }
+   }
+
 
    const fn_GetDataSheetDetail = () => {
       dispatch(emptyLoader_Action(true))
@@ -476,7 +505,7 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_Create = () => {
-      props.navigation.navigate("PerformaScreen",{"cardData" : route.params?.cardData})
+      props.navigation.navigate("PerformaScreen",{"cardData" : route.params?.cardData,"performaId":performaId})
    }
 
    const fn_Edit=()=>{
