@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
    
     homeHorz:{
       height:5,
-      width:constant.resW(46.5),
+      width:constant.resW(46.1),
       backgroundColor:"red",
       position:"absolute",
        borderBottomLeftRadius:20,

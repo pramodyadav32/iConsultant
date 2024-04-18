@@ -57,7 +57,7 @@ export default function HomeScreen(props) {
     React.useCallback(() => {
       // Screen is in focus
       getProspectData()
-      dispatch(emptyLoader_Action(true))
+      // dispatch(emptyLoader_Action(true))
       console.log('Screen in focus');
       return () => {
         // Screen is out of focus
@@ -182,13 +182,13 @@ export default function HomeScreen(props) {
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(12), y: constant.moderateScale(265) }, // Example new position
+        toValue: { x: constant.moderateScale(12), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(196), y: constant.moderateScale(265) }, // Example new position
+        toValue: { x: constant.moderateScale(196), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")

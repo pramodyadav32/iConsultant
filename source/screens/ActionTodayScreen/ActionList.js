@@ -20,6 +20,7 @@ export default function ActionList(props) {
     const dispatch = useDispatch()
 
     const renderItem=({item,index})=>{
+      console.log("iem",JSON.stringify(item))
         return(
 
                  <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
@@ -67,7 +68,7 @@ export default function ActionList(props) {
                  </View>
                  <View style={styles.driveListDetailSubView}>
                     <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>{moment(data?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
+                    <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
                  </View>
                 </View>
                     </View>

@@ -90,7 +90,7 @@ export default function ProspectDataSheetScreen(props) {
       console.log("prospectData", JSON.stringify(res))
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
-      
+        setcardData(res?.result?.pospectList[0])
       } else {
          constant.showMsg(res.message)
       }
@@ -505,11 +505,11 @@ export default function ProspectDataSheetScreen(props) {
    }
 
    const fn_Create = () => {
-      props.navigation.navigate("PerformaScreen",{"cardData" : route.params?.cardData,"performaId":performaId})
+      props.navigation.navigate("PerformaScreen",{"cardData" : cardData,"performaId":performaId})
    }
 
    const fn_Edit=()=>{
-      props.navigation.navigate("EditProspectScreen",{"cardData" : route.params?.cardData,"performaId":performaId})
+      props.navigation.navigate("EditProspectScreen",{"cardData" : cardData,"performaId":performaId})
 
    }
 
