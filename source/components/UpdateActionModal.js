@@ -49,7 +49,7 @@ const UpdateActionModal = (props) => {
             constant.showMsg("Please select Model")
         } else if (Object.keys(performValue).length === 0) {
             constant.showMsg("Please select Performed")
-        } else if (performData==='') {
+        } else if (actionDate === '') {
             constant.showMsg("Please select Performed Date")
         } else {
           const param = {

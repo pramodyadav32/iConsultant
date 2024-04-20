@@ -27,7 +27,7 @@ import Button from "../../components/Button";
 import moment from "moment";
 import { emptyLoader_Action } from "../../redux/actions/AuthAction";
 
-const transData = [
+const transData1 = [
   { code: "PAN_CARD", description: "Pan Card available" },
   { code: "FORM_60", description: "Pan Card not available" },
 ];
@@ -79,21 +79,22 @@ export default function PerformaBasicInfo(props) {
   const [exShowRoomPrePrice, setExShowRoomPrePrice] = useState(0);
   const [discountPerTex, setDiscountPerTex] = useState(0);
   const [tcsValue, setTcsValue] = useState("0");
+  const [texData,settexData]=useState({})
+  const [transData,setTransData] = useState(transData1)
 
   useEffect(() => {
-    console.log("performaGeneralMasterData = ", JSON.stringify(performaGeneralMasterData));
+    // console.log("performaGeneralMasterData = ", JSON.stringify(performaGeneralMasterData));
     console.log("performaPriceDetail data = ", performaPriceDetail);
-    console.log(
-      "performaGeneralMasterData performaBasicInfo = ",
-      performaBasicInfo
-    );
-    console.log("performaGeneralMasterData texMasterData = ", texMasterData);
-    console.log("performaGeneralMasterData cardData = ", performaBasicInfo);
+    // console.log(
+    //   "performaGeneralMasterData performaBasicInfo = ",
+    //   performaBasicInfo
+    // );
+    // console.log("performaGeneralMasterData texMasterData = ", texMasterData);
+    // console.log("performaGeneralMasterData cardData = ", performaBasicInfo);
 
     performaGeneralMasterData?.selectMasterList.map((item) => {
       if (item?.listType === "BILLING_LOCATION") {
         setBillingLocationData(item.basicList);
-        console.log("bilkling",item)
         item.basicList.map((item)=>{item?.isSelected==='Y' ? setBillingLocationValue(item) : null })
       } else if (item?.listType === "USAGE") {
         setUsageData(item.basicList);
@@ -103,7 +104,7 @@ export default function PerformaBasicInfo(props) {
         item.basicList.map((item,index)=>{
           if(item?.isSelected==='Y'){
            setSalesGroupValue(item) 
-           fn_GetProformaGeneralMasters(item)
+           fn_GetProformaGeneralMasters(item,1)
           }
           })
 
@@ -136,11 +137,24 @@ export default function PerformaBasicInfo(props) {
   }, [texMasterData, performaPriceDetail]);
 
   useEffect(() => {
-    fn_CalTax();
-    transData.map((item)=>{
-      console.log("trans",JSON.stringify(item))
-      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
-    })
+    // fn_CalTax();
+    // let newArray = []
+    // transData1.map((item)=>{
+    //      texMasterData?.tcsDetail.map((items)=>{
+    //       items?.trxnBasis===item?.code ? newArray.push(item) : null
+    //      })
+    // })
+    // setTransData(newArray)
+    // if(texMasterData?.vehPriceDetail?.transactionBasis===''){
+    //  transData1.map((item)=>{
+    //   item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(texMasterData?.tcsDetail[0]) : null
+    // })  
+    // }else{
+    //   transData1.map((item)=>{
+    //   item?.code===texMasterData?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
+    // })
+    // }
+ 
     setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice);
   }, [performaPriceDetail, texMasterData]);
 
@@ -153,7 +167,7 @@ export default function PerformaBasicInfo(props) {
     fn_createCal(performaPriceDetail?.discountAmt, tax);
   };
 
-  const fn_createCal = async (d, taxValue) => {
+  const fn_createCal = async (d, taxValue,texResp) => {
     let basicPrice = performaPriceDetail?.vehBasicAmount;
     setDiscountValue(d);
     let dis = Number(d);
@@ -171,7 +185,7 @@ export default function PerformaBasicInfo(props) {
     let newTaxTotal = 0;
     let newSubCharge = 0;
     let newTotal = 0;
-    texMasterData?.selectedProformaValueCodes.map((item) => {
+    texResp?.selectedProformaValueCodes.map((item) => {
       newTaxTotal = newTaxTotal + Number(item?.perc);
       newSubCharge = newSubCharge + Number(item?.surcharge);
       let newCal = Math.round(
@@ -193,26 +207,97 @@ export default function PerformaBasicInfo(props) {
       texMasterData?.tcsDetail[0]?.tcsApplicable
     );
     setExShowRoomPostPrice(newTotal + basicDiscount);
-    transData.map((item)=>{
-      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount)) : null
+
+   if(texResp?.vehPriceDetail?.transactionBasis===''){
+        transData1.map((item)=>{
+      item?.code===texResp?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculation(texResp?.tcsDetail[0], (newTotal + basicDiscount),texResp): null
+    })  
+    }else{
+      transData1.map((item)=>{
+       item?.code===texResp?.vehPriceDetail?.transactionBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount),texResp) : null
+
     })
+    }
+
    
   };
 
-  fn_TcsCalculation=(data, firstTimeTotal)=>{
-   if (texMasterData?.tcsDetail[0]?.tcsApplicable === "Y") {
+  const fn_createDiscountCal = async (d, taxValue) => {
+    let basicPrice = performaPriceDetail?.vehBasicAmount;
+    setDiscountValue(d);
+    let dis = Number(d);
+    let tax = isNaN(taxValue) ? 0 : taxValue;
+    let discount_Tax = isNaN(Math.round((dis * 100) / (tax + 100), 0))
+      ? 0
+      : Math.round((dis * 100) / (tax + 100), 0);
+    let basicDiscount = isNaN(basicPrice - discount_Tax)
+      ? 0
+      : basicPrice - discount_Tax;
+    setDiscountPerTex(discount_Tax);
+    setBasicPriceDiscount(basicDiscount);
+
+    let newArray = [];
+    let newTaxTotal = 0;
+    let newSubCharge = 0;
+    let newTotal = 0;
+    texData?.selectedProformaValueCodes.map((item) => {
+      newTaxTotal = newTaxTotal + Number(item?.perc);
+      newSubCharge = newSubCharge + Number(item?.surcharge);
+      let newCal = Math.round(
+        (Number(basicDiscount) * Number(item.perc)) / 100,
+        0
+      );
+      newTotal = newTotal + newCal;
+      item["total"] = newCal;
+      newArray.push(item);
+    });
+
+    setTexMaster([...newArray]);
+    setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal);
+    setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge);
+    setTotalAmount(isNaN(newTotal) ? 0 : newTotal);
+
+    console.log(
+      "texMasterData?.tcsDetail[0]?.tcsApplicable =  ",
+      texMasterData?.tcsDetail[0]?.tcsApplicable
+    );
+    setExShowRoomPostPrice(newTotal + basicDiscount);
+
+    if(Object.keys(trnsBasicValue).length===0){
+      if(texData?.vehPriceDetail?.transactionBasis===''){
+        transData1.map((item)=>{
+      item?.code===texData?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculationValue(texData?.tcsDetail[0], (newTotal + basicDiscount)): null
+    })  
+    }else{
+      transData1.map((item)=>{
+       item?.code===texData?.vehPriceDetail?.transactionBasis ?  fn_TcsCalculationValue(item, (newTotal + basicDiscount)) : null
+
+    })
+    }
+    }else{
+      fn_TcsCalculationValue(trnsBasicValue, (newTotal + basicDiscount))
+    }
+
+
+
+   
+  };
+
+  fn_TcsCalculation=(data, firstTimeTotal,texResp)=>{
+   if (texResp?.tcsDetail.length>0) {
       let newTcs = 0;
-      texMasterData?.tcsDetail?.map((item) => {
+      texResp?.tcsDetail?.map((item) => {
         if (item?.trxnBasis === data?.code) {
          setTcsPercentageValue(item?.tcsRate)
           newTcs = Math.round(
             ((firstTimeTotal === 0 ? (exShowRoomPostPrice) : firstTimeTotal) * item?.tcsRate) / 100,
             0
           );
+          item?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false);
         }
       });
       setTcsValue(isNaN(newTcs) ? 0 : newTcs);
-      setTcsStatus(true);
+     
     } else {
       console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
       setTcsStatus(false);
@@ -220,8 +305,32 @@ export default function PerformaBasicInfo(props) {
     }
   }
 
+  fn_TcsCalculationValue=(data,firstTimeTotal)=>{
+    if (texData?.tcsDetail?.length > 0) {
+       let newTcs = 0;
+       texData?.tcsDetail?.map((item) => {
+         if (item?.trxnBasis === data?.code) {
+          // if (item?.tcsApplicable === "Y") {
+          setTcsPercentageValue(item?.tcsRate)
+           newTcs = Math.round(
+             ((firstTimeTotal === 0 ? (exShowRoomPostPrice) : firstTimeTotal) * item?.tcsRate) / 100,
+             0
+           );
+          // }
+          item?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false);
+         }
+       });
+       console.log("newtcs",newTcs)
+       setTcsValue(isNaN(newTcs) ? 0 : newTcs);
+     } else {
+       console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
+       setTcsStatus(false);
+      //  setTcsValue(0);
+     }
+   }
 
-  const fn_GetProformaGeneralMasters = (d) => {
+
+  const fn_GetProformaGeneralMasters = (d,type) => {
     setSalesGroupValue(d);
     dispatch(emptyLoader_Action(true));
     let param = {
@@ -259,19 +368,26 @@ export default function PerformaBasicInfo(props) {
       GetProformaGeneralMastersCallBack,
       APIName.GetProformaGeneralMast,
       "POST",
-      param
+      param,
+      type
     );
   };
 
-  const GetProformaGeneralMastersCallBack = (res) => {
+  const GetProformaGeneralMastersCallBack = (res,type) => {
     console.log("GetProformaGeneralMastersCallBack12 = ", JSON.stringify(res));
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
       res.result?.selectMasterList.map((item) => {
         if (item?.listType === "END_USE") {
           setEndUseData(item.basicList);
+          let filteName= item.basicList.filter((item) => item?.isSelected==='Y')
+          if(filteName.length===0){
+            type===1 ?fn_GetProformaTaxMasters("EU" ,1) : null
+          }else{
+            setEndUseValue(filteName[0])
+            type===1 ?fn_GetProformaTaxMasters(filteName[0].code ,1) : null
+          }
         item.basicList.map((item,index)=>{item?.isSelected==='Y' ? setEndUseValue(item) : null })
-
         }
       });
     } else {
@@ -377,7 +493,7 @@ export default function PerformaBasicInfo(props) {
       } else {
         constant.showMsg("Somethings wents wrong");
       }
-      dispatch(emptyLoader_Action(false));
+      // dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
       constant.showMsg(res.message);
@@ -478,6 +594,162 @@ export default function PerformaBasicInfo(props) {
     setTotalAmount(newTotal);
   };
 
+  const fn_GetProformaTaxMasters = (d,type) => {
+  type===2 ? dispatch(emptyLoader_Action(true)) : null
+    let param = {
+       brandCode: userData?.brandCode,
+       countryCode: userData?.countryCode,
+       companyId: userData?.companyId,
+       prospectNo: Number(cardData?.prospectId),
+       proformaId: proformaId ,
+       hsnCode: performaGeneralMasterData?.vehPrice?.hsnCode,
+       endUse: d,
+       basicPrice: performaGeneralMasterData?.vehPrice?.vehBasicAmount,
+       discount:performaGeneralMasterData?.vehPrice?.discountAmt,
+       loginUserCompanyId: userData?.userCompanyId,
+       loginUserId: userData?.userId,
+       ipAddress: "1::1",
+ 
+    };
+    tokenApiCall(
+       GetProformaTaxMastersCallBack,
+       APIName.GetProformaTaxMasters,
+       "POST",
+       param,
+       type
+    );
+ };
+
+ const GetProformaTaxMastersCallBack = (res,type) => {
+    console.log("enduseText ", JSON.stringify(res));
+    dispatch(emptyLoader_Action(false))
+    settexData(res?.result)
+    if (res.statusCode === 200) {
+      if(type===1){
+        let newArray=[]
+        transData1.map((item)=>{
+         res?.result?.tcsDetail.map((items)=>{
+           items?.trxnBasis===item?.code ? newArray.push(item) : null
+          })
+     })
+     setTransData(newArray)
+     if(res?.result?.vehPriceDetail?.transactionBasis===''){
+         transData1.map((item)=>{
+       item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
+     })
+   
+     }else{
+       transData1.map((item)=>{
+       item?.code===res?.result?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
+     })
+     }
+        let tax = 0;
+        res?.result?.selectedProformaValueCodes.map((item) => {
+          tax = tax + Number(item.perc);
+        });
+        setTexTotal(tax);
+        fn_createCal(performaPriceDetail?.discountAmt, tax,res?.result);
+      }else{
+      let newArray1=[]
+      setTrnsBasicValue({})
+       transData1.map((item)=>{
+        res?.result?.tcsDetail.map((items)=>{
+          items?.trxnBasis===item?.code ? newArray1.push(item) : null
+         })
+    })
+    setTransData(newArray1)
+    let transObj = {}
+    if(res?.result?.vehPriceDetail?.transactionBasis===''){
+        transData1.map((item)=>{
+          item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? transObj= item : null
+
+      item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
+    })
+  
+    }else{
+      transData1.map((item)=>{
+        item?.code===res?.result?.vehPriceDetail?.transactionBasis ? transObj= item : null
+
+      item?.code===res?.result?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
+    })
+    }
+      
+
+    let tax1 = 0;
+    res?.result?.selectedProformaValueCodes.map((item) => {
+      tax1 = tax1 + Number(item.perc);
+    });
+    setTexTotal(tax1);
+
+
+    let basicPrice = performaPriceDetail?.vehBasicAmount;
+    setDiscountValue(performaPriceDetail?.discountAmt);
+    let dis = Number(performaPriceDetail?.discountAmt);
+    let tax = isNaN(tax1) ? 0 : tax1;
+    let discount_Tax = isNaN(Math.round((dis * 100) / (tax + 100), 0))
+      ? 0
+      : Math.round((dis * 100) / (tax + 100), 0);
+    let basicDiscount = isNaN(basicPrice - discount_Tax)
+      ? 0
+      : basicPrice - discount_Tax;
+    setDiscountPerTex(discount_Tax);
+    setBasicPriceDiscount(basicDiscount);
+
+    let newArray = [];
+    let newTaxTotal = 0;
+    let newSubCharge = 0;
+    let newTotal = 0;
+    res?.result?.selectedProformaValueCodes.map((item) => {
+      newTaxTotal = newTaxTotal + Number(item?.perc);
+      newSubCharge = newSubCharge + Number(item?.surcharge);
+      let newCal = Math.round(
+        (Number(basicDiscount) * Number(item.perc)) / 100,
+        0
+      );
+      newTotal = newTotal + newCal;
+      item["total"] = newCal;
+      newArray.push(item);
+    });
+
+    setTexMaster([...newArray]);
+    setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal);
+    setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge);
+    setTotalAmount(isNaN(newTotal) ? 0 : newTotal);
+   
+    if (res?.result?.tcsDetail.length > 0) {
+      let newTcs = 0;
+      res?.result?.tcsDetail?.map((item) => {
+        // if (item?.tcsApplicable === "Y") {
+        if (item?.trxnBasis === transObj?.code) {
+    
+         setTcsPercentageValue(item?.tcsRate)
+          newTcs = Math.round(
+            ((exShowRoomPostPrice)  * item?.tcsRate) / 100,
+            0
+          );
+        // }
+        item?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false);
+      }
+      });
+      setTcsValue(isNaN(newTcs) ? 0 : newTcs);
+    } else {
+      console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
+      setTcsStatus(false);
+      setTcsPercentageValue('')
+      setTcsValue(0);
+    }
+    let filterData = res?.result?.tcsDetail?.filter(e=>e?.trxnBasis === transObj?.code)
+    filterData?.length > 0 ? filterData[0]?.tcsApplicable==='Y' ? setTcsPercentageValue(filterData[0]?.tcsRate) :  setTcsPercentageValue('') : setTcsPercentageValue('')
+
+    filterData?.length > 0 ? filterData[0]?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false) : setTcsStatus(false)
+    setTrnsBasicValue(transObj)
+  }
+  
+    } else {
+       constant.showMsg(res.message);
+    }
+ };
+
   return (
     <View style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -501,7 +773,7 @@ export default function PerformaBasicInfo(props) {
             >
               <View style={[styles.driveListDetailSubView, {}]}>
                 <Text style={styles.listText2}>Proforma Inv no</Text>
-                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length===0 ? 'new' :performaBasicInfo?.proformaList[0]?.docNo }</Text>
+                <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length===0 ? 'New' :performaBasicInfo?.proformaList[0]?.docNo }</Text>
                 {/* <Text style={styles.listText3}>{performaBasicInfo?.proformaList.length > 0 ? "Edit" : "New"}</Text> */}
               </View>
               <View style={styles.driveListDetailSubView2}>
@@ -594,7 +866,7 @@ export default function PerformaBasicInfo(props) {
                 <TextInput
                   style={styles.input1}
                   keyboardType="numeric"
-                  onChangeText={(d) => fn_createCal(d, texTotal)}
+                  onChangeText={(d) => fn_createDiscountCal(d, texTotal)}
                 >
                   {discountValue}
                 </TextInput>
@@ -631,7 +903,7 @@ export default function PerformaBasicInfo(props) {
                   textExt={styles.dropListText}
                   title={salesGroupValue?.description}
                   refType={Object.keys(salesGroupValue).length===0 ?false : true}
-                  on_Select={(d) => fn_GetProformaGeneralMasters(d)}
+                  on_Select={(d) => fn_GetProformaGeneralMasters(d,2)}
                 />
               </View>
 
@@ -648,7 +920,10 @@ export default function PerformaBasicInfo(props) {
                   textExt={styles.dropListText}
                   title={endUseValue?.description}
                   refType={Object.keys(endUseValue).length===0 ?false : true}
-                  on_Select={(d) => setEndUseValue(d)}
+                  on_Select={(d) => {
+                    setEndUseValue(d)
+                    fn_GetProformaTaxMasters (d.code,2)
+                  }}
                 />
               </View>
 
@@ -736,9 +1011,10 @@ export default function PerformaBasicInfo(props) {
                   textExt={styles.dropListText}
                   on_Select={(d) => {
                      setTrnsBasicValue(d)
-                     fn_TcsCalculation(d, 0)
+                     fn_TcsCalculationValue(d, 0)
                   }}
                 />
+               
               </View>
 
               <View

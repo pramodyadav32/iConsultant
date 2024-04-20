@@ -463,7 +463,6 @@ export default function CustumerInfo(props) {
                  if(type===1){
                     item?.existingVehicleMasterList.map((item)=>{
                         if(item?.code === existing_Vehicle[0]?.productSerial){
-                          alert("aaa",item)
                             setProductSerialValue(item)
                         }
                       })

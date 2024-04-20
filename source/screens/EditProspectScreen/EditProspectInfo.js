@@ -421,7 +421,7 @@ export default function EditProspectInfo(props) {
         }else if (Object.keys(reg_City).length === 0) {
             constant.showMsg("Please select Regn City")
         }else if (Object.keys(reg_destict).length === 0) {
-            constant.showMsg("Please select Regn Destict")
+            constant.showMsg("Please select Regn District")
         }else if (reg_Pin==='') {
             constant.showMsg("Please enter Regn Pin")
         }else if (reg_Phone ==='') {

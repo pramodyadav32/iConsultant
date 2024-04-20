@@ -77,7 +77,7 @@ export default function ActionInfo(props) {
 
         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
           <View style={styles.driveListDetailSubView}>
-            <Text style={styles.listText2}>Stutus</Text>
+            <Text style={styles.listText2}>Status</Text>
             <Text style={styles.listText3}>{item?.statusDesc}</Text>
           </View>
           <View style={styles.driveListDetailSubView2}>
@@ -490,7 +490,7 @@ export default function ActionInfo(props) {
         fn_Next()
         constant.showMsg("Data Saved Successfully.")
       }else{
-        constant.showMsg("Error while data saving.");
+        constant.showMsg("Please Select Performed Date");
       }
     } else {
       dispatch(emptyLoader_Action(false))

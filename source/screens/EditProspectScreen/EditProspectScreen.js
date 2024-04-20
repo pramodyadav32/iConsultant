@@ -68,8 +68,10 @@ export default function EditProspectScreen(props) {
     const [allVehicleData,setAllVehicleData] = useState([])
     const [vehicleReqListData,setVehicleReqListData] = useState([])
     const [proformaDetail,setProformaDetail] = useState([])
+
+    const [cardData,setCardData] = useState(route.params.cardData)
     useEffect(() => {
-        console.log("route.params.cardData = ", route.params.cardData)
+        setCardData(route.params.cardData)
         fn_GetProspectBasicInfo()
     }, [])
 
@@ -531,7 +533,7 @@ export default function EditProspectScreen(props) {
         }
     }
 
-    const renderItem = () => {
+    const renderItem = ({item}) => {
         return (
             <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
                 <Pressable style={styles.driveListMainView}  >
@@ -541,11 +543,11 @@ export default function EditProspectScreen(props) {
                     </Pressable> */}
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, }}>
-                            <FastImage source={{ uri: route.params.cardData?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
+                            <FastImage source={{ uri: item?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
                             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
                                     <Text style={styles.listName3}>PID : </Text>
-                                    <Text style={[styles.listName3]}>{route.params.cardData?.prospectId}</Text>
+                                    <Text style={[styles.listName3]}>{item?.prospectId}</Text>
                                 </View>
                                 <View style={styles.cardHorLine} />
                             </View>
@@ -554,31 +556,31 @@ export default function EditProspectScreen(props) {
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Prospect Name</Text>
-                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{route.params.cardData?.title} {route.params.cardData?.firstName} {route.params.cardData?.middleName} {route.params.cardData?.lastName}</Text>
+                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Model</Text>
-                                    <Text style={styles.listName3}>{route.params.cardData?.model}</Text>
+                                    <Text style={styles.listName3}>{item?.model}</Text>
                                 </View>
                             </View>
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Mobile No</Text>
-                                    <Text style={styles.listName3}>{route.params.cardData?.custMobile}</Text>
+                                    <Text style={styles.listName3}>{item?.custMobile}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Closure Date</Text>
-                                    <Text style={styles.listName3}>{moment(route.params.cardData?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
+                                    <Text style={styles.listName3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
                                 </View>
                             </View>
                             <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
                                 <View style={styles.driveListDetailSubView}>
                                     <Text style={styles.listText4}>Rating</Text>
-                                    <Text style={styles.listName3}>{route.params.cardData?.prospectRating}</Text>
+                                    <Text style={styles.listName3}>{item?.prospectRating}</Text>
                                 </View>
                                 <View style={styles.driveListDetailSubView2}>
                                     <Text style={styles.listText4}>Color</Text>
-                                    <Text style={styles.listName3}>{route.params.cardData?.vehColor}</Text>
+                                    <Text style={styles.listName3}>{item?.vehColor}</Text>
                                 </View>
                             </View>
                         </View>
@@ -659,6 +661,32 @@ export default function EditProspectScreen(props) {
         // fn_GetActionTypeCloseList()
     }
 
+   const fn_ProspectList=()=>{
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "prospectStatus": "A",
+        "prospectNo": Number(route.params.cardData?.prospectId),
+        "rating": "ALL",
+        "loginUserCompanyId": userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+      }
+      tokenApiCall(prospectCallBack, APIName.GetProspectsList, "POST", param)
+    }
+
+    const prospectCallBack = (res) => {
+        console.log("prospectData", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+          setCardData(res?.result?.pospectList[0])
+        } else {
+           constant.showMsg(res.message)
+        }
+     }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
             <StatusBar translucent={false} backgroundColor={constant.blackColor} />
@@ -667,7 +695,7 @@ export default function EditProspectScreen(props) {
             <ScrollView>
                 <View>
                     <FlatList
-                        data={data}
+                        data={[cardData]}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}
@@ -723,7 +751,10 @@ export default function EditProspectScreen(props) {
                             modelSelect={(d) => fn_GetVehicleModel(d)}
                             allVehicleData={allVehicleData}
                             vehicleReqListData={vehicleReqListData}
-                            fn_Next={()=>fn_GetActionDetail()}
+                            fn_Next={()=>{
+                                fn_ProspectList()
+                                fn_GetActionDetail()
+                            }}
 
                         />
                     }

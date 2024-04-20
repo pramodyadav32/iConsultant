@@ -166,10 +166,9 @@ export default function CloseInfo(props) {
       constant.showMsg("Please select closer Date")
   }else if (Object.keys(closureValue).length === 0) {
     constant.showMsg("Plesae select at least one Reason!")
+}else if(remark===''){
+  constant.showMsg("Please Enter Remarks")
 }
-// else if(remark===''){
-//   constant.showMsg("Please Enter Remarks Alert.")
-// }
  else if(showDislikeAndBrand){
   if (compVehBrandSelected === undefined && Object.keys(compVehBrandSelected).length === 0) {
     constant.showMsg("Please select competiton Brand")
