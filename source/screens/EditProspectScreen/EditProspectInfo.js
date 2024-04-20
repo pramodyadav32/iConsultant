@@ -455,7 +455,7 @@ export default function EditProspectInfo(props) {
                 "companyId": userData?.companyId,
                 "prospectLocation": selectedBranch?.branchCode,
                 "prospectNo": Number(data?.prospectID),
-                "custType": "I",
+                "custType": prospectTypeValue?.code,
                 "title": titleValue.code,
                 "firstName": name,
                 "middleName": "",

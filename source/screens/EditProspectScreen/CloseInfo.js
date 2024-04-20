@@ -790,6 +790,10 @@ const fn_ListFooter=()=>{
               textExt={styles.dropListText}
               on_Select={(d) =>{
                 setCompVehBrandSelected(d)
+                setCompVehModelSelected({})
+                setCompVehModelData([])
+                setCompVehVarientData([])
+                setCompVehVarientSelected({})
                 fn_GetCompitionVehicleInfo(d?.code, "", "MODEL")
               }}
 
@@ -804,6 +808,8 @@ const fn_ListFooter=()=>{
               textExt={styles.dropListText}
               on_Select={(d) =>{
                 setCompVehModelSelected(d)
+                setCompVehVarientData([])
+                setCompVehVarientSelected({})
                 fn_GetCompitionVehicleInfo(compVehBrandSelected?.code, d?.code, "VARIENT")
               }}
 
@@ -812,7 +818,7 @@ const fn_ListFooter=()=>{
 
 
           <View style={styles.detailMainView}>
-            <Text style={styles.detailText}>Varient<Text style={styles.text2}>*</Text></Text>
+            <Text style={styles.detailText}>Variant<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={compVehVarientData}
               title=' '
