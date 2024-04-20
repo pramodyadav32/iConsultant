@@ -57,7 +57,7 @@ export default function HomeScreen(props) {
     React.useCallback(() => {
       // Screen is in focus
       getProspectData()
-      // dispatch(emptyLoader_Action(true))
+      dispatch(emptyLoader_Action(true))
       console.log('Screen in focus');
       return () => {
         // Screen is out of focus

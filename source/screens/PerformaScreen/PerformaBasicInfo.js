@@ -84,7 +84,7 @@ export default function PerformaBasicInfo(props) {
 
   useEffect(() => {
     // console.log("performaGeneralMasterData = ", JSON.stringify(performaGeneralMasterData));
-    // console.log("performaPriceDetail data = ", performaPriceDetail);
+    console.log("performaPriceDetail data = ", performaPriceDetail);
     // console.log(
     //   "performaGeneralMasterData performaBasicInfo = ",
     //   performaBasicInfo
@@ -137,23 +137,23 @@ export default function PerformaBasicInfo(props) {
   }, [texMasterData, performaPriceDetail]);
 
   useEffect(() => {
-    fn_CalTax();
-    let newArray = []
-    transData1.map((item)=>{
-         texMasterData?.tcsDetail.map((items)=>{
-          items?.trxnBasis===item?.code ? newArray.push(item) : null
-         })
-    })
-    setTransData(newArray)
-    if(texMasterData?.vehPriceDetail?.transactionBasis===''){
-     transData1.map((item)=>{
-      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(texMasterData?.tcsDetail[0]) : null
-    })  
-    }else{
-      transData1.map((item)=>{
-      item?.code===texMasterData?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
-    })
-    }
+    // fn_CalTax();
+    // let newArray = []
+    // transData1.map((item)=>{
+    //      texMasterData?.tcsDetail.map((items)=>{
+    //       items?.trxnBasis===item?.code ? newArray.push(item) : null
+    //      })
+    // })
+    // setTransData(newArray)
+    // if(texMasterData?.vehPriceDetail?.transactionBasis===''){
+    //  transData1.map((item)=>{
+    //   item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(texMasterData?.tcsDetail[0]) : null
+    // })  
+    // }else{
+    //   transData1.map((item)=>{
+    //   item?.code===texMasterData?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
+    // })
+    // }
  
     setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice);
   }, [performaPriceDetail, texMasterData]);
@@ -167,7 +167,7 @@ export default function PerformaBasicInfo(props) {
     fn_createCal(performaPriceDetail?.discountAmt, tax);
   };
 
-  const fn_createCal = async (d, taxValue) => {
+  const fn_createCal = async (d, taxValue,texResp) => {
     let basicPrice = performaPriceDetail?.vehBasicAmount;
     setDiscountValue(d);
     let dis = Number(d);
@@ -185,7 +185,7 @@ export default function PerformaBasicInfo(props) {
     let newTaxTotal = 0;
     let newSubCharge = 0;
     let newTotal = 0;
-    texMasterData?.selectedProformaValueCodes.map((item) => {
+    texResp?.selectedProformaValueCodes.map((item) => {
       newTaxTotal = newTaxTotal + Number(item?.perc);
       newSubCharge = newSubCharge + Number(item?.surcharge);
       let newCal = Math.round(
@@ -208,13 +208,13 @@ export default function PerformaBasicInfo(props) {
     );
     setExShowRoomPostPrice(newTotal + basicDiscount);
 
-   if(texMasterData?.vehPriceDetail?.transactionBasis===''){
+   if(texResp?.vehPriceDetail?.transactionBasis===''){
         transData1.map((item)=>{
-      item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculation(texMasterData?.tcsDetail[0], (newTotal + basicDiscount)): null
+      item?.code===texResp?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculation(texResp?.tcsDetail[0], (newTotal + basicDiscount),texResp): null
     })  
     }else{
       transData1.map((item)=>{
-       item?.code===texMasterData?.vehPriceDetail?.transactionBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount)) : null
+       item?.code===texResp?.vehPriceDetail?.transactionBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount),texResp) : null
 
     })
     }
@@ -283,10 +283,10 @@ export default function PerformaBasicInfo(props) {
    
   };
 
-  fn_TcsCalculation=(data, firstTimeTotal)=>{
-   if (texMasterData?.tcsDetail.length>0) {
+  fn_TcsCalculation=(data, firstTimeTotal,texResp)=>{
+   if (texResp?.tcsDetail.length>0) {
       let newTcs = 0;
-      texMasterData?.tcsDetail?.map((item) => {
+      texResp?.tcsDetail?.map((item) => {
         if (item?.trxnBasis === data?.code) {
          setTcsPercentageValue(item?.tcsRate)
           newTcs = Math.round(
@@ -648,7 +648,7 @@ export default function PerformaBasicInfo(props) {
           tax = tax + Number(item.perc);
         });
         setTexTotal(tax);
-        fn_createCal(performaPriceDetail?.discountAmt, tax);
+        fn_createCal(performaPriceDetail?.discountAmt, tax,res?.result);
       }else{
       let newArray1=[]
       setTrnsBasicValue({})
