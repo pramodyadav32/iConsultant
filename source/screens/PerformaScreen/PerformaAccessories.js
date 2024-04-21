@@ -279,7 +279,7 @@ export default function PerformaAccessories(props) {
 
   const fn_ListDataSelect = (d) => {
     console.log("part item gggggg = ", d);
-    d["totalAmount"] = 0
+    d["totalAmount"] = 1
     d["negociatedPrice"] = d?.price
     setAccessoriesData([...accessoriesData, ...[d]]);
     setAddListModel((s) => {

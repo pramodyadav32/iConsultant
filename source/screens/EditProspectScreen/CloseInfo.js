@@ -789,6 +789,10 @@ const fn_ListFooter=()=>{
               textExt={styles.dropListText}
               on_Select={(d) =>{
                 setCompVehBrandSelected(d)
+                setCompVehModelSelected({})
+                setCompVehModelData([])
+                setCompVehVarientData([])
+                setCompVehVarientSelected({})
                 fn_GetCompitionVehicleInfo(d?.code, "", "MODEL")
               }}
 
@@ -803,6 +807,8 @@ const fn_ListFooter=()=>{
               textExt={styles.dropListText}
               on_Select={(d) =>{
                 setCompVehModelSelected(d)
+                setCompVehVarientData([])
+                setCompVehVarientSelected({})
                 fn_GetCompitionVehicleInfo(compVehBrandSelected?.code, d?.code, "VARIENT")
               }}
 

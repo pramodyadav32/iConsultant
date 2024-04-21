@@ -158,7 +158,7 @@ export default function ProspectScreen(props) {
       sourceCode: "07",
       refCode: "07",
       campaign: "",
-      prospectOpenedOn:  moment(new Date()).format("DD-MMM-YYYY"),
+      prospectOpenedOn: moment(new Date()).format("DD-MMM-yyyy"),
       loginUserId: userData?.userId,
       ipAddress: "1::1",
     };
