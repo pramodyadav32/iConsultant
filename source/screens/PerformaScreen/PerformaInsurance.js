@@ -343,6 +343,10 @@ export default function PerformaInsurance(props) {
     setOtherRateValue({})
   }
 
+useEffect(()=>{
+  calculateInsurance()
+},[calOnValue,idvListValue,rateValue,nilDipSelectedData,discountDepValue,ncbSelectedData,discountRuleValue,otherRateValue])
+
   return (
     <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -444,7 +448,7 @@ export default function PerformaInsurance(props) {
               textExt={styles.dropListText}
               on_Select={(d) => {
                 console.log("idv selected = ", d)
-                setIdvListValue(d)
+                setIdvListValue(d), 
                 calculateInsurance()
               }}
             />
