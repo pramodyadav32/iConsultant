@@ -154,6 +154,7 @@ export default function PerformaInsurance(props) {
     let type = []
     let rule = []
     let insuLocation = []
+    let insuCompany = []
     insurance_Data?.insurenceDataList.map((item) => {
       if (item?.dataType === 'INSU_CALC_ON') {
         calData.push(item)
@@ -172,24 +173,24 @@ export default function PerformaInsurance(props) {
       }else if (item?.dataType === 'INSU_LOCATION') {
         insuLocation.push(item)
         item?.selectedValue==='Y' ? setLocationValue(item) : null 
+      }else if (item?.dataType === 'INSU_COMPANY') {
+        insuCompany.push(item)
+        item?.selectedValue==='Y' ? setCompanyValue(item) : null 
       }
     })
     setCalOnData(calData)
     setTypeData(type)
     setDiscountRuleData(rule)
     setInsuranceLocation(insuLocation)
-    generalMaster_Data?.selectMasterList?.map((item) => {
-      if (item?.listType === 'INSU_COMPANY') {
-          item?.basicList.map((items)=>{
-           
- items?.isSelected==='Y' ? setCompanyValue(items) : null 
-          })
-
-       
-
-        setINSU_COMPANY(item?.basicList)
-      }
-    })
+    setINSU_COMPANY(insuCompany)
+    // generalMaster_Data?.selectMasterList?.map((item) => {
+    //   if (item?.listType === 'INSU_COMPANY') {
+    //       item?.basicList.map((items)=>{
+    //         items?.isSelected==='Y' ? setCompanyValue(items) : null 
+    //       })
+    //     setINSU_COMPANY(item?.basicList)
+    //   }
+    // })
 
   }, [insurance_Data, generalMaster_Data])
 
@@ -217,7 +218,7 @@ export default function PerformaInsurance(props) {
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "insuranceYN": selectState ? "Y" : "N",
       "insuLocation": selectState ? locationValue?.dataValue : "",
-      "insuCompanyCode": companyValue?.code,
+      "insuCompanyCode": companyValue?.code ? "" : companyValue?.code,
       "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
@@ -236,11 +237,11 @@ export default function PerformaInsurance(props) {
       "insuAssetValueNet": 0,
       "insuLoadingAmt": loadingAmt,
       "idv2NildepApply": nilDipCheckStatus ? "Y" : "N",
-      "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage,
+      "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage === null ? 0 : nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": 0,
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
       "idv2NildepDiscountPercentage": Number(discountDepValue?.key),
-      "idv2NildepDiscountAmount": Number(discountDepAmt),
+      "idv2NildepDiscountAmount": Number(discount_DepAmt),
       "insuFinalDiscount": 0,
       "proformaHeadList":temp
     }
@@ -280,9 +281,9 @@ export default function PerformaInsurance(props) {
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
     let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
     let nilDipCharnges = 0
-    if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
+    // if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
       nilDipCharnges = nilDipCheckStatus ? ((idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage)))/100) + ((idvCharnges * Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100 : 0
-    }
+    // }
     let discountOnNilDep = (nilDipCharnges * (Number(discountDepValue?.key)))/100
     
     isNaN(discountOnNilDep) ? null :  setDiscountDepAmt(Math.round(discountOnNilDep,0))
@@ -292,9 +293,19 @@ export default function PerformaInsurance(props) {
     let premiumAmountBeforeNcb = Number(rateCharnges) + Number(totalDepAmount)
     isNaN(premiumAmountBeforeNcb) ? null : setPremiumAmt_Before(Math.round(premiumAmountBeforeNcb,0))
     let ncbChanrges = (Number(premiumAmountBeforeNcb) * (Number(ncbSelectedData?.key)))/100
+    console.log("aaaaaaaaaaaa ncbChanrges = ", ncbChanrges)
     let premiumAmountAfterNcb = Number(premiumAmountBeforeNcb) - Number(ncbChanrges)
     isNaN(premiumAmountAfterNcb) ? null :  setPremiumAmt_After(Math.round(premiumAmountAfterNcb,0))
-    let otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+    let otherDiscountAmount = 0//(Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+
+    if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
+      otherDiscountAmount = (Number(premiumAmountBeforeNcb) * (Number(otherRateValue?.key)))/100
+    }else if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_EXC_NILDEP"){
+      otherDiscountAmount = ((Number(premiumAmountBeforeNcb)-Number(totalDepAmount)) * (Number(otherRateValue?.key)))/100
+    }else if(discountRuleValue?.dataValue === "BASIC_TOTAL_PRM_POST_NCB"){
+      otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+    }
+    console.log("aaaaaaaaaaa otherDiscountAmount - ", otherDiscountAmount)
     let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount)
     isNaN(premiumAmountAfterDiscount) ? null : setNetPremiumAmt(Math.round(premiumAmountAfterDiscount,0))
     let loadingAmount = 0;
@@ -343,6 +354,20 @@ export default function PerformaInsurance(props) {
     setOtherRateValue({})
   }
 
+  const resetDropDownDataInsuranceCompany = () => {
+    setCalOnValue({})
+    setIdvListValue({})
+    setRateValue({})
+    setNilDipCheckStatus(false)
+    setNilDipSelectedData({})
+    setDiscountDepValue({})
+    setNcbSelectedData({})
+    setDiscountRuleValue({})
+    setOtherRateValue({})
+
+    
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -358,7 +383,7 @@ export default function PerformaInsurance(props) {
             <FastImage source={selectState ? images.checkIcon : images.unCheckIcon} style={styles.selectCheckIcon} />
           </View>
           </Pressable>
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Source</Text>
             <SelectDropList
               list={sourceData}
@@ -371,7 +396,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Type</Text>
             <SelectDropList
               list={typeData}
@@ -388,7 +413,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Location</Text>
             <SelectDropList
               list={insuranceLocation}
@@ -401,11 +426,12 @@ export default function PerformaInsurance(props) {
               on_Select={(d) => setLocationValue(d)}
             />
           </View>
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Company</Text>
             {console.log("company",companyValue)}
             <SelectDropList
               list={INSU_COMPANY}
+              desName='3'
               refType={Object.keys(companyValue).length===0 ?false : true}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
@@ -413,11 +439,12 @@ export default function PerformaInsurance(props) {
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCompanyValue(d)
+                resetDropDownDataInsuranceCompany()
               }}
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Calc On</Text>
             <SelectDropList
               list={calOnData}
@@ -434,7 +461,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>IDV%</Text>
             <SelectDropList
               list={idvListData}
@@ -450,7 +477,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
         
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Rate</Text>
             <SelectDropList
               list={basicPremiumList}
@@ -465,7 +492,7 @@ export default function PerformaInsurance(props) {
               }}
             />
           </View>
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>NIL Dep.</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Pressable onPress={()=> {selectState && (typeValue?.dataValue !== "THIRD_PARTY")? setNilDipCheckStatus(!nilDipCheckStatus) : null}}>
@@ -487,7 +514,7 @@ export default function PerformaInsurance(props) {
             </View>
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Discount on Dep.</Text>
             <SelectDropList
               list={otherRateData}
@@ -509,7 +536,7 @@ export default function PerformaInsurance(props) {
             <Text style={styles.detailText}>-</Text>
           </View> */}
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>NCB</Text>
             <SelectDropList
               list={ncbRateData}
@@ -524,7 +551,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Discount Rule</Text>
             <SelectDropList
               list={discountRuleData}
@@ -542,7 +569,7 @@ export default function PerformaInsurance(props) {
             />
           </View>
 
-          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10) }]}>
+          <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
             <Text style={styles.detailText}>Discount Rate</Text>
             <SelectDropList
               list={otherRateData}

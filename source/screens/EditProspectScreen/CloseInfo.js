@@ -383,7 +383,7 @@ const GetProspectDetailCallBack = (res) => {
       "ruleSubCategory": "",
       "status": "",
       "closeDate": closureDate,
-      "orderDate": moment(new Date()).format("DD-MMM-YYYY"),
+      "ordDate": moment(new Date()).format("DD-MMM-YYYY"),
       "prospectDisLikeList":showDislike ? newArray.join(",").toString() : '' ,
       "closureProductList": showList.show ? closureList : [],
       "reOpenDay": "",

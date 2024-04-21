@@ -753,7 +753,7 @@ export default function ProspectDataSheetScreen(props) {
             }
          </View>
        {active != 5 ?
-         <Button title='Create Proforma' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+         <Button title={performaId === 0 ? 'Create Proforma' : 'Edit Proforma'} click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
        
        :
 
