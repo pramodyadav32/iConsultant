@@ -433,7 +433,7 @@ useEffect(()=>{
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setCalOnValue(d)
-               setTimeout(()=>{calculateInsurance()},1000)  
+              //  setTimeout(()=>{calculateInsurance()},1000)  
               }}
             />
           </View>
@@ -447,9 +447,8 @@ useEffect(()=>{
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               on_Select={(d) => {
-                console.log("idv selected = ", d)
-                setIdvListValue(d), 
-                calculateInsurance()
+                setIdvListValue(d)
+                // calculateInsurance()
               }}
             />
           </View>
@@ -465,7 +464,7 @@ useEffect(()=>{
               on_Select={(d) => {
                 console.log("rate selected = ", d)
                 setRateValue(d)
-                calculateInsurance()
+                // calculateInsurance()
               }}
             />
           </View>
@@ -485,7 +484,7 @@ useEffect(()=>{
                on_Select={(d)=>{
                 console.log("nildip selected = ", d)
                 setNilDipSelectedData(d)
-                calculateInsurance()
+                // calculateInsurance()
                }}
               />
             </View>
@@ -503,7 +502,7 @@ useEffect(()=>{
               on_Select={(d) => {
                 console.log("dis on dep selected = ", d)
                 setDiscountDepValue(d)
-                calculateInsurance()
+                // calculateInsurance()
               }}
             />
           </View>
@@ -523,7 +522,7 @@ useEffect(()=>{
               on_Select={(d) => {
                 console.log("ncb selected = ", d)
                 setNcbSelectedData(d)
-                calculateInsurance()
+                // calculateInsurance()
               }}
             />
           </View>
@@ -541,7 +540,7 @@ useEffect(()=>{
               on_Select={(d) => {
                 console.log("dis rule selected = ", d)
                 setDiscountRuleValue(d)
-                calculateInsurance()
+                // calculateInsurance()
               }}
             />
           </View>
@@ -558,7 +557,7 @@ useEffect(()=>{
               on_Select={(d) => {
                 console.log("rate selected = ", d)
                 setOtherRateValue(d)
-                calculateInsurance()
+                // calculateInsurance()
               }}
             />
           </View>
