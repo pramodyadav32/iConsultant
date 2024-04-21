@@ -376,7 +376,7 @@ export default function PerformaScreen(props) {
          countryCode: userData?.countryCode,
          companyId: userData?.companyId,
          "prospectNo": Number(route.params.cardData?.prospectId),
-         "proformaId": 0,
+         "proformaId": performaNo,
          "assembly": "CKD",
          "edition": "STD",
          "model": "SCAB",
