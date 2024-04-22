@@ -57,7 +57,7 @@ export default function HomeScreen(props) {
     React.useCallback(() => {
       // Screen is in focus
       getProspectData()
-      dispatch(emptyLoader_Action(true))
+      // dispatch(emptyLoader_Action(true))
       console.log('Screen in focus');
       return () => {
         // Screen is out of focus
@@ -170,25 +170,25 @@ export default function HomeScreen(props) {
   const fn_Button1 = (type) => {
     if (type == 1) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(3), y: constant.moderateScale(129.4) }, // Example new position
+        toValue: { x: constant.resW(4), y: constant.moderateScale(129.4) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(51), y: constant.moderateScale(129.4) }, // Example new position
+        toValue: { x: constant.resW(51.8), y: constant.moderateScale(129.4) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(12), y: constant.moderateScale(265.6) }, // Example new position
+        toValue: { x: constant.moderateScale(13), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(196), y: constant.moderateScale(265.6) }, // Example new position
+        toValue: { x: constant.moderateScale(198), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")

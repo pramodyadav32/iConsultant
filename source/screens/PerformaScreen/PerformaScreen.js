@@ -355,6 +355,8 @@ export default function PerformaScreen(props) {
          docCode:performaBasicDataHeader?.proformaList[0]?.docCode,
          docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
          docNo: performaBasicDataHeader?.proformaList[0]?.docNo,
+         "insuCompany": "",
+         "insuLocation": ""
       };
       tokenApiCall(GetProformaInsuMasterCallBack, APIName.GetProformaInsuMaster, "POST", param);
    };
@@ -971,7 +973,7 @@ const GetAccessoriesCallBack = (res) => {
             {
                active === 2 &&
                <PerformaInsurance 
-               insurance_Data = {insuranceData}
+               insurance_Data1 = {insuranceData}
                generalMaster_Data = {generalMasterData}
                insuranceLoc_Data = {ins_Location}
                performaBasicInfo={performaBasicDataHeader}
