@@ -12,6 +12,7 @@ import {
   Animated,
   TextInput,
   StyleSheet,
+  Alert,
 } from "react-native";
 import * as constant from "../../utilities/constants";
 import styles from "./PerformaStyle";
@@ -138,90 +139,10 @@ export default function PerformaBasicInfo(props) {
   }, [texMasterData, performaPriceDetail]);
 
   useEffect(() => {
-    // fn_CalTax();
-    // let newArray = []
-    // transData1.map((item)=>{
-    //      texMasterData?.tcsDetail.map((items)=>{
-    //       items?.trxnBasis===item?.code ? newArray.push(item) : null
-    //      })
-    // })
-    // setTransData(newArray)
-    // if(texMasterData?.vehPriceDetail?.transactionBasis===''){
-    //  transData1.map((item)=>{
-    //   item?.code===texMasterData?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(texMasterData?.tcsDetail[0]) : null
-    // })  
-    // }else{
-    //   transData1.map((item)=>{
-    //   item?.code===texMasterData?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
-    // })
-    // }
- 
     setExShowRoomPrePrice(performaPriceDetail?.exShowromPrice);
   }, [performaPriceDetail, texMasterData]);
 
-  const fn_CalTax = () => {
-    let tax = 0;
-    texMasterData?.selectedProformaValueCodes.map((item) => {
-      tax = tax + Number(item.perc);
-    });
-    setTexTotal(tax);
-    fn_createCal(performaPriceDetail?.discountAmt, tax);
-  };
 
-  const fn_createCal = async (d, taxValue,texResp) => {
-    let basicPrice = performaPriceDetail?.vehBasicAmount;
-    setDiscountValue(d);
-    let dis = Number(d);
-    let tax = isNaN(taxValue) ? 0 : taxValue;
-    let discount_Tax = isNaN(Math.round((dis * 100) / (tax + 100), 0))
-      ? 0
-      : Math.round((dis * 100) / (tax + 100), 0);
-    let basicDiscount = isNaN(basicPrice - discount_Tax)
-      ? 0
-      : basicPrice - discount_Tax;
-    setDiscountPerTex(discount_Tax);
-    setBasicPriceDiscount(basicDiscount);
-
-    let newArray = [];
-    let newTaxTotal = 0;
-    let newSubCharge = 0;
-    let newTotal = 0;
-    texResp?.selectedProformaValueCodes.map((item) => {
-      newTaxTotal = newTaxTotal + Number(item?.perc);
-      newSubCharge = newSubCharge + Number(item?.surcharge);
-      let newCal = Math.round(
-        (Number(basicDiscount) * Number(item.perc)) / 100,
-        0
-      );
-      newTotal = newTotal + newCal;
-      item["total"] = newCal;
-      newArray.push(item);
-    });
-
-    setTexMaster([...newArray]);
-    setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal);
-    setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge);
-    setTotalAmount(isNaN(newTotal) ? 0 : newTotal);
-
-    console.log(
-      "texMasterData?.tcsDetail[0]?.tcsApplicable =  ",
-      texMasterData?.tcsDetail[0]?.tcsApplicable
-    );
-    setExShowRoomPostPrice(newTotal + basicDiscount);
-
-   if(texResp?.vehPriceDetail?.transactionBasis===''){
-        transData1.map((item)=>{
-      item?.code===texResp?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculation(texResp?.tcsDetail[0], (newTotal + basicDiscount),texResp): null
-    })  
-    }else{
-      transData1.map((item)=>{
-       item?.code===texResp?.vehPriceDetail?.transactionBasis ?  fn_TcsCalculation(item, (newTotal + basicDiscount),texResp) : null
-
-    })
-    }
-
-   
-  };
 
   const fn_createDiscountCal = async (d, taxValue) => {
     let basicPrice = priceDetail?.vehBasicAmount;
@@ -389,7 +310,7 @@ export default function PerformaBasicInfo(props) {
             setEndUseValue(filteName[0])
             newObj?.type===1 ?fn_GetProformaUseEndlMasters(filteName[0].code ,newObj) : null
           }
-        item.basicList.map((item,index)=>{item?.isSelected==='Y' ? setEndUseValue(item) : null })
+          newObj?.type===1 ?item.basicList.map((item,index)=>{item?.isSelected==='Y' ? setEndUseValue(item) : null }) : null
         }
       });
     } else {
@@ -876,7 +797,8 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
 
 
     let basicPrice = priceData?.priceObj?.vehBasicAmount;
-    let dis = priceData?.value===1 ? Number(priceData?.discountAmt) : Number(discountValue)
+    let dis = priceData.type===1 ? Number(priceData?.priceObj?.discountAmt) : Number(discountValue)
+    // let dis =  Number(priceData?.discountAmt) 
     let tax = isNaN(tax1) ? 0 : tax1;
     let discount_Tax = isNaN(Math.round((dis * 100) / (tax + 100), 0))
       ? 0
@@ -884,6 +806,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
     let basicDiscount = isNaN(basicPrice - discount_Tax)
       ? 0
       : basicPrice - discount_Tax;
+      console.log("aaaaaaa"+priceData.type)
     setDiscountPerTex(discount_Tax);
     setBasicPriceDiscount(basicDiscount);
 
@@ -916,7 +839,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
     
          setTcsPercentageValue(item?.tcsRate)
           newTcs = Math.round(
-            ((exShowRoomPostPrice)  * item?.tcsRate) / 100,
+            ((newTotal + basicDiscount)  * item?.tcsRate) / 100,
             0
           );
         // }
@@ -1095,7 +1018,10 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
                   textExt={styles.dropListText}
                   title={salesGroupValue?.description}
                   refType={Object.keys(salesGroupValue).length===0 ?false : true}
-                  on_Select={(d) => fn_GetProformaGeneralMasters(d,2)}
+                  on_Select={(d) =>{
+                    setEndUseValue({})
+                     fn_GetProformaGeneralMasters(d,2)
+                    }}
                 />
               </View>
 

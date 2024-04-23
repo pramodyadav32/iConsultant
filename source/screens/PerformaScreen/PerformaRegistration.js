@@ -493,7 +493,7 @@ const fn_AddAmtTotalCal=()=>{
            <View style={styles.callHeaderSubView}>
            <SelectDropList
                 list={[]}
-                title={item?.dataCalculation?.perVal+"%"+" "+item?.dataCalculation?.amountVal}
+                title={item?.dataCalculation?.perVal+"%"+"+"+item?.dataCalculation?.amountVal}
                 disable={true}
                 buttonExt={styles.dropList2}
                 textExt={styles.dropListText2}
@@ -690,7 +690,7 @@ const fn_AddAmtTotalCal=()=>{
                         dropList2:{
                             borderWidth:1,
                             height:constant.moderateScale(40),
-                            width:'80%',
+                            width:'100%',
                             borderRadius:10,
                             borderColor:'#ABABAB',
                             backgroundColor:constant.whiteColor,
