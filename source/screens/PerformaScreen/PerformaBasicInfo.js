@@ -695,7 +695,7 @@ export default function PerformaBasicInfo(props) {
     calledBy:
       "BILLING_LOCATION,USAGE,SALE_GROUP,END_USE,ITEM_GROUP,RTO_CITY,RTO_CODE,INSU_CITY,INSU_COMPANY,REGN_TYPE,VEH_PRICE",
     priceListApplicable: moment(new Date()).format("DD-MMM-YYYY"), //"23-APR-2024",
-    billingLocation: "",
+    billingLocation: billingLoactionValue?.code,
     usage: "",
     saleGroup:newObj?.value,
     endUse: d,
