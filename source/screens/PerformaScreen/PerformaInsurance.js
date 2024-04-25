@@ -317,7 +317,7 @@ useEffect(()=>{
         temp.push(checkBoxParams)
       }
     })
-    
+    console.log("aaaaaa companyValue = ", companyValue)
     let param = {
       "brandCode": userData?.brandCode,
       "countryCode": userData?.countryCode,
@@ -328,7 +328,7 @@ useEffect(()=>{
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "insuranceYN": selectState ? "Y" : "N",
       "insuLocation": selectState ? locationValue?.dataValue : "",
-      "insuCompanyCode": companyValue?.code ? "" : companyValue?.code,
+      "insuCompanyCode": companyValue?.dataValue ? companyValue?.dataValue : "",
       "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
