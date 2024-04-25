@@ -233,9 +233,10 @@ export default function PerformaBasicInfo(props) {
        texData?.tcsDetail?.map((item) => {
          if (item?.trxnBasis === data?.code) {
           // if (item?.tcsApplicable === "Y") {
+             console.log("newtcs111",(exShowRoomPostPrice ))
           setTcsPercentageValue(item?.tcsRate)
            newTcs = Math.round(
-             ((firstTimeTotal === 0 ? (exShowRoomPostPrice) : firstTimeTotal) * item?.tcsRate) / 100,
+             (exShowRoomPostPrice * item?.tcsRate) / 100,
              0
            );
           // }
@@ -830,6 +831,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
     setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal);
     setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge);
     setTotalAmount(isNaN(newTotal) ? 0 : newTotal);
+    // alert(newTotal + basicDiscount)
     setExShowRoomPostPrice(newTotal + basicDiscount);
     if (res?.result?.tcsDetail.length > 0) {
       let newTcs = 0;
