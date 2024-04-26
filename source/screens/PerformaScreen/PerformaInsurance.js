@@ -109,6 +109,7 @@ export default function PerformaInsurance(props) {
   const [dep_Amt,setDep_Amt] = useState(0)
   const [discount_DepAmt,setDiscountDepAmt] = useState(0)
   const [net_PremiumAmt,setNetPremiumAmt] = useState(0)
+  const [otherDiscountAmount,setOtherDiscountAmount] = useState(0)
   const [loadingAmt,setLoadingAmt] = useState(0)
   const [gross_Amt,setGrossAmt] = useState(0)
   const [gstValue,setGstValue] = useState(0)
@@ -335,20 +336,20 @@ useEffect(()=>{
       "ipAddress": "1::1",
       "insuranceType": typeValue?.dataValue,
       "insuSource": "Calculator",
-      "insuranceCalcOn": calOnValue?.dataType,
-      "insuversion": 0,
-      "insudiscrule": discountRuleValue?.dataType,
-      "basicpremiumperc1": 0,
-      "basicpremiumperc2": 0,
+      "insuranceCalcOn": calOnValue?.dataValue,
+      "insuversion": rateValue?.insuCalcVersionNo,
+      "insudiscrule": discountRuleValue?.dataValue,
+      "basicpremiumperc1": rateValue?.basicPremiumPerc1,
+      "basicpremiumperc2": rateValue?.basicPremiumPerc2,
       "ncb": ncbSelectedData?.title,
-      "idv": idvValue,
+      "idv": idvListValue?.idvPer,
       "insudiscountperc": otherRateValue?.title,
-      "insuAssetValueGross": 0,
-      "insuAssetValueNet": 0,
+      "insuAssetValueGross": priceValue,
+      "insuAssetValueNet": idvValue,
       "insuLoadingAmt": loadingAmt,
       "idv2NildepApply": nilDipCheckStatus ? "Y" : "N",
       "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage === null ? 0 : nilDipSelectedData?.idv2NildepPercentage,
-      "idv2NildepAmount": 0,
+      "idv2NildepAmount": dep_Amt,
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
       "idv2NildepDiscountPercentage": Number(discountDepValue?.key),
       "idv2NildepDiscountAmount": Number(discount_DepAmt),
@@ -406,17 +407,19 @@ useEffect(()=>{
     console.log("aaaaaaaaaaaa ncbChanrges = ", ncbChanrges)
     let premiumAmountAfterNcb = Number(premiumAmountBeforeNcb) - Number(ncbChanrges)
     isNaN(premiumAmountAfterNcb) ? null :  setPremiumAmt_After(Math.round(premiumAmountAfterNcb,0))
-    let otherDiscountAmount = 0//(Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+    let otherDiscountAmount1 = 0//(Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
 
     if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
-      otherDiscountAmount = (Number(premiumAmountBeforeNcb) * (Number(otherRateValue?.key)))/100
+      otherDiscountAmount1 = (Number(premiumAmountBeforeNcb) * (Number(otherRateValue?.key)))/100
     }else if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_EXC_NILDEP"){
-      otherDiscountAmount = ((Number(premiumAmountBeforeNcb)-Number(totalDepAmount)) * (Number(otherRateValue?.key)))/100
+      otherDiscountAmount1 = ((Number(premiumAmountBeforeNcb)-Number(totalDepAmount)) * (Number(otherRateValue?.key)))/100
     }else if(discountRuleValue?.dataValue === "BASIC_TOTAL_PRM_POST_NCB"){
-      otherDiscountAmount = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
+      otherDiscountAmount1 = (Number(premiumAmountAfterNcb) * (Number(otherRateValue?.key)))/100
     }
-    console.log("aaaaaaaaaaa otherDiscountAmount - ", otherDiscountAmount)
-    let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount)
+    isNaN(otherDiscountAmount1) ? null : setOtherDiscountAmount(Math.round(otherDiscountAmount1,0))
+    
+    console.log("aaaaaaaaaaa otherDiscountAmount - ", otherDiscountAmount1)
+    let premiumAmountAfterDiscount = Number(premiumAmountAfterNcb) - Number(otherDiscountAmount1)
     isNaN(premiumAmountAfterDiscount) ? null : setNetPremiumAmt(Math.round(premiumAmountAfterDiscount,0))
     let loadingAmount = 0;
     insurenceHeadList?.map((item) => {
