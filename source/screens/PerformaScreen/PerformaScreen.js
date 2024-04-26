@@ -117,7 +117,7 @@ export default function PerformaScreen(props) {
    }, [])
 
    const fn_GetProformaGeneralMasters = (data) => {
-      dispatch(emptyLoader_Action(true))
+      // dispatch(emptyLoader_Action(true))
       let param = {
          "brandCode": userData?.brandCode,
          "countryCode": userData?.countryCode,
@@ -159,7 +159,7 @@ export default function PerformaScreen(props) {
 
    const GetProformaGeneralMastersCallBack = (res) => {
       console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
-      dispatch(emptyLoader_Action(false))
+      // dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          
          setProformaGeneralMasters(res.result);

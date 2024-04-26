@@ -49,7 +49,7 @@ const otherRateData = [
 ]
 
 const ncbRateData = [
-  { "key": 0, title: 0, description: 0 },
+  { "key": 0, title: 0, description: "0" },
   { "key": 5, title: 5, description: 5 },
   { "key": 10, title: 10, description: 10 },
   { "key": 15, title: 15, description: 15 },
@@ -121,6 +121,10 @@ export default function PerformaInsurance(props) {
  
 
 useEffect(()=>{
+  setNcbSelectedData(ncbRateData[0])
+  setDiscountDepValue(otherRateData[0])
+  setOtherRateValue(otherRateData[0])
+
   setInsurance_Data(insurance_Data1)
   fn_SetInsurance()
 },[insurance_Data1])
@@ -147,9 +151,10 @@ useEffect(()=>{
 
     })
     insurance_Data1?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
-
     setIdvListData(insurance_Data1?.idvList)
+    alert("data"+JSON.stringify(insurance_Data1?.basicPremiumList))
     insurance_Data1?.idvList.map((item)=>{
+    
       item?.isSelected === "Y" ? setIdvValue(item): null
     })
     setbasicPremiumList(insurance_Data1?.basicPremiumList)
@@ -651,7 +656,7 @@ useEffect(()=>{
               list={otherRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
-              title={discountDepValue.title}
+              title={discountDepValue.description}
               refType={Object.keys(discountDepValue).length===0 ?true : false}
               textExt={styles.dropListText}
               on_Select={(d) => {
@@ -673,7 +678,7 @@ useEffect(()=>{
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              title={ncbSelectedData?.title}
+              title={ncbSelectedData?.description}
               refType={Object.keys(ncbSelectedData).length===0 ?true : false}
               on_Select={(d) => {
                 setNcbSelectedData(d)
@@ -707,7 +712,7 @@ useEffect(()=>{
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              title={otherRateValue?.title}
+              title={otherRateValue?.description}
               refType={Object.keys(otherRateValue).length===0 ?true : false}
               on_Select={(d) => {
                 console.log("rate selected = ", d)

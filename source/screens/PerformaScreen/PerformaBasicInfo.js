@@ -255,7 +255,7 @@ export default function PerformaBasicInfo(props) {
 
   const fn_GetProformaGeneralMasters = (d,type) => {
     setSalesGroupValue(d);
-    dispatch(emptyLoader_Action(true));
+    // dispatch(emptyLoader_Action(true));
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -299,7 +299,7 @@ export default function PerformaBasicInfo(props) {
 
   const GetProformaGeneralMastersCallBack = (res,newObj) => {
     console.log("GetProformaGeneralMastersCallBack12 = ", JSON.stringify(res));
-    dispatch(emptyLoader_Action(false));
+    newObj?.type===1 ?null : dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
       res.result?.selectMasterList.map((item) => {
         if (item?.listType === "END_USE") {
@@ -518,165 +518,11 @@ export default function PerformaBasicInfo(props) {
     setTotalAmount(newTotal);
   };
 
-  const fn_GetProformaTaxMasters = (d,type) => {
-  type===2 ? dispatch(emptyLoader_Action(true)) : null
-    let param = {
-       brandCode: userData?.brandCode,
-       countryCode: userData?.countryCode,
-       companyId: userData?.companyId,
-       prospectNo: Number(cardData?.prospectId),
-       proformaId: proformaId ,
-       hsnCode: performaGeneralMasterData?.vehPrice?.hsnCode,
-       endUse: d,
-       basicPrice: performaGeneralMasterData?.vehPrice?.vehBasicAmount,
-       discount:performaGeneralMasterData?.vehPrice?.discountAmt,
-       loginUserCompanyId: userData?.userCompanyId,
-       loginUserId: userData?.userId,
-       ipAddress: "1::1",
  
-    };
-    tokenApiCall(
-       GetProformaTaxMastersCallBack,
-       APIName.GetProformaTaxMasters,
-       "POST",
-       param,
-       type
-    );
- };
-
- const GetProformaTaxMastersCallBack = (res,type) => {
-    console.log("enduseText ", JSON.stringify(res));
-    dispatch(emptyLoader_Action(false))
-    settexData(res?.result)
-    if (res.statusCode === 200) {
-      if(type===1){
-        let newArray=[]
-        transData1.map((item)=>{
-         res?.result?.tcsDetail.map((items)=>{
-           items?.trxnBasis===item?.code ? newArray.push(item) : null
-          })
-     })
-     setTransData(newArray)
-     if(res?.result?.vehPriceDetail?.transactionBasis===''){
-         transData1.map((item)=>{
-       item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
-     })
-   
-     }else{
-       transData1.map((item)=>{
-       item?.code===res?.result?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
-     })
-     }
-        let tax = 0;
-        res?.result?.selectedProformaValueCodes.map((item) => {
-          tax = tax + Number(item.perc);
-        });
-        setTexTotal(tax);
-        fn_createCal(performaPriceDetail?.discountAmt, tax,res?.result);
-      }else{
-      let newArray1=[]
-      setTrnsBasicValue({})
-       transData1.map((item)=>{
-        res?.result?.tcsDetail.map((items)=>{
-          items?.trxnBasis===item?.code ? newArray1.push(item) : null
-         })
-    })
-    setTransData(newArray1)
-    let transObj = {}
-    if(res?.result?.vehPriceDetail?.transactionBasis===''){
-        transData1.map((item)=>{
-          item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? transObj= item : null
-
-      item?.code===res?.result?.tcsDetail[0]?.trxnBasis ? setTrnsBasicValue(item) : null
-    })
-  
-    }else{
-      transData1.map((item)=>{
-        item?.code===res?.result?.vehPriceDetail?.transactionBasis ? transObj= item : null
-
-      item?.code===res?.result?.vehPriceDetail?.transactionBasis ? setTrnsBasicValue(item) : null
-    })
-    }
-      
-
-    let tax1 = 0;
-    res?.result?.selectedProformaValueCodes.map((item) => {
-      tax1 = tax1 + Number(item.perc);
-    });
-    setTexTotal(tax1);
-
-
-    let basicPrice = performaPriceDetail?.vehBasicAmount;
-    // setDiscountValue(performaPriceDetail?.discountAmt);
-    let dis = Number(performaPriceDetail?.discountAmt);
-    let tax = isNaN(tax1) ? 0 : tax1;
-    let discount_Tax = isNaN(Math.round((dis * 100) / (tax + 100), 0))
-      ? 0
-      : Math.round((dis * 100) / (tax + 100), 0);
-    let basicDiscount = isNaN(basicPrice - discount_Tax)
-      ? 0
-      : basicPrice - discount_Tax;
-    setDiscountPerTex(discount_Tax);
-    setBasicPriceDiscount(basicDiscount);
-
-    let newArray = [];
-    let newTaxTotal = 0;
-    let newSubCharge = 0;
-    let newTotal = 0;
-    res?.result?.selectedProformaValueCodes.map((item) => {
-      newTaxTotal = newTaxTotal + Number(item?.perc);
-      newSubCharge = newSubCharge + Number(item?.surcharge);
-      let newCal = Math.round(
-        (Number(basicDiscount) * Number(item.perc)) / 100,
-        0
-      );
-      newTotal = newTotal + newCal;
-      item["total"] = newCal;
-      newArray.push(item);
-    });
-
-    setTexMaster([...newArray]);
-    setTexTotal(isNaN(newTaxTotal) ? 0 : newTaxTotal);
-    setSurchargeData(isNaN(newSubCharge) ? 0 : newSubCharge);
-    setTotalAmount(isNaN(newTotal) ? 0 : newTotal);
-   
-    if (res?.result?.tcsDetail.length > 0) {
-      let newTcs = 0;
-      res?.result?.tcsDetail?.map((item) => {
-        // if (item?.tcsApplicable === "Y") {
-        if (item?.trxnBasis === transObj?.code) {
-    
-         setTcsPercentageValue(item?.tcsRate)
-          newTcs = Math.round(
-            ((exShowRoomPostPrice)  * item?.tcsRate) / 100,
-            0
-          );
-        // }
-        item?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false);
-      }
-      });
-      setTcsValue(isNaN(newTcs) ? 0 : newTcs);
-    } else {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
-      setTcsStatus(false);
-      setTcsPercentageValue('')
-      setTcsValue(0);
-    }
-    let filterData = res?.result?.tcsDetail?.filter(e=>e?.trxnBasis === transObj?.code)
-    filterData?.length > 0 ? filterData[0]?.tcsApplicable==='Y' ? setTcsPercentageValue(filterData[0]?.tcsRate) :  setTcsPercentageValue('') : setTcsPercentageValue('')
-
-    filterData?.length > 0 ? filterData[0]?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false) : setTcsStatus(false)
-    setTrnsBasicValue(transObj)
-  }
-  
-    } else {
-       constant.showMsg(res.message);
-    }
- };
 
 
  const fn_GetProformaUseEndlMasters = (d,newObj) => {
-  dispatch(emptyLoader_Action(true))
+  // newObj?.type===2 ? dispatch(emptyLoader_Action(true)) : null
   let param = {
     brandCode: userData?.brandCode,
     countryCode: userData?.countryCode,
@@ -720,7 +566,7 @@ export default function PerformaBasicInfo(props) {
 
 const GetProformaUseEndlMasters = (res,dataObj) => {
   console.log("GetProformaGeneralMastersCallBack12 = ", JSON.stringify(res));
-  dispatch(emptyLoader_Action(false));
+  // dispatch(emptyLoader_Action(false));
   if (res.statusCode === 200) {
     dataObj?.type=== 1 ? setDiscountValue(res?.result?.vehPrice?.discountAmt) : null
     setExShowRoomPrePrice(res?.result?.vehPrice?.exShowromPrice)
@@ -734,7 +580,7 @@ const GetProformaUseEndlMasters = (res,dataObj) => {
 };
 
 const fn_GetProformaUseTaxMasters = (priceData,d) => {
-   dispatch(emptyLoader_Action(true)) 
+  //  dispatch(emptyLoader_Action(true)) 
     let param = {
        brandCode: userData?.brandCode,
        countryCode: userData?.countryCode,
@@ -1044,7 +890,6 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
                     setEndUseValue(d)
                     newObj={value:salesGroupValue?.code,type:2}
                     fn_GetProformaUseEndlMasters(d.code,newObj)
-                    // fn_GetProformaTaxMasters (d.code,2)
                   }}
                 />
               </View>
