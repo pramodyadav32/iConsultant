@@ -301,6 +301,7 @@ useEffect(()=>{
   let rule = []
   let insuLocation = []
   let insuCompany = []
+  console.log("datavalue",JSON.stringify(dataValue))
   dataValue?.insurenceDataList.map((item) => {
     if (item?.dataType === 'INSU_CALC_ON') {
       calData.push(item)
@@ -493,6 +494,9 @@ useEffect(()=>{
     setNcbSelectedData({})
     setDiscountRuleValue({})
     setOtherRateValue({})
+    setNcbSelectedData(ncbRateData[0])
+    setDiscountDepValue(otherRateData[0])
+  setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataInsuranceCompany = (d,locVal) => {
@@ -523,7 +527,7 @@ useEffect(()=>{
   }
 useEffect(()=>{
   calculateInsurance()
-},[calOnValue,idvListValue,rateValue,nilDipSelectedData,discountDepValue,ncbSelectedData,discountRuleValue,otherRateValue])
+},[calOnValue,idvListValue,rateValue,nilDipSelectedData,discountDepValue,ncbSelectedData,discountRuleValue,otherRateValue,nilDipCheckStatus])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>

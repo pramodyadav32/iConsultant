@@ -188,7 +188,7 @@ export default function PerformaBasicInfo(props) {
     if(Object.keys(trnsBasicValue).length===0){
       if(texData?.vehPriceDetail?.transactionBasis===''){
         transData1.map((item)=>{
-      item?.code===texData?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculationValue(texData?.tcsDetail[0], (newTotal + basicDiscount)): null
+      item?.code===texData?.tcsDetail[0]?.trxnBasis ? fn_TcsCalculationValue(texData?.tcsDetail[0],(newTotal + basicDiscount)): null
     })  
     }else{
       transData1.map((item)=>{
@@ -235,8 +235,10 @@ export default function PerformaBasicInfo(props) {
           // if (item?.tcsApplicable === "Y") {
              console.log("newtcs111",(exShowRoomPostPrice ))
           setTcsPercentageValue(item?.tcsRate)
+
            newTcs = Math.round(
-             (exShowRoomPostPrice * item?.tcsRate) / 100,
+            //  (exShowRoomPostPrice * item?.tcsRate) / 100,
+             ((firstTimeTotal === 0 ? exShowRoomPostPrice : firstTimeTotal) * item?.tcsRate) / 100,
              0
            );
           // }
