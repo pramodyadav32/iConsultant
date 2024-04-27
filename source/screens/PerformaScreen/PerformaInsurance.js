@@ -122,6 +122,8 @@ export default function PerformaInsurance(props) {
 
 useEffect(()=>{
   // setNcbSelectedData(ncbRateData[0])
+  insurance_Data1?.insurenceDetail=== null ? setNcbSelectedData(ncbRateData[0])
+  :
   ncbRateData.map((item)=>{
     item.title === insurance_Data1?.insurenceDetail?.insuNcbPer ? setNcbSelectedData(item) : null
   })
@@ -140,7 +142,7 @@ useEffect(()=>{
 
   const fn_SetInsurance=()=>{
     let insuranceHeadListTemp = insurance_Data1?.insurenceHeadList.map((list, index) => {
-      return { ...list, isChecked: list?.selectedValue, id: index };
+      return { ...list, isChecked: list?.selectedValue==="Y" ? true : false, id: index };
     });
     console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
     console.log("insurance_Data ==== ", JSON.stringify(insurance_Data))
@@ -148,11 +150,17 @@ useEffect(()=>{
     sourceData.map((item)=>{
       item?.title === insurance_Data1?.insurenceDetail?.insuSource ? setSourceValue(item) : null
     })
+    if(insurance_Data1?.insurenceDetail=== null){
+ setDiscountDepValue(otherRateData[0])
+  setOtherRateValue(otherRateData[0])
+    }else{
     otherRateData.map((item)=>{
       item?.title === insurance_Data1?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
       item?.title === insurance_Data1?.insurenceDetail?.idv2NildepPer ? setDiscountDepValue(item) : null
 
     })
+  }
+
     insurance_Data1?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
     setIdvListData(insurance_Data1?.idvList)
     insurance_Data1?.idvList.map((item)=>{
@@ -170,11 +178,15 @@ useEffect(()=>{
     setNilDipData(insurance_Data1?.idvCalculationList)
 
     insurance_Data1?.insurenceDetail?.idv2NildepApply==="Y" ? setNilDipCheckStatus(true) : setNilDipCheckStatus(false)
+    
+    insurance_Data1?.insurenceDetail=== null ? null
+    :
     insurance_Data1?.idvCalculationList.map((item)=>{
       ((item?.idv2NildepPercentage===insurance_Data1?.insurenceDetail?.idv2NildepPer) &&(item?.idv2NildepAddOnAmount===insurance_Data1?.insurenceDetail?.idv2NildepAddOnAmount)) ? setNilDipSelectedData(item) : null
 
     })
 
+    insurance_Data1?.insurenceDetail=== null ?  null :
     insurance_Data1?.idvCalculationList.map((item)=>{
       item?.idv2NildepPercentage === insurance_Data1?.insurenceDetail?.idv2NildepPer ? setNilDipSelectedData(item) : null
     })
@@ -197,8 +209,8 @@ useEffect(()=>{
       }
       else if (item?.dataType === 'INSU_DISCOUNT_CALC_RULE') {
         rule.push(item)
-        item?.selectedValue==='Y' ? setDiscountRuleValue(item) : null 
-        item?.selectedValue ==='Y' ?  calculateInsurance() : null
+        item?.dataValue===insurance_Data1?.insurenceDetail?.insuDisCalcRule ? setDiscountRuleValue(item) : null 
+        item?.dataValue===insurance_Data1?.insurenceDetail?.insuDisCalcRule ?  calculateInsurance() : null
       }else if (item?.dataType === 'INSU_LOCATION') {
         insuLocation.push(item)
         item?.selectedValue==='Y' ? setLocationValue(item) : null 
@@ -345,20 +357,20 @@ useEffect(()=>{
       "docNo": performaBasicInfo?.proformaList[0]?.docNo,
       "insuranceYN": selectState ? "Y" : "N",
       "insuLocation": selectState ? locationValue?.dataValue : "",
-      "insuCompanyCode": companyValue?.dataValue ? companyValue?.dataValue : "",
+      "insuCompanyCode": Object.keys(companyValue).length === 0 ? "" : companyValue?.dataValue ? companyValue?.dataValue : "",
       "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
       "insuranceType": typeValue?.dataValue,
       "insuSource": "Calculator",
-      "insuranceCalcOn": calOnValue?.dataValue,
+      "insuranceCalcOn": Object.keys(calOnValue).length === 0 ? "" : calOnValue?.dataValue,
       "insuversion": rateValue?.insuCalcVersionNo,
       "insudiscrule": discountRuleValue?.dataValue,
       "basicpremiumperc1": rateValue?.basicPremiumPerc1,
       "basicpremiumperc2": rateValue?.basicPremiumPerc2,
       "ncb": ncbSelectedData?.title,
-      "idv": idvListValue?.idvPer,
+      "idv": Object.keys(idvListValue).length=== 0 ? "" : idvListValue?.idvPer,
       "insudiscountperc": otherRateValue?.title,
       "insuAssetValueGross": priceValue,
       "insuAssetValueNet": idvValue,
@@ -367,7 +379,7 @@ useEffect(()=>{
       "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage === null ? 0 : nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": dep_Amt,
       "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
-      "idv2NildepDiscountPercentage": Number(discountDepValue?.key),
+      "idv2NildepDiscountPercentage": Object.keys(discountDepValue).length === 0 ? "" : Number(discountDepValue?.key),
       "idv2NildepDiscountAmount": Number(discount_DepAmt),
       "insuFinalDiscount": 0,
       "proformaHeadList":temp
@@ -631,7 +643,7 @@ useEffect(()=>{
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
-              title={rateValue?.basicPremiumPerc1+"% + "+rateValue?.basicPremiumPerc2}
+              title={ Object.keys(rateValue).length===0 ? "Please select" :rateValue?.basicPremiumPerc1+"% + "+rateValue?.basicPremiumPerc2}
               refType={Object.keys(rateValue).length===0 ?true : false}
               on_Select={(d) => {
                 console.log("rate selected = ", d)
@@ -654,7 +666,7 @@ useEffect(()=>{
                 disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
                 disable={!nilDipCheckStatus}
                 refType={Object.keys(nilDipSelectedData).length===0 ?true : false}
-                title={nilDipSelectedData?.idv2NildepPercentage +"% + " +nilDipSelectedData?.idv2NildepAddOnAmount}
+                title={Object.keys(nilDipSelectedData).length===0 ? 'Please Select' : nilDipSelectedData?.idv2NildepPercentage +"% + " +nilDipSelectedData?.idv2NildepAddOnAmount}
                 on_Select={(d)=>{
                 console.log("nildip selected = ", d)
                 setNilDipSelectedData(d)
