@@ -182,13 +182,13 @@ export default function HomeScreen(props) {
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(13), y: constant.moderateScale(265.6) }, // Example new position
+        toValue: { x: constant.resW(4), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(198), y: constant.moderateScale(265.6) }, // Example new position
+        toValue: { x: constant.resW(51.8), y: constant.moderateScale(265.6) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")

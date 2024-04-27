@@ -1001,7 +1001,7 @@ const GetAccessoriesCallBack = (res) => {
             performaGeneralMasterData={proformaGeneralMasters}
             performaBasicInfo={performaBasicDataHeader}
             invoice_Data = {invoiceData}
-            fn_Next={()=> fn_GetProspectBasicInfo()}
+            fn_Next={()=> navigation.pop(1)}
             />}
          </View>
 

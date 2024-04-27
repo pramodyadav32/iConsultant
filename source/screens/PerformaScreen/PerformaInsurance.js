@@ -156,7 +156,7 @@ useEffect(()=>{
     }else{
     otherRateData.map((item)=>{
       item?.title === insurance_Data1?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
-      item?.title === insurance_Data1?.insurenceDetail?.idv2NildepPer ? setDiscountDepValue(item) : null
+      item?.title === insurance_Data1?.insurenceDetail?.idv2NildepDisPer ? setDiscountDepValue(item) : null
 
     })
   }
@@ -276,7 +276,7 @@ useEffect(()=>{
 
   otherRateData.map((item)=>{
     item?.title === dataValue?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
-    item?.title === dataValue?.insurenceDetail?.idv2NildepAmount ? setDiscountDepValue(item) : null
+    item?.title === dataValue?.insurenceDetail?.idv2NildepDisPer ? setDiscountDepValue(item) : null
 
   })
   dataValue?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
@@ -365,21 +365,21 @@ useEffect(()=>{
       "insuranceType": typeValue?.dataValue,
       "insuSource": "Calculator",
       "insuranceCalcOn": Object.keys(calOnValue).length === 0 ? "" : calOnValue?.dataValue,
-      "insuversion": rateValue?.insuCalcVersionNo,
-      "insudiscrule": discountRuleValue?.dataValue,
-      "basicpremiumperc1": rateValue?.basicPremiumPerc1,
-      "basicpremiumperc2": rateValue?.basicPremiumPerc2,
+      "insuversion":Object.keys(rateValue).length=== 0 ? 0 : rateValue?.insuCalcVersionNo,
+      "insudiscrule": Object.keys(discountRuleValue).length=== 0 ? "" :discountRuleValue?.dataValue,
+      "basicpremiumperc1":Object.keys(rateValue).length=== 0 ? 0 : rateValue?.basicPremiumPerc1,
+      "basicpremiumperc2": Object.keys(rateValue).length=== 0 ? 0 : rateValue?.basicPremiumPerc2,
       "ncb": ncbSelectedData?.title,
-      "idv": Object.keys(idvListValue).length=== 0 ? "" : idvListValue?.idvPer,
+      "idv": Object.keys(idvListValue).length=== 0 ? 0 : idvListValue?.idvPer,
       "insudiscountperc": otherRateValue?.title,
       "insuAssetValueGross": priceValue,
       "insuAssetValueNet": idvValue,
       "insuLoadingAmt": loadingAmt,
       "idv2NildepApply": nilDipCheckStatus ? "Y" : "N",
-      "idv2NildepPercentage": nilDipSelectedData?.idv2NildepPercentage === null ? 0 : nilDipSelectedData?.idv2NildepPercentage,
+      "idv2NildepPercentage": Object.keys(nilDipSelectedData).length===0 ? 0 : nilDipSelectedData?.idv2NildepPercentage === null ? 0 : nilDipSelectedData?.idv2NildepPercentage,
       "idv2NildepAmount": dep_Amt,
-      "idv2NildepAddOnAmount": nilDipSelectedData?.idv2NildepAddOnAmount,
-      "idv2NildepDiscountPercentage": Object.keys(discountDepValue).length === 0 ? "" : Number(discountDepValue?.key),
+      "idv2NildepAddOnAmount":Object.keys(nilDipSelectedData).length===0 ? 0 : nilDipSelectedData?.idv2NildepAddOnAmount,
+      "idv2NildepDiscountPercentage": Object.keys(discountDepValue).length === 0 ? 0 : Number(discountDepValue?.key),
       "idv2NildepDiscountAmount": Number(discount_DepAmt),
       "insuFinalDiscount": 0,
       "proformaHeadList":temp
@@ -418,7 +418,7 @@ useEffect(()=>{
     setPriceValue(exShowRoomPrice)
     let idvCharnges = (exShowRoomPrice * (Number(idvListValue?.idvPer)))/100
     isNaN(idvCharnges) ? null : setIdvValue(Math.round(idvCharnges,0))
-    let rateCharnges = (idvCharnges * (Number(rateValue?.basicPremiumPerc1)))/100
+    let rateCharnges = (((idvCharnges * (Number(rateValue?.basicPremiumPerc2)))/100) * Number(rateValue?.basicPremiumPerc1))/100
     let nilDipCharnges = 0
     // if(discountRuleValue?.dataValue === "BASIC_PRM_PRE_NCB_INC_NILDEP"){
       nilDipCharnges = nilDipCheckStatus ? ((idvCharnges * (Number(nilDipSelectedData?.idv2NildepPercentage)))/100) + ((idvCharnges * Number(nilDipSelectedData?.idv2NildepAddOnAmount)))/100 : 0
