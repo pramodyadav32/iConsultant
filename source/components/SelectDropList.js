@@ -11,9 +11,9 @@ const SelectDropList = (props) => {
     const{title,list,on_Select,buttonExt,textExt,imageIcon,imageSize,desName,disable,refType, dropdownIndexValue}= props
 // console.log("dropdownIndexValue", dropdownIndexValue)
     useEffect(()=>{
-     if(refType){
+    //  if(refType){
         dropdownRef.current.reset()
-     }
+    //  }
     },[refType])
 
     return (

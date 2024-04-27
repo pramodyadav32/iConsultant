@@ -44,7 +44,7 @@ export default function HomeScreen(props) {
   const [dataCounts,setDataCounts] = useState({})
   const [testCount,setTestCount] = useState(0)
   const [activeCount,setActiveCount] = useState(0)
-  const [position] = useState(new Animated.ValueXY({ x: constant.moderateScale(10), y: constant.moderateScale(133) }));
+  const [position] = useState(new Animated.ValueXY({ x: constant.resW(4), y: constant.moderateScale(129.4) }));
  
   // useEffect(() => {
   //   dispatch(emptyLoader_Action(true))
@@ -239,7 +239,7 @@ export default function HomeScreen(props) {
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
                   <Progress.Circle
-                    size={constant.moderateScale(60)}
+                    size={constant.moderateScale(50)}
                     indeterminate={false}
                     progress={isNaN(activeCount)? 0 : activeCount}
                     color={'#FE0F17'}

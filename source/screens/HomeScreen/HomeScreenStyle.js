@@ -237,6 +237,9 @@ const styles = StyleSheet.create({
     homeSubBox1:{
      flexDirection:'row',
      alignItems:'flex-end',
+    //  backgroundColor:"red",
+     flex:1,
+     paddingVertical:"4%"
     },
     dashBoardIcon:{
       height:constant.moderateScale(30),

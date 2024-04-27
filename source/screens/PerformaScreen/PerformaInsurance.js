@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput, StyleSheet } from 'react-native';
+import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput, StyleSheet, Alert } from 'react-native';
 import * as constant from '../../utilities/constants'
 import { useDispatch, useSelector } from 'react-redux';
 import HomeHeader from '../../components/HomeHeader';
@@ -121,9 +121,12 @@ export default function PerformaInsurance(props) {
  
 
 useEffect(()=>{
-  setNcbSelectedData(ncbRateData[0])
-  setDiscountDepValue(otherRateData[0])
-  setOtherRateValue(otherRateData[0])
+  // setNcbSelectedData(ncbRateData[0])
+  ncbRateData.map((item)=>{
+    item.title === insurance_Data1?.insurenceDetail?.insuNcbPer ? setNcbSelectedData(item) : null
+  })
+  // setDiscountDepValue(otherRateData[0])
+  // setOtherRateValue(otherRateData[0])
 
   setInsurance_Data(insurance_Data1)
   fn_SetInsurance()
@@ -147,22 +150,30 @@ useEffect(()=>{
     })
     otherRateData.map((item)=>{
       item?.title === insurance_Data1?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
-      item?.title === insurance_Data1?.insurenceDetail?.idv2NildepAmount ? setDiscountDepValue(item) : null
+      item?.title === insurance_Data1?.insurenceDetail?.idv2NildepPer ? setDiscountDepValue(item) : null
 
     })
     insurance_Data1?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
     setIdvListData(insurance_Data1?.idvList)
-    alert("data"+JSON.stringify(insurance_Data1?.basicPremiumList))
     insurance_Data1?.idvList.map((item)=>{
-    
-      item?.isSelected === "Y" ? setIdvValue(item): null
+      item?.idvPer === insurance_Data1?.insurenceDetail?.insuIdvPer ? setIdvListValue(item): null  
+      item?.idvPer === insurance_Data1?.insurenceDetail?.insuIdvPer ? setIdvValue(item?.idvPer): null
     })
     setbasicPremiumList(insurance_Data1?.basicPremiumList)
+    insurance_Data1?.basicPremiumList.map((item)=>{
+    ((item?.basicPremiumPerc1===insurance_Data1?.insurenceDetail?.basicPremiumPerc1) &&(item?.basicPremiumPerc2===insurance_Data1?.insurenceDetail?.basicPremiumPerc2)) ? setRateValue(item) : null
+    })
     setidvCalculationList(insurance_Data1?.idvCalculationList)
     setinsurenceDataList(insurance_Data1?.insurenceDataList)
     setinsurenceHeadList(insuranceHeadListTemp);
     setinsurenceDetail(insurance_Data1?.insurenceDetail)
     setNilDipData(insurance_Data1?.idvCalculationList)
+
+    insurance_Data1?.insurenceDetail?.idv2NildepApply==="Y" ? setNilDipCheckStatus(true) : setNilDipCheckStatus(false)
+    insurance_Data1?.idvCalculationList.map((item)=>{
+      ((item?.idv2NildepPercentage===insurance_Data1?.insurenceDetail?.idv2NildepPer) &&(item?.idv2NildepAddOnAmount===insurance_Data1?.insurenceDetail?.idv2NildepAddOnAmount)) ? setNilDipSelectedData(item) : null
+
+    })
 
     insurance_Data1?.idvCalculationList.map((item)=>{
       item?.idv2NildepPercentage === insurance_Data1?.insurenceDetail?.idv2NildepPer ? setNilDipSelectedData(item) : null
@@ -603,6 +614,7 @@ useEffect(()=>{
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
+              title={idvListValue?.idvPer}
               refType={Object.keys(idvListValue).length===0 ?true : false}
               on_Select={(d) => {
                 setIdvListValue(d)
@@ -619,6 +631,7 @@ useEffect(()=>{
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
+              title={rateValue?.basicPremiumPerc1+"% + "+rateValue?.basicPremiumPerc2}
               refType={Object.keys(rateValue).length===0 ?true : false}
               on_Select={(d) => {
                 console.log("rate selected = ", d)
@@ -641,7 +654,8 @@ useEffect(()=>{
                 disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
                 disable={!nilDipCheckStatus}
                 refType={Object.keys(nilDipSelectedData).length===0 ?true : false}
-               on_Select={(d)=>{
+                title={nilDipSelectedData?.idv2NildepPercentage +"% + " +nilDipSelectedData?.idv2NildepAddOnAmount}
+                on_Select={(d)=>{
                 console.log("nildip selected = ", d)
                 setNilDipSelectedData(d)
                 // calculateInsurance()
