@@ -301,7 +301,7 @@ useEffect(()=>{
   let rule = []
   let insuLocation = []
   let insuCompany = []
-  console.log("datavalue",JSON.stringify(dataValue))
+  // console.log("datavalue",JSON.stringify(dataValue))
   dataValue?.insurenceDataList.map((item) => {
     if (item?.dataType === 'INSU_CALC_ON') {
       calData.push(item)
@@ -479,6 +479,9 @@ useEffect(()=>{
     setNcbSelectedData({})
     setDiscountRuleValue({})
     setOtherRateValue({})
+      setNcbSelectedData(ncbRateData[0])
+    setDiscountDepValue(otherRateData[0])
+  setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataNoInsurance = () => {

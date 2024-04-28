@@ -159,12 +159,12 @@ export default function PerformaScreen(props) {
 
    const GetProformaGeneralMastersCallBack = (res) => {
       console.log("GetProformaGeneralMastersCallBack = ", JSON.stringify(res));
-      dispatch(emptyLoader_Action(false))
+      // dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          
          setProformaGeneralMasters(res.result);
          setVehiclePriceDetail(res.result?.vehPrice);
-         // fn_GetProformaTaxMasters(res.result?.vehPrice)
+         fn_GetProformaTaxMasters(res.result?.vehPrice)
          
       } else {
          constant.showMsg(res.message);
@@ -197,7 +197,7 @@ export default function PerformaScreen(props) {
 
    const GetProformaTaxMastersCallBack = (res) => {
       console.log("GetProformaTaxMastersCallBack = ", JSON.stringify(res));
-      dispatch(emptyLoader_Action(false))
+      // dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setPerformaTaxMaster(res?.result)
          setActive(0)

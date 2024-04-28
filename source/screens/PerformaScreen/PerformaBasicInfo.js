@@ -257,7 +257,7 @@ export default function PerformaBasicInfo(props) {
 
   const fn_GetProformaGeneralMasters = (d,type) => {
     setSalesGroupValue(d);
-    // dispatch(emptyLoader_Action(true));
+   type===2 ? dispatch(emptyLoader_Action(true)) : null
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -317,6 +317,7 @@ export default function PerformaBasicInfo(props) {
         }
       });
     } else {
+      dispatch(emptyLoader_Action(false));
       constant.showMsg(res.message);
     }
   };
@@ -577,6 +578,7 @@ const GetProformaUseEndlMasters = (res,dataObj) => {
     fn_GetProformaUseTaxMasters(newObj,dataObj?.value)
 
   } else {
+    dispatch(emptyLoader_Action(false));
     constant.showMsg(res.message);
   }
 };
@@ -609,7 +611,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
 
  const GetProformaUseTaxMasters = (res,priceData) => {
     console.log("enduseText ", JSON.stringify(res));
-    dispatch(emptyLoader_Action(false))
+    
     settexData(res?.result)
     if (res.statusCode === 200) {
      
@@ -697,8 +699,8 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
       }
       });
       setTcsValue(isNaN(newTcs) ? 0 : newTcs);
+
     } else {
-      console.log("aaaaaaaaaaaaaaaaaaaaaaa false");
       setTcsStatus(false);
       setTcsPercentageValue('')
       setTcsValue(0);
@@ -708,9 +710,10 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
 
     filterData?.length > 0 ? filterData[0]?.tcsApplicable==='Y' ? setTcsStatus(true) :  setTcsStatus(false) : setTcsStatus(false)
     setTrnsBasicValue(transObj)
-  
+    dispatch(emptyLoader_Action(false))
   
     } else {
+      dispatch(emptyLoader_Action(false))
        constant.showMsg(res.message);
     }
  };
