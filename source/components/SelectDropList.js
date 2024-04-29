@@ -8,12 +8,12 @@ import FastImage from "react-native-fast-image"
 
 const SelectDropList = (props) => {
     const dropdownRef = useRef({}); 
-    const{title,list,on_Select,buttonExt,textExt,imageIcon,imageSize,desName,disable,refType, dropdownIndexValue}= props
+    const{title,list,on_Select,buttonExt,textExt,imageIcon,imageSize,desName,disable,refType, dropdownIndexValue, placeholderType}= props
 // console.log("dropdownIndexValue", dropdownIndexValue)
     useEffect(()=>{
-    //  if(refType){
+     if(refType){
         dropdownRef.current.reset()
-    //  }
+     }
     },[refType])
 
     return (

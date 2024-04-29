@@ -311,7 +311,7 @@ useEffect(()=>{
 
     } else if (item?.dataType === 'INSU_TYPE') {
       type.push(item)
-      item?.selectedValue==='Y' ? setTypevalue(item) : null 
+      // item?.selectedValue==='Y' ? setTypevalue(item) : null 
     }
     else if (item?.dataType === 'INSU_DISCOUNT_CALC_RULE') {
       rule.push(item)
@@ -479,9 +479,9 @@ useEffect(()=>{
     setNcbSelectedData({})
     setDiscountRuleValue({})
     setOtherRateValue({})
-      setNcbSelectedData(ncbRateData[0])
+    setNcbSelectedData(ncbRateData[0])
     setDiscountDepValue(otherRateData[0])
-  setOtherRateValue(otherRateData[0])
+    setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataNoInsurance = () => {
@@ -499,7 +499,7 @@ useEffect(()=>{
     setOtherRateValue({})
     setNcbSelectedData(ncbRateData[0])
     setDiscountDepValue(otherRateData[0])
-  setOtherRateValue(otherRateData[0])
+    setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataInsuranceCompany = (d,locVal) => {
@@ -524,6 +524,9 @@ useEffect(()=>{
     setDep_Amt(0)
     setIdvValue(0)
     setPriceValue(0)
+    setNcbSelectedData(ncbRateData[0])
+    setDiscountDepValue(otherRateData[0])
+    setOtherRateValue(otherRateData[0])
     getCompanychange(d?.dataValue,locVal?.dataValue)
 
     
@@ -572,7 +575,7 @@ useEffect(()=>{
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setTypevalue(d)
-                resetDropDownDataThirdParty()
+               d.dataValue==='THIRD_PARTY' ? resetDropDownDataThirdParty() : null
               }}
             />
           </View>
@@ -712,7 +715,7 @@ useEffect(()=>{
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               title={ncbSelectedData?.description}
-              refType={Object.keys(ncbSelectedData).length===0 ?true : false}
+              refType={Object.keys(ncbSelectedData).length===0 ?false : true}
               on_Select={(d) => {
                 setNcbSelectedData(d)
                 // calculateInsurance()
