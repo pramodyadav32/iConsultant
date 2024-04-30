@@ -79,7 +79,7 @@ export default function EditProspectInfo(props) {
     const [copyToOff, setCopyToOff] = useState(false)
     const [copyRegToOff, setCopyRegToOff] = useState(false)
     useEffect(() => {
-        // console.log("prospectMaster ======== ", JSON.stringify(prospectMaster))
+        console.log("prospectMaster ======== ", JSON.stringify(prospectMaster))
         prospectMaster.map((item) => {
           if (item.listType === 'STATE') {
                 setStateData(item.prospectMasterList)
@@ -226,7 +226,7 @@ export default function EditProspectInfo(props) {
                 setRes_StateData(item?.prospectMasterList)
                 setOffStateData(item?.prospectMasterList)
                   item.prospectMasterList.map((item) => {
-                    //   item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
+                      item?.code === prospectDetail?.regnState ? prospectDetail?.regnState != '' ? fn_GetProspectMaster(item,1) : null : null
                    type===2 && item?.code === prospectDetail?.resState ? prospectDetail?.resState != '' ? fn_GetProspectMaster(item,2) : null : null
                    type===3 && item?.code === prospectDetail?.offcState ? prospectDetail?.offcState != '' ? fn_GetProspectMaster(item,3) : null : null
   
@@ -244,7 +244,6 @@ export default function EditProspectInfo(props) {
     }
 
     const fn_GetProspectMaster2 = (item,type) => {
-        console.log("item",item)
         dispatch(emptyLoader_Action(true))
      type=== 1? setReg_State(item) : type === 2 ? setRes_State(item) : setOff_State(item)
         let param = {
@@ -283,6 +282,7 @@ export default function EditProspectInfo(props) {
                 res.result.map((item)=>{
                     if(item?.listType==='CITY'){
                         setReg_CityData(item?.prospectMasterList)
+                       
                     }else{
                         setReg_DistictData(item?.prospectMasterList)
 
@@ -354,8 +354,16 @@ export default function EditProspectInfo(props) {
                 res.result.map((item)=>{
                     if(item?.listType==='CITY'){
                         setReg_CityData(item?.prospectMasterList)
+                        item.prospectMasterList.map((item) => {
+                            item?.code === prospectDetail?.regnCity ? prospectDetail?.regnCity != '' ? setReg_City(item) : null : null
+                      
+                        })
                     }else{
                         setReg_DistictData(item?.prospectMasterList)
+                        item?.prospectMasterList?.map((item) => {
+                            item?.code === prospectDetail?.regnDistrict ? prospectDetail?.resDistrict != '' ? setReg_Destict(item) : null : null
+
+                        })
 
                     }
                 })
@@ -363,13 +371,16 @@ export default function EditProspectInfo(props) {
                 res.result.map((item)=>{
                     if(item?.listType==='CITY'){
                         setRes_CityData(item?.prospectMasterList)
+                        item.prospectMasterList.map((item) => {
+                            item?.code === prospectDetail?.resCity ? prospectDetail?.resCity != '' ? setRes_City(item) : null : null
+                      
+                        })
+                   
                     }else{
                         setRes_DistictData(item?.prospectMasterList)
                         item?.prospectMasterList?.map((item) => {
                             item?.code === prospectDetail?.resDistrict ? prospectDetail?.resDistrict != '' ? setRes_Destict(item) : null : null
-                            item?.code === prospectDetail?.regnDistrict ? prospectDetail?.resDistrict != '' ? setReg_Destict(item) : null : null
-                            item?.code === prospectDetail?.offcDistrict ? prospectDetail?.resDistrict != '' ? setOff_Destict(item) : null : null
-
+                 
                         })
                     }
                 })
@@ -377,9 +388,16 @@ export default function EditProspectInfo(props) {
                 res.result.map((item)=>{
                     if(item?.listType==='CITY'){
                         setOff_CityData(item?.prospectMasterList)
+                        item.prospectMasterList.map((item) => {
+                           item?.code === prospectDetail?.offcCity ? prospectDetail?.offcCity != '' ? setOff_City(item) : null : null
+                      
+                        })
                     }else{
                         setOff_DistictData(item?.prospectMasterList)
+                        item?.prospectMasterList?.map((item) => {
+                          item?.code === prospectDetail?.offcDistrict ? prospectDetail?.resDistrict != '' ? setOff_Destict(item) : null : null
 
+                        })
                     }
                 })
             }
@@ -420,8 +438,6 @@ export default function EditProspectInfo(props) {
             constant.showMsg("Please select Regn State")
         }else if (Object.keys(reg_City).length === 0) {
             constant.showMsg("Please select Regn City")
-        }else if (Object.keys(reg_destict).length === 0) {
-            constant.showMsg("Please select Regn District")
         }else if (reg_Pin==='') {
             constant.showMsg("Please enter Regn Pin")
         }else if (reg_Phone ==='') {
@@ -434,8 +450,6 @@ export default function EditProspectInfo(props) {
             constant.showMsg("Please select Res State")
         }else if (Object.keys(res_City).length === 0) {
             constant.showMsg("Please select Res City")
-        }else if (Object.keys(res_destict).length === 0) {
-            constant.showMsg("Please select Res Destict")
         }else if (res_Pin==='') {
             constant.showMsg("Please enter Res Pin")
         }else if (res_Phone ==='') {
@@ -479,7 +493,7 @@ export default function EditProspectInfo(props) {
                 "regnFax": "",
                 "regnZone": "",
                 "regnSubZone": "",
-                "regnDistrict": res_destict?.code,
+                "regnDistrict":Object.keys(res_destict).length===0 ? "" : res_destict?.code,
                 "resAdd1": resAdd1,
                 "resAdd2": resAdd2,
                 "resAdd3": resAdd3,
@@ -490,7 +504,7 @@ export default function EditProspectInfo(props) {
                 "resFax": "",
                 "resZone": "",
                 "resSubZone": "",
-                "resDistrict": reg_destict?.code,
+                "resDistrict":Object.keys(reg_destict).length===0 ? "" : reg_destict?.code,
                 "offAdd1": offAdd1,
                 "offAdd2": offAdd2,
                 "offAdd3": offAdd3,
@@ -501,7 +515,7 @@ export default function EditProspectInfo(props) {
                 "offFax": "",
                 "offZone": "",
                 "offSubZone": "",
-                "offDistrict": off_destict?.code,
+                "offDistrict": Object.keys(off_destict).length===0 ? "" : off_destict?.code,
                 "cp1Add1": "",
                 "cp1Add2": "",
                 "cp1Add3": "",
@@ -799,6 +813,7 @@ export default function EditProspectInfo(props) {
                                             list={reg_CityData}
                                             title={reg_City?.description}
                                             buttonExt={styles.dropList}
+                                            refType={Object.keys(reg_City).length===0 ? true : false}
                                             textExt={styles.dropListText}
                                             on_Select={(d) =>{ 
                                                 setReg_City(d)
