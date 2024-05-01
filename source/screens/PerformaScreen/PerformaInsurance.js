@@ -509,15 +509,13 @@ useEffect(()=>{
     setGrossAmt(0)
     let newArray = []
     let list= [...insurenceHeadList]
-    console.log('arrraylist',JSON.stringify(insurenceHeadList))
-    let updateArray = list.map(a=>a.isChecked=false);
-    // list.map((item)=>{
-    //   console.log("map",item)
-    //     item.isChecked = false
-    //     // newArray.push(item) 
+    // // let updateArray = list.map(a=>a.isChecked=false);
+    list.map((item)=>{
+        item.isChecked = false
+        newArray.push(item) 
      
-    // })
-    // setinsurenceHeadList([...newArray])
+    })
+    setinsurenceHeadList([...newArray])
     // setNcbSelectedData(ncbRateData[0])
     // setDiscountDepValue(otherRateData[0])
     // setOtherRateValue(otherRateData[0])
