@@ -378,7 +378,7 @@ export default function PerformaBasicInfo(props) {
         totalTax: parseInt(totalAmount),
         totalLevy: 0,
         exShowroomPostDisc: exShowRoomPostPrice,
-        exShowroomPreDisc: performaPriceDetail?.exShowromPrice,
+        exShowroomPreDisc: exShowRoomPrePrice,
         bookingAmount: 0,
         piUsage: usageValue?.code,
         piBillingLocation: billingLoactionValue?.code,
