@@ -11,6 +11,7 @@ import CommonHeader from '../../components/CommonHeader';
 import SelectDropList from '../../components/SelectDropList';
 import Button from '../../components/Button';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import InsuranceDropList from './InsuranceDropDown';
 
 const sourceData = [
   { 'key': 1, "title": 'Calculator', 'description': 'Calculator' }
@@ -147,9 +148,12 @@ useEffect(()=>{
     console.log("generalMaster_Data ==== ", JSON.stringify(generalMaster_Data))
     console.log("insurance_Data ==== ", JSON.stringify(insurance_Data))
 
-    sourceData.map((item)=>{
-      item?.title === insurance_Data1?.insurenceDetail?.insuSource ? setSourceValue(item) : null
-    })
+    // sourceData.map((item)=>{
+    //   item?.title === insurance_Data1?.insurenceDetail?.insuSource ? setSourceValue(item) : null
+    // })
+
+    setSourceValue(sourceData[0])
+
     if(insurance_Data1?.insurenceDetail=== null){
  setDiscountDepValue(otherRateData[0])
   setOtherRateValue(otherRateData[0])
@@ -275,11 +279,12 @@ useEffect(()=>{
 
 
   otherRateData.map((item)=>{
-    item?.title === dataValue?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
-    item?.title === dataValue?.insurenceDetail?.idv2NildepDisPer ? setDiscountDepValue(item) : null
+    // item?.title === dataValue?.insurenceDetail?.insuDisPer ? setOtherRateValue(item) : null
+    // item?.title === dataValue?.insurenceDetail?.idv2NildepDisPer ? setDiscountDepValue(item) : null
 
   })
-  dataValue?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
+  setNilDipCheckStatus(false) 
+  // dataValue?.insurenceDetail?.idv2NildepApply==='s' ? setNilDipCheckStatus(true) : null
 
   setIdvListData(dataValue?.idvList)
   dataValue?.idvList.map((item)=>{
@@ -288,13 +293,13 @@ useEffect(()=>{
   setbasicPremiumList(dataValue?.basicPremiumList)
   setidvCalculationList(dataValue?.idvCalculationList)
   setinsurenceDataList(dataValue?.insurenceDataList)
-  setinsurenceHeadList(insuranceHeadListTemp);
+  // setinsurenceHeadList(insuranceHeadListTemp);
   setinsurenceDetail(dataValue?.insurenceDetail)
   setNilDipData(dataValue?.idvCalculationList)
 
-  dataValue?.idvCalculationList.map((item)=>{
-    item?.idv2NildepPercentage === dataValue?.insurenceDetail?.idv2NildepPer ? setNilDipSelectedData(item) : null
-  })
+  // dataValue?.idvCalculationList.map((item)=>{
+  //   item?.idv2NildepPercentage === dataValue?.insurenceDetail?.idv2NildepPer ? setNilDipSelectedData(item) : null
+  // })
 
   let calData = []
   let type = []
@@ -305,17 +310,17 @@ useEffect(()=>{
   dataValue?.insurenceDataList.map((item) => {
     if (item?.dataType === 'INSU_CALC_ON') {
       calData.push(item)
-    item?.selectedValue==='Y' ? setCalOnValue(item) : null 
+    // item?.selectedValue==='Y' ? setCalOnValue(item) : null 
     // item?.selectedValue === 'Y' ? calculateInsurance() : null
-    item?.selectedValue === 'Y' ? setSelectState(true) : null
+    // item?.selectedValue === 'Y' ? setSelectState(true) : null
 
     } else if (item?.dataType === 'INSU_TYPE') {
       type.push(item)
-      item?.selectedValue==='Y' ? setTypevalue(item) : null 
+      // item?.selectedValue==='Y' ? setTypevalue(item) : null 
     }
     else if (item?.dataType === 'INSU_DISCOUNT_CALC_RULE') {
       rule.push(item)
-      item?.selectedValue==='Y' ? setDiscountRuleValue(item) : null 
+      // item?.selectedValue==='Y' ? setDiscountRuleValue(item) : null 
       // item?.selectedValue ==='Y' ?  calculateInsurance() : null
     }
   })
@@ -334,7 +339,21 @@ useEffect(()=>{
   // })
  }
 
+ const fn_Validation=()=>{
+  if(typeValue?.dataValue !='THIRD_PARTY'){
+    if(gross_Amt===0 ){
+    constant.showMsg("Please Select Mandatory Field")
+  
+  }else{
+      fn_SaveInsurance()
+    }
+  }else {
+    fn_SaveInsurance()
+  }
+ }
+
   const fn_SaveInsurance = () => {
+  
     let temp = []
     insurenceHeadList?.map((item, index) => {
       if(item?.isChecked){
@@ -359,7 +378,7 @@ useEffect(()=>{
       "insuranceYN": selectState ? "Y" : "N",
       "insuLocation": selectState ? locationValue?.dataValue : "",
       "insuCompanyCode": Object.keys(companyValue).length === 0 ? "" : companyValue?.dataValue ? companyValue?.dataValue : "",
-      "insuBasicPreAmount": Number(gross_Amt) + Number(loadingAmt),
+      "insuBasicPreAmount": Number(gross_Amt),
       "insuGSTAmount": gstValue,
       "loginUserId": userData?.userId,
       "ipAddress": "1::1",
@@ -370,9 +389,9 @@ useEffect(()=>{
       "insudiscrule": Object.keys(discountRuleValue).length=== 0 ? "" :discountRuleValue?.dataValue,
       "basicpremiumperc1":Object.keys(rateValue).length=== 0 ? 0 : rateValue?.basicPremiumPerc1,
       "basicpremiumperc2": Object.keys(rateValue).length=== 0 ? 0 : rateValue?.basicPremiumPerc2,
-      "ncb": ncbSelectedData?.title,
+      "ncb": Object.keys(ncbSelectedData).length===0 ? 0 : ncbSelectedData?.title,
       "idv": Object.keys(idvListValue).length=== 0 ? 0 : idvListValue?.idvPer,
-      "insudiscountperc": otherRateValue?.title,
+      "insudiscountperc": Object.keys(otherRateValue).length===0 ? 0 : otherRateValue?.title,
       "insuAssetValueGross": priceValue,
       "insuAssetValueNet": idvValue,
       "insuLoadingAmt": loadingAmt,
@@ -479,9 +498,27 @@ useEffect(()=>{
     setNcbSelectedData({})
     setDiscountRuleValue({})
     setOtherRateValue({})
-      setNcbSelectedData(ncbRateData[0])
-    setDiscountDepValue(otherRateData[0])
-  setOtherRateValue(otherRateData[0])
+    setIdvValue(0)
+    setDep_Amt(0)
+    setDiscountDepAmt(0)
+    setPremiumAmt_Before(0)
+    setPremiumAmt_After(0)
+    setNetPremiumAmt(0)
+    setGstValue(0)
+    setTotalPayable(0)
+    setGrossAmt(0)
+    let newArray = []
+    let list= [...insurenceHeadList]
+    // // let updateArray = list.map(a=>a.isChecked=false);
+    list.map((item)=>{
+        item.isChecked = false
+        newArray.push(item) 
+     
+    })
+    setinsurenceHeadList([...newArray])
+    // setNcbSelectedData(ncbRateData[0])
+    // setDiscountDepValue(otherRateData[0])
+    // setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataNoInsurance = () => {
@@ -497,9 +534,9 @@ useEffect(()=>{
     setNcbSelectedData({})
     setDiscountRuleValue({})
     setOtherRateValue({})
-    setNcbSelectedData(ncbRateData[0])
-    setDiscountDepValue(otherRateData[0])
-  setOtherRateValue(otherRateData[0])
+    // setNcbSelectedData(ncbRateData[0])
+    // setDiscountDepValue(otherRateData[0])
+    // setOtherRateValue(otherRateData[0])
   }
 
   const resetDropDownDataInsuranceCompany = (d,locVal) => {
@@ -524,6 +561,9 @@ useEffect(()=>{
     setDep_Amt(0)
     setIdvValue(0)
     setPriceValue(0)
+    // setNcbSelectedData(ncbRateData[0])
+    // setDiscountDepValue(otherRateData[0])
+    // setOtherRateValue(otherRateData[0])
     getCompanychange(d?.dataValue,locVal?.dataValue)
 
     
@@ -548,7 +588,7 @@ useEffect(()=>{
           </View>
           </Pressable>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Source</Text>
+            <Text style={styles.detailText}>Source<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={sourceData}
               disable={!selectState}
@@ -561,7 +601,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Type</Text>
+            <Text style={styles.detailText}>Type<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
               list={typeData}
               desName='3'
@@ -572,13 +612,13 @@ useEffect(()=>{
               textExt={styles.dropListText}
               on_Select={(d) => {
                 setTypevalue(d)
-                resetDropDownDataThirdParty()
+               d.dataValue==='THIRD_PARTY' ? resetDropDownDataThirdParty() : null
               }}
             />
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Location</Text>
+            <Text style={styles.detailText}>Location{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={insuranceLocation}
               desName='3'
@@ -591,7 +631,7 @@ useEffect(()=>{
             />
           </View>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Company</Text>
+            <Text style={styles.detailText}>Company{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             {console.log("company",companyValue)}
             <SelectDropList
               list={INSU_COMPANY}
@@ -609,7 +649,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Calc On</Text>
+            <Text style={styles.detailText}>Calc On{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={calOnData}
               desName="3"
@@ -626,7 +666,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>IDV%</Text>
+            <Text style={styles.detailText}>IDV%{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={idvListData}
               desName='4'
@@ -643,7 +683,7 @@ useEffect(()=>{
           </View>
         
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Rate</Text>
+            <Text style={styles.detailText}>Rate{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={basicPremiumList}
               desName='5'
@@ -660,7 +700,7 @@ useEffect(()=>{
             />
           </View>
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>NIL Dep.</Text>
+            <Text style={styles.detailText}>NIL Dep.{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Pressable onPress={()=> {selectState && (typeValue?.dataValue !== "THIRD_PARTY")? setNilDipCheckStatus(!nilDipCheckStatus) : null}}>
               <FastImage source={nilDipCheckStatus ? images.checkIcon : images.unCheckIcon} style={[styles.checkboxStyle, { marginRight: constant.moderateScale(10) }]} />
@@ -684,7 +724,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Discount on Dep.</Text>
+            <Text style={styles.detailText}>Discount on Dep.{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={otherRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
@@ -695,8 +735,19 @@ useEffect(()=>{
               on_Select={(d) => {
                 setDiscountDepValue(d)
                 // calculateInsurance()
+              }} />
+            {/* <SelectDropList
+              list={otherRateData}
+              disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
+              buttonExt={styles.dropList}
+              title={discountDepValue.description}
+              refType={Object.keys(discountDepValue).length===0 ?true : false}
+              textExt={styles.dropListText}
+              on_Select={(d) => {
+                setDiscountDepValue(d)
+                // calculateInsurance()
               }}
-            />
+            /> */}
           </View>
 
           {/* <View style={[styles.selectMainView]}>
@@ -705,14 +756,14 @@ useEffect(()=>{
           </View> */}
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>NCB</Text>
+            <Text style={styles.detailText}>NCB{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={ncbRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
               buttonExt={styles.dropList}
               textExt={styles.dropListText}
               title={ncbSelectedData?.description}
-              refType={Object.keys(ncbSelectedData).length===0 ?true : false}
+              refType={Object.keys(ncbSelectedData).length===0 ?false : true}
               on_Select={(d) => {
                 setNcbSelectedData(d)
                 // calculateInsurance()
@@ -721,7 +772,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Discount Rule</Text>
+            <Text style={styles.detailText}>Discount Rule{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={discountRuleData}
               desName='3'
@@ -739,7 +790,7 @@ useEffect(()=>{
           </View>
 
           <View style={[styles.detailMainView, { marginTop: constant.moderateScale(10), opacity: selectState===false || typeValue?.dataValue === "THIRD_PARTY" ? 0.4 : 1  }]}>
-            <Text style={styles.detailText}>Discount Rate</Text>
+            <Text style={styles.detailText}>Discount Rate{typeValue?.dataValue != "THIRD_PARTY" ?<Text style={styles.text2}>*</Text> : null}</Text>
             <SelectDropList
               list={otherRateData}
               disable={!selectState || (typeValue?.dataValue === "THIRD_PARTY")}
@@ -860,7 +911,7 @@ useEffect(()=>{
             </View> */}
 
         </View>
-        <Button title='Next' click_Action={() => fn_SaveInsurance()} buttonExt={styles.performaButton} />
+        <Button title='Next' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
       </ScrollView>
     </View>
   )
@@ -930,9 +981,9 @@ const styles = StyleSheet.create({
   },
   text2: {
     fontSize: constant.moderateScale(15),
-    color: constant.textColor,
-    fontFamily: constant.typeLight,
-    marginRight: constant.moderateScale(15)
+    color: constant.baseColor,
+    // fontFamily: constant.typeLight,
+    // marginRight: constant.moderateScale(15)
   },
   text3: {
     fontSize: constant.moderateScale(15),

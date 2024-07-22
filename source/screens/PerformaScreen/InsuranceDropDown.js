@@ -1,12 +1,12 @@
 import React,{useRef,useEffect} from "react"
 import { View, StyleSheet,Text, Image, } from "react-native"
-import * as constant from '../utilities/constants'
+import * as constant from '../../utilities/constants'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import SelectDropdown from 'react-native-select-dropdown'
-import images from "../utilities/images"
+import images from "../../utilities/images"
 import FastImage from "react-native-fast-image"
 
-const SelectDropList = (props) => {
+const InsuranceDropList = (props) => {
     const dropdownRef = useRef({}); 
     const{title,list,on_Select,buttonExt,textExt,imageIcon,imageSize,desName,disable,refType, dropdownIndexValue, placeholderType}= props
 // console.log("dropdownIndexValue", dropdownIndexValue)
@@ -85,9 +85,9 @@ const SelectDropList = (props) => {
     )
 }
 
-SelectDropList.defaultProps = {
+InsuranceDropList.defaultProps = {
     on_Select: function () { },
-    title: 'Please Select',
+    title: '0',
     buttonExt:{},
     textExt:{},
     imageIcon:false,
@@ -97,7 +97,7 @@ SelectDropList.defaultProps = {
     
 }
 
-export default SelectDropList;
+export default InsuranceDropList;
 
 const styles = StyleSheet.create({
     MainView: {
