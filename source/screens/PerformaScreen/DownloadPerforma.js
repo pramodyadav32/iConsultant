@@ -233,12 +233,12 @@ export default function DownloadPerforma(props) {
     <View style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
       <View
         // showsVerticalScrollIndicator={false}
-        style={{
+        style={[{
           flex: 1,
           backgroundColor: constant.whiteColor,
           borderBottomRightRadius: 10,
           borderBottomLeftRadius: 10,
-        }}
+        }, styles.shadowPropCard]}
       >
     
         {Object.keys(resource).length > 0 &&
@@ -263,10 +263,10 @@ export default function DownloadPerforma(props) {
         <Button
           title="Cancel Proforma"
           click_Action={() => fn_CancelPerform()}
-          buttonExt={styles.cancelPerformaButton}
+          buttonExt={[styles.cancelPerformaButton, styles.shadowProp]}
         />
         <Pressable
-          style={styles.printerPerformaButton}
+          style={[styles.printerPerformaButton, styles.shadowProp]}
           onPress={() => {
             fn_CreatePdfFromBase64(resource?.base64)
           }}
@@ -274,7 +274,7 @@ export default function DownloadPerforma(props) {
           <FastImage source={images.download} style={styles.printerImage} />
         </Pressable>
         <Pressable
-          style={styles.sharePerformaButton}
+          style={[styles.sharePerformaButton, styles.shadowProp]}
           onPress={() => {
             fn_SharePdf(resource?.base64);
           }}
@@ -330,4 +330,20 @@ const styles = StyleSheet.create({
     height: constant.moderateScale(20),
     width: constant.moderateScale(20),
   },
+  shadowProp: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5
+},
+shadowPropCard: {
+  shadowColor: '#000000',
+  borderBottomLeftRadius: 10,
+  borderBottomRightRadius: 10,
+  shadowOffset: {width: -2, height: 2},
+  shadowOpacity: 0.1,
+  elevation: 5
+},
 });

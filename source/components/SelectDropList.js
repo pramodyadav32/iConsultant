@@ -28,7 +28,7 @@ const SelectDropList = (props) => {
              on_Select(selectedItem)
             console.log(selectedItem, index)
         }}
-        buttonStyle={[styles.selectButton,buttonExt]}
+        buttonStyle={[styles.selectButton,buttonExt,styles.shadowProp2]}
         buttonTextStyle={[styles.title,textExt]}
         renderDropdownIcon={isOpened => {
             return (
@@ -132,6 +132,13 @@ const styles = StyleSheet.create({
         color:constant.blackColor,
     fontFamily:constant.typeBold,
     fontSize:constant.font5,
-    }
+    },
+    shadowProp2: {
+        shadowColor: '#ABABAB',
+        borderRadius: 10,
+        shadowOffset: {width: -1, height: 1},
+        shadowOpacity: 0.8,
+        elevation: 5
+    },
    
 })

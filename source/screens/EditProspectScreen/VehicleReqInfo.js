@@ -468,7 +468,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
   return (
     <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }}>
+        <View style={[{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }, styles.shadowPropCard]}>
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Model<Text style={styles.text2}>*</Text></Text>
@@ -624,7 +624,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
                 {/* <Pressable style={styles.coutButton}>
                   <FastImage source={images.minussign} tintColor={constant.red} resizeMode='contain' style={styles.minusStyle} />
                 </Pressable> */}
-                <View style={styles.countInput}>
+                <View style={[styles.countInput, styles.shadowProp2]}>
                   <Text style={styles.countInputText}>{count}</Text>
                 </View>
 
@@ -636,7 +636,7 @@ const fn_GetVehicleVarientCallBack = async (res) => {
 
           </View>
         </View>
-        <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+        <Button title='Save' click_Action={() => fn_Create()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
 
       </ScrollView>
     </View>
@@ -823,4 +823,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: constant.whiteColor,
   },
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowProp2: {
+    shadowColor: '#ABABAB',
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.8,
+    elevation: 5
+},
+shadowPropButton: {
+  shadowColor: constant.red,
+  borderRadius: 10,
+  shadowOffset: {width: -1, height: 1},
+  shadowOpacity: 0.8,
+  elevation: 5
+}
 })

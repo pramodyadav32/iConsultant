@@ -26,11 +26,14 @@ import FastImage from "react-native-fast-image";
 import Button from "../../components/Button";
 import * as constant from "../../utilities/constants";
 import * as common from "../../utilities/common_fn";
-import { apiCall, APIName, tokenApiCall } from "../../utilities/apiCaller";
+import { apiCall, APIName, tokenApiCall, apiFormDataCall } from "../../utilities/apiCaller";
 import * as common_fn from "../../utilities/common_fn";
 import SelectDropList from "../../components/SelectDropList";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import moment from "moment";
+import Voice from '@react-native-voice/voice';
+// import AudioRecord from 'react-native-audio-record';
+import SoundRecorder from 'react-native-sound-recorder';
 
 export default function EditBasicInfo(props) {
   const { cardClick, data, prospectMaster, fn_SaveBasicInfo ,fn_Next} = props;
@@ -52,6 +55,145 @@ export default function EditBasicInfo(props) {
   const [corporateCase, setCorporateCase] = useState("N");
   const [eventSourceData, setEventSourceData] = useState();
   const [eventSourceList, setEventSourceList] = useState([]);
+
+//voice recording section
+  const [isRecord, setIsRecord] = useState(false);
+  const onSpeechStart = (event) => {
+    console.log('onSpeechStart aa');
+    setGeneralComment('');
+  };
+  const onSpeechEnd = () => {
+    setIsRecord(false)
+    console.log('onSpeechEnd aa');
+  };
+  const onSpeechResults = async (event) => {
+    console.log(' onSpeechResults aa', event);
+    console.log('onSpeechResults aa1');
+    setGeneralComment(event.value[0]);
+
+    // audioFile = await AudioRecord.stop();
+    // console.log(audioFile, 'audioFile1111');
+    // fn_AudioFileSave(audioFile)
+
+    // SoundRecorder.stop()
+    // .then(function(result) {
+    //     console.log('stopped recording, audio file saved at: ' + result.path);
+    //     fn_AudioFileSave(result.path)
+    // });
+  };
+  const onSpeechError = (event) => {
+    console.log('onSpeechError aa', event);
+    console.log(event.error);
+  };
+  const onRecordVoice = () => {
+    if (isRecord) {
+      console.log('onRecordVoice stop aa', Voice);
+      Voice.stop();
+    } else {
+      console.log('onRecordVoice start aa', Voice);
+      Voice.start('es_US');
+      // Voice.start('es_US', {
+      //   "RECOGNIZER_ENGINE": "GOOGLE",
+      //   "EXTRA_PARTIAL_RESULTS": false
+      // }) // languages code e.g 'en-US'
+      // const options = {
+      //   sampleRate: 16000,  // default 44100
+      //   channels: 1,        // 1 or 2, default 1
+      //   bitsPerSample: 16,  // 8 or 16, default 16
+      //   audioSource: 6,     // android only (see below)
+      //   wavFile: data?.prospectID+'gen_comment'+'.mp3' // default 'audio.wav'
+      // };
+       
+      // AudioRecord.init(options);
+       
+      // AudioRecord.start();
+
+      // SoundRecorder.start(SoundRecorder.PATH_CACHE + '/test.mp3')
+      // .then(function() {
+      //     console.log('started recording');
+      // });
+    }
+    setIsRecord(!isRecord);
+  };
+  const onSpeechPartialResults = async (event) => {
+  
+    console.log("onSpeechPartialResults", event.value[0]);
+    setGeneralComment(event.value[0]);
+
+    // audioFile = await AudioRecord.stop();
+    // console.log(audioFile, 'audioFile1111');
+    // fn_AudioFileSave(audioFile)
+  };
+  const onSpeechVolumeChanged = (event) => {
+    // console.log('onSpeechVolumeChanged 3333');
+    console.log(event.value);
+  };
+  useEffect(() => {
+    Voice.onSpeechStart = onSpeechStart;
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechResults = onSpeechResults;
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechPartialResults = onSpeechPartialResults;
+    Voice.onSpeechVolumeChanged = onSpeechVolumeChanged
+  return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+  
+  const fn_AudioFileSave=async(pic)=>{
+    dispatch(emptyLoader_Action(true))
+   let newPic={
+    name: data?.prospectID+'gen_comment'+'.mp3',
+    // type: pic.mime,
+    // size: pic.size,
+    uri: Platform.OS === 'ios' ? pic?.path.replace('file://', '') : pic,
+   }
+
+  try {
+    var formdata = new FormData();
+    formdata.append("brandCode", userData.brandCode);
+    formdata.append("countryCode", userData.countryCode);
+    formdata.append("companyId", userData.companyId);
+    formdata.append("DocLocation", selectedBranch?.branchCode);
+    formdata.append("DocKeyType", "PROSPECT_MASTER_NUMBER");
+    formdata.append("DocKeyValue", Number(data?.prospectMasterNumber));
+    formdata.append("FileExtn", 'mp3');
+    formdata.append("FileTitle", data?.prospectID+'gen_comment'+'.mp3');
+    formdata.append("FileText", data?.prospectID+'gen_comment'+'.mp3');
+    formdata.append("FileGroup", 'PROSPECT_AUDIO_FILE');
+    formdata.append("FileSize", 50000);
+    formdata.append("FileName", data?.prospectID+'gen_comment'+'.mp3');
+    formdata.append("userId", userData?.userId);
+    formdata.append("ipAddress", "1::1");
+    formdata.append("FileExtensionAllowed", "Y");
+    formdata.append("FileSizeLimitKb", 50000);
+    formdata.append("environmentType", "DEMO");
+    // formdata.append("type", pic.mime);
+    formdata.append("photo", newPic);
+  
+  } catch (error) {
+    console.error('Error:', error);
+  }
+
+ 
+    apiFormDataCall(audioFileSave_Callback, APIName.UploadDocument, 'POST',formdata, 50000)
+}
+
+const audioFileSave_Callback = (res) => {
+    console.log(JSON.stringify(res))
+    dispatch(emptyLoader_Action(false))
+    if (res.statusCode === 200) {
+      if(res?.result?.status==='Y'){
+        constant.showMsg("Recording uploaded successfully")
+      }else {
+        dispatch(emptyLoader_Action(false))
+      }
+
+    } else {
+      dispatch(emptyLoader_Action(false))
+        constant.showMsg("Somethings wents wrong")
+    }
+}
 
   useEffect(() => {
     console.log("prospectMaster =====", JSON.stringify(data))
@@ -274,13 +416,13 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
     <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
-          style={{
+          style={[{
             flex: 1,
             backgroundColor: constant.whiteColor,
             borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10,
             paddingBottom: constant.moderateScale(20),
-          }}
+          }, styles.shadowPropCard]}
         >
           <View
             style={[
@@ -485,6 +627,7 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
             <View style={[styles.basicDetailSubView]}>
               <Text style={styles.detailText}>General Comment</Text>
             </View>
+            <View style={styles.mobileSubView}>
             <View style={styles.basicDetailSubView2}>
               <TextInput
                 onChangeText={(d) => setGeneralComment(d)}
@@ -492,13 +635,17 @@ const GetProspectMasterCallBack = async (res, calledByDropdown) => {
               >
                 {generalComment}
               </TextInput>
+              </View>
+              <Pressable onPress={()=>{onRecordVoice()}}>
+                  <FastImage source={isRecord ? require('../../assets/Icons/voiceRecord.png') : require('../../assets/Icons/micIcon.png')} resizeMode="contain" style={styles.miceIcon} />
+              </Pressable>
             </View>
           </View>
         </View>
         <Button
           title="Save"
           click_Action={() => fn_Create()}
-          buttonExt={styles.performaButton}
+          buttonExt={[styles.performaButton, styles.shadowPropButton]}
         />
       </ScrollView>
     </View>
@@ -590,6 +737,15 @@ const styles = StyleSheet.create({
     width: constant.moderateScale(115),
     fontFamily: constant.typeLight,
   },
+  miceIcon:{
+    height:constant.moderateScale(25),
+    width:constant.moderateScale(25),
+  },
+  mobileSubView:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+  },
   performaButton: {
     marginBottom: constant.moderateScale(30),
     marginTop: constant.moderateScale(10),
@@ -598,4 +754,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: constant.whiteColor,
   },
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowPropButton: {
+    shadowColor: constant.red,
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.8,
+    elevation: 5
+}
 });

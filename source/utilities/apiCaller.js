@@ -5,14 +5,20 @@ import { beginAsyncEvent } from 'react-native/Libraries/Performance/Systrace';
 
 const businessOwnerCode = 'ISUZU'
 export const brandCode = 'ISUZU'
-const baseUrlLogin = 'https://g2.orbitsys.com/OrbitsysIServiceCoreApi/api/'
+// const baseUrlLogin = 'https://g2.orbitsys.com/OrbitsysIServiceCoreApi/api/'//demo
+const baseUrlLoginTemp = 'https://g2.orbitsys.com/OrbitsysIServiceCoreApi/api/'//demo
+const baseUrlLogin = 'https://mobile.orbitsys.com/OrbitsysIdentityApi/api/'//Live
+// const baseUrlLoginTemp = "https://mobile.orbitsys.com/isuzuiservice/api/"
 
-export const baseUrl = 'https://g2.orbitsys.com/OrbitsysLmsApi/api/'
+export const baseUrl = 'https://g2.orbitsys.com/OrbitsysLmsApi/api/'//demo
+// export const baseUrl = 'https://mobile.orbitsys.com/OrbitsysLmsApi/api/'//Live
 export const imageUrl = 'http://3.111.186.19/media/category/'
 
 
 export const APIName = {
-  login: baseUrlLogin + 'Identity/AppAuthenticate',
+  login: baseUrlLoginTemp + 'Identity/AppAuthenticate',
+  getOtp: baseUrlLogin + 'Identity/GenerateProcessRequest',
+  varifyOtp: baseUrlLogin + 'Identity/ValidateProcessRequestToken',
   GetProspectsList : baseUrl + 'Prospect/GetProspectsList',
   GetDataCounts : baseUrl + 'Prospect/GetDataCounts',
   GetCustomerSearchResults : baseUrl + 'Prospect/GetCustomerSearchResults',
@@ -38,6 +44,7 @@ export const APIName = {
   SaveProspectClosure : baseUrl + 'Prospect/SaveProspectClosure',
   GetCampaignsMaster : baseUrl + 'Prospect/GetCampaignsMaster',
   SaveProspectDetails : baseUrl + 'Prospect/SaveProspectDetails',
+  UploadDocument : baseUrl + 'Prospect/UploadDocument',
   
   GetMstAccessories : baseUrl + 'Proforma/GetMstAccessories',
   GetProformaTaxMasters : baseUrl + 'Proforma/GetProformaTaxMasters',
@@ -116,7 +123,7 @@ export const tokenApiCall = (callback, url, method, param, data) => {
       "Authorization": state.AuthReducer.token
     },
   }
-  // console.log("options"+JSON.stringify(options))
+  console.log("options"+JSON.stringify(options))
   axios(options).then(function (response) {
     console.log("aa" + JSON.stringify(response.data));
     if (response.status === 200) {

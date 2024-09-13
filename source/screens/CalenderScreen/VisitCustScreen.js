@@ -35,7 +35,7 @@ const fn_EmptyComp=()=>{
   const renderItem=({item,index})=>{
     console.log("item",item)
     return(
-        <View style={styles.driveListMainView}>
+        <View style={[styles.driveListMainView, styles.shadowProp]}>
             <View style={styles.driveListTopView}>
                 <Text style={styles.driveText1}>{item?.custName}</Text>
                 <FastImage source={images.visitCust} resizeMode='contain' style={styles.listDriveIcon} />

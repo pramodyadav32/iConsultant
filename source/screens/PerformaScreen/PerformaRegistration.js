@@ -341,7 +341,7 @@ const fn_AddAmtTotalCal=()=>{
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
  <ScrollView showsVerticalScrollIndicator={false}>
      
-         <View style={styles.cal_SubView2}>
+         <View style={[styles.cal_SubView2, styles.shadowPropCard]}>
 
          <View style={{flex:1,backgroundColor:'#F9F9F9',borderWidth:1,borderColor:constant.whiteColor,borderRadius:10,marginHorizontal:constant.moderateScale(3),paddingHorizontal:constant.moderateScale(0),marginTop:constant.moderateScale(13),paddingVertical:constant.moderateScale(10),marginBottom:constant.moderateScale(20)}}>
             <View style={{flex:1,flexDirection:'row'}}>
@@ -528,7 +528,7 @@ const fn_AddAmtTotalCal=()=>{
             
                     
          </View>
-         <Button title='Next' click_Action={() => reg_Save()} buttonExt={styles.performaButton} />
+         <Button title='Next' click_Action={() => reg_Save()} buttonExt={[styles.performaButton, styles.shadowProp2]} />
      </ScrollView>
       </View>
    )
@@ -713,6 +713,20 @@ const fn_AddAmtTotalCal=()=>{
                             textAlign:'right',
                             paddingHorizontal:constant.moderateScale(5)
                           },
-                         
+                          shadowPropCard: {
+                            shadowColor: '#000000',
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10,
+                            shadowOffset: {width: -2, height: 2},
+                            shadowOpacity: 0.1,
+                            elevation: 5
+                          },
+                          shadowProp2: {
+                            shadowColor: '#000000',
+                            borderRadius: 10,
+                            shadowOffset: {width: -1, height: 1},
+                            shadowOpacity: 0.1,
+                            elevation: 5
+                        }
 
  })

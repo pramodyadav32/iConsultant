@@ -6,8 +6,11 @@ const styles = StyleSheet.create({
     backgroundColor:constant.whiteGhost,
     flex:1,
     margin:constant.moderateScale(5),
+    marginBottom:constant.moderateScale(10),
     borderRadius:10,
-    elevation:1,
+    borderColor:constant.whiteColor,
+    borderWidth:1,
+    elevation:5,
     },
     tabMainView:{
     paddingBottom:'1%',
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'space-between',
-    marginTop:constant.moderateScale(5)
+    marginTop:constant.moderateScale(6)
     },
     detailText:{
         fontSize:constant.moderateScale(14),
@@ -125,7 +128,8 @@ const styles = StyleSheet.create({
     calenderStyle:{
         height:constant.moderateScale(25),
         width:constant.moderateScale(25),
-        marginRight:'2%'
+        marginRight:'2%',
+        backgroundColor:constant.whiteColor,
     },
     calenderMainView:{
     flex:1,
@@ -134,7 +138,8 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderRadius:10,
     borderColor:'#ABABAB',
-    paddingLeft:"3%",
+    backgroundColor: constant.whiteColor,
+    // paddingLeft:"3%",
 
     },
     calenderInput:{
@@ -145,13 +150,16 @@ const styles = StyleSheet.create({
         backgroundColor:constant.whiteColor,
         color:constant.blackColor,
         fontFamily:constant.typeLight,
-        fontSize:constant.moderateScale(14)
+        fontSize:constant.moderateScale(14),
+        paddingLeft:constant.moderateScale(15)
     },
     proceedButton:{
      width:constant.moderateScale(135),
      alignSelf:'center',
      marginTop:constant.resW(20),
-     marginBottom:constant.resW(5)
+     marginBottom:constant.resW(5),
+     borderColor:constant.whiteColor,
+     borderWidth:1,
     },
     proccedButtonText:{
 
@@ -239,6 +247,21 @@ const styles = StyleSheet.create({
     minusStyle:{
         height:constant.moderateScale(20),
         width:constant.moderateScale(20),
+    },
+    shadowProp: {
+        shadowColor: '#000000',
+        borderRadius: 10,
+        shadowOffset: {width: -2, height: 2},
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 5
+    },
+    shadowProp2: {
+        shadowColor: '#ABABAB',
+        borderRadius: 10,
+        shadowOffset: {width: -1, height: 1},
+        shadowOpacity: 0.8,
+        elevation: 5
     }
 })
 

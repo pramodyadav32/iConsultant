@@ -222,7 +222,13 @@ const styles = StyleSheet.create({
                     width: constant.moderateScale(115),
                     fontFamily: constant.typeLight
                 },
-                
+                shadowPropCard: {
+                  shadowColor: '#000000',
+                  borderRadius: 10,
+                  shadowOffset: {width: -2, height: 2},
+                  shadowOpacity: 0.8,
+                  elevation: 5
+                },
   
 })
 

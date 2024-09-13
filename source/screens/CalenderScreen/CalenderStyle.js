@@ -143,6 +143,14 @@ const styles = StyleSheet.create({
          alignItems:'center',
          marginTop:constant.moderateScale(150)
         },
+        shadowProp: {
+            shadowColor: '#000000',
+            borderRadius: 10,
+            shadowOffset: {width: -2, height: 2},
+            shadowOpacity: 0.,
+            shadowRadius: 10,
+            elevation: 5
+        },
 })
 
 export default styles;

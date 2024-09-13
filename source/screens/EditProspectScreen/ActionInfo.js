@@ -54,7 +54,7 @@ export default function ActionInfo(props) {
    
     return (
       <View>
-      <View style={{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5), marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }}>
+      <View style={[{ backgroundColor: '#F9F9F9', borderWidth: 1, borderRadius: 10, borderColor: constant.whiteColor, paddingHorizontal: constant.moderateScale(5), marginHorizontal: constant.moderateScale(5), paddingBottom: constant.moderateScale(10), elevation: 1 }, styles.shadowPropCard]}>
 
         <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(10) }]}>
           <View style={[styles.driveListDetailSubView, {}]}>
@@ -114,11 +114,11 @@ export default function ActionInfo(props) {
           </View>
           <View style={[styles.buttonView, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }]}>
             <Button title='Update'
-              buttonExt={styles.updateButton}
+              buttonExt={[styles.updateButton, styles.shadowPropButton]}
               click_Action={() => fn_UpdateClick(item, index)}
             />
             {item?.actionCode ==='06' ?
-            <Pressable style={styles.feedbackButton} disabled={item?.status==="P" ? false : true} onPress={() => fn_FeedBack(item, index)}>
+            <Pressable style={[styles.feedbackButton, styles.shadowPropButton]} disabled={item?.status==="P" ? false : true} onPress={() => fn_FeedBack(item, index)}>
               <FastImage resizeMode='contain' source={images.feedBackIcon} style={styles.updateIcn} />
             </Pressable>
             : 
@@ -377,7 +377,7 @@ export default function ActionInfo(props) {
 
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>Date<Text style={styles.text2}>*</Text></Text>
-          <Pressable style={styles.calenderMainView} onPress={() => fn_CalenderClick()}>
+          <Pressable style={[styles.calenderMainView, styles.shadowProp2]} onPress={() => fn_CalenderClick()}>
             <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{actionDate}</TextInput>
             <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
           </Pressable>
@@ -406,19 +406,19 @@ export default function ActionInfo(props) {
         {actionTypeValue?.code==='06' &&
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>VIN</Text>
-          <TextInput placeholder='Type here' editable={false} style={styles.input1} >{vinData}</TextInput>
+          <TextInput placeholder='Type here' editable={false} style={[styles.input1, styles.shadowProp2]} >{vinData}</TextInput>
         </View>
   }
  {actionTypeValue?.code==='06' &&
         <View style={styles.detailMainView}>
           <Text style={styles.detailText}>Regn.<Text style={styles.text2}>*</Text></Text>
-          <TextInput placeholder='Type here' editable={false} style={styles.input1} >{regData}</TextInput>
+          <TextInput placeholder='Type here' editable={false} style={[styles.input1, styles.shadowProp2]} >{regData}</TextInput>
         </View>
   }
 
         <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
           <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
-          <TextInput placeholder='Enter Comment' multiline  onChangeText={fn_SetComment} style={styles.commentInput} >{comment}</TextInput>
+          <TextInput placeholder='Enter Comment' multiline  onChangeText={fn_SetComment} style={[styles.commentInput, styles.shadowProp2]} >{comment}</TextInput>
         </View>
 
       </View>
@@ -536,7 +536,7 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
   return (
     <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-      <View style={{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }}>
+      <View style={[{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }, styles.shadowPropCard]}>
 
         <FlatList
           data={data}
@@ -549,7 +549,7 @@ const GetTestDriveFeedbackDetailsCallBack = (res) => {
 
 
       </View>
-      <Button title='Save' click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+      <Button title='Save' click_Action={() => fn_Create()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
 
       {/* </ScrollView> */}
       <CalenderModal
@@ -744,7 +744,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ABABAB',
-    paddingLeft: "3%",
+    backgroundColor: constant.whiteColor,
+    // paddingLeft: "3%",
 
   },
   calenderInput: {
@@ -755,7 +756,8 @@ const styles = StyleSheet.create({
     backgroundColor: constant.whiteColor,
     color: constant.blackColor,
     fontFamily: constant.typeLight,
-    fontSize: constant.moderateScale(14)
+    fontSize: constant.moderateScale(14),
+    paddingLeft:constant.moderateScale(15)
   },
   proceedButton: {
     width: constant.moderateScale(135),
@@ -849,6 +851,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: constant.whiteColor,
   },
-
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowProp2: {
+    shadowColor: '#ABABAB',
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.8,
+    elevation: 5
+},
+shadowPropButton: {
+  shadowColor: constant.red,
+  borderRadius: 10,
+  shadowOffset: {width: -1, height: 1},
+  shadowOpacity: 0.8,
+  elevation: 5
+}
 
 })

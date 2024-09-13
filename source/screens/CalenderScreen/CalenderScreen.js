@@ -189,7 +189,7 @@ export default function CalenderScreen(props) {
         }}
 
 
-        style={{
+        style={[{
           borderWidth: 1,
           borderColor: '#FFFFFF',
           elevation: 1,
@@ -197,7 +197,7 @@ export default function CalenderScreen(props) {
           marginHorizontal: constant.moderateScale(5),
           marginVertical: constant.moderateScale(5),
           paddingVertical: '0%'
-        }}
+        }, styles.shadowProp]}
 
         theme={{
           monthTextColor: 'red',

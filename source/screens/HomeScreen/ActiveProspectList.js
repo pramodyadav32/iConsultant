@@ -21,7 +21,8 @@ export default function ActiveProspectList(props) {
 
     const renderItem=({item,index})=>{
         return(
-                 <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
+         
+                 <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={[styles.listBgStyle, styles.shadowProp]}>
                    <Pressable style={styles.driveListMainView} onPress={()=>cardClick(item,index)}>
                 <View style={styles.driveListTopView}>
                     <View>
@@ -72,7 +73,8 @@ export default function ActiveProspectList(props) {
                     </View>
                     </View>
                 </Pressable>  
-                 </ImageBackground>         
+                 </ImageBackground>  
+                      
         )
       }
     

@@ -62,7 +62,7 @@ export default function PerformaTerm(props) {
       <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>  
       <ScrollView showsVerticalScrollIndicator={false}>
      
-         <View style={styles.cal_SubView2}>
+         <View style={[styles.cal_SubView2, styles.shadowPropCard]}>
               
                  <FlatList 
                   data={listData}
@@ -74,7 +74,7 @@ export default function PerformaTerm(props) {
           
   
          </View>
-         <Button title='Next' click_Action={() => moveToPerformaInvoice()} buttonExt={styles.performaButton} />
+         <Button title='Next' click_Action={() => moveToPerformaInvoice()} buttonExt={[styles.performaButton, styles.shadowProp2]} />
        </ScrollView>
         </View>
    )
@@ -130,5 +130,19 @@ export default function PerformaTerm(props) {
         height:constant.moderateScale(25),
         width:constant.moderateScale(25),
        },
-      
+       shadowPropCard: {
+        shadowColor: '#000000',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        shadowOffset: {width: -2, height: 2},
+        shadowOpacity: 0.1,
+        elevation: 5
+      },
+      shadowProp2: {
+        shadowColor: '#000000',
+        borderRadius: 10,
+        shadowOffset: {width: -1, height: 1},
+        shadowOpacity: 0.1,
+        elevation: 5
+    }
  })

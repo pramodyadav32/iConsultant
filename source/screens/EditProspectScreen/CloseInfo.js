@@ -672,8 +672,8 @@ const listrenderItem=(item,index)=>{
               list={actionType_Data}
               title={item.dateValue != undefined ? item.dateValue : " "}
               disable={true}
-              buttonExt={styles.dropList3}
-              textExt={styles.dropListText3}
+              buttonExt={styles.dropList2}
+              textExt={styles.dropListText2}
               on_Select={(d) =>null}
             />
       </Pressable>
@@ -689,7 +689,7 @@ const fn_ListFooter=()=>{
   return (
     <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ flex: 1, backgroundColor:constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }}>
+        <View style={[{ flex: 1, backgroundColor:constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }, styles.shadowPropCard]}>
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Action Type<Text style={styles.text2}>*</Text></Text>
             <SelectDropList
@@ -733,7 +733,7 @@ const fn_ListFooter=()=>{
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Performed Date<Text style={styles.text2}>*</Text></Text>
-            <Pressable style={styles.calenderMainView} onPress={() => setActionCal_Modal(true)}>
+            <Pressable style={[styles.calenderMainView, styles.shadowProp2]} onPress={() => setActionCal_Modal(true)}>
               <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{performDate}</TextInput>
               <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
             </Pressable>
@@ -741,12 +741,12 @@ const fn_ListFooter=()=>{
 
           <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
             <Text style={[styles.detailText, { marginTop: '3%' }]}>Action Comment</Text>
-            <TextInput placeholder='Enter Comment' onChangeText={(d) => setcomment(d)} style={styles.commentInput} >{comment}</TextInput>
+            <TextInput placeholder='Enter Comment' onChangeText={(d) => setcomment(d)} style={[styles.commentInput, styles.shadowProp2]} >{comment}</TextInput>
           </View>
 
           <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Closure Date</Text>
-            <Pressable style={styles.calenderMainView} onPress={() => null}>
+            <Pressable style={[styles.calenderMainView, styles.shadowProp2]} onPress={() => null}>
               <TextInput placeholder='Please Select' editable={false} style={styles.calenderInput}>{closureDate}</TextInput>
               <FastImage source={images.calender} resizeMode='contain' style={styles.calenderStyle} />
             </Pressable>
@@ -766,7 +766,7 @@ const fn_ListFooter=()=>{
 
           <View style={[styles.detailMainView, { alignItems: 'flex-start' }]}>
             <Text style={[styles.detailText, { marginTop: '3%' }]}>Remarks</Text>
-            <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={styles.commentInput} >{remark}</TextInput>
+            <TextInput placeholder='Enter Remarks' onChangeText={(d) => setRemark(d)} style={[styles.commentInput, styles.shadowProp2]} >{remark}</TextInput>
           </View>
           {closureValue?.code==='C' &&   <View style={styles.detailMainView}>
             <Text style={styles.detailText}>Dealer</Text>
@@ -853,7 +853,7 @@ const fn_ListFooter=()=>{
      }
       
         </View>
-        <Button title='Save' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
+        <Button title='Save' click_Action={() => fn_Validation()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
 
       </ScrollView>
 
@@ -925,7 +925,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#ABABAB',
-    paddingLeft: "3%",
+    backgroundColor: constant.whiteColor,
+    // paddingLeft: "3%",
 
   },
   calenderInput: {
@@ -936,7 +937,8 @@ const styles = StyleSheet.create({
     backgroundColor: constant.whiteColor,
     color: constant.blackColor,
     fontFamily: constant.typeLight,
-    fontSize: constant.moderateScale(14)
+    fontSize: constant.moderateScale(14),
+    paddingLeft:constant.moderateScale(15)
   },
   commentInput: {
     borderWidth: 1,
@@ -1064,7 +1066,8 @@ const styles = StyleSheet.create({
     },
     otherListSubView5:{
     flex:1,
-    paddingVertical:constant.moderateScale(10)
+    paddingVertical:constant.moderateScale(10),
+    paddingHorizontal:constant.moderateScale(10)
     },
     otherListSubView6:{
       flex:0.7,
@@ -1111,4 +1114,26 @@ const styles = StyleSheet.create({
       color: constant.textColor,
       fontFamily: constant.typeRegular,
     },
+    shadowPropCard: {
+      shadowColor: '#000000',
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      shadowOffset: {width: -2, height: 2},
+      shadowOpacity: 0.1,
+      elevation: 5
+    },
+    shadowProp2: {
+      shadowColor: '#ABABAB',
+      borderRadius: 10,
+      shadowOffset: {width: -1, height: 1},
+      shadowOpacity: 0.8,
+      elevation: 5
+  },
+  shadowPropButton: {
+    shadowColor: constant.red,
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.8,
+    elevation: 5
+}
 })

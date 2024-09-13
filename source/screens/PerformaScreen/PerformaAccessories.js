@@ -366,7 +366,7 @@ export default function PerformaAccessories(props) {
   return (
     <View style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.cal_SubView2}>
+        <View style={[styles.cal_SubView2, styles.shadowPropCard]}>
           <View
             style={{
               flex: 1,
@@ -397,7 +397,7 @@ export default function PerformaAccessories(props) {
             <Button
               title="Add To List"
               click_Action={() => fn_AddList()}
-              buttonExt={styles.button1}
+              buttonExt={[styles.button1, styles.shadowProp2]}
             />
             {/* <Button title='Add Packages' click_Action={() => fn_AddPackage()} buttonExt={styles.button1} /> */}
           </View>
@@ -405,7 +405,7 @@ export default function PerformaAccessories(props) {
         <Button
           title="Next"
           click_Action={() => saveAccessoriesAndPackages()}
-          buttonExt={styles.performaButton}
+          buttonExt={[styles.performaButton, styles.shadowProp2]}
         />
       </ScrollView>
 
@@ -515,5 +515,20 @@ const styles = StyleSheet.create({
     borderColor:'#ABABAB',
     fontFamily:constant.typeRegular,
     color:constant.blackColor
-  }
+  },
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowProp2: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.1,
+    elevation: 5
+}
 });

@@ -324,7 +324,29 @@ const styles = StyleSheet.create({
     height: constant.moderateScale(20),
     width: constant.moderateScale(20)
   },
+  shadowProp: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5
+  },
 
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowPropButton: {
+    shadowColor: constant.red,
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.8,
+    elevation: 5
+}
 })
 
 export default styles;

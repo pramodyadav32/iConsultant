@@ -194,7 +194,7 @@ export default function ProspectDataSheetScreen(props) {
 
    const renderItem = ({ item, index }) => {
       return (
-         <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+         <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={[styles.listBgStyle, styles.shadowProp]}>
             <Pressable style={styles.driveListMainView}  >
              {prospectBasicInfo?.isOlmCase === "Y" && <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
                   <Text style={styles.text2}>OLM</Text>
@@ -533,7 +533,7 @@ export default function ProspectDataSheetScreen(props) {
             />
          </View>
 
-         <View style={styles.cal_SubView}>
+         <View style={[styles.cal_SubView, styles.shadowPropCard]}>
             <View style={styles.tabMainView}>
                <View style={styles.tabSubView}>
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -573,7 +573,7 @@ export default function ProspectDataSheetScreen(props) {
             </View>
             {
                active === 1 &&
-               <View style={{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }}>
+               <View style={[{ flex: 1, paddingHorizontal: '1%', paddingBottom: constant.moderateScale(15) }, {}]}>
                   <ScrollView showsVerticalScrollIndicator={false}>
                      <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(15) }]}>
                         <View style={[styles.driveListDetailSubView, {}]}>
@@ -753,12 +753,12 @@ export default function ProspectDataSheetScreen(props) {
             }
          </View>
        {active != 5 ?
-         <Button title={performaId === 0 ? 'Create Proforma' : 'Edit Proforma'} click_Action={() => fn_Create()} buttonExt={styles.performaButton} />
+         <Button title={performaId === 0 ? 'Create Proforma' : 'Edit Proforma'} click_Action={() => fn_Create()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
        
        :
 
          <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
-         <Button title='Cancel Proforma' click_Action={() => null} buttonExt={styles.cancelPerformaButton} />
+         <Button title='Cancel Proforma' click_Action={() => null} buttonExt={[styles.cancelPerformaButton, styles.shadowPropButton]} />
          <Pressable style={styles.printerPerformaButton}>
             <FastImage source={images.notify} style={styles.printerImage} />
          </Pressable>

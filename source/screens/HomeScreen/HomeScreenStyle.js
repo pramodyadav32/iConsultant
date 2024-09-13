@@ -18,11 +18,11 @@ const styles = StyleSheet.create({
       width: '49.7%',
       backgroundColor: 'red',
       paddingVertical: constant.moderateScale(14),
-      borderRadius: 5,
+      borderRadius: 7,
       paddingHorizontal:constant.moderateScale(10),
-      borderWidth:1.5,
+      borderWidth:2,
       borderColor:constant.whiteColor,
-      elevation:2
+      elevation:3
   },
 
   userStyle: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal:'2%',
     borderRadius:10,
     marginTop:constant.moderateScale(15),
-    marginBottom:constant.moderateScale(20),
+    marginBottom:constant.moderateScale(10),
     flex:1,
     // backgroundColor:'red'
 
@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
 
     },
     driveText1:{
-        fontSize:constant.moderateScale(18),
+        fontSize:constant.moderateScale(16),
         color:'#2E2E2E',
-        fontFamily:constant.typeRegular,
+        fontFamily:constant.typeBold,
     },
     listDriveIcon:{
         height:constant.moderateScale(20),
@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
         height:constant.moderateScale(30)
         },
     listText2:{
-        fontSize:constant.moderateScale(8),
+        fontSize:constant.moderateScale(8.5),
         color:'#434343',
-        fontFamily:constant.typeRegular,
+        fontFamily:constant.typeMedium,
     },
     fuelText2:{
       fontSize:constant.moderateScale(12),
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
     listText3:{
         fontSize:constant.moderateScale(9.5),
         color:'#434343',
-        fontFamily:constant.typeMedium,
+        fontFamily:constant.typeBold,
     },
     ModelText3:{
       fontSize:constant.moderateScale(12),
       color:'#434343',
-      fontFamily:constant.typeMedium,
+      fontFamily:constant.typeBold,
       width:constant.moderateScale(70),
     },
     listImageStyle:{
@@ -126,10 +126,27 @@ const styles = StyleSheet.create({
       height:undefined,
       width:undefined,
       // flexDirection:'row'
-      marginHorizontal:constant.moderateScale(8),
+      marginHorizontal:constant.moderateScale(10),
       // alignSelf:'center',
     //  backgroundColor:'red',
     //  marginBottom:'3%'
+    
+    },
+    shadowProp: {
+      shadowColor: '#000000',
+      borderRadius: 10,
+      shadowOffset: {width: -2, height: 2},
+      shadowOpacity: 0.4,
+      shadowRadius: 10,
+      elevation: 5
+    },
+    shadowPropButton: {
+      shadowColor: constant.red,
+      borderRadius: 10,
+      shadowOffset: {width: -2, height: 2},
+      shadowOpacity: 0.4,
+      shadowRadius: 10,
+      elevation: 5
     },
     listCardMainView:{
     flex:1,
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
       marginRight:constant.moderateScale(10)
     },
     homeBoxStyle:{
-      backgroundColor:constant.whiteColor,
+      backgroundColor:constant.whiteGhost,
       height:constant.moderateScale(130),
       width:constant.resW(46.8),
       borderRadius:10,
@@ -191,7 +208,7 @@ const styles = StyleSheet.create({
       // backgroundColor:"green",
     },
     homeBoxStyle2:{
-      backgroundColor:constant.whiteColor,
+      backgroundColor:constant.whiteGhost,
       height:constant.moderateScale(120),
       width:constant.resW(47.7),
       borderRadius:10,
@@ -227,7 +244,7 @@ const styles = StyleSheet.create({
     boxText:{
       fontSize:constant.moderateScale(13),
       color:'#3B3B3B',
-      fontFamily:constant.typeMedium,
+      fontFamily:constant.typeBold,
     },
     homeSubBox:{
     flexDirection:'row',
@@ -239,7 +256,8 @@ const styles = StyleSheet.create({
      alignItems:'flex-end',
     //  backgroundColor:"red",
      flex:1,
-     paddingVertical:"4%"
+     paddingVertical:"6%",
+     paddingHorizontal:"6%"
     },
     dashBoardIcon:{
       height:constant.moderateScale(30),
@@ -251,9 +269,9 @@ const styles = StyleSheet.create({
     homeSubBoxText:{
       fontSize:constant.moderateScale(32),
       color:'#2E2E2E',
-      fontFamily:constant.typeRegular,
+      fontFamily:constant.typeMedium,
       includeFontPadding:false,
-      paddingLeft:constant.moderateScale(10),
+      paddingLeft:constant.moderateScale(5),
    
     },
  

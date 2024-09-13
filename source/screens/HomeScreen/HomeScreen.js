@@ -44,7 +44,7 @@ export default function HomeScreen(props) {
   const [dataCounts,setDataCounts] = useState({})
   const [testCount,setTestCount] = useState(0)
   const [activeCount,setActiveCount] = useState(0)
-  const [position] = useState(new Animated.ValueXY({ x: constant.resW(4), y: constant.moderateScale(129.4) }));
+  const [position] = useState(new Animated.ValueXY({ x: DeviceInfo.isTablet() ? constant.resW(2) : constant.resW(4), y: DeviceInfo.isTablet() ? constant.moderateScale(122.4) : constant.moderateScale(129.4) }));
  
   // useEffect(() => {
   //   dispatch(emptyLoader_Action(true))
@@ -198,25 +198,25 @@ export default function HomeScreen(props) {
   const fn_Button2 = (type) => {
     if (type == 1) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(2), y: constant.moderateScale(132) }, // Example new position
+        toValue: { x: constant.resW(2), y: constant.moderateScale(125) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionTodayScreen")
     } else if (type == 2) {
       Animated.spring(position, {
-        toValue: { x: constant.resW(50.8), y: constant.moderateScale(131.5) }, // Example new position
+        toValue: { x: constant.resW(50.8), y: constant.moderateScale(124.5) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate('UpcomingActionScreen')
     } else if (type == 3) {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(10.6), y: constant.moderateScale(268) }, // Example new position
+        toValue: { x: constant.moderateScale(10.6), y: constant.moderateScale(250) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("TodayTestDriveScreen")
     } else {
       Animated.spring(position, {
-        toValue: { x: constant.moderateScale(268), y: constant.moderateScale(268) }, // Example new position
+        toValue: { x: constant.moderateScale(268), y: constant.moderateScale(250) }, // Example new position
         useNativeDriver: true, // Ensure to set useNativeDriver to false for non-transform animations
       }).start();
       // props.navigation.navigate("ActionProspectScreen")
@@ -231,10 +231,10 @@ export default function HomeScreen(props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
       <StatusBar translucent={false} />
-      <HomeHeader title='Home' mainExt={styles.drawerStyle} showDrawer={navigation} />
+      <HomeHeader title='Dashboard' mainExt={styles.drawerStyle} showDrawer={navigation} />
         <View style={{ position: "relative", paddingHorizontal: constant.moderateScale(10), paddingVertical: constant.moderateScale(5) }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Pressable onPress={() => fn_Button(1)} style={ deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle}  >
+            <Pressable onPress={() => fn_Button(1)} style={deviceSize ? [styles.homeBoxStyle2, styles.shadowProp] : [styles.homeBoxStyle, styles.shadowProp]} >
               <Text style={styles.boxText}>Actions Today</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
@@ -272,7 +272,7 @@ export default function HomeScreen(props) {
 
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: constant.moderateScale(6) }}>
-            <Pressable onPress={() => fn_Button(3)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
+            <Pressable onPress={() => fn_Button(3)} style={deviceSize ? [styles.homeBoxStyle2, styles.shadowProp] : [styles.homeBoxStyle, styles.shadowProp]} >
               <Text style={styles.boxText}>Test Drives Today</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
@@ -297,7 +297,7 @@ export default function HomeScreen(props) {
 
               </View>
             </Pressable>
-            <Pressable onPress={() => fn_Button(4)} style={deviceSize ? styles.homeBoxStyle2 : styles.homeBoxStyle} >
+            <Pressable onPress={() => fn_Button(4)} style={deviceSize ? [styles.homeBoxStyle2, styles.shadowProp] : [styles.homeBoxStyle, styles.shadowProp]} >
               <Text style={styles.boxText}>Active Prospect</Text>
               <View style={styles.homeSubBox}>
                 <View style={styles.homeSubBox1}>
@@ -316,12 +316,12 @@ export default function HomeScreen(props) {
         }
         </View>
         <View style={styles.topButtonView}>
-          <Pressable style={styles.userButton} onPress={() => fn_buttonClick(1)}>
+          <Pressable style={[styles.userButton, styles.shadowPropButton]} onPress={() => fn_buttonClick(1)}>
             <Text style={styles.userText}>Create Prospect</Text>
             <FastImage source={images.rightArrow} tintColor={constant.whiteColor} resizeMode='contain' style={styles.userStyle} />
 
           </Pressable>
-          <Pressable style={styles.userButton} onPress={() => fn_buttonClick(2)}>
+          <Pressable style={[styles.userButton, styles.shadowPropButton]} onPress={() => fn_buttonClick(2)}>
             <Text style={styles.userText}>Calender</Text>
             <FastImage source={images.rightArrow} tintColor={constant.whiteColor} resizeMode='contain' style={styles.userStyle} />
           </Pressable>

@@ -719,9 +719,9 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
  };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#E1E1E1" }}>
+    <View style={[{ flex: 1, backgroundColor: "#E1E1E1" }, styles.shadowPropCard]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={mainStyle.cal_SubView2}>
+        <View style={[mainStyle.cal_SubView2, styles.shadowPropCard]}>
           <View style={{ flex: 1 }}>
             {/* <View style={styles.detailMainView}>
               <Text style={styles.detailText}>Source</Text>
@@ -832,7 +832,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
               >
                 <Text style={styles.detailText}>Discount</Text>
                 <TextInput
-                  style={styles.input1}
+                  style={[styles.input1, styles.shadowProp2]}
                   keyboardType="numeric"
                   onChangeText={(d) => fn_createDiscountCal(d, texTotal)}
                 >
@@ -907,7 +907,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
               >
                 <Text style={styles.detailText}>Loyalty Disc Amt</Text>
                 <TextInput
-                  style={styles.input1}
+                  style={[styles.input1, styles.shadowProp2]}
                   editable={false}
                   onChangeText={(d) => setLoayalAmt(d)}
                 >
@@ -1046,7 +1046,7 @@ const fn_GetProformaUseTaxMasters = (priceData,d) => {
         <Button
           title="Create Proforma"
           click_Action={() => fn_Validation()}
-          buttonExt={styles.performaButton}
+          buttonExt={[styles.performaButton, styles.shadowPropCard]}
         />
       </ScrollView>
     </View>
@@ -1071,4 +1071,19 @@ const mainStyle = StyleSheet.create({
     marginLeft: constant.moderateScale(8),
     color: constant.blackColor,
   },
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowProp2: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.1,
+    elevation: 5
+}
 });

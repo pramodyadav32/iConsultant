@@ -33,7 +33,7 @@ export default function ActionUpcomingList(props) {
      
         return(
             <View>
-                <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
+                <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={[styles.headerImageStyle, styles.shadowProp]}>
                  <Pressable onPress={()=>tabClick(index)} style={{flex:1,paddingVertical:constant.moderateScale(15),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                  <Text style={styles.up_ListText}>{moment(item, "MM-DD-YYYY").format("DD-MMM-YYYY")}</Text>
                  <FastImage source={ activeIndex === index ? images.downArrow : images.rightArrow} style={ activeIndex === index ? styles.upRightArrow : styles.upRightArrow2} />

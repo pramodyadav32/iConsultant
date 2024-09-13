@@ -501,7 +501,7 @@ export default function PerformaScreen(props) {
    const renderItem = ({ item, index }) => {
 
       return (
-         <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+         <ImageBackground source={images.performaCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={[styles.listBgStyle, styles.shadowProp22]}>
             <Pressable style={styles.driveListMainView}  >
                <View style={{ flex: 1, flexDirection: 'row' }}>
                   <View style={{ flex: 1.8, marginTop: constant.moderateScale(7) }}>
@@ -706,7 +706,7 @@ export default function PerformaScreen(props) {
 
    const renderItem1 = () => {
       return (
-          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+          <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={[styles.listBgStyle, styles.shadowProp22]}>
               <Pressable style={styles.driveListMainView}  >
                   {/* <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
                       <Text style={styles.text2}>OLM</Text>

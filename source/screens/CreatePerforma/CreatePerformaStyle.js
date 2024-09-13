@@ -286,6 +286,21 @@ const styles = StyleSheet.create({
                       color:constant.textColor,
                       fontFamily:constant.typeLight,
                   },
+                  shadowPropCard: {
+                    shadowColor: '#000000',
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+                    shadowOffset: {width: -2, height: 2},
+                    shadowOpacity: 0.1,
+                    elevation: 5
+                  },
+                  shadowProp2: {
+                    shadowColor: '#ABABAB',
+                    borderRadius: 10,
+                    shadowOffset: {width: -1, height: 1},
+                    shadowOpacity: 0.8,
+                    elevation: 5
+                }
   
 })
 

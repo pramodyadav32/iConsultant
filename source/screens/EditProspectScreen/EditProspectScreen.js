@@ -535,7 +535,7 @@ export default function EditProspectScreen(props) {
 
     const renderItem = ({item}) => {
         return (
-            <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+            <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={[styles.listBgStyle, styles.shadowPropCard]}>
                 <Pressable style={styles.driveListMainView}  >
                     {/* <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
                         <Text style={styles.text2}>OLM</Text>

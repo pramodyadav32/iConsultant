@@ -576,7 +576,7 @@ useEffect(()=>{
     <View style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
-        <View style={styles.cal_SubView2}>
+        <View style={[styles.cal_SubView2, styles.shadowPropCard]}>
 
         <Pressable onPress={()=>{
           setSelectState(!selectState)
@@ -911,7 +911,7 @@ useEffect(()=>{
             </View> */}
 
         </View>
-        <Button title='Next' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
+        <Button title='Next' click_Action={() => fn_Validation()} buttonExt={[styles.performaButton, styles.shadowProp2]} />
       </ScrollView>
     </View>
   )
@@ -1033,6 +1033,21 @@ const styles = StyleSheet.create({
     color: '#000',
     fontFamily: constant.typeLight,
     marginLeft: constant.moderateScale(11)
-  }
+  },
+  shadowPropCard: {
+    shadowColor: '#000000',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    shadowOffset: {width: -2, height: 2},
+    shadowOpacity: 0.1,
+    elevation: 5
+  },
+  shadowProp2: {
+    shadowColor: '#000000',
+    borderRadius: 10,
+    shadowOffset: {width: -1, height: 1},
+    shadowOpacity: 0.1,
+    elevation: 5
+}
 
 })

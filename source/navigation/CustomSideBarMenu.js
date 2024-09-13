@@ -10,7 +10,7 @@ import * as Async from '../utilities/AsyncStorage'
 
 
 const data =[
-  {'key':1,"title":'Home','source':images.homeIcon,'screenName':'HomeScreen'},
+  {'key':1,"title":'Dashboard','source':images.homeIcon,'screenName':'HomeScreen'},
   // {'key':2,"title":'Active Offers','source':images.activeOffer,'screenName':'ActiveOfferScreen'},
   {'key':3,"title":'Dashboard','source':images.DashBoard,'screenName':'HomeScreen'},
   // {'key':4,"title":'Emi Calculator','source':images.emiCalculatorIcon,'screenName':'EmiCalculatorScreen'},

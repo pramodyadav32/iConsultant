@@ -128,7 +128,7 @@ const AddPartListModel = (props) => {
                         <View style={[styles.detailMainView,{justifyContent:'center',marginTop:constant.moderateScale(20)}]}>
            <Button title='Save'
             click_Action={()=>fn_Save()}
-            buttonExt={styles.SaveButton}
+            buttonExt={[styles.SaveButton, styles.shadowProp2]}
            />
                         </View>
                     </View>
@@ -251,8 +251,14 @@ const styles = StyleSheet.create({
             width:constant.moderateScale(180),
             marginBottom:constant.moderateScale(15),
             marginTop:constant.moderateScale(10)
+        },
+        shadowProp2: {
+            shadowColor: '#ABABAB',
+            borderRadius: 10,
+            shadowOffset: {width: -1, height: 1},
+            shadowOpacity: 0.8,
+            elevation: 5
         }
-
 
 
 })

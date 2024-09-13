@@ -14,6 +14,7 @@ import { apiCall, APIName, tokenApiCall } from '../../utilities/apiCaller'
 import * as common_fn from '../../utilities/common_fn'
 import SelectDropList from '../../components/SelectDropList';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import OtpVarifyModel from "../../components/OtpVarifyModel";
 
 export default function EditProspectInfo(props) {
     const { data, prospectMaster, prospectDetail,fn_Next } = props
@@ -78,6 +79,8 @@ export default function EditProspectInfo(props) {
     const [copyToRes, setCopyToRes] = useState(false)
     const [copyToOff, setCopyToOff] = useState(false)
     const [copyRegToOff, setCopyRegToOff] = useState(false)
+    const [showOtpModel, setShowOtpModel] = useState(false);
+
     useEffect(() => {
         console.log("prospectMaster ======== ", JSON.stringify(prospectMaster))
         prospectMaster.map((item) => {
@@ -637,12 +640,89 @@ export default function EditProspectInfo(props) {
         }
       };
 
+
+  const fn_GetOtp = () => {
+    if (mobileno === "") {
+      constant.showMsg("Please enter mobile no");
+    } else if (mobileno.length != 10) {
+      constant.showMsg("Please enter valid mobile no");
+    } else {
+      dispatch(emptyLoader_Action(true));
+      let param = {
+        BrandCode: userData?.brandCode,
+        CountryCode: userData?.countryCode,
+        DlrCompanyId: userData?.companyId,
+        ProspectMasterNo: Number(data?.prospectMasterNumber),
+        ContactType: "MOBILE",
+        AddressType: "OWNER",
+        ContactNo: mobileno,
+        LoginCompanyId: userData?.companyId,
+        LoginIpAddress: "1::1",
+        LoginUserId: userData?.userId,
+      };
+      tokenApiCall(
+        getOtpCallBack,
+        APIName.getOtp,
+        "POST",
+        param
+      );
+    }
+  }
+
+  const getOtpCallBack = (res) => {
+    console.log("getOtpCallBack", JSON.stringify(res));
+    dispatch(emptyLoader_Action(false));
+    if (res?.isIpinGenerated === true) {
+      setShowOtpModel(true);
+    } else {
+    }
+  };
+
+  const fn_VerifyOtp = (enteredOtp) => {
+    if (enteredOtp === "") {
+      constant.showMsg("Please enter OTP");
+    } else if (enteredOtp.length != 6) {
+      constant.showMsg("Please enter valid OTP");
+    } else {
+      dispatch(emptyLoader_Action(true));
+      let param = {
+        BrandCode: userData?.brandCode,
+        CountryCode: userData?.countryCode,
+        DlrCompanyId: userData?.companyId,
+        ProspectMasterNo: Number(data?.prospectID),
+        IpinEntered: enteredOtp,
+        UrnEntered: 0,
+        RequestNo: 0,
+        LoginCompanyId: userData?.companyId,
+        LoginIpAddress: "1::1",
+        LoginUserId: userData?.userId,
+      };
+      tokenApiCall(
+        verifyOtpCallBack,
+        APIName.varifyOtp,
+        "POST",
+        param
+      );
+    }
+  }
+
+  const verifyOtpCallBack = (res) => {
+    console.log("getOtpCallBack", JSON.stringify(res));
+    dispatch(emptyLoader_Action(false));
+    if (res.isIpinValidated === true) {
+      constant.showMsg("OTP verified successfully");
+      setShowOtpModel(false);
+    } else {
+      // constant.showMsg(res.message);
+    }
+  };
+
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }}>
+                <View style={[{ flex: 1, backgroundColor: constant.whiteColor, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBottom: constant.moderateScale(20) }, styles.shadowPropCard]}>
 
-                    <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
+                    <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={[styles.headerImageStyle, styles.shadowProp2]}>
                         <Pressable onPress={() => setActiveIndex(true)} style={{ flex: 1, paddingVertical: constant.moderateScale(15), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Text style={styles.up_ListText}>Customer Info</Text>
                             <FastImage source={activeIndex ? images.downArrow : images.rightArrow} style={styles.upRightArrow} />
@@ -680,16 +760,16 @@ export default function EditProspectInfo(props) {
                         </View>
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Name</Text>
-                            <View style={styles.mobileSubView}>
+                            <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                 
-                                <TextInput onChangeText={(d) => setName(d)} style={[styles.input1]} >{name}</TextInput>
+                                <TextInput onChangeText={(d) => setName(d)} style={styles.input1} >{name}</TextInput>
 
                             </View>
                         </View>
 
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Son of</Text>
-                            <View style={styles.mobileSubView}>
+                            <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                 {/* <SelectDropList
                                     list={title}
                                     title={titleSonValue?.description==='' ? " " : titleSonValue?.description}
@@ -697,47 +777,57 @@ export default function EditProspectInfo(props) {
                                     textExt={styles.dropNameListText}
                                     on_Select={(d) => setTitleSonValue(d)}
                                 /> */}
-                                <TextInput onChangeText={(d) => setSonName(d)} style={[styles.input1]} >{sonName}</TextInput>
+                                <TextInput onChangeText={(d) => setSonName(d)} style={styles.input1} >{sonName}</TextInput>
 
                             </View>
                         </View>
 
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Mobile No.<Text style={styles.text2}>*</Text></Text>
-                            <View style={styles.mobileSubView}>
+                            <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                 <TextInput style={styles.input1} onChangeText={(d) => setMobileno(d)} keyboardType='numeric'>{mobileno}</TextInput>
                             </View>
+                            <Pressable
+                                style={styles.searchButtonStyle}
+                                onPress={() => fn_GetOtp()}
+                                >
+                                <FastImage
+                                    source={images.search}
+                                    resizeMode="contain"
+                                    style={styles.searchStyle}
+                                />
+                            </Pressable>
                         </View>
 
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Email ID</Text>
-                            <TextInput onChangeText={(d) => setEmail(d)} style={styles.input1} >{email}</TextInput>
+                            <TextInput onChangeText={(d) => setEmail(d)} style={[styles.input1, styles.shadowProp2]} >{email}</TextInput>
                         </View>
 
 
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>I-Tax PAN</Text>
-                            <TextInput onChangeText={(d) => setPanData(d)} style={styles.input1} >{panData}</TextInput>
+                            <TextInput onChangeText={(d) => setPanData(d)} style={[styles.input1, styles.shadowProp2]} >{panData}</TextInput>
                         </View>
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Employer Name</Text>
-                            <TextInput onChangeText={(d) => setEmpName(d)} style={styles.input1} >{empName}</TextInput>
+                            <TextInput onChangeText={(d) => setEmpName(d)} style={[styles.input1, styles.shadowProp2]} >{empName}</TextInput>
                         </View>
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Employer Mail</Text>
-                            <TextInput onChangeText={(d) => setEmpMail(d)} style={styles.input1} >{empMail}</TextInput>
+                            <TextInput onChangeText={(d) => setEmpMail(d)} style={[styles.input1, styles.shadowProp2]} >{empMail}</TextInput>
                         </View>
                         <View style={[styles.detailMainView, { marginBottom: constant.moderateScale(10) }]}>
                             <Text style={styles.detailText}>Designation</Text>
-                            <TextInput onChangeText={(d) => setDestination(d)} style={styles.input1} >{destination}</TextInput>
+                            <TextInput onChangeText={(d) => setDestination(d)} style={[styles.input1, styles.shadowProp2]} >{destination}</TextInput>
                         </View>
                     </View>
                     }
 
-                    <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={styles.headerImageStyle}>
+                    <ImageBackground source={images.listHeaderCard} resizeMode='stretch' style={[styles.headerImageStyle, styles.shadowProp2]}>
                         <Pressable onPress={() => setActiveIndex(false)} style={{ flex: 1, paddingVertical: constant.moderateScale(15), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Text style={styles.up_ListText}>Address Info</Text>
-                            <FastImage source={activeIndex ? images.downArrow : images.rightArrow} style={styles.upRightArrow} />
+                            <FastImage source={activeIndex ? images.rightArrow : images.downArrow} style={styles.upRightArrow} />
                         </Pressable>
                     </ImageBackground>
 
@@ -768,7 +858,7 @@ export default function EditProspectInfo(props) {
                                         setReg_Add1(d) 
                                         setCopyToRes(false)
                                         setCopyToOff(false)
-                                        }} style={styles.input1} >{regAdd1}</TextInput>
+                                        }} style={[styles.input1, styles.shadowProp2]} >{regAdd1}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
@@ -776,7 +866,7 @@ export default function EditProspectInfo(props) {
                                          setReg_Add2(d) 
                                          setCopyToRes(false)
                                          setCopyToOff(false)
-                                         }} style={styles.input1} >{regAdd2}</TextInput>
+                                         }} style={[styles.input1, styles.shadowProp2]} >{regAdd2}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
@@ -784,7 +874,7 @@ export default function EditProspectInfo(props) {
                                         setReg_Add3(d)
                                         setCopyToRes(false)
                                         setCopyToOff(false)
-                                         }} style={styles.input1} >{regAdd3}</TextInput>
+                                         }} style={[styles.input1, styles.shadowProp2]} >{regAdd3}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>State</Text>
@@ -844,7 +934,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput maxLength={6} onChangeText={(d) => { 
                                             setReg_Pin(d)
                                             setCopyToRes(false)
@@ -856,7 +946,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput maxLength={10} onChangeText={(d) => { 
                                             setReg_Phone(d) 
                                             setCopyToRes(false)
@@ -890,21 +980,21 @@ export default function EditProspectInfo(props) {
                                     <TextInput onChangeText={(d) => { 
                                         setRes_Add1(d)
                                         setCopyRegToOff(false) 
-                                        }} style={styles.input1} >{resAdd1}</TextInput>
+                                        }} style={[styles.input1, styles.shadowProp2]} >{resAdd1}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
                                     <TextInput onChangeText={(d) => {
                                          setRes_Add2(d)
                                          setCopyRegToOff(false)
-                                          }} style={styles.input1} >{resAdd2}</TextInput>
+                                          }} style={[styles.input1, styles.shadowProp2]} >{resAdd2}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
                                     <TextInput onChangeText={(d) => {
                                          setRes_Add3(d) 
                                          setCopyRegToOff(false)
-                                         }} style={styles.input1} >{resAdd3}</TextInput>
+                                         }} style={[styles.input1, styles.shadowProp2]} >{resAdd3}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>State</Text>
@@ -966,7 +1056,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput maxLength={6} onChangeText={(d) => {
                                              setRes_Pin(d)
                                              setCopyRegToOff(false)
@@ -977,7 +1067,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput maxLength={10} onChangeText={(d) => { 
                                             setRes_Phone(d) 
                                             setCopyRegToOff(false)
@@ -999,15 +1089,15 @@ export default function EditProspectInfo(props) {
                             <View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Address (Regn.)</Text>
-                                    <TextInput onChangeText={(d) => { setOff_Add1(d) }} style={styles.input1} >{offAdd1}</TextInput>
+                                    <TextInput onChangeText={(d) => { setOff_Add1(d) }} style={[styles.input1, styles.shadowProp2]} >{offAdd1}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setOff_Add2(d) }} style={styles.input1} >{offAdd2}</TextInput>
+                                    <TextInput onChangeText={(d) => { setOff_Add2(d) }} style={[styles.input1, styles.shadowProp2]} >{offAdd2}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}></Text>
-                                    <TextInput onChangeText={(d) => { setOff_Add3(d) }} style={styles.input1} >{offAdd3}</TextInput>
+                                    <TextInput onChangeText={(d) => { setOff_Add3(d) }} style={[styles.input1, styles.shadowProp2]} >{offAdd3}</TextInput>
                                 </View>
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>State</Text>
@@ -1062,7 +1152,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Pin</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput  maxLength={6} onChangeText={(d) => { setOff_Pin(d) }} style={styles.input1} >{off_Pin}</TextInput>
 
                                     </View>
@@ -1070,7 +1160,7 @@ export default function EditProspectInfo(props) {
 
                                 <View style={styles.detailMainView}>
                                     <Text style={styles.detailText}>Phone</Text>
-                                    <View style={styles.mobileSubView}>
+                                    <View style={[styles.mobileSubView, styles.shadowProp2]}>
                                         <TextInput maxLength={10} onChangeText={(d) => { setOff_Phone(d) }} style={styles.input1} >{off_Phone}</TextInput>
 
                                     </View>
@@ -1082,9 +1172,17 @@ export default function EditProspectInfo(props) {
                     }
 
                 </View>
-                <Button title='Save' click_Action={() => fn_Validation()} buttonExt={styles.performaButton} />
+                <Button title='Save' click_Action={() => fn_Validation()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
 
             </ScrollView>
+            <OtpVarifyModel
+                isVisible={showOtpModel}
+                onRequestClose={() =>{setShowOtpModel(false)}}
+                verifyOtp={((s) => {
+                    fn_VerifyOtp(s)
+                })}
+                mobile_Data={mobileno}
+            />
         </View>
     );
 }
@@ -1155,6 +1253,7 @@ const styles = StyleSheet.create({
         color: constant.blackColor,
         fontFamily: constant.typeLight,
         paddingHorizontal: "3%",
+        paddingLeft: constant.moderateScale(15),
         fontSize: constant.moderateScale(15)
     },
     searchButtonStyle: {
@@ -1343,4 +1442,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: constant.whiteColor,
     },
+    shadowPropCard: {
+        shadowColor: '#000000',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        shadowOffset: {width: -2, height: 2},
+        shadowOpacity: 0.1,
+        elevation: 5
+      },
+      shadowProp2: {
+        shadowColor: '#ABABAB',
+        borderRadius: 10,
+        shadowOffset: {width: -1, height: 1},
+        shadowOpacity: 0.8,
+        elevation: 5
+    },
+    shadowPropButton: {
+      shadowColor: constant.red,
+      borderRadius: 10,
+      shadowOffset: {width: -1, height: 1},
+      shadowOpacity: 0.8,
+      elevation: 5
+  }
 })

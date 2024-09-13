@@ -120,34 +120,35 @@ export default function ProspectScreen(props) {
   });
   const [SaveDataObj, setSaveDataObj] = useState({});
 
-  const [actionTypeData, SetActionTypeData] = useState([])
-  const [actionTypeValue, setActionTypeValue] = useState({})
-  const [actionModelData, setActionModelData] = useState([])
-  const [actionModelValue, setActionModelValue] = useState({})
-  const [actionDate, setActionDate] = useState('')
-  const [actionSlotValue, setActionSlotValue] = useState(' ')
-  const [actionSlotValue2, setActionSlotValue2] = useState(' ')
-  const [vinData, setVinData] = useState('')
-  const [modelCode, setModelCode] = useState('')
-  const [variant, setVariant] = useState('')
-  
-  const [regData, setRegData] = useState('')
-  const [comment, setComment] = useState('')
-  const [actionSlotLength,setActionSlotLength] = useState([])
-  const [priceAvailable, setPriceAvailable] = useState("")
+  const [actionTypeData, SetActionTypeData] = useState([]);
+  const [actionTypeValue, setActionTypeValue] = useState({});
+  const [actionModelData, setActionModelData] = useState([]);
+  const [actionModelValue, setActionModelValue] = useState({});
+  const [actionDate, setActionDate] = useState("");
+  const [actionSlotValue, setActionSlotValue] = useState(" ");
+  const [actionSlotValue2, setActionSlotValue2] = useState(" ");
+  const [vinData, setVinData] = useState("");
+  const [modelCode, setModelCode] = useState("");
+  const [variant, setVariant] = useState("");
+
+  const [regData, setRegData] = useState("");
+  const [comment, setComment] = useState("");
+  const [actionSlotLength, setActionSlotLength] = useState([]);
+  const [priceAvailable, setPriceAvailable] = useState("");
   const [eventSourceData, setEventSourceData] = useState();
   const [eventSourceList, setEventSourceList] = useState([]);
 
   // const [generlActive,setGeneralActive] =useState(false)
-  const [vehicleActive,setVehicleActive] = useState(false)
-  const [actionActive,setActionActive] = useState(false)
+  const [vehicleActive, setVehicleActive] = useState(false);
+  const [actionActive, setActionActive] = useState(false);
+  const [showOtpModel, setShowOtpModel] = useState(false);
 
   useEffect(() => {
     console.log("selectBranchh", selectedBranch);
     fn_GetProspectMaster();
     // priceStatus()
     // fn_GetVehicleMasterModel()
-    fn_GetEventSource()
+    fn_GetEventSource();
   }, []);
 
   const fn_GetEventSource = () => {
@@ -242,23 +243,23 @@ export default function ProspectScreen(props) {
   };
 
   const GetProspectMasterCallBack = async (res) => {
-    console.log("search", JSON.stringify(res));
+    console.log("search123456", JSON.stringify(res));
     if (res.statusCode === 200) {
-      await res.result.map((item) => {
-        if (item.listType === "ENTITY") {
-          setEntityData(item.prospectMasterList);
-        } else if (item.listType === "STATE") {
-          setStateData(item.prospectMasterList);
-        } else if (item.listType === "CITY") {
+      await res.result?.map((item) => {
+        if (item?.listType === "ENTITY") {
+          setEntityData(item?.prospectMasterList);
+        } else if (item?.listType === "STATE") {
+          setStateData(item?.prospectMasterList);
+        } else if (item?.listType === "CITY") {
           // setCityData(item.prospectMasterList)
-        } else if (item.listType === "REFERENCE") {
-          setReferenceData(item.prospectMasterList);
-        } else if (item.listType === "SOURCE") {
-          setSourceData(item.prospectMasterList);
-        } else if (item.listType === "RATING") {
-          setRatingData(item.prospectMasterList);
-        } else if (item.listType === "USAGE") {
-          setUsageData(item.prospectMasterList);
+        } else if (item?.listType === "REFERENCE") {
+          setReferenceData(item?.prospectMasterList);
+        } else if (item?.listType === "SOURCE") {
+          setSourceData(item?.prospectMasterList);
+        } else if (item?.listType === "RATING") {
+          setRatingData(item?.prospectMasterList);
+        } else if (item?.listType === "USAGE") {
+          setUsageData(item?.prospectMasterList);
         }
       });
       dispatch(emptyLoader_Action(false));
@@ -288,7 +289,7 @@ export default function ProspectScreen(props) {
   };
 
   const GetActionMasterListCallBack = (res) => {
-    console.log("search", JSON.stringify(res));
+    console.log("search111111111", JSON.stringify(res));
     dispatch(emptyLoader_Action(false));
     if (res.statusCode === 200) {
       SetActionTypeData(res?.result[0]?.actionMasterList);
@@ -360,8 +361,8 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please select City");
     } else if (pinCode === "") {
       constant.showMsg("Please enter pin code");
-    }else if (pinCode?.trim().length != 6) {
-        constant.showMsg("Please enter valid pin code");
+    } else if (pinCode?.trim().length != 6) {
+      constant.showMsg("Please enter valid pin code");
     } else if (Object.keys(sourceValue).length === 0) {
       constant.showMsg("Please select Source");
     } else if (Object.keys(referenceValue).length === 0) {
@@ -374,27 +375,27 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please select Rating");
     } else {
       let newObj = {
-        "title": titleValue.code,
-        "entity": entityValue.code,
-        "firstName": name,
-        "middleName": "",
-        "lastName": "",
-        "suffix":"",
-        "pincode": pinCode,
-        "email": email,
-       "contactName" : contactPerson,
-        "mobile": mobileno,
-        "source": sourceValue.code,
-        "usage": usageValue.code,
-        "activeRate": ratingValue.code,
-        "regnState": stateValue.code,
-        "regnCity": cityValue.code,
-        "projectedClosureDate": generlCloserdata,
-        "refFrom": referenceValue.code,
-      }
-      setSaveDataObj(newObj)
-      setVehicleActive(true)
-      fn_GetVehicleMasterModel()
+        title: titleValue.code,
+        entity: entityValue.code,
+        firstName: name,
+        middleName: "",
+        lastName: "",
+        suffix: "",
+        pincode: pinCode,
+        email: email,
+        contactName: contactPerson,
+        mobile: mobileno,
+        source: sourceValue.code,
+        usage: usageValue.code,
+        activeRate: ratingValue.code,
+        regnState: stateValue.code,
+        regnCity: cityValue.code,
+        projectedClosureDate: generlCloserdata,
+        refFrom: referenceValue.code,
+      };
+      setSaveDataObj(newObj);
+      setVehicleActive(true);
+      fn_GetVehicleMasterModel();
     }
   };
 
@@ -437,7 +438,8 @@ export default function ProspectScreen(props) {
         firstAction: actionTypeValue.code,
         actionDate: actionDate,
         actionComment: comment,
-        campaign: eventSourceData === undefined ? 0 : Number(eventSourceData?.serial),
+        campaign:
+          eventSourceData === undefined ? 0 : Number(eventSourceData?.serial),
         dealerCompanyDocket: "",
         corporateFlag: "N",
         dealType: "",
@@ -445,15 +447,14 @@ export default function ProspectScreen(props) {
         corporateComment: "",
         salesperson: userData?.empCode,
         hour: totalhours,
-        demoVehModel: actionTypeValue?.code==='06' ? modelCode: "",
-        demoVehVariant: actionTypeValue?.code==='06' ? variant: "",
-        demoVehChassisNo: actionTypeValue?.code==='06' ? vinData: "",
+        demoVehModel: actionTypeValue?.code === "06" ? modelCode : "",
+        demoVehVariant: actionTypeValue?.code === "06" ? variant : "",
+        demoVehChassisNo: actionTypeValue?.code === "06" ? vinData : "",
         make: "",
         loginUserId: userData?.userId,
         ipAddress: "1::1",
         slotMins: totalTimeSlot,
         slotCount: actionSlotLength.length,
-       
       };
 
       let newObj = Object.assign({}, SaveDataObj, param);
@@ -527,13 +528,12 @@ export default function ProspectScreen(props) {
   };
 
   const fn_TabClick = (type) => {
-    if(type===1){
-      setActive(type)
-    }else if(type === 2) {
-      vehicleActive ? setActive(type) : null
-    }else if(type===3){
-      actionActive ? setActive(type) : null
-
+    if (type === 1) {
+      setActive(type);
+    } else if (type === 2) {
+      vehicleActive ? setActive(type) : null;
+    } else if (type === 3) {
+      actionActive ? setActive(type) : null;
     }
     // setActive(type)
     // fn_GetActionMasterList()
@@ -562,25 +562,25 @@ export default function ProspectScreen(props) {
       constant.showMsg("Count must be greater than 0");
     } else {
       let newObj = {
-        "my": Number(my_DataValue.code),
-        "vy": Number(vy_DataValue.code),
-        "model": modelValue.code,
-        "qty": count,
-        "color": exteriorValue.code,
-        "interiorColor": interiorValue.code,
-        "style": styleValue.code,
-        "assembly": assemblyValue.code,
-        "edition": editionValue.code,
-        "subModel": varientValue?.code,
-      }
-      setSaveDataObj(Object.assign({}, SaveDataObj, newObj))
-      setActionActive(true)
-      fn_GetActionMasterList()
+        my: Number(my_DataValue.code),
+        vy: Number(vy_DataValue.code),
+        model: modelValue.code,
+        qty: count,
+        color: exteriorValue.code,
+        interiorColor: interiorValue.code,
+        style: styleValue.code,
+        assembly: assemblyValue.code,
+        edition: editionValue.code,
+        subModel: varientValue?.code,
+      };
+      setSaveDataObj(Object.assign({}, SaveDataObj, newObj));
+      setActionActive(true);
+      fn_GetActionMasterList();
     }
   };
 
   const fn_DateSelect = (data) => {
-    setRatingValue({})
+    setRatingValue({});
     dispatch(emptyLoader_Action(true));
     setTimeout(() => {
       dispatch(emptyLoader_Action(false));
@@ -589,22 +589,32 @@ export default function ProspectScreen(props) {
     }, 1000);
 
     const date1 = moment(new Date()).format("YYYY-MM-DD");
-    const date2 = moment(data.timestamp).format("YYYY-MM-DD")
-   console.log("ratingData",ratingData)
-    const differenceInDays = moment(date2).diff(moment(date1), 'days');
-    if(differenceInDays<=10){
-     setRatingValue( {"code": "HOT", "description": "Hot"})
-    }else if(differenceInDays>10 && differenceInDays<30){
-     setRatingValue({"code": "WARM", "description": "Warm"})
-    }else{
-     setRatingValue({"code": "NORMAL", "description": "Normal"})
+    const date2 = moment(data.timestamp).format("YYYY-MM-DD");
+    console.log("ratingData", ratingData);
+    const differenceInDays = moment(date2).diff(moment(date1), "days");
+    if (differenceInDays <= 10) {
+      setRatingValue({ code: "HOT", description: "Hot" });
+    } else if (differenceInDays > 10 && differenceInDays < 30) {
+      setRatingValue({ code: "WARM", description: "Warm" });
+    } else {
+      setRatingValue({ code: "NORMAL", description: "Normal" });
     }
   };
 
   const fn_ActionDateSelect = (data) => {
-    if(actionTypeValue==="06"){
-    if (Object.keys(actionModelValue).length === 0) {
-      constant.showMsg("Please select Model");
+    if (actionTypeValue === "06") {
+      if (Object.keys(actionModelValue).length === 0) {
+        constant.showMsg("Please select Model");
+      } else {
+        const originalDate = moment(data.timestamp);
+        const utcDate = originalDate.utc();
+        const zoneData = utcDate.toISOString();
+        setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"));
+        setTimeSlotModal((s) => {
+          return { ...s, date: data, utcDateFormate: zoneData };
+        });
+        fn_GetDemoVehicleList();
+      }
     } else {
       const originalDate = moment(data.timestamp);
       const utcDate = originalDate.utc();
@@ -615,16 +625,6 @@ export default function ProspectScreen(props) {
       });
       fn_GetDemoVehicleList();
     }
-  }else{
-    const originalDate = moment(data.timestamp);
-    const utcDate = originalDate.utc();
-    const zoneData = utcDate.toISOString();
-    setActionDate(moment(data.timestamp).format("DD-MMM-yyyy"));
-    setTimeSlotModal((s) => {
-      return { ...s, date: data, utcDateFormate: zoneData };
-    });
-    fn_GetDemoVehicleList();
-  }
   };
 
   const fn_GetDemoVehicleList = () => {
@@ -634,7 +634,7 @@ export default function ProspectScreen(props) {
       countryCode: userData?.countryCode,
       companyId: userData?.companyId,
       calledBy: "VEHICLE",
-      model: actionTypeValue.code === "06"  ? actionModelValue.code : "",
+      model: actionTypeValue.code === "06" ? actionModelValue.code : "",
       loginUserCompanyId: userData?.companyId,
       loginUserId: userData?.userId,
       ipAddress: "1::1",
@@ -648,7 +648,7 @@ export default function ProspectScreen(props) {
   };
 
   const GetDemoVehicleListCallBack = async (res) => {
-    console.log("searchvehi", JSON.stringify(res));
+    console.log("searchvehi34", JSON.stringify(res));
     if (res.statusCode === 200) {
       setActionCal_Modal(false);
       setTimeSlotModal((s) => {
@@ -657,27 +657,27 @@ export default function ProspectScreen(props) {
       dispatch(emptyLoader_Action(false));
     } else {
       dispatch(emptyLoader_Action(false));
-      // constant.showMsg(res.message);
+      constant.showMsg(res.message);
     }
   };
 
   const fn_GetActionSlots = (item, index) => {
     dispatch(emptyLoader_Action(true));
     let param = {
-      "brandCode": userData?.brandCode,
-      "countryCode": userData?.countryCode,
-      "companyId": userData?.companyId,
-      "branchcode": selectedBranch?.branchCode,
-      "calledBy": "TIME_SLOTS",
-      "actionCode": actionTypeValue?.code,
-      "chassisNo": item?.chassisNo,
-      "empCode": userData?.empCode,
-      "date": timeSlotModal?.utcDateFormate,
-      "loginUserId": userData?.userId,
-      "ipAddress": "1::1"
-    }
-    tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param)
-  }
+      brandCode: userData?.brandCode,
+      countryCode: userData?.countryCode,
+      companyId: userData?.companyId,
+      branchcode: selectedBranch?.branchCode,
+      calledBy: "TIME_SLOTS",
+      actionCode: actionTypeValue?.code,
+      chassisNo: item?.chassisNo,
+      empCode: userData?.empCode,
+      date: timeSlotModal?.utcDateFormate,
+      loginUserId: userData?.userId,
+      ipAddress: "1::1",
+    };
+    tokenApiCall(GetActionSlotsCallBack, APIName.GetActionSlots, "POST", param);
+  };
 
   const GetActionSlotsCallBack = async (res) => {
     console.log("searchvehi", JSON.stringify(res));
@@ -699,25 +699,24 @@ export default function ProspectScreen(props) {
 
   const fn_ModelSelect = (d) => {
     setModelValue(d);
-    setEditionValue({})
-    setVarientValue({})
-    setStyleValue({})
-    setExteriorValue({})
-    setInteriorValue({})
-    setMyDataValue({})
-    setVyDataValue({})
-    setAssemblyValue({})
-    setEditionData([])
-    setvarientData([])
-    setStyleData([])
-    setExteriorData([])
-    setInteriorData([])
-    setMyData([])
-    setVyData([])
-    setAssemblyData([])
-    setPriceAvailable("")
+    setEditionValue({});
+    setVarientValue({});
+    setStyleValue({});
+    setExteriorValue({});
+    setInteriorValue({});
+    setMyDataValue({});
+    setVyDataValue({});
+    setAssemblyValue({});
+    setEditionData([]);
+    setvarientData([]);
+    setStyleData([]);
+    setExteriorData([]);
+    setInteriorData([]);
+    setMyData([]);
+    setVyData([]);
+    setAssemblyData([]);
+    setPriceAvailable("");
     fn_GetVehicleModel(d);
-    
   };
 
   const fn_GetVehicleModel = (d) => {
@@ -749,7 +748,7 @@ export default function ProspectScreen(props) {
       await res.result.map((item) => {
         if (item.listType === "EDITION") {
           setEditionData(item.vehicleMaster);
-        }  else if (item.listType === "VARIANT") {
+        } else if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
         } else if (item.listType === "ASSEMBLY") {
           setAssemblyData(item.vehicleMaster);
@@ -763,23 +762,23 @@ export default function ProspectScreen(props) {
   };
 
   const fn_CalenderClick = () => {
-   if(actionTypeValue?.code ==="06"){
-    if (Object.keys(actionModelValue).length === 0) {
-      constant.showMsg("Please select Model");
+    if (actionTypeValue?.code === "06") {
+      if (Object.keys(actionModelValue).length === 0) {
+        constant.showMsg("Please select Model");
+      } else {
+        setActionCal_Modal(true);
+      }
     } else {
       setActionCal_Modal(true);
     }
-  }else{
-    setActionCal_Modal(true);
-  }
   };
 
   const fn_SlotDone = (selectVeh, slotData) => {
-   actionTypeValue?.code==='06' ? setVinData(selectVeh?.chassisNo): null;
-   actionTypeValue?.code==='06' ? setModelCode(selectVeh?.modelCode): null;
-   actionTypeValue?.code==='06' ? setVariant(selectVeh?.variant): null;
-   
-  actionTypeValue?.code==='06' ? setRegData(selectVeh?.regn) : null;
+    actionTypeValue?.code === "06" ? setVinData(selectVeh?.chassisNo) : null;
+    actionTypeValue?.code === "06" ? setModelCode(selectVeh?.modelCode) : null;
+    actionTypeValue?.code === "06" ? setVariant(selectVeh?.variant) : null;
+
+    actionTypeValue?.code === "06" ? setRegData(selectVeh?.regn) : null;
     const originalTime = slotData[slotData.length - 1].slot;
     const originalMoment = moment(originalTime, "hh:mm A");
     const updatedMoment = originalMoment.add(30, "minutes");
@@ -843,9 +842,9 @@ export default function ProspectScreen(props) {
   };
 
   const fn_State = (d) => {
-    setStateValue(d)
-    setCityValue({})
-    dispatch(emptyLoader_Action(true))
+    setStateValue(d);
+    setCityValue({});
+    dispatch(emptyLoader_Action(true));
     let param = {
       brandCode: userData?.brandCode,
       countryCode: userData?.countryCode,
@@ -890,9 +889,9 @@ export default function ProspectScreen(props) {
     }
   };
 
-  const fn_EntityClick=(d)=>{
-    setEntityValue(d)
-    setTitleValue({})
+  const fn_EntityClick = (d) => {
+    setEntityValue(d);
+    setTitleValue({});
     dispatch(emptyLoader_Action(true));
     let param = {
       brandCode: userData?.brandCode,
@@ -901,7 +900,7 @@ export default function ProspectScreen(props) {
       branchCode: selectedBranch?.branchCode,
       calledBy:
         "INTERNATIONAL_CALLING_CODE,ENTITY,TITLE,STATE,CITY,REFERENCE,SOURCE,RATING,USAGE,DEALCATEGORY,DEALTYPE,CORPORATE,PURCHASE_INTENTION,PROSPECT_CATEGORY,IMPORTANCE,FINANCER,DRIVEN_BY,GENDER,SALES_CONSULTANT,CUST_TYPE,COMPETITION_MODELS,CORRESPONDENCE_ADDRESS",
-      entityCode:d.code,
+      entityCode: d.code,
       title: "",
       stateCode: "",
       corpDealCategory: "",
@@ -920,21 +919,15 @@ export default function ProspectScreen(props) {
       loginUserCompanyId: userData?.companyId,
       ipAddress: "1::1",
     };
-    tokenApiCall(
-      EntityClickCallBack,
-      APIName.GetProspectMaster,
-      "POST",
-      param
-    );
-  }
-
+    tokenApiCall(EntityClickCallBack, APIName.GetProspectMaster, "POST", param);
+  };
 
   const EntityClickCallBack = async (res) => {
     console.log("search", JSON.stringify(res));
     if (res.statusCode === 200) {
-      setTitleValue({})
+      setTitleValue({});
       await res.result.map((item) => {
-         if (item.listType === "TITLE") {
+        if (item.listType === "TITLE") {
           setTitle(item.prospectMasterList);
         }
       });
@@ -945,21 +938,20 @@ export default function ProspectScreen(props) {
     }
   };
 
-
   const fn_VarientSelect = (d) => {
     setVarientValue(d);
-    setStyleValue({})
-    setExteriorValue({})
-    setInteriorValue({})
-    setMyDataValue({})
-    setVyDataValue({})
-    setAssemblyValue({})
-    setStyleData([])
-    setExteriorData([])
-    setInteriorData([])
-    setMyData([])
-    setVyData([])
-    setPriceAvailable("")
+    setStyleValue({});
+    setExteriorValue({});
+    setInteriorValue({});
+    setMyDataValue({});
+    setVyDataValue({});
+    setAssemblyValue({});
+    setStyleData([]);
+    setExteriorData([]);
+    setInteriorData([]);
+    setMyData([]);
+    setVyData([]);
+    setPriceAvailable("");
     fn_GetVehicleVarient(d);
   };
 
@@ -990,10 +982,10 @@ export default function ProspectScreen(props) {
     console.log("search", JSON.stringify(res));
     if (res.statusCode === 200) {
       await res.result.map((item) => {
-         if (item.listType === "VARIANT") {
+        if (item.listType === "VARIANT") {
           setvarientData(item.vehicleMaster);
         } else if (item.listType === "STYLE") {
-          console.log("item.listType ==== ", item.listType, item.vehicleMaster)
+          console.log("item.listType ==== ", item.listType, item.vehicleMaster);
           setStyleData(item.vehicleMaster);
         } else if (item.listType === "EXT_COLOR") {
           setExteriorData(item.vehicleMaster);
@@ -1021,7 +1013,7 @@ export default function ProspectScreen(props) {
         onBack={() => navigation.goBack()}
       />
 
-      <View style={styles.mainTopView}>
+      <View style={[styles.mainTopView, styles.shadowProp]}>
         <View style={styles.tabMainView}>
           <View style={styles.tabSubView}>
             <Pressable
@@ -1079,9 +1071,23 @@ export default function ProspectScreen(props) {
                 Mobile No.<Text style={styles.text2}>*</Text>
               </Text>
               <View style={styles.mobileSubView}>
-                <TextInput style={styles.input1} maxLength={10} onChangeText={(d) => setMobileNo(d)} keyboardType='numeric'>{mobileno}</TextInput>
-                <Pressable style={styles.searchButtonStyle} onPress={() => fn_GetSearchCust()}>
-                  <FastImage source={images.search} resizeMode='contain' style={styles.searchStyle} />
+                <TextInput
+                  style={[styles.input1, styles.shadowProp2]}
+                  maxLength={10}
+                  onChangeText={(d) => setMobileNo(d)}
+                  keyboardType="numeric"
+                >
+                  {mobileno}
+                </TextInput>
+                <Pressable
+                  style={styles.searchButtonStyle}
+                  onPress={() => fn_GetSearchCust()}
+                >
+                  <FastImage
+                    source={images.search}
+                    resizeMode="contain"
+                    style={styles.searchStyle}
+                  />
                 </Pressable>
               </View>
             </View>
@@ -1107,7 +1113,7 @@ export default function ProspectScreen(props) {
                 </Text>
 
                 <TextInput
-                  style={styles.input1}
+                  style={[styles.input1, styles.shadowProp2]}
                   onChangeText={(d) => setContactPerson(d)}
                 >
                   {contactPerson}
@@ -1115,14 +1121,18 @@ export default function ProspectScreen(props) {
               </View>
             ) : null}
 
-<View style={styles.detailMainView}>
+            <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-              Title<Text style={styles.text2}>*</Text>
+                Title<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={title}
-                title={titleValue?.description=== undefined ? ' ' : titleValue?.description}
-                refType={Object.keys(titleValue).length===0 ?false : true}
+                title={
+                  titleValue?.description === undefined
+                    ? " "
+                    : titleValue?.description
+                }
+                refType={Object.keys(titleValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setTitleValue(d)}
@@ -1142,7 +1152,7 @@ export default function ProspectScreen(props) {
                 /> */}
                 <TextInput
                   onChangeText={(d) => setName(d)}
-                  style={[styles.input1, {}]}
+                  style={[styles.input1, styles.shadowProp2]}
                 >
                   {name}
                 </TextInput>
@@ -1150,10 +1160,12 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Email ID<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                Email ID<Text style={styles.text2}>*</Text>
+              </Text>
               <TextInput
                 onChangeText={(d) => setEmail(d)}
-                style={styles.input1}
+                style={[styles.input1, styles.shadowProp2]}
               >
                 {email}
               </TextInput>
@@ -1169,8 +1181,7 @@ export default function ProspectScreen(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
-                  fn_State(d)
-                  
+                  fn_State(d);
                 }}
               />
             </View>
@@ -1182,7 +1193,7 @@ export default function ProspectScreen(props) {
               <SelectDropList
                 list={cityData}
                 title={cityValue?.description}
-                refType={Object.keys(cityValue).length===0 ?false : true}
+                refType={Object.keys(cityValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setCityValue(d)}
@@ -1190,9 +1201,11 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>PIN<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                PIN<Text style={styles.text2}>*</Text>
+              </Text>
               <TextInput
-                style={styles.input1}
+                style={[styles.input1, styles.shadowProp2]}
                 maxLength={6}
                 keyboardType="numeric"
                 onChangeText={(d) => setPinCode(d)}
@@ -1201,31 +1214,32 @@ export default function ProspectScreen(props) {
               </TextInput>
             </View>
 
-            <View style={styles.bottomMainView}>
+            <View style={[styles.bottomMainView, styles.shadowProp]}>
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Inquiry Type</Text>
                 <SelectDropList
                   list={sourceData}
-                  title= {sourceValue?.description}
+                  title={sourceValue?.description}
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
-                    if(sourceValue?.code !== "07")  setEventSourceData(undefined)
-                    setSourceValue(d)
+                    if (sourceValue?.code !== "07")
+                      setEventSourceData(undefined);
+                    setSourceValue(d);
                   }}
                 />
               </View>
               {sourceValue?.code === "07" ? (
-              <View style={styles.detailMainView2}>
-                <Text style={styles.detailText}></Text>
-                <SelectDropList
-                  list={eventSourceList}
-                  title="Select Campaign"
-                  buttonExt={styles.dropList}
-                  textExt={styles.dropListText}
-                  on_Select={(d) => setEventSourceData(d)}
-                />
-              </View>
+                <View style={styles.detailMainView2}>
+                  <Text style={styles.detailText}></Text>
+                  <SelectDropList
+                    list={eventSourceList}
+                    title="Select Campaign"
+                    buttonExt={styles.dropList}
+                    textExt={styles.dropListText}
+                    on_Select={(d) => setEventSourceData(d)}
+                  />
+                </View>
               ) : null}
 
               <View style={styles.detailMainView2}>
@@ -1252,7 +1266,7 @@ export default function ProspectScreen(props) {
               <View style={styles.detailMainView2}>
                 <Text style={styles.detailText}>Proj. Closure Date</Text>
                 <Pressable
-                  style={styles.calenderMainView}
+                  style={[styles.calenderMainView, styles.shadowProp2]}
                   onPress={() => setCalenderModalShow(true)}
                 >
                   <TextInput
@@ -1277,7 +1291,7 @@ export default function ProspectScreen(props) {
                   title={ratingValue?.description}
                   buttonExt={styles.dropList}
                   disable={true}
-                  refType={Object.keys(ratingValue).length===0 ?false : true}
+                  refType={Object.keys(ratingValue).length === 0 ? false : true}
                   textExt={styles.dropListText}
                   on_Select={(d) => setRatingValue(d)}
                 />
@@ -1285,7 +1299,10 @@ export default function ProspectScreen(props) {
             </View>
             <Button
               title="Proceed"
-              buttonExt={[styles.proceedButton,{marginTop:constant.resW(6),}]}
+              buttonExt={[
+                styles.proceedButton,
+                { marginTop: constant.resW(6) },
+                styles.shadowProp]}
               textExt={styles.proccedButtonText}
               click_Action={() => fn_General_Validation()}
             />
@@ -1299,7 +1316,7 @@ export default function ProspectScreen(props) {
           >
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
-              Model<Text style={styles.text2}>*</Text>
+                Model<Text style={styles.text2}>*</Text>
               </Text>
               <SelectDropList
                 list={modelData}
@@ -1316,7 +1333,7 @@ export default function ProspectScreen(props) {
               <SelectDropList
                 list={editionData}
                 title={editionValue?.description}
-                refType={Object.keys(editionValue).length===0 ?false : true}
+                refType={Object.keys(editionValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setEditionValue(d)}
@@ -1324,11 +1341,13 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Variant<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                Variant<Text style={styles.text2}>*</Text>
+              </Text>
               <SelectDropList
                 list={varientData}
                 title={varientValue?.description}
-                refType={Object.keys(varientValue).length===0 ?false : true}
+                refType={Object.keys(varientValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => fn_VarientSelect(d)}
@@ -1343,7 +1362,7 @@ export default function ProspectScreen(props) {
               <SelectDropList
                 list={styleData}
                 title={styleValue?.description}
-                refType={Object.keys(styleValue).length===0 ?false : true}
+                refType={Object.keys(styleValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setStyleValue(d)}
@@ -1357,22 +1376,24 @@ export default function ProspectScreen(props) {
               <SelectDropList
                 list={exteriorData}
                 title={exteriorValue?.description}
-                refType={Object.keys(exteriorValue).length===0 ?false : true}
+                refType={Object.keys(exteriorValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
-                on_Select={(d) =>{
-                  setExteriorValue(d)
+                on_Select={(d) => {
+                  setExteriorValue(d);
                   setAssemblyValue({});
                 }}
               />
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Internal<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                Internal<Text style={styles.text2}>*</Text>
+              </Text>
               <SelectDropList
                 list={inteiorData}
                 title={interiorValue?.description}
-                refType={Object.keys(interiorValue).length===0 ?false : true}
+                refType={Object.keys(interiorValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => setInteriorValue(d)}
@@ -1381,16 +1402,20 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>MY/VY<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                MY/VY<Text style={styles.text2}>*</Text>
+              </Text>
               <View style={styles.mobileSubView}>
                 <SelectDropList
                   list={my_Data}
                   title={my_DataValue?.description}
-                  refType={Object.keys(my_DataValue).length===0 ?false : true}
+                  refType={
+                    Object.keys(my_DataValue).length === 0 ? false : true
+                  }
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
-                    setMyDataValue(d)
+                    setMyDataValue(d);
                     setAssemblyValue({});
                   }}
                 />
@@ -1398,11 +1423,13 @@ export default function ProspectScreen(props) {
                 <SelectDropList
                   list={vy_Data}
                   title={vy_DataValue?.description}
-                  refType={Object.keys(vy_DataValue).length===0 ?false : true}
+                  refType={
+                    Object.keys(vy_DataValue).length === 0 ? false : true
+                  }
                   buttonExt={styles.dropList}
                   textExt={styles.dropListText}
                   on_Select={(d) => {
-                    setVyDataValue(d)
+                    setVyDataValue(d);
                     setAssemblyValue({});
                   }}
                 />
@@ -1410,11 +1437,13 @@ export default function ProspectScreen(props) {
             </View>
 
             <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>Assembly Type<Text style={styles.text2}>*</Text></Text>
+              <Text style={styles.detailText}>
+                Assembly Type<Text style={styles.text2}>*</Text>
+              </Text>
               <SelectDropList
                 list={assemblyData}
                 title={assemblyValue?.description}
-                refType={Object.keys(assemblyValue).length===0 ?false : true}
+                refType={Object.keys(assemblyValue).length === 0 ? false : true}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
@@ -1463,7 +1492,7 @@ export default function ProspectScreen(props) {
                     style={styles.coutButton}
                     onPress={() => setCount(count + 1)}
                   > */}
-                    {/* <FastImage
+                  {/* <FastImage
                       source={images.add}
                       tintColor={constant.red}
                       resizeMode="contain"
@@ -1475,7 +1504,7 @@ export default function ProspectScreen(props) {
             </View>
             <Button
               title="Proceed"
-              buttonExt={styles.proceedButton}
+              buttonExt={[styles.proceedButton, styles.shadowProp]}
               textExt={styles.proccedButtonText}
               click_Action={() => fn_VehicleValidation()}
             />
@@ -1494,32 +1523,35 @@ export default function ProspectScreen(props) {
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {
-                  setTimeSlotModal(s=>{return{...s,vehicleList:[]}})
-                  setActionTypeValue(d)
+                  setTimeSlotModal((s) => {
+                    return { ...s, vehicleList: [] };
+                  });
+                  setActionTypeValue(d);
                 }}
               />
             </View>
 
-           { actionTypeValue?.code ==="06" &&  <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>
-              Demo Vehicle<Text style={styles.text2}>*</Text>
-              </Text>
-              <SelectDropList
-                list={modelData}
-                title={actionModelValue?.description}
-                buttonExt={styles.dropList}
-                textExt={styles.dropListText}
-                on_Select={(d) => setActionModelValue(d)}
-              />
-            </View>
-}
+            {actionTypeValue?.code === "06" && (
+              <View style={styles.detailMainView}>
+                <Text style={styles.detailText}>
+                  Demo Vehicle<Text style={styles.text2}>*</Text>
+                </Text>
+                <SelectDropList
+                  list={modelData}
+                  title={actionModelValue?.description}
+                  buttonExt={styles.dropList}
+                  textExt={styles.dropListText}
+                  on_Select={(d) => setActionModelValue(d)}
+                />
+              </View>
+            )}
 
             <View style={styles.detailMainView}>
               <Text style={styles.detailText}>
                 Date<Text style={styles.text2}>*</Text>
               </Text>
               <Pressable
-                style={styles.calenderMainView}
+                style={[styles.calenderMainView, styles.shadowProp2]}
                 onPress={() => fn_CalenderClick()}
               >
                 <TextInput
@@ -1558,31 +1590,32 @@ export default function ProspectScreen(props) {
               </View>
             </View>
 
-            { actionTypeValue?.code ==="06" && <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>VIN</Text>
-              <TextInput
-                placeholder="Type here"
-                editable={false}
-                style={styles.input1}
-              >
-                {vinData}
-              </TextInput>
-            </View>
-}
-{ actionTypeValue?.code ==="06" && 
-            <View style={styles.detailMainView}>
-              <Text style={styles.detailText}>
-                Regn.<Text style={styles.text2}>*</Text>
-              </Text>
-              <TextInput
-                placeholder="Type here"
-                editable={false}
-                style={styles.input1}
-              >
-                {regData}
-              </TextInput>
-            </View>
-}
+            {actionTypeValue?.code === "06" && (
+              <View style={styles.detailMainView}>
+                <Text style={styles.detailText}>VIN</Text>
+                <TextInput
+                  placeholder="Type here"
+                  editable={false}
+                  style={[styles.input1, styles.shadowProp2]}
+                >
+                  {vinData}
+                </TextInput>
+              </View>
+            )}
+            {actionTypeValue?.code === "06" && (
+              <View style={styles.detailMainView}>
+                <Text style={styles.detailText}>
+                  Regn.<Text style={styles.text2}>*</Text>
+                </Text>
+                <TextInput
+                  placeholder="Type here"
+                  editable={false}
+                  style={[styles.input1, styles.shadowProp2]}
+                >
+                  {regData}
+                </TextInput>
+              </View>
+            )}
 
             <View style={[styles.detailMainView, { alignItems: "flex-start" }]}>
               <Text style={[styles.detailText, { marginTop: "3%" }]}>
@@ -1590,8 +1623,8 @@ export default function ProspectScreen(props) {
               </Text>
               <TextInput
                 placeholder="Enter Comment"
-                style={styles.commentInput}
-                onChangeText={(d)=>setComment(d)}
+                style={[styles.commentInput, styles.shadowProp2]}
+                onChangeText={(d) => setComment(d)}
               >
                 {comment}
               </TextInput>
@@ -1599,7 +1632,7 @@ export default function ProspectScreen(props) {
 
             <Button
               title="Create Prospect"
-              buttonExt={styles.proceedButton}
+              buttonExt={[styles.proceedButton, styles.shadowProp]}
               textExt={styles.proccedButtonText}
               click_Action={() => fn_CreateProspect()}
             />

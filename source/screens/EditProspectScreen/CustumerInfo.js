@@ -482,7 +482,7 @@ export default function CustumerInfo(props) {
     return (
         <View style={{ flex: 1, paddingBottom: constant.moderateScale(15) }}>
            <ScrollView showsVerticalScrollIndicator={false}>
-           <View style={{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}}>
+           <View style={[{flex:1,backgroundColor:constant.whiteColor,borderBottomLeftRadius:10,borderBottomRightRadius:10,paddingBottom:constant.moderateScale(20)}, styles.shadowPropCard]}>
 
    <View>
     <View style={styles.detailMainView}>
@@ -616,7 +616,7 @@ export default function CustumerInfo(props) {
 
 
 </View>
-<Button title='Save' click_Action={() => validation()} buttonExt={styles.performaButton} />
+<Button title='Save' click_Action={() => validation()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
 
      </ScrollView>
 
@@ -841,4 +841,19 @@ const styles = StyleSheet.create({
                 borderWidth: 1,
                 borderColor: constant.whiteColor,
             },
+            shadowPropCard: {
+              shadowColor: '#000000',
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              shadowOffset: {width: -2, height: 2},
+              shadowOpacity: 0.1,
+              elevation: 5
+            },
+            shadowPropButton: {
+              shadowColor: constant.red,
+              borderRadius: 10,
+              shadowOffset: {width: -1, height: 1},
+              shadowOpacity: 0.8,
+              elevation: 5
+          }
 })
