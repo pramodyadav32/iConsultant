@@ -70,6 +70,8 @@ export default function ProspectScreen(props) {
     slotList: [],
     utcDateFormate: "",
   });
+  const [seData, setSeData] = useState([]);
+  const [seValue, setSeValue] = useState({});
   const [stateData, setStateData] = useState([]);
   const [stateValue, setStateValue] = useState({});
   const [cityData, setCityData] = useState([]);
@@ -248,6 +250,8 @@ export default function ProspectScreen(props) {
       await res.result?.map((item) => {
         if (item?.listType === "ENTITY") {
           setEntityData(item?.prospectMasterList);
+        } else if (item?.listType === "SALES_CONSULTANT") {
+          setSeData(item?.prospectMasterList);
         } else if (item?.listType === "STATE") {
           setStateData(item?.prospectMasterList);
         } else if (item?.listType === "CITY") {
@@ -355,6 +359,8 @@ export default function ProspectScreen(props) {
       constant.showMsg("Please enter email");
     } else if (!common_fn.validEmail(email?.trim())) {
       constant.showMsg("Please enter valid email");
+    } else if (Object.keys(seValue).length === 0) {
+      constant.showMsg("Please select Sales Consultant Name");
     } else if (Object.keys(stateValue).length === 0) {
       constant.showMsg("Please select State");
     } else if (Object.keys(cityValue).length === 0) {
@@ -392,6 +398,7 @@ export default function ProspectScreen(props) {
         regnCity: cityValue.code,
         projectedClosureDate: generlCloserdata,
         refFrom: referenceValue.code,
+        ProspectTimeModel:"Iconsultant",
       };
       setSaveDataObj(newObj);
       setVehicleActive(true);
@@ -445,7 +452,7 @@ export default function ProspectScreen(props) {
         dealType: "",
         approveFlag: "",
         corporateComment: "",
-        salesperson: userData?.empCode,
+        salesperson: seValue?.code,
         hour: totalhours,
         demoVehModel: actionTypeValue?.code === "06" ? modelCode : "",
         demoVehVariant: actionTypeValue?.code === "06" ? variant : "",
@@ -1169,6 +1176,21 @@ export default function ProspectScreen(props) {
               >
                 {email}
               </TextInput>
+            </View>
+
+            <View style={styles.detailMainView}>
+              <Text style={styles.detailText}>
+                SE Name<Text style={styles.text2}>*</Text>
+              </Text>
+              <SelectDropList
+                list={seData}
+                title={stateValue?.description}
+                buttonExt={styles.dropList}
+                textExt={styles.dropListText}
+                on_Select={(d) => {
+                  setSeValue(d)
+                }}
+              />
             </View>
 
             <View style={styles.detailMainView}>

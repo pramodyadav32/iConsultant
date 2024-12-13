@@ -3,7 +3,7 @@ import { Image, SafeAreaView, ImageBackground, View, Text, ScrollView, StatusBar
 import images from '../../utilities/images';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux'
-import { userData_Action,emptyLoader_Action } from '../../redux/actions/AuthAction'
+import { userData_Action, emptyLoader_Action } from '../../redux/actions/AuthAction'
 import { CommonActions } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import styles from './ActionProspectStyle'
@@ -16,79 +16,88 @@ import * as common_fn from '../../utilities/common_fn'
 import moment from "moment";
 
 export default function ActionProspectList(props) {
-   const {data,onClick} = props
-    const dispatch = useDispatch()
+   const { data, onClick } = props
+   const dispatch = useDispatch()
 
-    const renderItem=({item,index})=>{
+   const renderItem = ({ item, index }) => {
       console.log("bbbbbbbb = ", item)
-        return(
-                 <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{borderRadius:10}} style={styles.listBgStyle}>
-                   <Pressable style={styles.driveListMainView} onPress={()=>onClick(item,index)}>
-                <View style={styles.driveListTopView}>
-                    <View>
-                    <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
-                    <View style={styles.horizontalLine} />
-                    </View>
-                    <FastImage source={images.graph} resizeMode='contain' style={styles.listDriveIcon} />
-                </View>
-                <View style={{flex:1,flexDirection:'row'}}>
-                    <View style={{flex:1,}}>
-                    <FastImage source={{uri:item?.modelImgUrl}} resizeMode='contain' style={styles.carImage} />
-                    <View style={[{flexDirection:'row',justifyContent:'space-between',flex:1,paddingRight:constant.moderateScale(18)}]}>
-                    <Text style={styles.ModelText3}>{item?.model}</Text>
-                    <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>
-                 </View>
-                    </View>
-                    <View style={{flex:1.7}}>
-                    <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(2)}]}>
-                 <View style={styles.driveListDetailSubView}>
-                    <Text style={styles.listText2}>Prospect ID</Text>
-                    <Text style={styles.listText3}>{item?.prospectId}</Text>
-                 </View>
-                 <View style={styles.driveListDetailSubView2}>
-                    <Text style={styles.listText2}>Next Action</Text>
-                    <Text style={styles.listText3}>{item?.action}</Text>
-                 </View>
-                </View>
-                <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
-                 <View style={styles.driveListDetailSubView}>
-                    <Text style={styles.listText2}>Mobile No</Text>
-                    <Text style={styles.listText3}>{item?.custMobile}</Text>
-                 </View>
-                 <View style={styles.driveListDetailSubView}>
-                    <Text style={styles.listText2}>Day Since</Text>
-                    <Text style={styles.listText3}>{item?.prospectAge}</Text>
-                 </View>
-                </View>
-                <View style={[styles.driveListDetailView,{marginTop:constant.moderateScale(8)}]}>
-                <View style={styles.driveListDetailSubView}>
-                    <Text style={styles.listText2}>Rating</Text>
-                    <Text style={styles.listText3}>{item?.prospectRating}</Text>
-                 </View>
-                 <View style={styles.driveListDetailSubView}>
-                    <Text style={styles.listText2}>Closure</Text>
-                    <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
-                 </View>
-                </View>
-                    </View>
-                    </View>
-                </Pressable>  
-                 </ImageBackground>         
-        )
-      }
-    
-  
-    return (
-        <View style={{flex:1}}>
-            <FlatList
-              data={data}
-              renderItem={renderItem}
-              showsVerticalScrollIndicator={false}
-      ListHeaderComponent={()=>common_fn.listSpace(constant.moderateScale(5))}
-      ItemSeparatorComponent={()=>common_fn.listSpace(constant.moderateScale(7))}
-      ListFooterComponent={()=>common_fn.listSpace(constant.moderateScale(10))}
-            />
-          
-         </View>
-    );
+      return (
+         <ImageBackground source={images.listCard} resizeMode='stretch' imageStyle={{ borderRadius: 10 }} style={styles.listBgStyle}>
+            <Pressable style={styles.driveListMainView} onPress={() => onClick(item, index)}>
+               <View style={styles.driveListTopView}>
+                  <View>
+                     <Text style={styles.driveText1}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
+                     <View style={styles.horizontalLine} />
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                     {item?.prospectTimeModel === "Iconsultant" ? <FastImage source={images.mobile} resizeMode='contain' style={styles.listDriveIcon} /> : null}
+                     <FastImage source={images.graph} resizeMode='contain' style={styles.listDriveIcon} />
+                  </View>
+               </View>
+               <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1, }}>
+                     <FastImage source={{ uri: item?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
+                     <View style={[{ flexDirection: 'row', justifyContent: 'space-between', flex: 1, paddingRight: constant.moderateScale(18) }]}>
+                        <Text style={styles.ModelText3}>{item?.model}</Text>
+                        <Text style={styles.fuelText2}>{item?.fuelDesc}</Text>
+                     </View>
+                  </View>
+                  <View style={{ flex: 1.7 }}>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Prospect ID</Text>
+                           <Text style={styles.listText3}>{item?.prospectId}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView2}>
+                           <Text style={styles.listText2}>Next Action</Text>
+                           <Text style={styles.listText3}>{item?.action}</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Mobile No</Text>
+                           <Text style={styles.listText3}>{item?.custMobile}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Day Since</Text>
+                           <Text style={styles.listText3}>{item?.prospectAge}</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Rating</Text>
+                           <Text style={styles.listText3}>{item?.prospectRating}</Text>
+                        </View>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>Closure</Text>
+                           <Text style={styles.listText3}>{moment(item?.projectedCloserDate, "DD-MMM-YYYY, hh:mm A").format("DD-MMM-YYYY")}</Text>
+                        </View>
+                     </View>
+                     <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                        <View style={styles.driveListDetailSubView}>
+                           <Text style={styles.listText2}>SE Name</Text>
+                           <Text style={styles.listText3}>{item?.salesExecutiveName}</Text>
+                        </View>
+                     </View>
+                  </View>
+               </View>
+            </Pressable>
+         </ImageBackground>
+      )
+   }
+
+
+   return (
+      <View style={{ flex: 1 }}>
+         <FlatList
+            data={data}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}
+            ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(7))}
+            ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+         />
+
+      </View>
+   );
 }

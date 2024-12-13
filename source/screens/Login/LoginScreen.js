@@ -22,6 +22,7 @@ export default function LoginScreen(props) {
     const [comp_Id, setComp_Id] = useState('')
     const [user_Id,setUser_Id] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false); 
     const [active, setActive] = useState(true)
 
     const fn_Veify = () => {
@@ -105,8 +106,10 @@ export default function LoginScreen(props) {
  
                         <View style={styles.inputMainView}>
                             <Image source={images.lock} resizeMode='contain' style={styles.scanIconStyle} />
-                            <TextInput style={styles.inputStyle} onChangeText={(t)=>setPassword(t)} placeholderTextColor={'#797979'} placeholder='Password' >{password}</TextInput>
-                            <Image source={images.eyeIcon} resizeMode='contain' style={styles.eyeStyle} />
+                            <TextInput style={styles.inputStyle} secureTextEntry={!showPassword} onChangeText={(t)=>setPassword(t)} placeholderTextColor={'#797979'} placeholder='Password' >{password}</TextInput>
+                            <Pressable onPress={()=>setShowPassword(!showPassword)}>
+                                <Image source={images.eyeIcon} resizeMode="contain" style={styles.eyeStyle} />
+                            </Pressable>
                         </View>
                         <Button
                             title='Log In'
