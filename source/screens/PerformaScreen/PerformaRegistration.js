@@ -55,6 +55,7 @@ export default function PerformaRegistration(props) {
 
   let newData = []
   console.log("regData",JSON.stringify(regData))
+  var isAllUnselected = true
   regData?.registrationTypeList.map((item)=>{
     let totalPre = (regData?.priceDetails?.exShowroomValueBeforeDiscount * Number(item?.dataCalculation?.perVal))/100
     let totalPost = (regData?.priceDetails?.exShowroomValueAfterDiscount * Number(item?.dataCalculation?.perVal))/100
@@ -72,9 +73,15 @@ export default function PerformaRegistration(props) {
     item["addAmount"] = item?.dataCalculation?.amountVal
     item["select"] = item?.isSelected === "Y" ? true : false
     newData.push(item)
+    if(item?.isSelected === "Y"){
+      isAllUnselected = false
+    }
   })
   setRegistrationTypeList([...newData])
 
+  if(isAllUnselected){
+    setCustumerReg(true)
+  }
   let location=[]
   let source = []
   let rtoCal = []

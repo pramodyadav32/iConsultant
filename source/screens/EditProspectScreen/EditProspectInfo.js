@@ -766,7 +766,7 @@ export default function EditProspectInfo(props) {
 
                             </View>
                         </View>
-
+                        {prospectTypeValue?.code === "I" ?
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Son of</Text>
                             <View style={[styles.mobileSubView, styles.shadowProp2]}>
@@ -781,6 +781,7 @@ export default function EditProspectInfo(props) {
 
                             </View>
                         </View>
+                        : null}
 
                         <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Mobile No.<Text style={styles.text2}>*</Text></Text>
@@ -809,14 +810,14 @@ export default function EditProspectInfo(props) {
                             <Text style={styles.detailText}>I-Tax PAN</Text>
                             <TextInput onChangeText={(d) => setPanData(d)} style={[styles.input1, styles.shadowProp2]} >{panData}</TextInput>
                         </View>
-                        <View style={styles.detailMainView}>
+                        {prospectTypeValue?.code === "I" ? <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Employer Name</Text>
                             <TextInput onChangeText={(d) => setEmpName(d)} style={[styles.input1, styles.shadowProp2]} >{empName}</TextInput>
-                        </View>
-                        <View style={styles.detailMainView}>
+                        </View> : null }
+                        {prospectTypeValue?.code === "I" ? <View style={styles.detailMainView}>
                             <Text style={styles.detailText}>Employer Mail</Text>
                             <TextInput onChangeText={(d) => setEmpMail(d)} style={[styles.input1, styles.shadowProp2]} >{empMail}</TextInput>
-                        </View>
+                        </View> : null}
                         <View style={[styles.detailMainView, { marginBottom: constant.moderateScale(10) }]}>
                             <Text style={styles.detailText}>Designation</Text>
                             <TextInput onChangeText={(d) => setDestination(d)} style={[styles.input1, styles.shadowProp2]} >{destination}</TextInput>
