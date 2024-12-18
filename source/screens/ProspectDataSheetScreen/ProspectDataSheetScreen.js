@@ -16,6 +16,7 @@ import DataSheetModal from '../../components/DataSheetModal';
 import { emptyLoader_Action } from '../../redux/actions/AuthAction';
 import moment from 'moment';
 import { useFocusEffect, } from '@react-navigation/native';
+import DownloadPerforma from '../../screens/PerformaScreen/DownloadPerforma'
 
 const data = [
    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
@@ -43,6 +44,8 @@ export default function ProspectDataSheetScreen(props) {
    const [prospectInfo, setProspectInfo] = useState({})
    const [actionInfo,setActionInfo] = useState([])
    const [performaId,setPerformaId] = useState(0)
+   const [performaList,setPerformaList] = useState([])
+   const [invoiceData,setInvoiceData] = useState("")
    const interpolateX = animatedValue.interpolate({
       inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
       outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
@@ -146,6 +149,7 @@ export default function ProspectDataSheetScreen(props) {
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setProspectBasicInfo(res.result?.prospectBasicInfo)
+         setPerformaList(res.result)
          let newId = res.result?.proformaList.length > 0 ? res.result?.proformaList[0]?.docRunningNo : 0
          setPerformaId(newId)
          setActive(1)
@@ -271,9 +275,52 @@ export default function ProspectDataSheetScreen(props) {
       }else if(type===4){
          fn_GetActionDetail()
       }else{
-         setActive(type)
+         if(performaId === 0){
+            constant.showMsg("Proforma is not created for this prospect.");
+         }else{
+            getPrformaPdf(type)
+         }
       }
    }
+
+const getPrformaPdf = (type) => {
+      console.log("performBasic",performaList)
+      dispatch(emptyLoader_Action(true));
+      const param = {
+        brandCode: userData?.brandCode,
+        countryCode: userData?.countryCode,
+        companyId: userData?.companyId,
+        userId: userData?.userId,
+        ipAddress: "1::1",
+        docLocation:performaList?.proformaList[0]?.docLocation,
+        docCode: performaList?.proformaList[0]?.docCode,
+        docFY: performaList?.proformaList[0]?.docFy,
+        docNo:performaList?.proformaList[0]?.docNo,
+      };
+      console.log("param" + JSON.stringify(param));
+      tokenApiCall(
+        getEstimatePdf_Callback,
+        APIName.GetProformaPDF,
+        "POST",
+        JSON.stringify(param),
+        type
+      );
+    };
+  
+    const getEstimatePdf_Callback = (res, type) => {
+      dispatch(emptyLoader_Action(false));
+      if (res.statusCode === 200) {
+        let temp = res?.result?.fileBase;
+        if (temp === "") {
+          constant.showMsg("No PDF is available");
+        } else {
+         setInvoiceData(temp)
+         setActive(type)
+        }
+      } else {
+        constant.showMsg("Somethings wents wrong");
+      }
+    };
 
    const fn_GetActionDetail = () => {
       dispatch(emptyLoader_Action(true))
@@ -745,27 +792,35 @@ export default function ProspectDataSheetScreen(props) {
             {
                active === 5 &&
                <View style={{ flex: 1, paddingHorizontal: '1%' }}>
-               <ScrollView showsVerticalScrollIndicator={false}>
-                
-            
-               </ScrollView>
+               <DownloadPerforma
+                        performaGeneralMasterData={undefined}
+                        performaBasicInfo={performaList}
+                        invoice_Data = {invoiceData}
+                        fn_Next={()=> navigation.pop(1)}
+                        />
             </View>
             }
+            {/* {active === 5 && <DownloadPerforma
+                        performaGeneralMasterData={undefined}
+                        performaBasicInfo={performaList}
+                        invoice_Data = {invoiceData}
+                        fn_Next={()=> navigation.pop(1)}
+                        />} */}
          </View>
        {active != 5 ?
          <Button title={performaId === 0 ? 'Create Proforma' : 'Edit Proforma'} click_Action={() => fn_Create()} buttonExt={[styles.performaButton, styles.shadowPropButton]} />
        
        :
-
-         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
-         <Button title='Cancel Proforma' click_Action={() => null} buttonExt={[styles.cancelPerformaButton, styles.shadowPropButton]} />
-         <Pressable style={styles.printerPerformaButton}>
-            <FastImage source={images.notify} style={styles.printerImage} />
-         </Pressable>
-         <Pressable style={styles.sharePerformaButton}>
-            <FastImage source={images.notify} style={styles.printerImage} />
-         </Pressable>
-         </View>
+null
+         // <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end'}}>
+         // <Button title='Cancel Proforma' click_Action={() => null} buttonExt={[styles.cancelPerformaButton, styles.shadowPropButton]} />
+         // <Pressable style={styles.printerPerformaButton}>
+         //    <FastImage source={images.notify} style={styles.printerImage} />
+         // </Pressable>
+         // <Pressable style={styles.sharePerformaButton}>
+         //    <FastImage source={images.notify} style={styles.printerImage} />
+         // </Pressable>
+         // </View>
 }
 
          <DataSheetModal

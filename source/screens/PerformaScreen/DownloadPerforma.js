@@ -47,11 +47,11 @@ export default function DownloadPerforma(props) {
   //   url: "https://www.africau.edu/images/default/sample.pdf",
   //   base64: base64String,
   // };
+
   useEffect(() => {
-    console.log(
-      "performaGeneralMasterData1111111 = ",
-      performaGeneralMasterData
-    );
+console.log("a22a33a44aaaaaaaaaaaaaa 2222")
+  }, []);
+  useEffect(() => {
 
     // setBase64String(invoice_Data)
     // fn_CreatePdfFromBase64(invoice_Data)

@@ -1184,7 +1184,7 @@ export default function ProspectScreen(props) {
               </Text>
               <SelectDropList
                 list={seData}
-                title={stateValue?.description}
+                title={seValue?.description}
                 buttonExt={styles.dropList}
                 textExt={styles.dropListText}
                 on_Select={(d) => {

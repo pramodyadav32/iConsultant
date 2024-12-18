@@ -480,7 +480,7 @@ export default function PerformaScreen(props) {
          docFY: performaBasicDataHeader?.proformaList[0]?.docFy,
          docNo: performaBasicDataHeader?.proformaList[0]?.docNo,
          "regnSource": "",
-         "rtoCalcOn": "2024-02-01",
+         "rtoCalcOn": moment(new Date).format("YYYY-MM-DD"),
          "loginUserId": userData?.userId,
          "ipAddress": "1::1"
       }
@@ -488,7 +488,7 @@ export default function PerformaScreen(props) {
    }
 
    const RegistrationCallBack = (res) => {
-      console.log("searchTerm", JSON.stringify(res))
+      console.log("searchTerm reg data", JSON.stringify(res))
       dispatch(emptyLoader_Action(false))
       if (res.statusCode === 200) {
          setReg_Data(res?.result?.proformaRegistrationMaster)
