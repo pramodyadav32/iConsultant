@@ -1,0 +1,806 @@
+import React, { useEffect, useState } from 'react';
+import { FlatList, View, ScrollView, SafeAreaView, Pressable, Text, Image, ImageBackground, StatusBar, Animated, TextInput } from 'react-native';
+import * as constant from '../../utilities/constants'
+import styles from './EditProspectStyle';
+import { useDispatch, useSelector } from 'react-redux';
+import HomeHeader from '../../components/HomeHeader';
+import FastImage from 'react-native-fast-image';
+import images from '../../utilities/images';
+import * as common_fn from '../../utilities/common_fn'
+import { APIName, imageUrl, tokenApiCall } from '../../utilities/apiCaller';
+import CommonHeader from '../../components/CommonHeader';
+import SelectDropList from '../../components/SelectDropList';
+import Button from '../../components/Button';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import TestDriveEditScreen from '../EditProspectScreen/TestDriveEditScreen';
+import PlanEditScreen from '../EditProspectScreen/PlanEditScreen'
+import LoadedTrialEditScreen from '../EditProspectScreen/LoadedTrialEditScreen'
+import CommercialDiscussionEditScreen from '../EditProspectScreen/CommercialDiscussionEditScreen'
+import CloseInfo from '../EditProspectScreen/CloseInfo'
+import DownloadPerforma from '../PerformaScreen/DownloadPerforma'
+import UpdateActionModal from '../../components/UpdateActionModal';
+import FeedBackModal from '../../components/FeedBackModal';
+import { emptyLoader_Action } from '../../redux/actions/AuthAction';
+import CustumerInfo from './CustumerInfo';
+import moment from 'moment';
+import { CommonActions } from '@react-navigation/native';
+const data = [
+    { 'key': 1, "title": 'Your Profile', 'source': images.profile, 'screenName': 'HomeScreen' },
+
+]
+
+const data2 = [
+    { 'key': 1, "title": 'Test Drive', },
+    { 'key': 2, "title": 'Plan' },
+    { 'key': 3, "title": 'Loaded Trial' },
+    { 'key': 4, "title": 'Commercial Discussion' },
+    { 'key': 5, "title": 'Close' },
+    { 'key': 6, "title": 'Quotation' },
+
+
+]
+
+export default function EditBusinessProspectScreen(props) {
+    const { navigation, route } = props
+    const dispatch = useDispatch()
+    const tabWidth = constant.resW(49);
+    const { userData, selectedBranch } = useSelector(state => state.AuthReducer)
+    const [active, setActive] = useState(0)
+    const [animatedValue] = useState(new Animated.Value(1));
+    const [basicInfo, setBasicInfo] = useState({})
+    const [prospectMasterData, setProspectMasterData] = useState([])
+    const [prospectInfo, setProspectInfo] = useState({})
+    const [veh_ModelData, setVeh_ModelData] = useState([])
+    const [vehicleData, setVehicleData] = useState([])
+    const interpolateX = animatedValue.interpolate({
+        inputRange: [0, 1, 2, 3, 4], // Adjust based on the number of tabs
+        outputRange: [0, constant.resW(3), constant.resW(26), tabWidth, constant.resW(79)],
+    });
+
+    const [detailModal, setDetailModal] = useState(false)
+    const [updateModal, setUpdateModal] = useState({ show: false, data: {} })
+    const [feedBackModal, setFeedBackModal] = useState({ show: false, data: {} })
+    const [actionTypeData, SetActionTypeData] = useState([])
+    const [performData, setPerformData] = useState([])
+    const [actionInfo, setActionInfo] = useState([])
+    const [profileData, setProfileData] = useState({})
+    const [existingVehicle,setExistingVehicle] = useState([])
+    const [allVehicleData,setAllVehicleData] = useState([])
+    const [vehicleReqListData,setVehicleReqListData] = useState([])
+    const [proformaDetail,setProformaDetail] = useState([])
+
+    const [cardData,setCardData] = useState(route.params.cardData)
+    useEffect(() => {
+        setCardData(route.params.cardData)
+        fn_GetProspectBasicInfo()
+    }, [])
+
+    const fn_GetProspectBasicInfo = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+        }
+        tokenApiCall(GetProspectBasicInfoCallBack, APIName.GetProspectBasicInfo, "POST", param)
+    }
+
+    const GetProspectBasicInfoCallBack = (res) => {
+        console.log("basic123",res?.result)
+        if (res.statusCode === 200) {
+            setBasicInfo(res.result?.prospectBasicInfo)
+            res.result?.proformaList === null ? null : setProformaDetail(res?.result?.proformaList)
+            fn_GetProspectMaster()
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetProspectMaster = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "branchCode": selectedBranch?.branchCode,
+            "calledBy": "INTERNATIONAL_CALLING_CODE,ENTITY,TITLE,STATE,CITY,REFERENCE,SOURCE,RATING,USAGE,DEALCATEGORY,DEALTYPE,CORPORATE,PURCHASE_INTENTION,PROSPECT_CATEGORY,IMPORTANCE,FINANCER,DRIVEN_BY,GENDER,SALES_CONSULTANT,CUST_TYPE,COMPETITION_MODELS,CORRESPONDENCE_ADDRESS",
+            "entityCode": "",
+            "title": "",
+            "stateCode": "",
+            "corpDealCategory": "",
+            "dealType": "",
+            "purchaseIntension": "",
+            "prospectType": "",
+            "importance": "",
+            "financer": "",
+            "drivenBy": "",
+            "gender": "",
+            "teams": "",
+            "empId": "",
+            "custType": "",
+            "competitionModelSearch": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+
+        }
+        tokenApiCall(GetProspectMasterCallBack, APIName.GetProspectMaster, "POST", param)
+    }
+
+    const GetProspectMasterCallBack = async (res) => {
+        console.log("search1111", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            setProspectMasterData(res?.result)
+
+            setActive(0)
+            Animated.timing(animatedValue, {
+                toValue: 1,
+                duration: 800, // Adjust the duration of the animation
+                useNativeDriver: false,
+            }).start();
+        } else {
+
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetProspectDetail = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+
+        }
+        tokenApiCall(GetProspectDetailCallBack, APIName.GetProspectDetails, "POST", param)
+    }
+
+    const GetProspectDetailCallBack = (res) => {
+        console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            setProspectInfo(res.result?.prospectDetails)
+            setActive(1)
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetVehicleMasterModel = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "EDITION,ASSEMBLY,MODEL",
+            "edition": "",
+            "assembly": "",
+            "subModel": "",
+            "model": "",
+            "code": "",
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetVehicleMasterModelCallBack, APIName.GetVehicleMaster, "POST", param)
+    }
+
+    const GetVehicleMasterModelCallBack = async (res) => {
+        console.log("search", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            setAllVehicleData(res?.result)
+            await res.result.map((item) => {
+                if (item.listType === 'MODEL') {
+                    setVeh_ModelData(item.vehicleMaster)
+                }
+            })
+            fn_VehicleReqList()
+            //   setActive(2)
+            //   dispatch(emptyLoader_Action(false))
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_VehicleReqList = () => {
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+        }
+        console.log("vehicleReq", param)
+        tokenApiCall(VehicleReqListCallBack, APIName.GetVehiclesRequiredList, "POST", param)
+    }
+
+    const VehicleReqListCallBack = async (res) => {
+        console.log("vehicleRequest", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            setVehicleReqListData(res?.result?.vehicleRequiredList[0])
+            // fn_GetVehicleModel({},1)
+            setActive(2)
+            dispatch(emptyLoader_Action(false))
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetVehicleModel = (d,type) => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "EDITION,ASSEMBLY,VARIANT,STYLE,MY,VY,EXT_COLOR,INT_COLOR",
+            "edition": "",
+            "assembly": "",
+            "subModel": "",
+            "model": d.code ,
+            "code": "",
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetVehicleMasterCallBack, APIName.GetVehicleMaster, "POST", param,type)
+    }
+
+    const GetVehicleMasterCallBack = async (res,type) => {
+        console.log("search", JSON.stringify(res))
+        if (res.statusCode === 200) {
+           setVehicleData(res?.result)
+            dispatch(emptyLoader_Action(false))
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetActionDetail = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "PROSPECT_ID",
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "type": "",
+            "code": "",
+            "status": "A",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+            "actionDate": ""
+
+        }
+        tokenApiCall(GetActionDetailCallBack, APIName.GetActionsList, "POST", param)
+    }
+
+    const GetActionDetailCallBack = (res) => {
+        // dispatch(emptyLoader_Action(false))
+        console.log("actionList",JSON.stringify(res))
+        if (res.statusCode === 200) {
+            fn_GetActionMasterList()
+            setActionInfo(res.result?.actionInfoList)
+
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetActionMasterList = () => {
+        // dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "FUP_TYPE,ACTION_STATUS",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetActionMasterListCallBack, APIName.GetActionMaster, "POST", param)
+    }
+
+    const GetActionMasterListCallBack = (res) => {
+        console.log("search11", JSON.stringify(res))
+        // dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            res.result.map((item) => {
+                if (item?.listType === 'FUP_TYPE') {
+                    SetActionTypeData(item?.actionMasterList)
+                } else {
+                    setPerformData(item?.actionMasterList)
+                }
+            })
+            // SetActionTypeData(res?.result[0]?.actionMasterList)
+            fn_GetVehicleActionModel()
+
+
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetVehicleActionModel = () => {
+        // dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "EDITION,ASSEMBLY,MODEL",
+            "edition": "",
+            "assembly": "",
+            "subModel": "",
+            "model": "",
+            "code": "",
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetVehicleActionModelCallBack, APIName.GetVehicleMaster, "POST", param)
+    }
+
+    const GetVehicleActionModelCallBack = async (res) => {
+        console.log("search", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            await res.result.map((item) => {
+                if (item.listType === 'MODEL') {
+                    setVeh_ModelData(item.vehicleMaster)
+                }
+            })
+            setActive(3)
+            dispatch(emptyLoader_Action(false))
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetActionBeforeCloser = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "PROSPECT_ID",
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "type": "",
+            "code": "",
+            "status": "A",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1",
+            "actionDate": ""
+
+        }
+        tokenApiCall(GetActionBeforeCloserCallBack, APIName.GetActionsList, "POST", param)
+    }
+
+    const GetActionBeforeCloserCallBack = (res) => {
+        // dispatch(emptyLoader_Action(false))
+        console.log("actionList",JSON.stringify(res))
+        if (res.statusCode === 200) {
+            setActionInfo(res.result?.actionInfoList)
+            fn_GetActionTypeCloseList()
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+
+    const fn_GetActionTypeCloseList = () => {
+       
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "FUP_TYPE,ACTION_STATUS",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetActionTypeCloseListCallBack, APIName.GetActionMaster, "POST", param)
+    }
+
+    const GetActionTypeCloseListCallBack = (res) => {
+        console.log("search", JSON.stringify(res))
+        // dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            res.result.map((item) => {
+                if (item?.listType === 'FUP_TYPE') {
+                    SetActionTypeData(item?.actionMasterList)
+                } else {
+                    setPerformData(item?.actionMasterList)
+                }
+            })
+            // SetActionTypeData(res?.result[0]?.actionMasterList)
+            fn_GetVehicleActionClose()
+
+
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetVehicleActionClose = () => {
+        // dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "calledBy": "EDITION,ASSEMBLY,MODEL",
+            "edition": "",
+            "assembly": "",
+            "subModel": "",
+            "model": "",
+            "code": "",
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetVehicleActionCloseCallBack, APIName.GetVehicleMaster, "POST", param)
+    }
+
+    const GetVehicleActionCloseCallBack = async (res) => {
+        console.log("search", JSON.stringify(res))
+        if (res.statusCode === 200) {
+            await res.result.map((item) => {
+                if (item.listType === 'MODEL') {
+                    setVeh_ModelData(item.vehicleMaster)
+                }
+            })
+            setActive(5)
+            dispatch(emptyLoader_Action(false))
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetProfile = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+         "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "prospectID":Number(route.params.cardData?.prospectId),
+            "calledBy": "USAGE,OCCUPATION,OCCUPATION_PRODUCT,BRAND,BODY_TYPE,MODEL,VARIANT,OWNERSHIP,FINANCER,YEAR_OF_PURCHASE",
+            "brandType": "",
+            "usage": "",
+            "competitorBrand": "",
+            "model": "",
+            "subModel": "",
+            "ownerShip": "",
+            "financer": "",
+            "purchaseYear": 0,
+            "occupationCode": "",
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetProfileCallBack, APIName.GetExistingVehicleMasters, "POST", param)
+
+    }
+
+    const GetProfileCallBack = async (res) => {
+        console.log("profile", JSON.stringify(res))
+        // dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            setProfileData(res?.result)
+            fn_GetProfileModel()
+
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_GetProfileModel = () => {
+        dispatch(emptyLoader_Action(true))
+        let param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "userId": userData?.userId,
+            "ipAddress": "1::1",
+            "userCompanyId": userData?.userCompanyId,
+            "prospectNo": Number(route.params.cardData?.prospectId),
+            "dataType": "EXISTING_PRODUCT"
+        }
+        tokenApiCall(GetProfileModelCallBack, APIName.GetExistingVehicleList, "POST", param)
+    }
+
+    const GetProfileModelCallBack = async (res) => {
+        console.log("exitstingdata", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            setExistingVehicle(res?.result?.existingVehicleList)
+            setActive(4)
+        } else {
+            dispatch(emptyLoader_Action(false))
+            constant.showMsg(res.message)
+        }
+    }
+
+    const renderItem = ({item}) => {
+        return (
+            <ImageBackground source={images.listCard} resizeMode='cover' imageStyle={{ borderRadius: 10 }} style={[styles.listBgStyle, styles.shadowPropCard]}>
+                <Pressable style={styles.driveListMainView}  >
+                    {/* <Pressable style={styles.driveListTopView1} onPress={() => setDetailModal(true)}>
+                        <Text style={styles.text2}>OLM</Text>
+                        <AntDesign name='close' style={styles.closeIcon} />
+                    </Pressable> */}
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 1, }}>
+                            <FastImage source={{ uri: item?.modelImgUrl }} resizeMode='contain' style={styles.carImage} />
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={[{ flexDirection: 'row', justifyContent: 'center', flex: 1, paddingRight: constant.moderateScale(18) }]}>
+                                    <Text style={styles.listName3}>PID : </Text>
+                                    <Text style={[styles.listName3]}>{item?.prospectId}</Text>
+                                </View>
+                                <View style={styles.cardHorLine} />
+                            </View>
+                        </View>
+                        <View style={{ flex: 1.8 }}>
+                            <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(2) }]}>
+                                <View style={styles.driveListDetailSubView}>
+                                    <Text style={styles.listText4}>Prospect Name</Text>
+                                    <Text numberOfLines={2} style={[styles.listName3, { width: '90%' }]}>{item?.title} {item?.firstName} {item?.middleName} {item?.lastName}</Text>
+                                </View>
+                                <View style={styles.driveListDetailSubView2}>
+                                    <Text style={styles.listText4}>Model</Text>
+                                    <Text style={styles.listName3}>{item?.model}</Text>
+                                </View>
+                            </View>
+                            <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                                <View style={styles.driveListDetailSubView}>
+                                    <Text style={styles.listText4}>Mobile No</Text>
+                                    <Text style={styles.listName3}>{item?.custMobile}</Text>
+                                </View>
+                                <View style={styles.driveListDetailSubView2}>
+                                    <Text style={styles.listText4}>Closure Date</Text>
+                                    <Text style={styles.listName3}>{moment(item?.projectedCloserDate, 'DD-MMM-YYYY, hh:mm A').format('DD-MMM-YYYY')}</Text>
+                                </View>
+                            </View>
+                            <View style={[styles.driveListDetailView, { marginTop: constant.moderateScale(8) }]}>
+                                <View style={styles.driveListDetailSubView}>
+                                    <Text style={styles.listText4}>Rating</Text>
+                                    <Text style={styles.listName3}>{item?.prospectRating}</Text>
+                                </View>
+                                <View style={styles.driveListDetailSubView2}>
+                                    <Text style={styles.listText4}>Color</Text>
+                                    <Text style={styles.listName3}>{item?.vehColor}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Pressable>
+            </ImageBackground>
+        )
+    }
+
+    const fn_TabClick = (type) => {
+        if (type === 0) {
+            // setActive(type)
+            fn_GetProspectBasicInfo()
+            // Animated.timing(animatedValue, {
+            //     toValue: type,
+            //     duration: 800, // Adjust the duration of the animation
+            //     useNativeDriver: false,
+            // }).start();
+        } else if (type === 1) {
+            fn_GetProspectDetail()
+        } else if (type === 2) {
+            fn_GetVehicleMasterModel()
+        } else if (type === 3) {
+
+            fn_GetActionDetail()
+        // } else if (type === 4) {
+        //     fn_GetProfile()
+
+        } else {
+            fn_GetActionBeforeCloser()
+            // fn_GetActionTypeCloseList()
+            // setActive(5)
+        }
+
+    }
+
+    const fn_FeedBack = (item, index) => {
+        // console.log("item",item)
+        // setFeedBackModal({show:true,data:item})
+        dispatch(emptyLoader_Action(true))
+        const param = {
+            "brandCode": userData?.brandCode,
+            "countryCode": userData?.countryCode,
+            "companyId": userData?.companyId,
+            "branchCode": selectedBranch?.branchCode,
+            "prospectNo": Number(item?.prospectId),
+            "serial": 0,
+            "loginUserCompanyId": userData?.userCompanyId,
+            "loginUserId": userData?.userId,
+            "ipAddress": "1::1"
+        }
+        tokenApiCall(GetTestDriveFeedbackDetailsCallBack, APIName.GetTestDriveFeedbackQuestions, "POST", param)
+
+    }
+
+    const GetTestDriveFeedbackDetailsCallBack = (res) => {
+        console.log("search", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+            let newData = res.result?.feedbackList.map((item) => {
+                item["answer"] = {}
+                return (item)
+            })
+            console.log("newDat", newData)
+            setFeedBackModal({ show: true, data: newData })
+        } else {
+            constant.showMsg(res.message)
+        }
+    }
+
+    const fn_Create = () => {
+        props.navigation.navigate("CreatePerforma")
+    }
+
+    const fn_CustumerSave=()=>{
+        // constant.showMsg("Profile Save Successfully")
+        fn_GetActionBeforeCloser()
+        // fn_GetActionTypeCloseList()
+    }
+
+   const fn_ProspectList=()=>{
+    let param = {
+        "brandCode": userData?.brandCode,
+        "countryCode": userData?.countryCode,
+        "companyId": userData?.companyId,
+        "branchCode": selectedBranch?.branchCode,
+        "prospectStatus": "A",
+        "prospectNo": Number(route.params.cardData?.prospectId),
+        "rating": "ALL",
+        "loginUserCompanyId": userData?.userCompanyId,
+        "loginUserId": userData?.userId,
+        "ipAddress": "1::1"
+      }
+      tokenApiCall(prospectCallBack, APIName.GetProspectsList, "POST", param)
+    }
+
+    const prospectCallBack = (res) => {
+        console.log("prospectData", JSON.stringify(res))
+        dispatch(emptyLoader_Action(false))
+        if (res.statusCode === 200) {
+          setCardData(res?.result?.pospectList[0])
+        } else {
+           constant.showMsg(res.message)
+        }
+     }
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#E1E1E1' }}>
+            <StatusBar translucent={false} backgroundColor={constant.blackColor} />
+
+            <CommonHeader title='Edit Prospect' mainExt={styles.drawerStyle} onBack={() => navigation.goBack()} />
+            <ScrollView>
+                <View>
+                    <FlatList
+                        data={[cardData]}
+                        renderItem={renderItem}
+                        showsVerticalScrollIndicator={false}
+                        ListHeaderComponent={() => common_fn.listSpace(constant.moderateScale(5))}
+                        ItemSeparatorComponent={() => common_fn.listSpace(constant.moderateScale(7))}
+                        ListFooterComponent={() => common_fn.listSpace(constant.moderateScale(10))}
+                    />
+                </View>
+
+                <View style={styles.cal_SubView}>
+                    <View style={styles.tabMainView}>
+                        <View style={styles.tabSubView}>
+                            <FlatList
+                                data={data2}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                ItemSeparatorComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
+                                ListFooterComponent={() => common_fn.listVer_Space(constant.moderateScale(10))}
+
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <Pressable style={active === index ? styles.tabButton : styles.tabButton2} onPress={() => fn_TabClick(index)} >
+                                            <Text style={active === index ? styles.tabButtonText : styles.tabButtonText2}>{item?.title}</Text>
+                                            {active === index && <View style={styles.horixontalLine} />}
+                                        </Pressable>
+                                    )
+                                }}
+                            />
+                        </View>
+                    </View>
+
+                    {
+                        active === 0 &&
+                        <TestDriveEditScreen
+                            data={basicInfo}
+                            prospectMaster={prospectMasterData}
+                            fn_Next={()=>fn_GetProspectDetail()}
+                        />
+                    }
+                    {
+                        active === 1 &&
+                        <PlanEditScreen
+                            data={basicInfo}
+                            prospectDetail={prospectInfo}
+                            prospectMaster={prospectMasterData}
+                            fn_Next={()=>fn_GetVehicleMasterModel()}
+                        />
+                    }
+                    {active === 2 &&
+                        <LoadedTrialEditScreen
+                            modelData={veh_ModelData}
+                            vehicledata={vehicleData}
+                            prospectData={route.params?.cardData}
+                            modelSelect={(d) => fn_GetVehicleModel(d)}
+                            allVehicleData={allVehicleData}
+                            vehicleReqListData={vehicleReqListData}
+                            fn_Next={()=>{
+                                fn_ProspectList()
+                                fn_GetActionDetail()
+                            }}
+
+                        />
+                    }
+                    {active === 3 &&
+                        <CommercialDiscussionEditScreen
+                            updateClick={(item, index) => setUpdateModal({ show: true, data: item })}
+                            actionType_Data={actionTypeData}
+                            modelData={veh_ModelData}
+                            data={actionInfo}
+                            prospectData={route.params?.cardData}
+                            perform_Data={performData}
+                            feedBackClick={(item, index) => { fn_FeedBack(item, index) }}
+                            fn_Next={()=>fn_GetProfile()}
+                        />
+
+                    }
+                    {
+                        active === 4 &&
+                        <CloseInfo
+                            actionType_Data={actionTypeData}
+                            modelData={veh_ModelData}
+                            perform_Data={performData}
+                            action_Info={actionInfo}
+                            proformaDetail={proformaDetail}
+                            data={basicInfo}
+                            fn_Next={()=>{
+                                props.navigation.dispatch(
+                                    CommonActions.reset({
+                                      index: 0,
+                                      routes: [{ name: 'HomeScreen' }],
+                                    }),
+                                  );
+                            }}
+                        />
+                    }
+                    {active === 5 && 
+                        <DownloadPerforma
+                            performaGeneralMasterData={proformaGeneralMasters}
+                            performaBasicInfo={performaBasicDataHeader}
+                            invoice_Data = {invoiceData}
+                            fn_Next={()=> navigation.pop(1)}
+                        />
+                    }
+                </View>
+            </ScrollView>
+
+        </SafeAreaView>
+    )
+}
